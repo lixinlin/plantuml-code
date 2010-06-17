@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4626 $
  *
  */
 package net.sourceforge.plantuml.graph;
@@ -56,6 +58,7 @@ import net.sourceforge.plantuml.geom.Point2DInt;
 import net.sourceforge.plantuml.geom.PolylineBreakeable;
 import net.sourceforge.plantuml.geom.XMoveable;
 import net.sourceforge.plantuml.graphic.HorizontalAlignement;
+import net.sourceforge.plantuml.graphic.StringBounderUtils;
 import net.sourceforge.plantuml.graphic.TextBlock;
 import net.sourceforge.plantuml.graphic.TextBlockUtils;
 
@@ -111,9 +114,9 @@ public class Elastane {
 				final PolylineBreakeable other = lines.get(alink2);
 				if (p.doesTouch(other)) {
 					result += getLength(other);
-					//return Double.MAX_VALUE;
+					// return Double.MAX_VALUE;
 				}
-				//result += p.getDistance(other);
+				// result += p.getDistance(other);
 			}
 		}
 
@@ -216,7 +219,7 @@ public class Elastane {
 			assert getCost() <= initCost;
 
 		}
-		//System.err.println("COSTB=" + getCost());
+		// System.err.println("COSTB=" + getCost());
 		return changed;
 	}
 
@@ -263,8 +266,8 @@ public class Elastane {
 				final Point2DInt center = polyline.getFirst().getCenter();
 				final TextBlock textBlock = TextBlockUtils.create(Arrays.asList(label), g2d.getFont(), Color.BLACK,
 						HorizontalAlignement.LEFT);
-				final Dimension2D dim = textBlock.calculateDimension(g2d);
-				textBlock.draw(g2d, center.getXint() - dim.getWidth() / 2, center.getYint() - dim.getHeight() / 2);
+				final Dimension2D dim = textBlock.calculateDimension(StringBounderUtils.asStringBounder(g2d));
+				textBlock.drawTOBEREMOVED(g2d, center.getXint() - dim.getWidth() / 2, center.getYint() - dim.getHeight() / 2);
 			}
 
 			g2d.setColor(red);
@@ -302,7 +305,7 @@ public class Elastane {
 		for (Map.Entry<ALink, PolylineBreakeable> entry : lines.entrySet()) {
 			final PolylineBreakeable p = entry.getValue();
 			final List<XMoveable> freedoms = p.getFreedoms();
-			//System.err.println("freedoms=" + freedoms);
+			// System.err.println("freedoms=" + freedoms);
 			if (freedoms.size() > 0) {
 				linkMoveables.put(entry.getKey(), freedoms);
 				// xmoveableGroups.addAll(CollectionUtils.selectUpTo(freedoms,

@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,22 +26,23 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
  *
  */
 package net.sourceforge.plantuml.usecasediagram;
 
-import net.sourceforge.plantuml.classdiagram.command.CommandCreateNote;
-import net.sourceforge.plantuml.classdiagram.command.CommandMultilinesStandaloneNote;
-import net.sourceforge.plantuml.classdiagram.command.CommandNoteEntity;
-import net.sourceforge.plantuml.classdiagram.command.CommandPackage;
-import net.sourceforge.plantuml.classdiagram.command.CommandPage;
 import net.sourceforge.plantuml.command.AbstractUmlSystemCommandFactory;
+import net.sourceforge.plantuml.command.CommandCreateNote;
+import net.sourceforge.plantuml.command.CommandEndPackage;
+import net.sourceforge.plantuml.command.CommandMultilinesStandaloneNote;
+import net.sourceforge.plantuml.command.CommandNoteEntity;
+import net.sourceforge.plantuml.command.CommandPackage;
+import net.sourceforge.plantuml.command.CommandPage;
 import net.sourceforge.plantuml.usecasediagram.command.CommandCreateActor;
 import net.sourceforge.plantuml.usecasediagram.command.CommandCreateUsecase;
 import net.sourceforge.plantuml.usecasediagram.command.CommandLinkUsecase;
 import net.sourceforge.plantuml.usecasediagram.command.CommandMultilinesUsecaseNoteEntity;
-import net.sourceforge.plantuml.usecasediagram.command.CommandNoopUsecase;
+import net.sourceforge.plantuml.usecasediagram.command.CommandRankDirUsecase;
 
 public class UsecaseDiagramFactory extends AbstractUmlSystemCommandFactory {
 
@@ -55,10 +56,14 @@ public class UsecaseDiagramFactory extends AbstractUmlSystemCommandFactory {
 	protected void initCommands() {
 		system = new UsecaseDiagram();
 
+		addCommand(new CommandRankDirUsecase(system));
+		addCommonCommands(system);
+
 		addCommand(new CommandPage(system));
 		addCommand(new CommandLinkUsecase(system));
 
 		addCommand(new CommandPackage(system));
+		addCommand(new CommandEndPackage(system));
 		addCommand(new CommandNoteEntity(system));
 
 		addCommand(new CommandCreateNote(system));
@@ -67,8 +72,5 @@ public class UsecaseDiagramFactory extends AbstractUmlSystemCommandFactory {
 
 		addCommand(new CommandMultilinesUsecaseNoteEntity(system));
 		addCommand(new CommandMultilinesStandaloneNote(system));
-		addCommand(new CommandNoopUsecase(system));
-
-		addCommonCommands(system);
 	}
 }

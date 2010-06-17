@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ *
+ * Revision $Revision: 4762 $
  *
  */
 package net.sourceforge.plantuml.classdiagram.command;
@@ -34,21 +36,26 @@ package net.sourceforge.plantuml.classdiagram.command;
 import java.util.List;
 
 import net.sourceforge.plantuml.classdiagram.ClassDiagram;
+import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.command.SingleLineCommand;
 import net.sourceforge.plantuml.cucadiagram.Entity;
+import net.sourceforge.plantuml.skin.VisibilityModifier;
 
 public class CommandAddMethod extends SingleLineCommand<ClassDiagram> {
 
-	public CommandAddMethod(ClassDiagram classDiagram) {
-		super(classDiagram, "(?i)^(\\w+)\\s*:\\s*(.*)$");
+	public CommandAddMethod(ClassDiagram diagram) {
+		super(diagram, "(?i)^([\\p{L}0-9_.]+)\\s*:\\s*(.*)$");
 	}
 
 	@Override
-	protected boolean executeArg(List<String> arg) {
+	protected CommandExecutionResult executeArg(List<String> arg) {
 		final Entity entity = getSystem().getOrCreateClass(arg.get(0));
-		
-		entity.addFieldOrMethod(arg.get(1));
-		return true;
-	}
 
+		final String field = arg.get(1);
+		if (field.length() > 0 && VisibilityModifier.isVisibilityCharacter(field.charAt(0))) {
+			getSystem().setVisibilityModifierPresent(true);
+		}
+		entity.addFieldOrMethod(field);
+		return CommandExecutionResult.ok();
+	}
 }

@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4797 $
  *
  */
 package net.sourceforge.plantuml.graphic;
@@ -35,10 +37,11 @@ import java.awt.BasicStroke;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.geom.Dimension2D;
-import java.awt.geom.Rectangle2D;
 
 import net.sourceforge.plantuml.Dimension2DDouble;
 import net.sourceforge.plantuml.Log;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
+import net.sourceforge.plantuml.ugraphic.UText;
 
 class TileText implements Tile {
 
@@ -50,10 +53,9 @@ class TileText implements Tile {
 		this.text = text;
 	}
 
-	public Dimension2D calculateDimension(Graphics2D g2d) {
-		final FontMetrics fm = g2d.getFontMetrics(fontConfiguration.getFont());
-		final Rectangle2D rect = fm.getStringBounds(text, g2d);
-		Log.debug("g2d="+g2d);
+	public Dimension2D calculateDimension(StringBounder stringBounder) {
+		final Dimension2D rect = stringBounder.calculateDimension(fontConfiguration.getFont(), text);
+		Log.debug("g2d=" + rect);
 		Log.debug("Size for " + text + " is " + rect);
 		double h = rect.getHeight();
 		if (h < 10) {
@@ -72,20 +74,43 @@ class TileText implements Tile {
 		g2d.drawString(text, (float) x, (float) y);
 
 		if (fontConfiguration.containsStyle(FontStyle.UNDERLINE)) {
-			final Dimension2D dim = calculateDimension(g2d);
+			final Dimension2D dim = calculateDimension(StringBounderUtils.asStringBounder(g2d));
 			final int ypos = (int) (y + 2.5);
 			g2d.setStroke(new BasicStroke((float) 1.3));
 			g2d.drawLine((int) x, ypos, (int) (x + dim.getWidth()), ypos);
 			g2d.setStroke(new BasicStroke());
 		}
 		if (fontConfiguration.containsStyle(FontStyle.STRIKE)) {
-			final Dimension2D dim = calculateDimension(g2d);
+			final Dimension2D dim = calculateDimension(StringBounderUtils.asStringBounder(g2d));
 			final FontMetrics fm = g2d.getFontMetrics(fontConfiguration.getFont());
 			final int ypos = (int) (y - fm.getDescent() - 0.5);
 			g2d.setStroke(new BasicStroke((float) 1.5));
 			g2d.drawLine((int) x, ypos, (int) (x + dim.getWidth()), ypos);
 			g2d.setStroke(new BasicStroke());
 		}
+	}
+
+	public void drawU(UGraphic ug, double x, double y) {
+		final UText utext = new UText(text, fontConfiguration);
+		ug.getParam().setColor(fontConfiguration.getColor());
+		ug.draw(x, y, utext);
+
+//		if (fontConfiguration.containsStyle(FontStyle.UNDERLINE)) {
+//			final Dimension2D dim = calculateDimension(ug.getStringBounder());
+//			final double ypos = y + 2.5;
+//			ug.getParam().setStroke(new UStroke(1.3));
+//			ug.draw(x, ypos, new ULine(dim.getWidth(), 0));
+//			ug.getParam().setStroke(new UStroke());
+//		}
+//		if (fontConfiguration.containsStyle(FontStyle.STRIKE)) {
+//			final Dimension2D dim = calculateDimension(ug.getStringBounder());
+//			//final FontMetrics fm = g2d.getFontMetrics(fontConfiguration.getFont());
+//			final double descent = ug.getStringBounder().getFontDescent(fontConfiguration.getFont());
+//			final double ypos = y - descent - 0.5;
+//			ug.getParam().setStroke(new UStroke(1.5));
+//			ug.draw(x, ypos, new ULine(dim.getWidth(), 0));
+//			ug.getParam().setStroke(new UStroke());
+//		}
 	}
 
 }

@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4179 $
  *
  */
 package net.sourceforge.plantuml.png;
@@ -40,34 +42,70 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 
 import net.sourceforge.plantuml.graphic.HorizontalAlignement;
+import net.sourceforge.plantuml.graphic.StringBounder;
+import net.sourceforge.plantuml.graphic.StringBounderUtils;
 import net.sourceforge.plantuml.graphic.TextBlock;
 import net.sourceforge.plantuml.graphic.TextBlockUtils;
 import net.sourceforge.plantuml.graphic.VerticalPosition;
+import net.sourceforge.plantuml.ugraphic.g2d.UGraphicG2d;
 
 public class PngTitler {
 
-	static public BufferedImage process(BufferedImage im, Color background, Color textColor, List<String> text,
-			int fontSize, String fontFamily, HorizontalAlignement horizontalAlignement,
-			VerticalPosition verticalPosition) {
+	private final Color textColor;
+	private final List<String> text;
+	private final int fontSize;
+	private final String fontFamily;
+	private final HorizontalAlignement horizontalAlignement;
+	private final VerticalPosition verticalPosition;
+
+	public PngTitler(Color textColor, List<String> text, int fontSize, String fontFamily,
+			HorizontalAlignement horizontalAlignement, VerticalPosition verticalPosition) {
+		this.textColor = textColor;
+		this.text = text;
+		this.fontSize = fontSize;
+		this.fontFamily = fontFamily;
+		this.horizontalAlignement = horizontalAlignement;
+		this.verticalPosition = verticalPosition;
+
+	}
+
+	public BufferedImage processImage(BufferedImage im, Color background, int margin) {
 		if (text != null && text.size() > 0) {
-			im = addTitle(im, background, textColor, text, fontSize, fontFamily, horizontalAlignement, verticalPosition);
+			im = addTitle(im, background, textColor, text, fontSize, fontFamily, horizontalAlignement,
+					verticalPosition, margin);
 		}
 		return im;
 
 	}
 
+	public Dimension2D getTextDimension(StringBounder stringBounder) {
+		final TextBlock textBloc = getTextBlock();
+		if (textBloc == null) {
+			return null;
+		}
+		return textBloc.calculateDimension(stringBounder);
+	}
+
+	public TextBlock getTextBlock() {
+		if (text == null || text.size() == 0) {
+			return null;
+		}
+		final Font normalFont = new Font(fontFamily, Font.PLAIN, fontSize);
+		return TextBlockUtils.create(text, normalFont, textColor, horizontalAlignement);
+	}
+
 	static private BufferedImage addTitle(BufferedImage im, Color background, Color textColor, List<String> text,
 			int fontSize, String fontFamily, HorizontalAlignement horizontalAlignement,
-			VerticalPosition verticalPosition) {
+			VerticalPosition verticalPosition, int margin) {
 
 		final Font normalFont = new Font(fontFamily, Font.PLAIN, fontSize);
 		final Graphics2D oldg2d = im.createGraphics();
 		final TextBlock textBloc = TextBlockUtils.create(text, normalFont, textColor, horizontalAlignement);
-		final Dimension2D dimText = textBloc.calculateDimension(oldg2d);
+		final Dimension2D dimText = textBloc.calculateDimension(StringBounderUtils.asStringBounder(oldg2d));
 		oldg2d.dispose();
 
 		final double width = Math.max(im.getWidth(), dimText.getWidth());
-		final double height = im.getHeight() + dimText.getHeight();
+		final double height = im.getHeight() + dimText.getHeight() + margin;
 
 		final BufferedImage newIm = new BufferedImage((int) width, (int) height, BufferedImage.TYPE_INT_RGB);
 		final Graphics2D g2d = newIm.createGraphics();
@@ -92,14 +130,14 @@ public class PngTitler {
 
 		if (verticalPosition == VerticalPosition.TOP) {
 			yText = 0;
-			yImage = (int) dimText.getHeight();
+			yImage = (int) dimText.getHeight() + margin;
 		} else {
-			yText = im.getHeight();
+			yText = im.getHeight() + margin;
 			yImage = 0;
 		}
 
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		textBloc.draw(g2d, xText, yText);
+		textBloc.drawU(new UGraphicG2d(g2d, null), xText, yText);
 
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 		final double delta2 = (width - im.getWidth()) / 2;

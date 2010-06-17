@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ *
+ * Revision $Revision: 4762 $
  *
  */
 package net.sourceforge.plantuml.classdiagram.command;
@@ -37,9 +39,11 @@ import java.util.List;
 
 import net.sourceforge.plantuml.FileSystem;
 import net.sourceforge.plantuml.classdiagram.ClassDiagram;
+import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.command.SingleLineCommand;
 import net.sourceforge.plantuml.cucadiagram.Entity;
 import net.sourceforge.plantuml.cucadiagram.Link;
+import net.sourceforge.plantuml.cucadiagram.LinkDecor;
 import net.sourceforge.plantuml.cucadiagram.LinkType;
 
 public class CommandImport extends SingleLineCommand<ClassDiagram> {
@@ -49,7 +53,7 @@ public class CommandImport extends SingleLineCommand<ClassDiagram> {
 	}
 
 	@Override
-	protected boolean executeArg(List<String> arg) {
+	protected CommandExecutionResult executeArg(List<String> arg) {
 		final String arg0 = arg.get(0);
 		try {
 			final File f = FileSystem.getInstance().getFile(arg0);
@@ -61,9 +65,9 @@ public class CommandImport extends SingleLineCommand<ClassDiagram> {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-			return false;
+			return CommandExecutionResult.error("IO error " + e);
 		}
-		return true;
+		return CommandExecutionResult.ok();
 	}
 
 	private void includeDirectory(File dir) throws IOException {
@@ -77,27 +81,30 @@ public class CommandImport extends SingleLineCommand<ClassDiagram> {
 		if (f.getName().toLowerCase().endsWith(".java")) {
 			includeFileJava(f);
 		}
-		if (f.getName().toLowerCase().endsWith(".sql")) {
-			includeFileSql(f);
-		}
+		// if (f.getName().toLowerCase().endsWith(".sql")) {
+		// includeFileSql(f);
+		// }
 	}
 
 	private void includeFileJava(final File f) throws IOException {
 		final JavaFile javaFile = new JavaFile(f);
 		for (JavaClass cl : javaFile.getJavaClasses()) {
 			final String name = cl.getName();
-			final Entity ent1 = getSystem().getOrCreateClass(name, cl.getType());
+			final Entity ent1 = getSystem()
+					.getOrCreateClass(name, cl.getType());
 
 			for (String p : cl.getParents()) {
-				final Entity ent2 = getSystem().getOrCreateClass(p, cl.getParentType());
-				final Link link = new Link(ent2, ent1, LinkType.EXTENDS_INV, null, 2, null, null);
+				final Entity ent2 = getSystem().getOrCreateClass(p,
+						cl.getParentType());
+				final Link link = new Link(ent2, ent1, new LinkType(
+						LinkDecor.NONE, LinkDecor.EXTENDS), null, 2);
 				getSystem().addLink(link);
 			}
 		}
 	}
 
-	private void includeFileSql(final File f) throws IOException {
-		new SqlImporter(getSystem(), f).process();
-	}
+	// private void includeFileSql(final File f) throws IOException {
+	// new SqlImporter(getSystem(), f).process();
+	// }
 
 }

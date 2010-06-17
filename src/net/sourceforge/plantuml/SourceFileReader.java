@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,20 +26,25 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ *
+ * Revision $Revision: 4771 $
  *
  */
 package net.sourceforge.plantuml;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import net.sourceforge.plantuml.code.Transcoder;
 import net.sourceforge.plantuml.preproc.Defines;
 
 public class SourceFileReader extends AbstractSourceReader {
@@ -47,23 +52,30 @@ public class SourceFileReader extends AbstractSourceReader {
 	private final File file;
 	private final File outputDirectory;
 	private final List<String> config;
+	private final String charset;
+	private FileFormat fileFormat;
 
 	public SourceFileReader(File file) throws IOException {
 		this(file, file.getAbsoluteFile().getParentFile());
 	}
 
 	public SourceFileReader(final File file, File outputDirectory) throws IOException {
-		this(new Defines(), file, outputDirectory, Collections.<String> emptyList());
+		this(new Defines(), file, outputDirectory, Collections.<String> emptyList(), null, FileFormat.PNG);
 	}
 
-	public SourceFileReader(Defines defines, final File file, File outputDirectory, List<String> config)
-			throws IOException {
+	public SourceFileReader(final File file, File outputDirectory, FileFormat fileFormat) throws IOException {
+		this(new Defines(), file, outputDirectory, Collections.<String> emptyList(), null, fileFormat);
+	}
+
+	public SourceFileReader(Defines defines, final File file, File outputDirectory, List<String> config,
+			String charset, FileFormat fileFormat) throws IOException {
 		super(defines);
+		this.charset = charset;
 		this.config = config;
 		if (file.exists() == false) {
 			throw new IllegalArgumentException();
 		}
-		FileSystem.getInstance().setCurrentDir(file.getParentFile());
+		FileSystem.getInstance().setCurrentDir(file.getAbsoluteFile().getParentFile());
 		if (outputDirectory == null) {
 			outputDirectory = file.getAbsoluteFile().getParentFile();
 		} else if (outputDirectory.isAbsolute() == false) {
@@ -74,6 +86,7 @@ public class SourceFileReader extends AbstractSourceReader {
 		}
 		this.file = file;
 		this.outputDirectory = outputDirectory;
+		this.fileFormat = fileFormat;
 	}
 
 	public List<GeneratedImage> getGeneratedImages() throws IOException, InterruptedException {
@@ -86,13 +99,13 @@ public class SourceFileReader extends AbstractSourceReader {
 			String newName = startUml.getFilename();
 
 			if (newName == null) {
-				newName = changeName(file.getName(), cpt++);
+				newName = changeName(file.getName(), cpt++, fileFormat);
 			}
 
-			final File png = new File(outputDirectory, newName);
-			png.getParentFile().mkdirs();
+			final File suggested = new File(outputDirectory, newName);
+			suggested.getParentFile().mkdirs();
 
-			for (File f : startUml.getSystem().createPng(png)) {
+			for (File f : startUml.getSystem().createFiles(suggested, fileFormat)) {
 				final String desc = "[" + file.getName() + "] " + startUml.getSystem().getDescription();
 				final GeneratedImage generatedImage = new GeneratedImage(f, desc);
 				result.add(generatedImage);
@@ -105,16 +118,36 @@ public class SourceFileReader extends AbstractSourceReader {
 		return Collections.unmodifiableList(result);
 	}
 
-	static String changeName(String name, int cpt) {
-		if (cpt == 0) {
-			return name.replaceAll("\\.\\w+$", ".png");
+	public List<String> getEncodedUrl() throws IOException, InterruptedException {
+		final List<String> result = new ArrayList<String>();
+		final Transcoder transcoder = new Transcoder();
+		for (StartUml startUml : getAllStartUml(config)) {
+			final String source = startUml.getSystem().getSource().getPlainString();
+			final String encoded = transcoder.encode(source);
+			result.add(encoded);
 		}
-		return name.replaceAll("\\.\\w+$", "_" + String.format("%03d", cpt) + ".png");
+		return Collections.unmodifiableList(result);
+	}
+
+	static String changeName(String name, int cpt, FileFormat fileFormat) {
+		if (cpt == 0) {
+			return name.replaceAll("\\.\\w+$", fileFormat.getFileSuffix());
+		}
+		return name.replaceAll("\\.\\w+$", "_" + String.format("%03d", cpt) + fileFormat.getFileSuffix());
 	}
 
 	@Override
-	protected Reader getReader() throws FileNotFoundException {
-		return new FileReader(file);
+	protected Reader getReader() throws FileNotFoundException, UnsupportedEncodingException {
+		if (charset == null) {
+			Log.info("Using default charset");
+			return new InputStreamReader(new FileInputStream(file));
+		}
+		Log.info("Using charset " + charset);
+		return new InputStreamReader(new FileInputStream(file), charset);
+	}
+
+	public final void setFileFormat(FileFormat fileFormat) {
+		this.fileFormat = fileFormat;
 	}
 
 }

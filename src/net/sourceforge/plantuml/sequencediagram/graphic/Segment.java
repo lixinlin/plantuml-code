@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,30 +26,39 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4699 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.graphic;
 
-import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Dimension2D;
 
 import net.sourceforge.plantuml.Dimension2DDouble;
+import net.sourceforge.plantuml.graphic.HtmlColor;
+import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.skin.Component;
 import net.sourceforge.plantuml.skin.SimpleContext2D;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
 
 class Segment {
 
 	final private double pos1;
 	final private double pos2;
+	final private HtmlColor backcolor;
 
-	Segment(double pos1, double pos2) {
+	Segment(double pos1, double pos2, HtmlColor backcolor) {
 		this.pos1 = pos1;
 		this.pos2 = pos2;
+		this.backcolor = backcolor;
 		if (pos2 < pos1) {
 			throw new IllegalArgumentException("pos1=" + pos1 + " pos2=" + pos2);
 		}
+	}
+	
+	public HtmlColor getSpecificBackColor() {
+		return backcolor;
 	}
 
 	@Override
@@ -72,12 +81,15 @@ class Segment {
 		return "" + pos1 + " - " + pos2;
 	}
 
-	public void draw(Graphics2D g2d, Component comp, int level) {
-		final AffineTransform t = g2d.getTransform();
-		g2d.translate((level - 1) * comp.getPreferredWidth(g2d) / 2, pos1);
-		final Dimension2D dim = new Dimension2DDouble(comp.getPreferredWidth(g2d), pos2 - pos1);
-		comp.draw(g2d, dim, new SimpleContext2D(false));
-		g2d.setTransform(t);
+	public void drawU(UGraphic ug, Component comp, int level) {
+		final double atX = ug.getTranslateX();
+		final double atY = ug.getTranslateY();
+
+		final StringBounder stringBounder = ug.getStringBounder();
+		ug.translate((level - 1) * comp.getPreferredWidth(stringBounder) / 2, pos1);
+		final Dimension2D dim = new Dimension2DDouble(comp.getPreferredWidth(stringBounder), pos2 - pos1);
+		comp.drawU(ug, dim, new SimpleContext2D(false));
+		ug.setTranslate(atX, atY);
 	}
 
 	public double getLength() {
@@ -93,7 +105,7 @@ class Segment {
 	}
 
 	public Segment merge(Segment this2) {
-		return new Segment(Math.min(this.pos1, this2.pos1), Math.max(this.pos2, this2.pos2));
+		return new Segment(Math.min(this.pos1, this2.pos1), Math.max(this.pos2, this2.pos2), backcolor);
 	}
 
 }

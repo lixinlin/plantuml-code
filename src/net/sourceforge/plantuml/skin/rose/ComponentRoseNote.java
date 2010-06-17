@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,20 +26,24 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4167 $
  *
  */
 package net.sourceforge.plantuml.skin.rose;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.Polygon;
 import java.awt.geom.Dimension2D;
 import java.util.List;
 
 import net.sourceforge.plantuml.graphic.HorizontalAlignement;
+import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.skin.AbstractTextualComponent;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
+import net.sourceforge.plantuml.ugraphic.ULine;
+import net.sourceforge.plantuml.ugraphic.UPolygon;
 
 final public class ComponentRoseNote extends AbstractTextualComponent {
 
@@ -47,40 +51,42 @@ final public class ComponentRoseNote extends AbstractTextualComponent {
 	private final Color back;
 	private final Color foregroundColor;
 
-	public ComponentRoseNote(Color back, Color foregroundColor, Color fontColor, Font font, List<? extends CharSequence> strings) {
+	public ComponentRoseNote(Color back, Color foregroundColor, Color fontColor, Font font,
+			List<? extends CharSequence> strings) {
 		super(strings, fontColor, font, HorizontalAlignement.LEFT, 6, 15, 5);
 		this.back = back;
 		this.foregroundColor = foregroundColor;
 	}
 
 	@Override
-	final public double getPreferredWidth(Graphics2D g2d) {
-		final double result = getTextWidth(g2d) + 2 * getPaddingX();
+	final public double getPreferredWidth(StringBounder stringBounder) {
+		final double result = getTextWidth(stringBounder) + 2 * getPaddingX();
 		return result;
 	}
 
 	@Override
-	final public double getPreferredHeight(Graphics2D g2d) {
-		return getTextHeight(g2d) + 2 * getPaddingY();
+	final public double getPreferredHeight(StringBounder stringBounder) {
+		return getTextHeight(stringBounder) + 2 * getPaddingY();
 	}
-	
+
 	@Override
 	public double getPaddingX() {
 		return 5;
 	}
-	
+
 	@Override
 	public double getPaddingY() {
 		return 5;
 	}
 
 	@Override
-	protected void drawInternal(Graphics2D g2d, Dimension2D dimensionToUse) {
-		final int textHeight = (int) getTextHeight(g2d);
+	protected void drawInternalU(UGraphic ug, Dimension2D dimensionToUse) {
+		final StringBounder stringBounder = ug.getStringBounder();
+		final int textHeight = (int) getTextHeight(stringBounder);
 
-		final int x2 = (int) getTextWidth(g2d);
+		final int x2 = (int) getTextWidth(stringBounder);
 
-		final Polygon polygon = new Polygon();
+		final UPolygon polygon = new UPolygon();
 		polygon.addPoint(0, 0);
 		polygon.addPoint(0, textHeight);
 		polygon.addPoint(x2, textHeight);
@@ -88,15 +94,14 @@ final public class ComponentRoseNote extends AbstractTextualComponent {
 		polygon.addPoint(x2 - cornersize, 0);
 		polygon.addPoint(0, 0);
 
-		g2d.setColor(back);
-		g2d.fill(polygon);
-		g2d.setColor(foregroundColor);
-		g2d.draw(polygon);
+		ug.getParam().setColor(foregroundColor);
+		ug.getParam().setBackcolor(back);
+		ug.draw(0, 0, polygon);
 
-		g2d.drawLine(x2 - cornersize, 0, x2 - cornersize, cornersize);
-		g2d.drawLine(x2, cornersize, x2 - cornersize, cornersize);
+		ug.draw(x2 - cornersize, 0, new ULine(0, cornersize));
+		ug.draw(x2, cornersize, new ULine(-cornersize, 0));
 
-		getTextBlock().draw(g2d, getMarginX1(), getMarginY());
+		getTextBlock().drawU(ug, getMarginX1(), getMarginY());
 
 	}
 

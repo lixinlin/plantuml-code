@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ *
+ * Revision $Revision: 4828 $
  *
  */
 package net.sourceforge.plantuml;
@@ -50,6 +52,9 @@ public class Option {
 	private final List<String> excludes = new ArrayList<String>();
 	private final List<String> config = new ArrayList<String>();
 	private final Map<String, String> defines = new LinkedHashMap<String, String>();
+	private String charset;
+	private boolean computeurl = false;
+	private boolean decodeurl = false;
 
 	private File outputDir = null;
 	private final List<String> result = new ArrayList<String>();
@@ -57,15 +62,43 @@ public class Option {
 	public Option() {
 	}
 
+	private FileFormat fileFormat = FileFormat.PNG;
+
+	public FileFormat getFileFormat() {
+		return fileFormat;
+	}
+
+	public void setFileFormat(FileFormat fileFormat) {
+		this.fileFormat = fileFormat;
+	}
+
 	public Option(String... arg) throws InterruptedException, IOException {
+		if (arg.length == 0) {
+			OptionFlags.getInstance().setGui(true);
+		}
 		for (int i = 0; i < arg.length; i++) {
 			String s = arg[i];
-			if (s.equalsIgnoreCase("-output") || s.equalsIgnoreCase("-o")) {
+			if (s.equalsIgnoreCase("-tsvg")) {
+				setFileFormat(FileFormat.SVG);
+			} else if (s.equalsIgnoreCase("-output") || s.equalsIgnoreCase("-o")) {
 				i++;
 				if (i == arg.length) {
 					continue;
 				}
 				outputDir = new File(StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(arg[i]));
+			} else if (s.equalsIgnoreCase("-graphvizdot") || s.equalsIgnoreCase("-graphviz_dot")) {
+				i++;
+				if (i == arg.length) {
+					continue;
+				}
+				OptionFlags.getInstance().setDotExecutable(
+						StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(arg[i]));
+			} else if (s.equalsIgnoreCase("-charset")) {
+				i++;
+				if (i == arg.length) {
+					continue;
+				}
+				charset = StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(arg[i]);
 			} else if (s.startsWith("-o") && s.length() > 3) {
 				s = s.substring(2);
 				outputDir = new File(StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(s));
@@ -86,22 +119,38 @@ public class Option {
 			} else if (s.startsWith("-x")) {
 				s = s.substring(2);
 				excludes.add(StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(s));
+			} else if (s.equalsIgnoreCase("-debugdot")) {
+				OptionFlags.getInstance().setDebugDot(true);
 			} else if (s.equalsIgnoreCase("-verbose") || s.equalsIgnoreCase("-v")) {
 				OptionFlags.getInstance().setVerbose(true);
+			} else if (s.equalsIgnoreCase("-pipe") || s.equalsIgnoreCase("-p")) {
+				OptionFlags.getInstance().setPipe(true);
 			} else if (s.equalsIgnoreCase("-keepfiles") || s.equalsIgnoreCase("-keepfile")) {
 				OptionFlags.getInstance().setKeepTmpFiles(true);
 			} else if (s.equalsIgnoreCase("-metadata")) {
 				OptionFlags.getInstance().setMetadata(true);
 			} else if (s.equalsIgnoreCase("-word")) {
 				OptionFlags.getInstance().setWord(true);
+			} else if (s.equalsIgnoreCase("-forcegd")) {
+				OptionFlags.getInstance().setForceGd(true);
+			} else if (s.equalsIgnoreCase("-forcecairo")) {
+				OptionFlags.getInstance().setForceCairo(true);
+			} else if (s.equalsIgnoreCase("-computeurl") || s.equalsIgnoreCase("-encodeurl")) {
+				this.computeurl = true;
+			} else if (s.equalsIgnoreCase("-decodeurl")) {
+				this.decodeurl = true;
 			} else if (s.equalsIgnoreCase("-version")) {
 				OptionPrint.printVersion();
 			} else if (s.startsWith("-D")) {
 				manageDefine(s.substring(2));
 			} else if (s.equalsIgnoreCase("-testdot")) {
 				OptionPrint.printTestDot();
-			} else if (s.equalsIgnoreCase("-help") || s.equalsIgnoreCase("-h")) {
+			} else if (s.equalsIgnoreCase("-about") || s.equalsIgnoreCase("-author") || s.equalsIgnoreCase("-authors")) {
+				OptionPrint.printAbout();
+			} else if (s.equalsIgnoreCase("-help") || s.equalsIgnoreCase("-h") || s.equalsIgnoreCase("-?")) {
 				OptionPrint.printHelp();
+			} else if (s.equalsIgnoreCase("-gui")) {
+				OptionFlags.getInstance().setGui(true);
 			} else {
 				result.add(s);
 			}
@@ -135,8 +184,8 @@ public class Option {
 		return outputDir;
 	}
 
-	public final String getPattern() {
-		return "(?i)^.*\\.(txt|tex|java|htm|html|c|h|cpp)$";
+	public final static String getPattern() {
+		return "(?i)^.*\\.(txt|tex|java|htm|html|c|h|cpp|apt)$";
 	}
 
 	public void setOutputDir(File f) {
@@ -166,6 +215,23 @@ public class Option {
 
 	public final List<String> getResult() {
 		return Collections.unmodifiableList(result);
+	}
+
+	public final String getCharset() {
+		return charset;
+	}
+
+	public void setCharset(String s) {
+		this.charset = s;
+
+	}
+
+	public final boolean isComputeurl() {
+		return computeurl;
+	}
+
+	public final boolean isDecodeurl() {
+		return decodeurl;
 	}
 
 }

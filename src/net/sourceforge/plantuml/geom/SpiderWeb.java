@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 3830 $
  *
  */
 package net.sourceforge.plantuml.geom;
@@ -138,7 +140,8 @@ public class SpiderWeb {
 		PolylineBreakeable result = null;
 		for (int u = 5; u <= 95; u += 5) {
 			for (int d = -200; d <= 200; d += 5) {
-				final PolylineBreakeable cur = new PolylineBreakeable(getMainPoint(row1, col1), getMainPoint(row2, col2));
+				final PolylineBreakeable cur = new PolylineBreakeable(getMainPoint(row1, col1),
+						getMainPoint(row2, col2));
 				cur.insertBetweenPoint(u, d);
 				if ((result == null || cur.getLength() < result.getLength()) && isCompatible(cur)) {
 					result = cur;

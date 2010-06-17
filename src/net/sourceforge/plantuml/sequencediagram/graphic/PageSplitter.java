@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 3836 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.graphic;
@@ -43,14 +45,14 @@ class PageSplitter {
 	private final double fullHeight;
 	private final List<Double> positions;
 	private final List<List<String>> titles;
-	//private final double titleHeight;
+	// private final double titleHeight;
 	private final double headerHeight;
 	private final double tailHeight;
 	private final double signatureHeight;
 	private final double newpageHeight;
 	private final List<String> diagramTitle;
 
-	PageSplitter(double fullHeight, /*double titleHeight,*/ double headerHeight, Map<Newpage, Double> newpages,
+	PageSplitter(double fullHeight, /* double titleHeight, */double headerHeight, Map<Newpage, Double> newpages,
 			double tailHeight, double signatureHeight, double newpageHeight, List<String> diagramTitle) {
 		this.fullHeight = fullHeight;
 		this.diagramTitle = diagramTitle;
@@ -62,7 +64,7 @@ class PageSplitter {
 			positions.add(ent.getValue());
 		}
 
-		//this.titleHeight = titleHeight;
+		// this.titleHeight = titleHeight;
 		this.headerHeight = headerHeight;
 		this.tailHeight = tailHeight;
 		this.signatureHeight = signatureHeight;
@@ -89,28 +91,29 @@ class PageSplitter {
 		final double newpage1 = positions.get(positions.size() - 1) - this.newpageHeight;
 		final double newpage2 = this.fullHeight - this.tailHeight - this.signatureHeight;
 		final List<String> title = titles.get(positions.size() - 1);
-		return new Page(/*title == null ? 0 : titleHeight,*/ headerHeight, newpage1, newpage2, tailHeight, signatureHeight, title);
+		return new Page(/* title == null ? 0 : titleHeight, */headerHeight, newpage1, newpage2, tailHeight,
+				signatureHeight, title);
 		// return new Page(0, headerHeight, newpage1, newpage2, tailHeight,
 		// signatureHeight);
 	}
 
 	private Page firstPage() {
-		final double newpage1 = /*this.titleHeight +*/ this.headerHeight;
+		final double newpage1 = /* this.titleHeight + */this.headerHeight;
 		final double newpage2 = positions.get(0) + this.newpageHeight;
-		return new Page(/*titleHeight,*/ headerHeight, newpage1, newpage2, tailHeight, 0, diagramTitle);
+		return new Page(/* titleHeight, */headerHeight, newpage1, newpage2, tailHeight, 0, diagramTitle);
 	}
 
 	private Page onePage() {
-		final double newpage1 = /*this.titleHeight +*/ this.headerHeight;
+		final double newpage1 = /* this.titleHeight + */this.headerHeight;
 		final double newpage2 = this.fullHeight - this.tailHeight - this.signatureHeight;
-		return new Page(/*titleHeight,*/ headerHeight, newpage1, newpage2, tailHeight, signatureHeight, diagramTitle);
+		return new Page(/* titleHeight, */headerHeight, newpage1, newpage2, tailHeight, signatureHeight, diagramTitle);
 	}
 
 	private Page createPage(int i) {
 		final double newpage1 = positions.get(i) - this.newpageHeight;
 		final double newpage2 = positions.get(i + 1) + this.newpageHeight;
 		final List<String> title = titles.get(i);
-		return new Page(/*title == null ? 0 : titleHeight,*/ headerHeight, newpage1, newpage2, tailHeight, 0, title);
+		return new Page(/* title == null ? 0 : titleHeight, */headerHeight, newpage1, newpage2, tailHeight, 0, title);
 		// return new Page(0, headerHeight, newpage1, newpage2, tailHeight, 0);
 	}
 

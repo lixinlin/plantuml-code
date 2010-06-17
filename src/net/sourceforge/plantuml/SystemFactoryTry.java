@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ *
+ * Revision $Revision: 4799 $
  *
  */
 package net.sourceforge.plantuml;
@@ -42,7 +44,9 @@ import java.util.TreeMap;
 
 import net.sourceforge.plantuml.command.Command;
 import net.sourceforge.plantuml.command.CommandControl;
+import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.command.PSystemCommandFactory;
+import net.sourceforge.plantuml.command.ProtectedCommand;
 
 final public class SystemFactoryTry {
 
@@ -52,7 +56,6 @@ final public class SystemFactoryTry {
 	private final Iterator<String> it;
 
 	public SystemFactoryTry(List<String> strings, PSystemFactory systemFactory) throws IOException {
-
 		it = strings.iterator();
 		while (hasNext()) {
 			final String s = next();
@@ -61,14 +64,14 @@ final public class SystemFactoryTry {
 			}
 			if (isArobaseStartuml(s)) {
 				final int line = nb;
-				PSystem system = null;
+				StartUml startUml = null;
 				if (systemFactory instanceof PSystemCommandFactory) {
-					system = executeUmlCommand(s, (PSystemCommandFactory) systemFactory);
+					startUml = executeUmlCommand(s, (PSystemCommandFactory) systemFactory);
 				} else if (systemFactory instanceof PSystemBasicFactory) {
-					system = executeUmlBasic(s, (PSystemBasicFactory) systemFactory);
+					startUml = executeUmlBasic(s, (PSystemBasicFactory) systemFactory);
 				}
-				if (system != null) {
-					result.put(line, new StartUml(system, s));
+				if (startUml != null) {
+					result.put(line, startUml);
 				}
 			}
 		}
@@ -91,74 +94,105 @@ final public class SystemFactoryTry {
 		return Collections.unmodifiableSortedMap(result);
 	}
 
-	private PSystem executeUmlBasic(String start, PSystemBasicFactory systemFactory) throws IOException {
+	private StartUml executeUmlBasic(String start, PSystemBasicFactory systemFactory) throws IOException {
 		systemFactory.reset();
-		final StringBuilder source = new StringBuilder(start);
-		source.append('\n');
+		final UmlSource source = new UmlSource();
+		source.append(start);
 		while (hasNext()) {
 			final String s = next();
 			if (isIgnoredLine(s)) {
 				continue;
 			}
 			source.append(s);
-			source.append('\n');
 			if (s.equals("@enduml")) {
-				final PSystem sys = systemFactory.getSystem();
-				sys.setSource(source.toString());
-				return sys;
+				final AbstractPSystem sys = (AbstractPSystem) systemFactory.getSystem();
+				if (sys == null) {
+					return null;
+				}
+				sys.setSource(source);
+				return new StartUml(sys, start);
 			}
 			final boolean ok = systemFactory.executeLine(s);
 			if (ok == false) {
-				return new PSystemError(s);
+				final int position = source.getSize();
+				final UmlSource sourceWithEnd = getSourceWithEnd(source);
+				return new StartUml(new PSystemError(sourceWithEnd, new ErrorUml(ErrorUmlType.SYNTAX_ERROR, "",
+						position)), start);
 			}
 		}
-		final PSystem sys = systemFactory.getSystem();
-		sys.setSource(source.toString());
-		return sys;
+		final AbstractPSystem sys = (AbstractPSystem) systemFactory.getSystem();
+		sys.setSource(source);
+		return new StartUml(sys, start);
+	}
+
+	private UmlSource getSourceWithEnd(UmlSource start) {
+		final UmlSource result = new UmlSource(start);
+		while (hasNext()) {
+			final String s = next();
+			if (isIgnoredLine(s)) {
+				continue;
+			}
+			result.append(s);
+			if (s.equals("@enduml")) {
+				return result;
+			}
+		}
+		return result;
 	}
 
 	private boolean isIgnoredLine(final String s) {
-		return s.length() == 0 || s.startsWith("#") || s.startsWith("'");
+		// return s.length() == 0 || s.startsWith("#") || s.startsWith("'");
+		return s.length() == 0 || s.startsWith("'");
 	}
 
-	private PSystem executeUmlCommand(String start, PSystemCommandFactory systemFactory) throws IOException {
+	private StartUml executeUmlCommand(String start, PSystemCommandFactory systemFactory) throws IOException {
 		systemFactory.reset();
-		final StringBuilder source = new StringBuilder(start);
-		source.append('\n');
+		final UmlSource source = new UmlSource();
+		source.append(start);
 		while (hasNext()) {
 			final String s = next();
 			if (isIgnoredLine(s)) {
 				continue;
 			}
 			source.append(s);
-			source.append('\n');
 			if (s.equals("@enduml")) {
-				final PSystem sys = systemFactory.getSystem();
-				sys.setSource(source.toString());
-				return sys;
+				final AbstractPSystem sys = (AbstractPSystem) systemFactory.getSystem();
+				sys.setSource(source);
+				return new StartUml(sys, start);
 			}
 			final CommandControl commandControl = systemFactory.isValid(Arrays.asList(s));
 			if (commandControl == CommandControl.NOT_OK) {
-				return new PSystemError(s);
+				final int position = source.getSize() - 1;
+				final UmlSource sourceWithEnd = getSourceWithEnd(source);
+				return new StartUml(new PSystemError(sourceWithEnd, new ErrorUml(ErrorUmlType.SYNTAX_ERROR, "",
+						position)), start);
 			} else if (commandControl == CommandControl.OK_PARTIAL) {
-				final boolean ok = manageMultiline(systemFactory, s);
+				final boolean ok = manageMultiline(systemFactory, s, source);
+				final int position = source.getSize() - 1;
 				if (ok == false) {
-					return new PSystemError(s);
+					final UmlSource sourceWithEnd = getSourceWithEnd(source);
+					return new StartUml(new PSystemError(sourceWithEnd, new ErrorUml(ErrorUmlType.EXECUTION_ERROR, "",
+							position)), start);
 				}
 			} else if (commandControl == CommandControl.OK) {
-				final Command cmd = systemFactory.createCommand(Arrays.asList(s));
-				final boolean ok = cmd.execute(Arrays.asList(s));
-				if (ok == false) {
-					return new PSystemError(s);
+				final Command cmd = new ProtectedCommand(systemFactory.createCommand(Arrays.asList(s)));
+				final CommandExecutionResult result = cmd.execute(Arrays.asList(s));
+				if (result.isOk() == false) {
+					final int position = source.getSize() - 1;
+					final List<String> all = new ArrayList<String>();
+					all.add(s);
+					final UmlSource sourceWithEnd = getSourceWithEnd(source);
+					return new StartUml(new PSystemError(sourceWithEnd, new ErrorUml(ErrorUmlType.EXECUTION_ERROR,
+							result.getError(), position)), start);
 				}
 				testDeprecated(Arrays.asList(s), cmd);
 			} else {
 				assert false;
 			}
 		}
-		final PSystem sys = systemFactory.getSystem();
-		sys.setSource(source.toString());
-		return sys;
+		final AbstractPSystem sys = (AbstractPSystem) systemFactory.getSystem();
+		sys.setSource(source);
+		return new StartUml(sys, start);
 	}
 
 	private void testDeprecated(final List<String> lines, final Command cmd) {
@@ -175,7 +209,8 @@ final public class SystemFactoryTry {
 		}
 	}
 
-	private boolean manageMultiline(PSystemCommandFactory systemFactory, final String init) throws IOException {
+	private boolean manageMultiline(PSystemCommandFactory systemFactory, final String init, UmlSource source2)
+			throws IOException {
 		final List<String> lines = new ArrayList<String>();
 		lines.add(init);
 		while (hasNext()) {
@@ -187,6 +222,7 @@ final public class SystemFactoryTry {
 				return false;
 			}
 			lines.add(s);
+			source2.append(s);
 			// final List<Command> cmd = systemFactory.create(lines);
 			final CommandControl commandControl = systemFactory.isValid(lines);
 			if (commandControl == CommandControl.NOT_OK) {
@@ -195,7 +231,7 @@ final public class SystemFactoryTry {
 			if (commandControl == CommandControl.OK) {
 				final Command cmd = systemFactory.createCommand(lines);
 				testDeprecated(lines, cmd);
-				return cmd.execute(lines);
+				return cmd.execute(lines).isOk();
 			}
 		}
 		return false;

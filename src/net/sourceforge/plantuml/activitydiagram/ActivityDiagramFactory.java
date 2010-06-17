@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,14 +26,20 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ *
+ * Revision $Revision: 4563 $
  *
  */
 package net.sourceforge.plantuml.activitydiagram;
 
+import net.sourceforge.plantuml.activitydiagram.command.CommandEndPartition;
 import net.sourceforge.plantuml.activitydiagram.command.CommandLinkActivity;
 import net.sourceforge.plantuml.activitydiagram.command.CommandLinkLongActivity;
-import net.sourceforge.plantuml.activitydiagram.command.CommandNoopActivity;
+import net.sourceforge.plantuml.activitydiagram.command.CommandMultilinesNoteActivity;
+import net.sourceforge.plantuml.activitydiagram.command.CommandMultilinesNoteActivityLink;
+import net.sourceforge.plantuml.activitydiagram.command.CommandNoteActivity;
+import net.sourceforge.plantuml.activitydiagram.command.CommandNoteOnActivityLink;
 import net.sourceforge.plantuml.activitydiagram.command.CommandPartition;
 import net.sourceforge.plantuml.command.AbstractUmlSystemCommandFactory;
 
@@ -49,13 +55,19 @@ public class ActivityDiagramFactory extends AbstractUmlSystemCommandFactory {
 	protected void initCommands() {
 		system = new ActivityDiagram();
 
+		addCommonCommands(system);
+
 		addCommand(new CommandLinkActivity(system));
 		addCommand(new CommandPartition(system));
+		addCommand(new CommandEndPartition(system));
 		addCommand(new CommandLinkLongActivity(system));
 
-		addCommonCommands(system);
-		
-		addCommand(new CommandNoopActivity(system));
+		addCommand(new CommandNoteActivity(system));
+		addCommand(new CommandMultilinesNoteActivity(system));
+
+		addCommand(new CommandNoteOnActivityLink(system));
+		addCommand(new CommandMultilinesNoteActivityLink(system));
+
 	}
 
 }

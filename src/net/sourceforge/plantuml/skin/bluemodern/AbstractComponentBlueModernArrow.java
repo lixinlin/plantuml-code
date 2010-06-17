@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4633 $
  *
  */
 package net.sourceforge.plantuml.skin.bluemodern;
@@ -42,15 +44,18 @@ public abstract class AbstractComponentBlueModernArrow extends AbstractTextualCo
 
 	private final int arrowDeltaX = 12;
 	private final int arrowDeltaY = 10;
-	
+
 	private final int arrowDeltaX2 = 10;
 	private final int arrowDeltaY2 = 5;
 	private final boolean dotted;
+	private final boolean full;
 	private final Color foregroundColor;
 
-	public AbstractComponentBlueModernArrow(Color foregroundColor, Color fontColor, Font font, List<? extends CharSequence> stringsToDisplay, boolean dotted) {
+	public AbstractComponentBlueModernArrow(Color foregroundColor, Color fontColor, Font font,
+			List<? extends CharSequence> stringsToDisplay, boolean dotted, boolean full) {
 		super(stringsToDisplay, fontColor, font, HorizontalAlignement.LEFT, 17, 17, 1);
 		this.dotted = dotted;
+		this.full = full;
 		this.foregroundColor = foregroundColor;
 	}
 
@@ -69,7 +74,7 @@ public abstract class AbstractComponentBlueModernArrow extends AbstractTextualCo
 	final protected int getArrowDeltaY2() {
 		return arrowDeltaY2;
 	}
-	
+
 	final protected int getArrowDeltaX2() {
 		return arrowDeltaX2;
 	}
@@ -81,6 +86,10 @@ public abstract class AbstractComponentBlueModernArrow extends AbstractTextualCo
 
 	final protected boolean isDotted() {
 		return dotted;
+	}
+
+	final protected boolean isFull() {
+		return full;
 	}
 
 }

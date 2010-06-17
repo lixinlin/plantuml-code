@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,15 +26,18 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 3833 $
  *
  */
 package net.sourceforge.plantuml.graph;
 
-
 public class SimpleCostComputer implements CostComputer {
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see net.sourceforge.plantuml.graph.CostComputer#getCost(net.sourceforge.plantuml.graph.Board)
 	 */
 	public double getCost(Board board) {
@@ -51,6 +54,5 @@ public class SimpleCostComputer implements CostComputer {
 		}
 		return result;
 	}
-
 
 }

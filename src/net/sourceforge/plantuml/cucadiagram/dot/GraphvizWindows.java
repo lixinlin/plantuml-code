@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,40 +26,62 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4826 $
  *
  */
 package net.sourceforge.plantuml.cucadiagram.dot;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 class GraphvizWindows extends AbstractGraphviz {
 
-	private static File exeOnWindows;
-	static {
-		final String getenv = getenvGraphvizDot();
-
-		if (getenv == null) {
-			final File programFile = new File("c:/Program Files");
-			if (programFile.exists()) {
-				for (File f : programFile.listFiles(new FileFilter() {
-					public boolean accept(File pathname) {
-						return pathname.isDirectory() && pathname.getName().startsWith("Graphviz");
-					}
-				})) {
-					final File binDir = new File(f, "bin");
-					// exeOnWindows = new File(binDir, "neato.exe");
-					exeOnWindows = new File(binDir, "dot.exe");
-				}
-			}
-		} else {
-			exeOnWindows = new File(getenv);
+	@Override
+	protected File specificDotExe() {
+		final File result = searchInDir(new File("c:/Program Files"));
+		if (result != null) {
+			return result;
 		}
+		final File result86 = searchInDir(new File("c:/Program Files (x86)"));
+		if (result86 != null) {
+			return result86;
+		}
+		return null;
 	}
 
-	GraphvizWindows(String dotString) {
-		super(exeOnWindows, dotString);
+	private static File searchInDir(final File programFile) {
+		if (programFile.exists() == false || programFile.isDirectory() == false) {
+			return null;
+		}
+		final List<File> dots = new ArrayList<File>();
+		for (File f : programFile.listFiles(new FileFilter() {
+			public boolean accept(File pathname) {
+				return pathname.isDirectory() && pathname.getName().startsWith("Graphviz");
+			}
+		})) {
+			final File result = new File(new File(f, "bin"), "dot.exe");
+			if (result.exists() && result.canRead()) {
+				dots.add(result.getAbsoluteFile());
+			}
+		}
+		return higherVersion(dots);
+	}
+
+	static File higherVersion(List<File> dots) {
+		if (dots.size() == 0) {
+			return null;
+		}
+		Collections.sort(dots, Collections.reverseOrder());
+		return dots.get(0);
+	}
+
+	GraphvizWindows(String dotString, String... type) {
+		super(dotString, type);
 	}
 
 	@Override
@@ -68,7 +90,7 @@ class GraphvizWindows extends AbstractGraphviz {
 		appendDoubleQuoteOnWindows(sb);
 		sb.append(getDotExe().getAbsolutePath());
 		appendDoubleQuoteOnWindows(sb);
-		sb.append(" -Tpng ");
+		appendImageType(sb);
 		return sb.toString();
 	}
 

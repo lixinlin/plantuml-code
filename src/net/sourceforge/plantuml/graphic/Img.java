@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 3834 $
  *
  */
 package net.sourceforge.plantuml.graphic;
@@ -74,11 +76,12 @@ class Img implements HtmlCommand {
 			return new Text("(SYNTAX ERROR)");
 		}
 		final String src = m.group(1);
-		//final File f = new File(src);
+		// final File f = new File(src);
 		try {
 			final File f = FileSystem.getInstance().getFile(src);
-			//final File f = new File(src);
-			//System.err.println("f=" + f.getAbsolutePath() + " f2=" + f2.getAbsolutePath());
+			// final File f = new File(src);
+			// System.err.println("f=" + f.getAbsolutePath() + " f2=" +
+			// f2.getAbsolutePath());
 			if (f.exists() == false) {
 				return new Text("(File not found: " + f + ")");
 			}

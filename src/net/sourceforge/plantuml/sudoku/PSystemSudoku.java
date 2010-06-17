@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4041 $
  *
  */
 package net.sourceforge.plantuml.sudoku;
@@ -39,25 +41,26 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.sourceforge.plantuml.AbstractPSystem;
+import net.sourceforge.plantuml.FileFormat;
 
 public class PSystemSudoku extends AbstractPSystem {
 
 	final private ISudoku sudoku;
 
-	public List<File> createPng(File pngFile) throws IOException, InterruptedException {
+	public List<File> createFiles(File suggestedFile, FileFormat fileFormat) throws IOException, InterruptedException {
 		OutputStream os = null;
 		try {
-			os = new FileOutputStream(pngFile);
+			os = new FileOutputStream(suggestedFile);
 			new GraphicsSudoku(sudoku).writeImage(os);
 		} finally {
 			if (os != null) {
 				os.close();
 			}
 		}
-		return Arrays.asList(pngFile);
+		return Arrays.asList(suggestedFile);
 	}
 
-	public void createPng(OutputStream os) throws IOException {
+	public void createFile(OutputStream os, int index, FileFormat fileFormat) throws IOException {
 		new GraphicsSudoku(sudoku).writeImage(os);
 	}
 

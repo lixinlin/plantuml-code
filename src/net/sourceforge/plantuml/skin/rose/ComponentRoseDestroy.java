@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,20 +26,24 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4169 $
  *
  */
 package net.sourceforge.plantuml.skin.rose;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.geom.Dimension2D;
 
+import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.skin.AbstractComponent;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
+import net.sourceforge.plantuml.ugraphic.ULine;
+import net.sourceforge.plantuml.ugraphic.UStroke;
 
 public class ComponentRoseDestroy extends AbstractComponent {
-	
+
 	private final Color foregroundColor;
 
 	public ComponentRoseDestroy(Color foregroundColor) {
@@ -49,22 +53,22 @@ public class ComponentRoseDestroy extends AbstractComponent {
 	private final int crossSize = 9;
 
 	@Override
-	protected void drawInternal(Graphics2D g2d, Dimension2D dimensionToUse) {
-		g2d.setStroke(new BasicStroke(2));
+	protected void drawInternalU(UGraphic ug, Dimension2D dimensionToUse) {
+		ug.getParam().setStroke(new UStroke(2));
 
-		g2d.setColor(foregroundColor);
-		g2d.drawLine(0, 0, 2 * crossSize, 2 * crossSize);
-		g2d.drawLine(0, 2 * crossSize, 2 * crossSize, 0);
-		g2d.setStroke(new BasicStroke());
+		ug.getParam().setColor(foregroundColor);
+		ug.draw(0, 0, new ULine(2 * crossSize, 2 * crossSize));
+		ug.draw(0, 2 * crossSize, new ULine(2 * crossSize, -2 * crossSize));
+		ug.getParam().setStroke(new UStroke());
 	}
 
 	@Override
-	public double getPreferredHeight(Graphics2D g2d) {
+	public double getPreferredHeight(StringBounder stringBounder) {
 		return crossSize * 2;
 	}
 
 	@Override
-	public double getPreferredWidth(Graphics2D g2d) {
+	public double getPreferredWidth(StringBounder stringBounder) {
 		return crossSize * 2;
 	}
 

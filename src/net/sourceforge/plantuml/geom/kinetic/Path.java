@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 3831 $
  *
  */
 package net.sourceforge.plantuml.geom.kinetic;
@@ -45,7 +47,8 @@ public class Path {
 	private final Frame frame1;
 	private final Frame frame2;
 	private final List<Point2DCharge> points1 = new ArrayList<Point2DCharge>();
-	//private final Map<Point2DCharge, Integer> points2 = new HashMap<Point2DCharge, Integer>(1000, (float).01);
+	// private final Map<Point2DCharge, Integer> points2 = new
+	// HashMap<Point2DCharge, Integer>(1000, (float).01);
 	private final Map<Point2DCharge, Integer> points2 = new HashMap<Point2DCharge, Integer>();
 
 	public Path(Frame f1, Frame f2) {
@@ -77,7 +80,7 @@ public class Path {
 	}
 
 	private static final double MINDIST = 30;
-	
+
 	public void renderContinue() {
 		final List<Point2D> newPoints = new ArrayList<Point2D>();
 		Point2D cur = frame1.getMainCorner();

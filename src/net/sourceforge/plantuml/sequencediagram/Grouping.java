@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,55 +26,53 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4320 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram;
 
-public class Grouping implements Event {
+import net.sourceforge.plantuml.graphic.HtmlColor;
+
+public abstract class Grouping implements Event {
 
 	private final String title;
 	private final GroupingType type;
-	private Grouping father;
 	private final String comment;
+	private final HtmlColor backColorElement;
 
-	public Grouping(String title, String comment, GroupingType type) {
+	public Grouping(String title, String comment, GroupingType type,
+			HtmlColor backColorElement) {
 		this.title = title;
 		this.comment = comment;
 		this.type = type;
+		this.backColorElement = backColorElement;
 	}
 
-	public Grouping getFather() {
-		return father;
+	@Override
+	public final String toString() {
+		return super.toString() + " " + type + " " + title;
 	}
 
-	public void setFather(Grouping g) {
-		if (father != null) {
-			throw new IllegalStateException();
-		}
-		this.father = g;
-	}
-
-	public String getTitle() {
+	final public String getTitle() {
 		return title;
 	}
 
-	public GroupingType getType() {
+	final public GroupingType getType() {
 		return type;
 	}
 
-	public int getLevel() {
-		if (type != GroupingType.START) {
-			return getFather().getLevel();
-		}
-		if (getFather() == null) {
-			return 0;
-		}
-		return getFather().getLevel() + 1;
+	public abstract int getLevel();
+
+	public abstract HtmlColor getBackColorGeneral();
+	
+	final public String getComment() {
+		return comment;
 	}
 
-	public String getComment() {
-		return comment;
+	public final HtmlColor getBackColorElement() {
+		return backColorElement;
 	}
 
 }

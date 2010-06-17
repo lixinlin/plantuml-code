@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4155 $
  *
  */
 package net.sourceforge.plantuml.command;
@@ -75,15 +77,16 @@ public abstract class AbstractUmlSystemCommandFactory implements PSystemCommandF
 	protected abstract void initCommands();
 
 	final protected void addCommonCommands(UmlDiagram system) {
+		addCommand(new CommandPragma(system));
 		addCommand(new CommandTitle(system));
 		addCommand(new CommandMultilinesTitle(system));
-		
+
 		addCommand(new CommandFooter(system));
 		addCommand(new CommandMultilinesFooter(system));
-		
+
 		addCommand(new CommandHeader(system));
 		addCommand(new CommandMultilinesHeader(system));
-		
+
 		addCommand(new CommandSkinParam(system));
 		addCommand(new CommandMinwidth(system));
 		addCommand(new CommandRotate(system));

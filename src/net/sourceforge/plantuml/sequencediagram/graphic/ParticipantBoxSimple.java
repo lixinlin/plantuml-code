@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,23 +26,35 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4683 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.graphic;
 
-import java.awt.Graphics2D;
-
+import net.sourceforge.plantuml.graphic.StringBounder;
 
 class ParticipantBoxSimple implements Pushable {
 
 	private double pos = 0;
+	private final String name;
 
 	public ParticipantBoxSimple(double pos) {
-		this.pos = pos;
+		this(pos, null);
 	}
 
-	public double getCenterX(Graphics2D g2d) {
+	public ParticipantBoxSimple(double pos, String name) {
+		this.pos = pos;
+		this.name = name;
+	}
+
+	@Override
+	public String toString() {
+		return name == null ? super.toString() : name;
+	}
+
+	public double getCenterX(StringBounder stringBounder) {
 		return pos;
 	}
 

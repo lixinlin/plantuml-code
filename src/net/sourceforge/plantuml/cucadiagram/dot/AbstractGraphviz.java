@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4826 $
  *
  */
 package net.sourceforge.plantuml.cucadiagram.dot;
@@ -34,9 +36,12 @@ package net.sourceforge.plantuml.cucadiagram.dot;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
+import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.Log;
+import net.sourceforge.plantuml.OptionFlags;
 import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.graphic.GraphicStrings;
 
@@ -44,27 +49,43 @@ abstract class AbstractGraphviz implements Graphviz {
 
 	private final File dotExe;
 	private final String dotString;
+	private final String[] type;
 
 	static boolean isWindows() {
 		return File.separatorChar == '\\';
 	}
 
-	public static String getenvGraphvizDot() {
-		return System.getenv("GRAPHVIZ_DOT");
+	AbstractGraphviz(String dotString, String... type) {
+		if (type == null) {
+			throw new IllegalArgumentException();
+		}
+		this.dotExe = searchDotExe();
+		this.dotString = dotString;
+		this.type = type;
 	}
 
-	AbstractGraphviz(File dotExe, String dotString) {
-		this.dotExe = dotExe;
-		this.dotString = dotString;
+	private File searchDotExe() {
+		if (OptionFlags.getInstance().getDotExecutable() == null) {
+			final String getenv = GraphvizUtils.getenvGraphvizDot();
+			if (getenv == null) {
+				return specificDotExe();
+			}
+			return new File(getenv);
+		}
+
+		return new File(OptionFlags.getInstance().getDotExecutable());
+
 	}
+
+	abstract protected File specificDotExe();
 
 	final public void createPng(OutputStream os) throws IOException, InterruptedException {
 		if (dotString == null) {
 			throw new IllegalArgumentException();
 		}
 
-		if (dotExe == null) {
-			createPngNoGraphviz(os);
+		if (illegalDotExe()) {
+			createPngNoGraphviz(os, FileFormat.valueOf(type[0].toUpperCase()));
 			return;
 		}
 		final String cmd = getCommandLine();
@@ -73,6 +94,7 @@ abstract class AbstractGraphviz implements Graphviz {
 			Log.info("DotString size: " + dotString.length());
 			final ProcessRunner p = new ProcessRunner(cmd);
 			p.run(dotString.getBytes(), os);
+			Log.info("Ending process ok");
 		} catch (Throwable e) {
 			e.printStackTrace();
 			Log.error("Error: " + e);
@@ -86,8 +108,16 @@ abstract class AbstractGraphviz implements Graphviz {
 		}
 	}
 
+	private boolean illegalDotExe() {
+		return dotExe == null || dotExe.isFile() == false || dotExe.canRead() == false;
+	}
+
 	final public String dotVersion() throws IOException, InterruptedException {
 		final String cmd = getCommandLineVersion();
+		return executeCmd(cmd);
+	}
+
+	private String executeCmd(final String cmd) throws IOException, InterruptedException {
 		final ProcessRunner p = new ProcessRunner(cmd);
 		p.run(null, null);
 		final StringBuilder sb = new StringBuilder();
@@ -103,10 +133,23 @@ abstract class AbstractGraphviz implements Graphviz {
 		return sb.toString().replace('\n', ' ').trim();
 	}
 
-	final private void createPngNoGraphviz(OutputStream os) throws IOException {
-		final GraphicStrings errorResult = new GraphicStrings(Arrays
-				.asList("Cannot find Graphviz: try 'java -jar plantuml.jar -testdot'"));
-		errorResult.writeImage(os);
+	final private void createPngNoGraphviz(OutputStream os, FileFormat format) throws IOException {
+		final List<String> msg = new ArrayList<String>();
+		msg.add("Dot Executable: " + dotExe);
+		if (dotExe != null) {
+			if (dotExe.exists() == false) {
+				msg.add("File does not exist");
+			} else if (dotExe.isDirectory()) {
+				msg.add("It should be an executable, not a directory");
+			} else if (dotExe.isFile() == false) {
+				msg.add("Not a valid file");
+			} else if (dotExe.canRead() == false) {
+				msg.add("File cannot be read");
+			}
+		}
+		msg.add("Cannot find Graphviz: try 'java -jar plantuml.jar -testdot'");
+		final GraphicStrings errorResult = new GraphicStrings(msg);
+		errorResult.writeImage(os, format);
 	}
 
 	abstract String getCommandLine();
@@ -116,4 +159,11 @@ abstract class AbstractGraphviz implements Graphviz {
 	public final File getDotExe() {
 		return dotExe;
 	}
+
+	protected final void appendImageType(final StringBuilder sb) {
+		for (String t : type) {
+			sb.append(" -T" + t + " ");
+		}
+	}
+
 }

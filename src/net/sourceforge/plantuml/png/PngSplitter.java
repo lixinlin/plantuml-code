@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4165 $
  *
  */
 package net.sourceforge.plantuml.png;
@@ -40,8 +42,9 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.Log;
-import net.sourceforge.plantuml.sequencediagram.graphic.SequenceDiagramPngMaker;
+import net.sourceforge.plantuml.sequencediagram.graphic.SequenceDiagramFileMaker;
 
 public class PngSplitter {
 
@@ -73,7 +76,7 @@ public class PngSplitter {
 		int x = 0;
 		for (int i = 0; i < horizontalPages; i++) {
 			for (int j = 0; j < verticalPages; j++) {
-				final File f = SequenceDiagramPngMaker.computeFilename(pngFile, x++);
+				final File f = SequenceDiagramFileMaker.computeFilename(pngFile, x++, FileFormat.PNG);
 				this.files.add(f);
 				final BufferedImage imPiece = im.getSubimage(horizontalSegment.getStart(i),
 						verticalSegment.getStart(j), horizontalSegment.getLen(i), verticalSegment.getLen(j));

@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,22 +26,26 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4587 $
  *
  */
 package net.sourceforge.plantuml.componentdiagram;
 
-import net.sourceforge.plantuml.classdiagram.command.CommandCreateNote;
-import net.sourceforge.plantuml.classdiagram.command.CommandMultilinesStandaloneNote;
-import net.sourceforge.plantuml.classdiagram.command.CommandNoteEntity;
-import net.sourceforge.plantuml.classdiagram.command.CommandPackage;
-import net.sourceforge.plantuml.classdiagram.command.CommandPage;
 import net.sourceforge.plantuml.command.AbstractUmlSystemCommandFactory;
+import net.sourceforge.plantuml.command.CommandCreateNote;
+import net.sourceforge.plantuml.command.CommandEndPackage;
+import net.sourceforge.plantuml.command.CommandMultilinesStandaloneNote;
+import net.sourceforge.plantuml.command.CommandNoteEntity;
+import net.sourceforge.plantuml.command.CommandPackage;
+import net.sourceforge.plantuml.command.CommandPage;
+import net.sourceforge.plantuml.componentdiagram.command.CommandCreateActor2;
 import net.sourceforge.plantuml.componentdiagram.command.CommandCreateCircleInterface;
 import net.sourceforge.plantuml.componentdiagram.command.CommandCreateComponent;
 import net.sourceforge.plantuml.componentdiagram.command.CommandLinkComponent;
 import net.sourceforge.plantuml.componentdiagram.command.CommandMultilinesComponentNoteEntity;
-import net.sourceforge.plantuml.componentdiagram.command.CommandNoopComponent;
+import net.sourceforge.plantuml.usecasediagram.command.CommandRankDirUsecase;
 
 public class ComponentDiagramFactory extends AbstractUmlSystemCommandFactory {
 
@@ -55,21 +59,23 @@ public class ComponentDiagramFactory extends AbstractUmlSystemCommandFactory {
 	protected void initCommands() {
 		system = new ComponentDiagram();
 
+		addCommand(new CommandRankDirUsecase(system));
+		addCommonCommands(system);
+
 		addCommand(new CommandPage(system));
 		addCommand(new CommandLinkComponent(system));
 
 		addCommand(new CommandPackage(system));
+		addCommand(new CommandEndPackage(system));
 		addCommand(new CommandNoteEntity(system));
 
 		addCommand(new CommandCreateNote(system));
 		addCommand(new CommandCreateComponent(system));
 		addCommand(new CommandCreateCircleInterface(system));
+		addCommand(new CommandCreateActor2(system));
 
 		addCommand(new CommandMultilinesComponentNoteEntity(system));
 		addCommand(new CommandMultilinesStandaloneNote(system));
-
-		addCommand(new CommandNoopComponent(system));
-		addCommonCommands(system);
 
 	}
 }

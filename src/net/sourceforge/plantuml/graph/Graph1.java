@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 3833 $
  *
  */
 package net.sourceforge.plantuml.graph;
@@ -46,8 +48,7 @@ public class Graph1 {
 	}
 
 	public BufferedImage createBufferedImage() {
-		final BufferedImage im = new BufferedImage(widthCell * 15, heightCell * 15,
-				BufferedImage.TYPE_INT_RGB);
+		final BufferedImage im = new BufferedImage(widthCell * 15, heightCell * 15, BufferedImage.TYPE_INT_RGB);
 		final Graphics2D g2d = im.createGraphics();
 		g2d.setColor(Color.WHITE);
 		g2d.fillRect(0, 0, im.getWidth(), im.getHeight());

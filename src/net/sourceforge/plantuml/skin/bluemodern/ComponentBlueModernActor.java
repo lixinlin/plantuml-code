@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,26 +26,28 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4738 $
  *
  */
 package net.sourceforge.plantuml.skin.bluemodern;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics2D;
 import java.awt.geom.Dimension2D;
 import java.util.List;
 
 import net.sourceforge.plantuml.graphic.HorizontalAlignement;
+import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.graphic.TextBlock;
 import net.sourceforge.plantuml.skin.AbstractTextualComponent;
 import net.sourceforge.plantuml.skin.StickMan;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
 
 public class ComponentBlueModernActor extends AbstractTextualComponent {
 
 	private final StickMan stickman;
-	private final int outMargin = 5;
 	private final boolean head;
 
 	public ComponentBlueModernActor(Color backgroundColor, Color foregroundColor, Color fontColor, Font font,
@@ -56,33 +58,35 @@ public class ComponentBlueModernActor extends AbstractTextualComponent {
 	}
 
 	@Override
-	protected void drawInternal(Graphics2D g2d, Dimension2D dimensionToUse) {
-		g2d.setColor(getFontColor());
+	protected void drawInternalU(UGraphic ug, Dimension2D dimensionToUse) {
+		ug.getParam().setColor(getFontColor());
 		final TextBlock textBlock = getTextBlock();
-		final double delta = (getPreferredWidth(g2d) - stickman.getPreferredWidth(g2d)) / 2;
+		final StringBounder stringBounder = ug.getStringBounder();
+		final double delta = (getPreferredWidth(stringBounder) - stickman.getPreferredWidth(stringBounder)) / 2;
 
 		if (head) {
-			textBlock.draw(g2d, getTextMiddlePostion(g2d), stickman.getPreferredHeight(g2d));
-			g2d.translate(delta, 0);
+			textBlock.drawU(ug, getTextMiddlePostion(stringBounder), stickman.getPreferredHeight(stringBounder));
+			ug.translate(delta, 0);
 		} else {
-			textBlock.draw(g2d, getTextMiddlePostion(g2d), 0);
-			g2d.translate(delta, getTextHeight(g2d));
+			textBlock.drawU(ug, getTextMiddlePostion(stringBounder), 0);
+			ug.translate(delta, getTextHeight(stringBounder));
 		}
-		stickman.draw(g2d);
+		stickman.drawU(ug);
+
 	}
 
-	private double getTextMiddlePostion(Graphics2D g2d) {
-		return (getPreferredWidth(g2d) - getTextWidth(g2d)) / 2.0;
-	}
-
-	@Override
-	public double getPreferredHeight(Graphics2D g2d) {
-		return stickman.getPreferredHeight(g2d) + getTextHeight(g2d);
+	private double getTextMiddlePostion(StringBounder stringBounder) {
+		return (getPreferredWidth(stringBounder) - getTextWidth(stringBounder)) / 2.0;
 	}
 
 	@Override
-	public double getPreferredWidth(Graphics2D g2d) {
-		return Math.max(stickman.getPreferredWidth(g2d), getTextWidth(g2d)) + outMargin * 2;
+	public double getPreferredHeight(StringBounder stringBounder) {
+		return stickman.getPreferredHeight(stringBounder) + getTextHeight(stringBounder);
+	}
+
+	@Override
+	public double getPreferredWidth(StringBounder stringBounder) {
+		return Math.max(stickman.getPreferredWidth(stringBounder), getTextWidth(stringBounder));
 	}
 
 }

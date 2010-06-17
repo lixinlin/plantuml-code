@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ *
+ * Revision $Revision: 4155 $
  *
  */
 package net.sourceforge.plantuml;
@@ -46,6 +48,7 @@ public abstract class UmlDiagram extends AbstractPSystem implements PSystem {
 	private List<String> footer;
 	private HorizontalAlignement headerAlignement = HorizontalAlignement.RIGHT;
 	private HorizontalAlignement footerAlignement = HorizontalAlignement.CENTER;
+	private final Pragma pragma = new Pragma();
 
 	private final SkinParam skinParam = new SkinParam();
 
@@ -76,7 +79,7 @@ public abstract class UmlDiagram extends AbstractPSystem implements PSystem {
 	public final SkinParam getSkinParam() {
 		return skinParam;
 	}
-	
+
 	public void setParam(String key, String value) {
 		skinParam.setParam(key.toLowerCase(), value);
 	}
@@ -113,5 +116,10 @@ public abstract class UmlDiagram extends AbstractPSystem implements PSystem {
 		this.footerAlignement = footerAlignement;
 	}
 
+	abstract public UmlDiagramType getUmlDiagramType();
+
+	public Pragma getPragma() {
+		return pragma;
+	}
 
 }

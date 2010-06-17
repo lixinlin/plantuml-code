@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4631 $
  *
  */
 package net.sourceforge.plantuml.skin.rose;
@@ -44,15 +46,16 @@ public abstract class AbstractComponentRoseArrow extends AbstractTextualComponen
 	private final int arrowDeltaX = 10;
 	private final int arrowDeltaY = 4;
 	private final boolean dotted;
+	private final boolean full;
 	private final Color foregroundColor;
 
 	public AbstractComponentRoseArrow(Color foregroundColor, Color fontColor, Font font,
-			List<? extends CharSequence> stringsToDisplay, boolean dotted) {
+			List<? extends CharSequence> stringsToDisplay, boolean dotted, boolean full) {
 		super(stringsToDisplay, fontColor, font, HorizontalAlignement.LEFT, 7, 7, 2);
 		this.dotted = dotted;
+		this.full = full;
 		this.foregroundColor = foregroundColor;
 	}
-
 
 	protected final Color getForegroundColor() {
 		return foregroundColor;
@@ -73,6 +76,10 @@ public abstract class AbstractComponentRoseArrow extends AbstractTextualComponen
 
 	final protected boolean isDotted() {
 		return dotted;
+	}
+
+	final protected boolean isFull() {
+		return full;
 	}
 
 }

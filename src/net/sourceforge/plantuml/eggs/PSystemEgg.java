@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4041 $
  *
  */
 package net.sourceforge.plantuml.eggs;
@@ -43,6 +45,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import net.sourceforge.plantuml.AbstractPSystem;
+import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.graphic.GraphicStrings;
 
 public class PSystemEgg extends AbstractPSystem {
@@ -56,21 +59,21 @@ public class PSystemEgg extends AbstractPSystem {
 		}
 	}
 
-	public List<File> createPng(File pngFile) throws IOException, InterruptedException {
+	public List<File> createFiles(File suggestedFile, FileFormat fileFormat) throws IOException, InterruptedException {
 		OutputStream os = null;
 		try {
-			os = new FileOutputStream(pngFile);
-			getGraphicStrings().writeImage(os);
+			os = new FileOutputStream(suggestedFile);
+			getGraphicStrings().writeImage(os, fileFormat);
 		} finally {
 			if (os != null) {
 				os.close();
 			}
 		}
-		return Arrays.asList(pngFile);
+		return Arrays.asList(suggestedFile);
 	}
 
-	public void createPng(OutputStream os) throws IOException {
-		getGraphicStrings().writeImage(os);
+	public void createFile(OutputStream os, int index, FileFormat fileFormat) throws IOException {
+		getGraphicStrings().writeImage(os, fileFormat);
 	}
 
 	private GraphicStrings getGraphicStrings() throws IOException {

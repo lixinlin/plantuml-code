@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,79 +26,98 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4633 $
  *
  */
 package net.sourceforge.plantuml.skin.rose;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics2D;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Point2D;
 import java.util.List;
+
+import net.sourceforge.plantuml.graphic.StringBounder;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
+import net.sourceforge.plantuml.ugraphic.ULine;
+import net.sourceforge.plantuml.ugraphic.UPolygon;
+import net.sourceforge.plantuml.ugraphic.UStroke;
 
 public class ComponentRoseSelfArrow extends AbstractComponentRoseArrow {
 
 	private final double arrowWidth = 45;
 
-	public ComponentRoseSelfArrow(Color foregroundColor, Color colorFont, Font font, List<? extends CharSequence> stringsToDisplay,
-			boolean dotted) {
-		super(foregroundColor, colorFont, font, stringsToDisplay, dotted);
+	public ComponentRoseSelfArrow(Color foregroundColor, Color colorFont, Font font,
+			List<? extends CharSequence> stringsToDisplay, boolean dotted, boolean full) {
+		super(foregroundColor, colorFont, font, stringsToDisplay, dotted, full);
 	}
 
 	@Override
-	protected void drawInternal(Graphics2D g2d, Dimension2D dimensionToUse) {
-		final int textHeight = (int) getTextHeight(g2d);
+	protected void drawInternalU(UGraphic ug, Dimension2D dimensionToUse) {
+		final StringBounder stringBounder = ug.getStringBounder();
+		final double textHeight = getTextHeight(stringBounder);
 
-		g2d.setColor(getForegroundColor());
-		final int x2 = (int) arrowWidth;
-
-		if (isDotted()) {
-			stroke(g2d, 2);
-		}
-
-		g2d.drawLine(0, textHeight, x2, textHeight);
-
-		final int textAndArrowHeight = (int) (textHeight + getArrowOnlyHeight(g2d));
-
-		g2d.drawLine(x2, textHeight, x2, textAndArrowHeight);
-		g2d.drawLine(x2, textAndArrowHeight, 0, textAndArrowHeight);
+		ug.getParam().setColor(getForegroundColor());
+		final double x2 = arrowWidth;
 
 		if (isDotted()) {
-			g2d.setStroke(new BasicStroke());
+			stroke(ug, 2);
 		}
 
-		g2d.drawLine(getArrowDeltaX(), textAndArrowHeight - getArrowDeltaY(), 0, textAndArrowHeight);
-		g2d.drawLine(getArrowDeltaX(), textAndArrowHeight + getArrowDeltaY(), 0, textAndArrowHeight);
+		ug.draw(0, textHeight, new ULine(x2, 0));
 
-		getTextBlock().draw(g2d, getMarginX1(), 0);
+		final double textAndArrowHeight = textHeight + getArrowOnlyHeight(stringBounder);
+
+		ug.draw(x2, textHeight, new ULine(0, textAndArrowHeight - textHeight));
+		ug.draw(0, textAndArrowHeight, new ULine(x2, 0));
+
+		if (isDotted()) {
+			ug.getParam().setStroke(new UStroke());
+		}
+
+//		ug.draw(0, textAndArrowHeight, new ULine(getArrowDeltaX(), -getArrowDeltaY()));
+//		ug.draw(0, textAndArrowHeight, new ULine(getArrowDeltaX(), getArrowDeltaY()));
+		if (isFull()) {
+			ug.getParam().setBackcolor(getForegroundColor());
+			final UPolygon polygon = new UPolygon();
+			polygon.addPoint(getArrowDeltaX(), textAndArrowHeight - getArrowDeltaY());
+			polygon.addPoint(0, textAndArrowHeight);
+			polygon.addPoint(getArrowDeltaX(), textAndArrowHeight + getArrowDeltaY());
+			ug.draw(0, 0, polygon);
+			ug.getParam().setBackcolor(null);
+		} else {
+			ug.draw(0, textHeight, new ULine(getArrowDeltaX(), -getArrowDeltaY()));
+			ug.draw(0, textHeight, new ULine(getArrowDeltaX(), getArrowDeltaY()));
+		}
+
+		getTextBlock().drawU(ug, getMarginX1(), 0);
 	}
 
-	public Point2D getStartPoint(Graphics2D g2d, Dimension2D dimensionToUse) {
-		final int textHeight = (int) getTextHeight(g2d);
+	public Point2D getStartPoint(StringBounder stringBounder, Dimension2D dimensionToUse) {
+		final int textHeight = (int) getTextHeight(stringBounder);
 		return new Point2D.Double(getPaddingX(), textHeight + getPaddingY());
 	}
 
-	public Point2D getEndPoint(Graphics2D g2d, Dimension2D dimensionToUse) {
-		final int textHeight = (int) getTextHeight(g2d);
-		final int textAndArrowHeight = (int) (textHeight + getArrowOnlyHeight(g2d));
+	public Point2D getEndPoint(StringBounder stringBounder, Dimension2D dimensionToUse) {
+		final int textHeight = (int) getTextHeight(stringBounder);
+		final int textAndArrowHeight = (int) (textHeight + getArrowOnlyHeight(stringBounder));
 		return new Point2D.Double(getPaddingX(), textAndArrowHeight + getPaddingY());
 	}
 
 	@Override
-	public double getPreferredHeight(Graphics2D g2d) {
-		return getTextHeight(g2d) + getArrowDeltaY() + getArrowOnlyHeight(g2d) + 2 * getPaddingY();
+	public double getPreferredHeight(StringBounder stringBounder) {
+		return getTextHeight(stringBounder) + getArrowDeltaY() + getArrowOnlyHeight(stringBounder) + 2 * getPaddingY();
 	}
 
-	private double getArrowOnlyHeight(Graphics2D g2d) {
+	private double getArrowOnlyHeight(StringBounder stringBounder) {
 		return 13;
 	}
 
 	@Override
-	public double getPreferredWidth(Graphics2D g2d) {
-		return Math.max(getTextWidth(g2d), arrowWidth);
+	public double getPreferredWidth(StringBounder stringBounder) {
+		return Math.max(getTextWidth(stringBounder), arrowWidth);
 	}
 
 }

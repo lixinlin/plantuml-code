@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ *
+ * Revision $Revision: 4041 $
  *
  */
 package net.sourceforge.plantuml;
@@ -37,6 +39,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import net.sourceforge.plantuml.graphic.GraphicStrings;
 import net.sourceforge.plantuml.preproc.Defines;
@@ -44,34 +47,39 @@ import net.sourceforge.plantuml.preproc.Defines;
 public class SourceStringReader extends AbstractSourceReader {
 
 	private final String source;
+	private final List<String> config;
 
 	public SourceStringReader(String source) {
-		this(new Defines(), source);
+		this(new Defines(), source, Collections.<String> emptyList());
 	}
 
-	public SourceStringReader(Defines defines, String source) {
+	public SourceStringReader(Defines defines, String source, List<String> config) {
 		super(defines);
 		this.source = source;
+		this.config = config;
 	}
 
 	public String generateImage(OutputStream os) throws IOException {
 		return generateImage(os, 0);
 	}
 
-	public String generateImage(OutputStream os, int numImage) throws IOException {
-		try {
-			int nb = 0;
-			for (StartUml startUml : getAllStartUml(Collections.<String> emptyList())) {
+	public String generateImage(OutputStream os, FileFormat fileFormat) throws IOException {
+		return generateImage(os, 0, fileFormat);
+	}
 
-				if (nb == numImage) {
-					startUml.getSystem().createPng(os);
-					return startUml.getSystem().getDescription();
-				}
-				nb++;
+	public String generateImage(OutputStream os, int numImage) throws IOException {
+		return generateImage(os, numImage, FileFormat.PNG);
+	}
+
+	public String generateImage(OutputStream os, int numImage, FileFormat fileFormat) throws IOException {
+		try {
+			for (StartUml startUml : getAllStartUml(config)) {
+				startUml.getSystem().createFile(os, numImage, fileFormat);
+				return startUml.getSystem().getDescription();
 			}
 
 			final GraphicStrings error = new GraphicStrings(Arrays.asList("No @startuml found"));
-			error.writeImage(os);
+			error.writeImage(os, fileFormat);
 
 			return null;
 		} catch (InterruptedException e) {

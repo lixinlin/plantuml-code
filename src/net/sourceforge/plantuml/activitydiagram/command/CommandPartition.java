@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ *
+ * Revision $Revision: 4762 $
  *
  */
 package net.sourceforge.plantuml.activitydiagram.command;
@@ -35,25 +37,29 @@ import java.util.List;
 
 import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.activitydiagram.ActivityDiagram;
+import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.command.SingleLineCommand;
-import net.sourceforge.plantuml.cucadiagram.EntityPackage;
+import net.sourceforge.plantuml.cucadiagram.Group;
+import net.sourceforge.plantuml.cucadiagram.GroupType;
 import net.sourceforge.plantuml.graphic.HtmlColor;
 
 public class CommandPartition extends SingleLineCommand<ActivityDiagram> {
 
 	public CommandPartition(ActivityDiagram diagram) {
-		super(diagram, "(?i)^partition\\s+(\"[^\"]+\"|\\S+)\\s*(#[0-9a-fA-F]{6}|\\w+)?\\s*$");
+		super(diagram, "(?i)^partition\\s+(\"[^\"]+\"|\\S+)\\s*(#[0-9a-fA-F]{6}|#?\\w+)?\\s*$");
 	}
 
 	@Override
-	protected boolean executeArg(List<String> arg) {
+	protected CommandExecutionResult executeArg(List<String> arg) {
 		final String code = StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(arg.get(0));
-		final EntityPackage p = getSystem().getOrCreatePackage(code);
+		final Group currentPackage = getSystem().getCurrentGroup();
+		final Group p = getSystem().getOrCreateGroup(code, code, null, GroupType.PACKAGE, currentPackage);
+		p.setBold(true);
 		final String color = arg.get(1);
 		if (color != null) {
 			p.setBackColor(new HtmlColor(color));
 		}
-		return true;
+		return CommandExecutionResult.ok();
 	}
 
 }

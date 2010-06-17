@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 3833 $
  *
  */
 package net.sourceforge.plantuml.graph;
@@ -51,7 +53,7 @@ public class Galaxy4 {
 		this.spiderWeb = new SpiderWeb(widthCell, heightCell);
 		this.board = board;
 	}
-	
+
 	public Point2DInt getMainPoint(int row, int col) {
 		return spiderWeb.getMainPoint(row, col);
 	}

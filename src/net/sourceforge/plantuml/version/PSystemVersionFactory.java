@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,7 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
  *
  */
 package net.sourceforge.plantuml.version;
@@ -51,6 +51,10 @@ public class PSystemVersionFactory implements PSystemBasicFactory {
 		}
 		if (line.matches("(?i)^version\\s*$")) {
 			system = PSystemVersion.createShowVersion();
+			return true;
+		}
+		if (line.matches("(?i)^testdot\\s*$")) {
+			system = PSystemVersion.createTestDot();
 			return true;
 		}
 		return false;

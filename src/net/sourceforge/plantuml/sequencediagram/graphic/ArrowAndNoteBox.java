@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,99 +26,104 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4838 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.graphic;
 
-import java.awt.Graphics2D;
-
+import net.sourceforge.plantuml.graphic.StringBounder;
+import net.sourceforge.plantuml.sequencediagram.InGroupable;
 import net.sourceforge.plantuml.sequencediagram.NotePosition;
-import net.sourceforge.plantuml.skin.Component;
 import net.sourceforge.plantuml.skin.Context2D;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
 
-class ArrowAndNoteBox extends Arrow {
+class ArrowAndNoteBox extends Arrow implements InGroupable {
 
-	private final SimpleArrow arrow;
+	private final Arrow arrow;
 	private final NoteBox noteBox;
 
-	public ArrowAndNoteBox(Graphics2D g2d, SimpleArrow arrow, Component noteComp, NotePosition notePosition) {
-		super(arrow.getStartingY(), arrow.getSkin());
+	public ArrowAndNoteBox(StringBounder stringBounder, Arrow arrow, NoteBox noteBox) {
+		super(arrow.getStartingY(), arrow.getSkin(), arrow.getArrowComponent());
 		this.arrow = arrow;
+		this.noteBox = noteBox;
 
-		final double arrowHeight = arrow.getPreferredHeight(g2d);
-
-		if (arrow instanceof MessageSelfArrow) {
-			final MessageSelfArrow m = (MessageSelfArrow) arrow;
-			noteBox = new NoteBox(arrow.getStartingY(), noteComp, m.getParticipant1(), null, notePosition);
-			if (notePosition == NotePosition.RIGHT) {
-				noteBox.pushToRight(arrow.getPreferredWidth(g2d));
-			}
-		} else {
-			final MessageArrow m = (MessageArrow) arrow;
-			noteBox = new NoteBox(arrow.getStartingY(), noteComp, m.getParticipantAt(g2d, notePosition), null,
-					notePosition);
-		}
-
-		final double noteHeight = noteBox.getPreferredHeight(g2d);
-		final double myHeight = getPreferredHeight(g2d);
+		final double arrowHeight = arrow.getPreferredHeight(stringBounder);
+		final double noteHeight = noteBox.getPreferredHeight(stringBounder);
+		final double myHeight = getPreferredHeight(stringBounder);
 
 		final double diffHeightArrow = myHeight - arrowHeight;
 		final double diffHeightNote = myHeight - noteHeight;
 		if (diffHeightArrow > 0) {
-			arrow.pushToDown(diffHeightArrow / 2);
+			arrow.pushToDown(-diffHeightArrow / 2);
 		}
 		if (diffHeightNote > 0) {
-			noteBox.pushToDown(diffHeightNote / 2);
+			noteBox.pushToDown(-diffHeightNote / 2);
 		}
 	}
-	
-	@Override
-	final public double getArrowOnlyWidth(Graphics2D g2d) {
-		return arrow.getPreferredWidth(g2d);
-	}
-
 
 	@Override
-	protected void drawInternal(Graphics2D g2d, double maxX, Context2D context) {
-		arrow.draw(g2d, maxX, context);
-		noteBox.draw(g2d, maxX, context);
-
+	final public double getArrowOnlyWidth(StringBounder stringBounder) {
+		return arrow.getPreferredWidth(stringBounder);
 	}
 
 	@Override
-	public double getPreferredHeight(Graphics2D g2d) {
-		return Math.max(arrow.getPreferredHeight(g2d), noteBox.getPreferredHeight(g2d));
+	protected void drawInternalU(UGraphic ug, double maxX, Context2D context) {
+		arrow.drawU(ug, maxX, context);
+		noteBox.drawU(ug, maxX, context);
 	}
 
 	@Override
-	public double getPreferredWidth(Graphics2D g2d) {
-		double w = arrow.getPreferredWidth(g2d);
+	public double getPreferredHeight(StringBounder stringBounder) {
+		return Math.max(arrow.getPreferredHeight(stringBounder), noteBox.getPreferredHeight(stringBounder));
+	}
+
+	@Override
+	public double getPreferredWidth(StringBounder stringBounder) {
+		double w = arrow.getPreferredWidth(stringBounder);
 		if (arrow instanceof MessageArrow) {
 			final MessageArrow messageArrow = (MessageArrow) arrow;
-			w = Math.max(w, messageArrow.getActualWidth(g2d));
+			w = Math.max(w, messageArrow.getActualWidth(stringBounder));
 		}
-		return w + noteBox.getPreferredWidth(g2d);
+		return w + noteBox.getPreferredWidth(stringBounder);
 	}
 
 	@Override
-	public double getStartingX(Graphics2D g2d) {
-		return Math.min(arrow.getStartingX(g2d), noteBox.getStartingX(g2d));
+	public double getStartingX(StringBounder stringBounder) {
+		return Math.min(arrow.getStartingX(stringBounder), noteBox.getStartingX(stringBounder));
 	}
 
 	@Override
-	public int getDirection(Graphics2D g2d) {
-		return arrow.getDirection(g2d);
+	public int getDirection(StringBounder stringBounder) {
+		return arrow.getDirection(stringBounder);
 	}
 
 	@Override
-	public double getArrowYStartLevel(Graphics2D g2d) {
-		return arrow.getArrowYStartLevel(g2d);
+	public double getArrowYStartLevel(StringBounder stringBounder) {
+		return arrow.getArrowYStartLevel(stringBounder);
 	}
 
 	@Override
-	public double getArrowYEndLevel(Graphics2D g2d) {
-		return arrow.getArrowYEndLevel(g2d);
+	public double getArrowYEndLevel(StringBounder stringBounder) {
+		return arrow.getArrowYEndLevel(stringBounder);
+	}
+
+	public double getMaxX(StringBounder stringBounder) {
+		return getStartingX(stringBounder) + getPreferredWidth(stringBounder);
+	}
+
+	public double getMinX(StringBounder stringBounder) {
+		return getStartingX(stringBounder);
+	}
+
+	public String toString(StringBounder stringBounder) {
+		return toString();
+	}
+
+	@Override
+	public LivingParticipantBox getParticipantAt(StringBounder stringBounder, NotePosition position) {
+		return arrow.getParticipantAt(stringBounder, position);
 	}
 
 }

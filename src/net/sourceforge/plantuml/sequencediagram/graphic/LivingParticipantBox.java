@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,14 +26,19 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4836 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.graphic;
 
-import java.awt.Graphics2D;
+import net.sourceforge.plantuml.asciiart.CharArea;
+import net.sourceforge.plantuml.graphic.StringBounder;
+import net.sourceforge.plantuml.sequencediagram.InGroupable;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
 
-public class LivingParticipantBox {
+public class LivingParticipantBox implements InGroupable {
 
 	private final ParticipantBox participantBox;
 	private final LifeLine lifeLine;
@@ -57,22 +62,49 @@ public class LivingParticipantBox {
 		return lifeLine;
 	}
 
-	public Segment getLiveThicknessAt(Graphics2D g2d, double y) {
+	public Segment getLiveThicknessAt(StringBounder stringBounder, double y) {
 		final double left = lifeLine.getLeftShift(y);
 		assert left >= 0;
 		final double right = lifeLine.getRightShift(y);
 		assert right >= 0;
-		final double centerX = participantBox.getCenterX(g2d);
-		return new Segment(centerX - left, centerX + right);
+		final double centerX = participantBox.getCenterX(stringBounder);
+		// System.err.println("Attention, null for segment");
+		return new Segment(centerX - left, centerX + right, null);
 	}
-	
-	public void drawLine(Graphics2D g2d, double endingY, boolean showTail) {
-		participantBox.drawLine(g2d, lifeLine.getCreate(), endingY, showTail);
+
+	public void drawLineU(UGraphic ug, double startingY, double endingY, boolean showTail) {
+		if (endingY <= startingY) {
+			return;
+		}
+		participantBox.drawLineU(ug, startingY, endingY, showTail);
+	}
+
+	public double magicMargin(StringBounder stringBounder) {
+		return participantBox.magicMargin(stringBounder);
 	}
 
 	public void create(double ypos) {
 		lifeLine.setCreate(ypos);
 	}
 
+	public double getCreate() {
+		return lifeLine.getCreate();
+	}
+
+	public void drawLineTxt(CharArea charArea, double endingY, boolean showTail) {
+		participantBox.drawLineArea(charArea, lifeLine.getCreate(), endingY, showTail);
+	}
+
+	public double getMaxX(StringBounder stringBounder) {
+		return participantBox.getMaxX(stringBounder);
+	}
+
+	public double getMinX(StringBounder stringBounder) {
+		return participantBox.getStartingX();
+	}
+
+	public String toString(StringBounder stringBounder) {
+		return toString();
+	}
 
 }

@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,15 +26,24 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4539 $
  *
  */
 package net.sourceforge.plantuml.cucadiagram;
 
 public enum EntityType {
-	ABSTRACT_CLASS, CLASS, INTERFACE, ENUM,
-	ACTOR, USECASE,
-	COMPONENT, CIRCLE_INTERFACE,
-	NOTE,
-	ACTIVITY, BRANCH, SYNCHRO_BAR, CIRCLE_START, CIRCLE_END, POINT_FOR_ASSOCIATION
+	
+	EMPTY_PACKAGE,
+	
+	ABSTRACT_CLASS, CLASS, INTERFACE, ENUM, ACTOR, USECASE, COMPONENT, CIRCLE_INTERFACE, NOTE, OBJECT,
+	
+	ACTIVITY, BRANCH, SYNCHRO_BAR, CIRCLE_START, CIRCLE_END, POINT_FOR_ASSOCIATION,
+	
+	STATE, STATE_CONCURRENT,
+	
+	BLOCK,
+	
+	GROUP
 }

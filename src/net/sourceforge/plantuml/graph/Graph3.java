@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 3833 $
  *
  */
 package net.sourceforge.plantuml.graph;
@@ -60,6 +62,7 @@ import net.sourceforge.plantuml.geom.kinetic.Frame;
 import net.sourceforge.plantuml.geom.kinetic.Path;
 import net.sourceforge.plantuml.geom.kinetic.Point2DCharge;
 import net.sourceforge.plantuml.geom.kinetic.World;
+import net.sourceforge.plantuml.graphic.StringBounderUtils;
 
 public class Graph3 {
 
@@ -150,8 +153,8 @@ public class Graph3 {
 			final Point2DInt p = nodePoint.getPosition();
 			final AbstractEntityImage image = getImage(nodePoint.getNode());
 
-			int widthCell = (int) image.getDimension(dummyGraphics2D).getWidth();
-			int heightCell = (int) image.getDimension(dummyGraphics2D).getHeight();
+			int widthCell = (int) image.getDimension(StringBounderUtils.asStringBounder(dummyGraphics2D)).getWidth();
+			int heightCell = (int) image.getDimension(StringBounderUtils.asStringBounder(dummyGraphics2D)).getHeight();
 			if (widthCell % 2 == 1) {
 				widthCell++;
 			}
@@ -180,7 +183,8 @@ public class Graph3 {
 		for (ANodePoint point : nodePoints.values()) {
 			final double x = point.getPosition().getX();
 			final double y = point.getPosition().getY();
-			final Dimension2D dim = getImage(point.getNode()).getDimension(dummyGraphics2D);
+			final Dimension2D dim = getImage(point.getNode()).getDimension(
+					StringBounderUtils.asStringBounder(dummyGraphics2D));
 			final Frame frame = new Frame(x, y, (int) dim.getWidth(), (int) dim.getHeight());
 			frames.put(point, frame);
 			world.addFrame(frame);
@@ -201,11 +205,11 @@ public class Graph3 {
 		final long start = System.currentTimeMillis();
 		final int limit = 100;
 		for (int i = 0; i < limit; i++) {
-			Log.info("i="+i);
+			Log.info("i=" + i);
 			final double move = world.onePass();
 			if (move < 1) {
 				Log.info("i=" + i + " " + move);
-				//break;
+				// break;
 			}
 			if (i == limit - 1) {
 				Log.info("Aborting");
@@ -429,8 +433,8 @@ public class Graph3 {
 		for (ANodePoint nodePoint : nodePoints.values()) {
 			final Frame frame = frames.get(nodePoint);
 			final AbstractEntityImage image = getImage(nodePoint.getNode());
-			final double width = image.getDimension(g2d).getWidth();
-			final double height = image.getDimension(g2d).getHeight();
+			final double width = image.getDimension(StringBounderUtils.asStringBounder(g2d)).getWidth();
+			final double height = image.getDimension(StringBounderUtils.asStringBounder(g2d)).getHeight();
 			g2d.translate(frame.getX() - width / 2, frame.getY() - height / 2);
 			image.draw(g2d);
 			g2d.translate(-frame.getX() + width / 2, -frame.getY() + height / 2);
@@ -459,8 +463,8 @@ public class Graph3 {
 			final Point2DInt p = nodePoint.getPosition();
 			// System.err.println("p=" + p);
 			final AbstractEntityImage image = getImage(nodePoint.getNode());
-			final int width = (int) (image.getDimension(g2d).getWidth());
-			final int height = (int) (image.getDimension(g2d).getHeight());
+			final int width = (int) (image.getDimension(StringBounderUtils.asStringBounder(g2d)).getWidth());
+			final int height = (int) (image.getDimension(StringBounderUtils.asStringBounder(g2d)).getHeight());
 			g2d.translate(p.getXint() - width / 2, p.getYint() - height / 2);
 			image.draw(g2d);
 			g2d.translate(-p.getXint() + width / 2, -p.getYint() + height / 2);

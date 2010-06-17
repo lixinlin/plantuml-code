@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4125 $
  *
  */
 package net.sourceforge.plantuml.graph;
@@ -41,6 +43,8 @@ import net.sourceforge.plantuml.cucadiagram.Entity;
 import net.sourceforge.plantuml.cucadiagram.EntityType;
 import net.sourceforge.plantuml.graphic.CircledCharacter;
 import net.sourceforge.plantuml.graphic.HorizontalAlignement;
+import net.sourceforge.plantuml.graphic.StringBounder;
+import net.sourceforge.plantuml.graphic.StringBounderUtils;
 import net.sourceforge.plantuml.graphic.TextBlock;
 import net.sourceforge.plantuml.graphic.TextBlockUtils;
 
@@ -50,7 +54,6 @@ class EntityImageClass extends AbstractEntityImage {
 	final private MethodsOrFieldsArea methods;
 	final private MethodsOrFieldsArea fields;
 	final private CircledCharacter circledCharacter;
-
 
 	private final int xMargin = 10;
 	private final int yMargin = 6;
@@ -72,52 +75,55 @@ class EntityImageClass extends AbstractEntityImage {
 		// font, entity.getStereotype().getColor(),
 		// red, Color.BLACK);
 		// }
+		final double radius = 10;
 		if (entity.getType() == EntityType.ABSTRACT_CLASS) {
-			return new CircledCharacter('A', getFont17(), getBlue(), getRed(), Color.BLACK);
+			return new CircledCharacter('A', radius, getFont17(), getBlue(), getRed(), Color.BLACK);
 		}
 		if (entity.getType() == EntityType.CLASS) {
-			return new CircledCharacter('C', getFont17(), getGreen(), getRed(), Color.BLACK);
+			return new CircledCharacter('C', radius, getFont17(), getGreen(), getRed(), Color.BLACK);
 		}
 		if (entity.getType() == EntityType.INTERFACE) {
-			return new CircledCharacter('I', getFont17(), getViolet(), getRed(), Color.BLACK);
+			return new CircledCharacter('I', radius, getFont17(), getViolet(), getRed(), Color.BLACK);
 		}
 		if (entity.getType() == EntityType.ENUM) {
-			return new CircledCharacter('E', getFont17(), getRose(), getRed(), Color.BLACK);
+			return new CircledCharacter('E', radius, getFont17(), getRose(), getRed(), Color.BLACK);
 		}
 		assert false;
 		return null;
 	}
 
-	public Dimension2D getDimension(Graphics2D g2d) {
-		final Dimension2D dimName = getNameDimension(g2d);
-		final Dimension2D dimMethods = methods.calculateDimension(g2d);
-		final Dimension2D dimFields = fields.calculateDimension(g2d);
+	@Override
+	public Dimension2D getDimension(StringBounder stringBounder) {
+		final Dimension2D dimName = getNameDimension(stringBounder);
+		final Dimension2D dimMethods = methods.calculateDimension(stringBounder);
+		final Dimension2D dimFields = fields.calculateDimension(stringBounder);
 		final double width = Math.max(Math.max(dimMethods.getWidth(), dimFields.getWidth()), dimName.getWidth()) + 2
 				* xMargin;
 		final double height = dimMethods.getHeight() + dimFields.getHeight() + dimName.getHeight() + 6 * yMargin;
 		return new Dimension2DDouble(width, height);
 	}
 
-	private Dimension2D getNameDimension(Graphics2D g2d) {
-		final Dimension2D nameDim = name.calculateDimension(g2d);
+	private Dimension2D getNameDimension(StringBounder stringBounder) {
+		final Dimension2D nameDim = name.calculateDimension(stringBounder);
 		if (circledCharacter == null) {
 			return nameDim;
 		}
-		return new Dimension2DDouble(nameDim.getWidth() + getCircledWidth(g2d), Math.max(nameDim
-				.getHeight(), circledCharacter.getPreferredHeight(g2d)));
+		return new Dimension2DDouble(nameDim.getWidth() + getCircledWidth(stringBounder), Math.max(nameDim.getHeight(),
+				circledCharacter.getPreferredHeight(stringBounder)));
 	}
 
-	private double getCircledWidth(Graphics2D g2d) {
+	private double getCircledWidth(StringBounder stringBounder) {
 		if (circledCharacter == null) {
 			return 0;
 		}
-		return circledCharacter.getPreferredWidth(g2d) + 3;
+		return circledCharacter.getPreferredWidth(stringBounder) + 3;
 	}
 
+	@Override
 	public void draw(Graphics2D g2d) {
-		final Dimension2D dimTotal = getDimension(g2d);
-		final Dimension2D dimName = getNameDimension(g2d);
-		final Dimension2D dimFields = fields.calculateDimension(g2d);
+		final Dimension2D dimTotal = getDimension(StringBounderUtils.asStringBounder(g2d));
+		final Dimension2D dimName = getNameDimension(StringBounderUtils.asStringBounder(g2d));
+		final Dimension2D dimFields = fields.calculateDimension(StringBounderUtils.asStringBounder(g2d));
 
 		final int width = (int) dimTotal.getWidth();
 		final int height = (int) dimTotal.getHeight();
@@ -133,9 +139,9 @@ class EntityImageClass extends AbstractEntityImage {
 		g2d.drawLine(0, (int) line1, width, (int) line1);
 		g2d.drawLine(0, (int) line2, width, (int) line2);
 
-		final double circledWidth = getCircledWidth(g2d);
+		final double circledWidth = getCircledWidth(StringBounderUtils.asStringBounder(g2d));
 		g2d.setColor(Color.BLACK);
-		name.draw(g2d, xMargin + circledWidth, yMargin);
+		name.drawTOBEREMOVED(g2d, xMargin + circledWidth, yMargin);
 		fields.draw(g2d, xMargin, line1 + yMargin);
 		methods.draw(g2d, xMargin, line2 + yMargin);
 

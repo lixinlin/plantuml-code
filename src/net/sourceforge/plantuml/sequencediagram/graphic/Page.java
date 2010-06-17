@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4822 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.graphic;
@@ -35,7 +37,6 @@ import java.util.List;
 
 public final class Page {
 
-	//private final double titleHeight;
 	private final double headerHeight;
 	private final double newpage1;
 	private final double newpage2;
@@ -43,11 +44,13 @@ public final class Page {
 	private final double signatureHeight;
 	private final List<String> title;
 
-	public Page(/*double titleHeight,*/ double headerHeight, double newpage1, double newpage2, double tailHeight,
+	@Override
+	public String toString() {
+		return "headerHeight=" + headerHeight + " newpage1=" + newpage1 + " newpage2=" + newpage2;
+	}
+
+	public Page(double headerHeight, double newpage1, double newpage2, double tailHeight,
 			double signatureHeight, List<String> title) {
-//		if (titleHeight < 0) {
-//			throw new IllegalArgumentException();
-//		}
 		if (headerHeight < 0) {
 			throw new IllegalArgumentException();
 		}
@@ -60,7 +63,6 @@ public final class Page {
 		if (newpage1 > newpage2) {
 			throw new IllegalArgumentException();
 		}
-		//this.titleHeight = titleHeight;
 		this.headerHeight = headerHeight;
 		this.newpage1 = newpage1;
 		this.newpage2 = newpage2;
@@ -70,16 +72,11 @@ public final class Page {
 	}
 
 	public double getHeight() {
-		return /*titleHeight +*/ headerHeight + getBodyHeight() + tailHeight + signatureHeight;
+		return headerHeight + getBodyHeight() + tailHeight + signatureHeight;
 	}
-
-//	public double getTitleRelativePosition() {
-//		return 0;
-//	}
 
 	public double getHeaderRelativePosition() {
 		return 0;
-		//return getTitleRelativePosition() + titleHeight;
 	}
 
 	public double getBodyRelativePosition() {
@@ -101,10 +98,6 @@ public final class Page {
 		return getTailRelativePosition() + tailHeight;
 	}
 
-//	public boolean displayTitle() {
-//		return titleHeight > 0;
-//	}
-
 	public boolean displaySignature() {
 		return signatureHeight > 0;
 	}
@@ -120,10 +113,6 @@ public final class Page {
 	public double getHeaderHeight() {
 		return headerHeight;
 	}
-
-//	public double getTitleHeight() {
-//		return titleHeight;
-//	}
 
 	public final List<String> getTitle() {
 		return title;

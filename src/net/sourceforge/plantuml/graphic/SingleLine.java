@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 3834 $
  *
  */
 package net.sourceforge.plantuml.graphic;
@@ -39,6 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sourceforge.plantuml.Dimension2DDouble;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
 
 class SingleLine implements Line {
 
@@ -63,11 +66,11 @@ class SingleLine implements Line {
 		}
 	}
 
-	public Dimension2D calculateDimension(Graphics2D g2d) {
+	public Dimension2D calculateDimension(StringBounder stringBounder) {
 		double width = 0;
 		double height = 0;
 		for (Tile b : blocs) {
-			final Dimension2D size2D = b.calculateDimension(g2d);
+			final Dimension2D size2D = b.calculateDimension(stringBounder);
 			width += size2D.getWidth();
 			height = Math.max(height, size2D.getHeight());
 		}
@@ -76,12 +79,26 @@ class SingleLine implements Line {
 
 	private double maxDeltaY(Graphics2D g2d) {
 		double result = 0;
-		final Dimension2D dim = calculateDimension(g2d);
+		final Dimension2D dim = calculateDimension(StringBounderUtils.asStringBounder(g2d));
 		for (Tile b : blocs) {
 			if (b instanceof TileText == false) {
 				continue;
 			}
-			final Dimension2D dimBloc = b.calculateDimension(g2d);
+			final Dimension2D dimBloc = b.calculateDimension(StringBounderUtils.asStringBounder(g2d));
+			final double deltaY = dim.getHeight() - dimBloc.getHeight() + ((TileText) b).getFontSize2D();
+			result = Math.max(result, deltaY);
+		}
+		return result;
+	}
+
+	private double maxDeltaY(UGraphic ug) {
+		double result = 0;
+		final Dimension2D dim = calculateDimension(ug.getStringBounder());
+		for (Tile b : blocs) {
+			if (b instanceof TileText == false) {
+				continue;
+			}
+			final Dimension2D dimBloc = b.calculateDimension(ug.getStringBounder());
 			final double deltaY = dim.getHeight() - dimBloc.getHeight() + ((TileText) b).getFontSize2D();
 			result = Math.max(result, deltaY);
 		}
@@ -96,7 +113,19 @@ class SingleLine implements Line {
 			} else {
 				b.draw(g2d, x, y + deltaY);
 			}
-			x += b.calculateDimension(g2d).getWidth();
+			x += b.calculateDimension(StringBounderUtils.asStringBounder(g2d)).getWidth();
+		}
+	}
+
+	public void drawU(UGraphic ug, double x, double y) {
+		final double deltaY = maxDeltaY(ug);
+		for (Tile b : blocs) {
+			if (b instanceof TileImage) {
+				b.drawU(ug, x, y);
+			} else {
+				b.drawU(ug, x, y + deltaY);
+			}
+			x += b.calculateDimension(ug.getStringBounder()).getWidth();
 		}
 	}
 

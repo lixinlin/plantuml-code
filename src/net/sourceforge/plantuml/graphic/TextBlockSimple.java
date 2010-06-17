@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4125 $
  *
  */
 package net.sourceforge.plantuml.graphic;
@@ -40,6 +42,7 @@ import java.util.List;
 
 import net.sourceforge.plantuml.Dimension2DDouble;
 import net.sourceforge.plantuml.cucadiagram.Stereotype;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
 
 class TextBlockSimple implements TextBlock {
 
@@ -62,33 +65,50 @@ class TextBlockSimple implements TextBlock {
 		return new SingleLine(s.getLabel(), font.deriveFont(Font.ITALIC), paint, horizontalAlignement);
 	}
 
-	public Dimension2D calculateDimension(Graphics2D g2d) {
-		return getTextDimension(g2d);
+	public Dimension2D calculateDimension(StringBounder stringBounder) {
+		return getTextDimension(stringBounder);
 	}
 
-	protected final Dimension2D getTextDimension(Graphics2D g2d) {
+	protected final Dimension2D getTextDimension(StringBounder stringBounder) {
 		double width = 0;
 		double height = 0;
 		for (Line line : lines) {
-			final Dimension2D size2D = line.calculateDimension(g2d);
+			final Dimension2D size2D = line.calculateDimension(stringBounder);
 			height += size2D.getHeight();
 			width = Math.max(width, size2D.getWidth());
 		}
 		return new Dimension2DDouble(width, height);
 	}
 
-	public void draw(Graphics2D g2d, double x, double y) {
-		final Dimension2D dimText = getTextDimension(g2d);
+	public void drawTOBEREMOVED(Graphics2D g2d, double x, double y) {
+		final Dimension2D dimText = getTextDimension(StringBounderUtils.asStringBounder(g2d));
 
 		for (Line line : lines) {
 			final HorizontalAlignement lineHorizontalAlignement = line.getHorizontalAlignement();
 			double deltaX = 0;
 			if (lineHorizontalAlignement == HorizontalAlignement.CENTER) {
-				final double diff = dimText.getWidth() - line.calculateDimension(g2d).getWidth();
+				final double diff = dimText.getWidth()
+						- line.calculateDimension(StringBounderUtils.asStringBounder(g2d)).getWidth();
 				deltaX = diff / 2.0;
 			}
 			line.draw(g2d, x + deltaX, y);
-			y += line.calculateDimension(g2d).getHeight();
+			y += line.calculateDimension(StringBounderUtils.asStringBounder(g2d)).getHeight();
+		}
+	}
+	
+	public void drawU(UGraphic ug, double x, double y) {
+		final Dimension2D dimText = getTextDimension(ug.getStringBounder());
+
+		for (Line line : lines) {
+			final HorizontalAlignement lineHorizontalAlignement = line.getHorizontalAlignement();
+			double deltaX = 0;
+			if (lineHorizontalAlignement == HorizontalAlignement.CENTER) {
+				final double diff = dimText.getWidth()
+						- line.calculateDimension(ug.getStringBounder()).getWidth();
+				deltaX = diff / 2.0;
+			}
+			line.drawU(ug, x + deltaX, y);
+			y += line.calculateDimension(ug.getStringBounder()).getHeight();
 		}
 	}
 

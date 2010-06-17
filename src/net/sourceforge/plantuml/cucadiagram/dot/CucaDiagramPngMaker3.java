@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 3829 $
  *
  */
 package net.sourceforge.plantuml.cucadiagram.dot;
@@ -55,7 +57,7 @@ import net.sourceforge.plantuml.graph.ANode;
 import net.sourceforge.plantuml.graph.ANodeImpl;
 import net.sourceforge.plantuml.graph.Board;
 import net.sourceforge.plantuml.graph.BoardExplorer;
-import net.sourceforge.plantuml.graph.Graph3;
+import net.sourceforge.plantuml.graph.Graph5;
 import net.sourceforge.plantuml.graph.Heap;
 import net.sourceforge.plantuml.graph.Zoda2;
 import net.sourceforge.plantuml.png.PngSplitter;
@@ -73,9 +75,9 @@ public final class CucaDiagramPngMaker3 {
 
 		for (Link link : diagram.getLinks()) {
 			final String s = link.getEntity1().getCode() + "->" + link.getEntity2().getCode();
-			System.err.println("CucaDiagramPngMaker3:: " + s);
+			// Log.error("CucaDiagramPngMaker3:: " + s);
 			final int diffHeight = link.getLenght() - 1;
-			System.err.println("CucaDiagramPngMaker3:: " + s + " " + diffHeight);
+			// Log.error("CucaDiagramPngMaker3:: " + s + " " + diffHeight);
 			zoda2.addLink(s, diffHeight, link);
 		}
 		for (Entity ent : diagram.entities().values()) {
@@ -86,7 +88,7 @@ public final class CucaDiagramPngMaker3 {
 			((ANodeImpl) n).setUserData(ent);
 		}
 
-		final List<Graph3> graphs = getGraphs3(zoda2.getHeaps());
+		final List<Graph5> graphs = getGraphs3(zoda2.getHeaps());
 
 		final Dimension2D totalDim = getTotalDimension(graphs);
 		final EmptyImageBuilder im = new EmptyImageBuilder((int) totalDim.getWidth(), (int) totalDim.getHeight(),
@@ -96,7 +98,7 @@ public final class CucaDiagramPngMaker3 {
 
 		final Graphics2D g2d = im.getGraphics2D();
 
-		for (Graph3 g : graphs) {
+		for (Graph5 g : graphs) {
 			g2d.setTransform(new AffineTransform());
 			g2d.translate(x, 0);
 			g.draw(g2d);
@@ -106,10 +108,10 @@ public final class CucaDiagramPngMaker3 {
 		ImageIO.write(im.getBufferedImage(), "png", os);
 	}
 
-	private Dimension2D getTotalDimension(List<Graph3> graphs) {
+	private Dimension2D getTotalDimension(List<Graph5> graphs) {
 		double width = 0;
 		double height = 0;
-		for (Graph3 g : graphs) {
+		for (Graph5 g : graphs) {
 			width += g.getDimension().getWidth();
 			height = Math.max(height, g.getDimension().getHeight());
 		}
@@ -117,8 +119,8 @@ public final class CucaDiagramPngMaker3 {
 
 	}
 
-	private List<Graph3> getGraphs3(Collection<Heap> heaps) {
-		final List<Graph3> result = new ArrayList<Graph3>();
+	private List<Graph5> getGraphs3(Collection<Heap> heaps) {
+		final List<Graph5> result = new ArrayList<Graph5>();
 		for (Heap h : heaps) {
 			h.computeRows();
 			Board board = new Board(h.getNodes(), h.getLinks());
@@ -138,7 +140,7 @@ public final class CucaDiagramPngMaker3 {
 			Log.info("################# DURATION = " + (System.currentTimeMillis() - start));
 			board = boardExplorer.getBestBoard();
 
-			result.add(new Graph3(board));
+			result.add(new Graph5(board));
 		}
 		return result;
 	}
@@ -154,7 +156,7 @@ public final class CucaDiagramPngMaker3 {
 			}
 		}
 
-		return new PngSplitter(pngFile, diagram.getHorizontalPages(), diagram.getVerticalPages(), diagram.getSource())
+		return new PngSplitter(pngFile, diagram.getHorizontalPages(), diagram.getVerticalPages(), diagram.getMetadata())
 				.getFiles();
 	}
 }

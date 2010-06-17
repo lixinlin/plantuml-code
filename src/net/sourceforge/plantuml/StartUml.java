@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ *
+ * Revision $Revision: 4780 $
  *
  */
 package net.sourceforge.plantuml;
@@ -34,16 +36,22 @@ package net.sourceforge.plantuml;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class StartUml {
+class StartUml {
 
-	private final PSystem system;
 	private final String startuml;
+	private final PSystem system;
 
 	private static final Pattern pattern1 = Pattern.compile("^@startuml\\s+\"?(.*?)\"?$");
 
 	StartUml(PSystem system, String startuml) {
-		this.system = system;
+		if (system == null) {
+			throw new IllegalArgumentException();
+		}
+		if (startuml == null) {
+			throw new IllegalArgumentException();
+		}
 		this.startuml = startuml;
+		this.system = system;
 	}
 
 	@Override

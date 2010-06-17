@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,22 +26,25 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4737 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.graphic;
 
-import java.awt.Graphics2D;
 import java.awt.geom.Dimension2D;
 
 import net.sourceforge.plantuml.Dimension2DDouble;
+import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.sequencediagram.NotePosition;
 import net.sourceforge.plantuml.skin.ArrowComponent;
 import net.sourceforge.plantuml.skin.Component;
 import net.sourceforge.plantuml.skin.Context2D;
 import net.sourceforge.plantuml.skin.Skin;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
 
-class MessageArrow extends SimpleArrow {
+class MessageArrow extends Arrow {
 
 	private final LivingParticipantBox p1;
 	private final LivingParticipantBox p2;
@@ -59,42 +62,44 @@ class MessageArrow extends SimpleArrow {
 		this.p2 = p2;
 	}
 
-	public double getActualWidth(Graphics2D g2d) {
-		final double r = getRightEndInternal(g2d) - getLeftStartInternal(g2d);
+	public double getActualWidth(StringBounder stringBounder) {
+		final double r = getRightEndInternal(stringBounder) - getLeftStartInternal(stringBounder);
 		assert r > 0;
 		return r;
 	}
 
-	private double getLeftStartInternal(Graphics2D g2d) {
-		return getParticipantAt(g2d, NotePosition.LEFT).getLiveThicknessAt(g2d, getArrowYStartLevel(g2d)).getPos2();
+	private double getLeftStartInternal(StringBounder stringBounder) {
+		return getParticipantAt(stringBounder, NotePosition.LEFT).getLiveThicknessAt(stringBounder,
+				getArrowYStartLevel(stringBounder)).getPos2();
 	}
 
-	private double getRightEndInternal(Graphics2D g2d) {
-		return getParticipantAt(g2d, NotePosition.RIGHT).getLiveThicknessAt(g2d, getArrowYStartLevel(g2d)).getPos1();
-	}
-
-	@Override
-	public double getPreferredHeight(Graphics2D g2d) {
-		return getArrow().getPreferredHeight(g2d);
+	private double getRightEndInternal(StringBounder stringBounder) {
+		return getParticipantAt(stringBounder, NotePosition.RIGHT).getLiveThicknessAt(stringBounder,
+				getArrowYStartLevel(stringBounder)).getPos1();
 	}
 
 	@Override
-	public double getStartingX(Graphics2D g2d) {
-		return getLeftStartInternal(g2d);
+	public double getPreferredHeight(StringBounder stringBounder) {
+		return getArrowComponent().getPreferredHeight(stringBounder);
 	}
 
 	@Override
-	public int getDirection(Graphics2D g2d) {
-		final double x1 = p1.getParticipantBox().getCenterX(g2d);
-		final double x2 = p2.getParticipantBox().getCenterX(g2d);
+	public double getStartingX(StringBounder stringBounder) {
+		return getLeftStartInternal(stringBounder);
+	}
+
+	@Override
+	public int getDirection(StringBounder stringBounder) {
+		final double x1 = p1.getParticipantBox().getCenterX(stringBounder);
+		final double x2 = p2.getParticipantBox().getCenterX(stringBounder);
 		if (x1 < x2) {
 			return 1;
 		}
 		return -1;
 	}
 
-	public LivingParticipantBox getParticipantAt(Graphics2D g2d, NotePosition position) {
-		final int direction = getDirection(g2d);
+	public LivingParticipantBox getParticipantAt(StringBounder stringBounder, NotePosition position) {
+		final int direction = getDirection(stringBounder);
 		if (direction == 1 && position == NotePosition.RIGHT) {
 			return p2;
 		}
@@ -111,39 +116,53 @@ class MessageArrow extends SimpleArrow {
 	}
 
 	@Override
-	public double getPreferredWidth(Graphics2D g2d) {
-		return getArrow().getPreferredWidth(g2d);
+	public double getPreferredWidth(StringBounder stringBounder) {
+		return getArrowComponent().getPreferredWidth(stringBounder);
 	}
 
 	@Override
-	protected void drawInternal(Graphics2D g2d, double maxX, Context2D context) {
-		g2d.translate(getStartingX(g2d), getStartingY());
-		getArrow().draw(g2d, getActualDimension(g2d), context);
+	protected void drawInternalU(UGraphic ug, double maxX, Context2D context) {
+		final StringBounder stringBounder = ug.getStringBounder();
+		ug.translate(getStartingX(stringBounder), getStartingY());
+		getArrowComponent().drawU(ug, getActualDimension(stringBounder), context);
 	}
 
-	private Dimension2D getActualDimension(Graphics2D g2d) {
-		return new Dimension2DDouble(getActualWidth(g2d), getArrow().getPreferredHeight(g2d));
+	private Dimension2D getActualDimension(StringBounder stringBounder) {
+		return new Dimension2DDouble(getActualWidth(stringBounder) - getPaddingArrowHead(), getArrowComponent()
+				.getPreferredHeight(stringBounder));
 	}
 
 	@Override
-	public double getArrowYStartLevel(Graphics2D g2d) {
-		if (getArrow() instanceof ArrowComponent) {
-			final ArrowComponent arrowComponent = (ArrowComponent) getArrow();
-			final Dimension2D dim = new Dimension2DDouble(arrowComponent.getPreferredWidth(g2d), arrowComponent
-					.getPreferredHeight(g2d));
-			return getStartingY() + arrowComponent.getStartPoint(g2d, dim).getY();
+	public double getArrowYStartLevel(StringBounder stringBounder) {
+		if (getArrowComponent() instanceof ArrowComponent) {
+			final ArrowComponent arrowComponent = (ArrowComponent) getArrowComponent();
+			final Dimension2D dim = new Dimension2DDouble(arrowComponent.getPreferredWidth(stringBounder),
+					arrowComponent.getPreferredHeight(stringBounder));
+			return getStartingY() + arrowComponent.getStartPoint(stringBounder, dim).getY();
 		}
 		return getStartingY();
 	}
 
 	@Override
-	public double getArrowYEndLevel(Graphics2D g2d) {
-		if (getArrow() instanceof ArrowComponent) {
-			final ArrowComponent arrowComponent = (ArrowComponent) getArrow();
-			final Dimension2D dim = new Dimension2DDouble(arrowComponent.getPreferredWidth(g2d), arrowComponent
-					.getPreferredHeight(g2d));
-			return getStartingY() + arrowComponent.getEndPoint(g2d, dim).getY();
+	public double getArrowYEndLevel(StringBounder stringBounder) {
+		if (getArrowComponent() instanceof ArrowComponent) {
+			final ArrowComponent arrowComponent = (ArrowComponent) getArrowComponent();
+			final Dimension2D dim = new Dimension2DDouble(arrowComponent.getPreferredWidth(stringBounder),
+					arrowComponent.getPreferredHeight(stringBounder));
+			return getStartingY() + arrowComponent.getEndPoint(stringBounder, dim).getY();
 		}
-		return getStartingY() + getArrow().getPreferredHeight(g2d);
+		return getStartingY() + getArrowComponent().getPreferredHeight(stringBounder);
+	}
+
+	public double getMaxX(StringBounder stringBounder) {
+		return getRightEndInternal(stringBounder);
+	}
+
+	public double getMinX(StringBounder stringBounder) {
+		return getLeftStartInternal(stringBounder);
+	}
+
+	public String toString(StringBounder stringBounder) {
+		return getMinX(stringBounder) + "-" + getMaxX(stringBounder);
 	}
 }

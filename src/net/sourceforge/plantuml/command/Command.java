@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4762 $
  *
  */
 package net.sourceforge.plantuml.command;
@@ -34,14 +36,13 @@ package net.sourceforge.plantuml.command;
 import java.util.List;
 
 public interface Command {
-	
-	boolean execute(List<String> lines);
+
+	CommandExecutionResult execute(List<String> lines);
 
 	CommandControl isValid(List<String> lines);
-	
-	boolean isDeprecated(List<String> lines);
-	
-	String getHelpMessageForDeprecated(List<String> lines);
 
+	boolean isDeprecated(List<String> lines);
+
+	String getHelpMessageForDeprecated(List<String> lines);
 
 }

@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ *
+ * Revision $Revision: 3827 $
  *
  */
 package net.sourceforge.plantuml.code;
@@ -56,7 +58,7 @@ public class Transcoder {
 	public String encode(String text) throws IOException {
 
 		final String stringAnnoted = stringCompressor.compress(text);
-		
+
 		final byte[] data = stringAnnoted.getBytes("UTF-8");
 		final byte[] compressedData = compression.compress(data);
 
@@ -66,7 +68,7 @@ public class Transcoder {
 	public String decode(String code) throws IOException {
 		final byte compressedData[] = urlEncoder.decode(code);
 		final byte data[] = compression.decompress(compressedData);
-		
+
 		return stringCompressor.decompress(new String(data, "UTF-8"));
 	}
 

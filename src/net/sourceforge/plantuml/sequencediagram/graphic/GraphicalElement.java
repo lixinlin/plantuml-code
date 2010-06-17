@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,15 +26,16 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4696 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.graphic;
 
-import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
-
+import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.skin.Context2D;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
 
 abstract class GraphicalElement {
 
@@ -52,18 +53,19 @@ abstract class GraphicalElement {
 		return startingY;
 	}
 
-	public final void draw(Graphics2D g2d, double maxX, Context2D context) {
-		final AffineTransform t = g2d.getTransform();
-		drawInternal(g2d, maxX, context);
-		g2d.setTransform(t);
+	public final void drawU(UGraphic ug, double maxX, Context2D context) {
+		final double atX = ug.getTranslateX();
+		final double atY = ug.getTranslateY();
+		drawInternalU(ug, maxX, context);
+		ug.setTranslate(atX, atY);
 	}
 
-	protected abstract void drawInternal(Graphics2D g2d, double maxX, Context2D context);
+	protected abstract void drawInternalU(UGraphic ug, double maxX, Context2D context);
 
-	public abstract double getStartingX(Graphics2D g2d);
+	public abstract double getStartingX(StringBounder stringBounder);
 
-	public abstract double getPreferredWidth(Graphics2D g2d);
+	public abstract double getPreferredWidth(StringBounder stringBounder);
 
-	public abstract double getPreferredHeight(Graphics2D g2d);
+	public abstract double getPreferredHeight(StringBounder stringBounder);
 
 }

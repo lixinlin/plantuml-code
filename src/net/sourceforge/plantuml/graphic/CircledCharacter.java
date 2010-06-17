@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4235 $
  *
  */
 package net.sourceforge.plantuml.graphic;
@@ -34,18 +36,31 @@ package net.sourceforge.plantuml.graphic;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.geom.Rectangle2D;
+import java.awt.Shape;
+import java.awt.font.FontRenderContext;
+import java.awt.font.TextLayout;
+import java.awt.geom.Dimension2D;
+import java.awt.geom.PathIterator;
 
-public class CircledCharacter {
+import net.sourceforge.plantuml.skin.UDrawable;
+import net.sourceforge.plantuml.ugraphic.UEllipse;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
+import net.sourceforge.plantuml.ugraphic.UPath;
+import net.sourceforge.plantuml.ugraphic.USegmentType;
+import net.sourceforge.plantuml.ugraphic.g2d.UGraphicG2d;
+
+public class CircledCharacter implements UDrawable {
 
 	private final String c;
 	private final Font font;
 	private final Color innerCircle;
 	private final Color circle;
 	private final Color fontColor;
+	private final double radius;
 
-	public CircledCharacter(char c, Font font, Color innerCircle, Color circle, Color fontColor) {
+	public CircledCharacter(char c, double radius, Font font, Color innerCircle, Color circle, Color fontColor) {
 		this.c = "" + c;
+		this.radius = radius;
 		this.font = font;
 		this.innerCircle = innerCircle;
 		this.circle = circle;
@@ -53,33 +68,62 @@ public class CircledCharacter {
 	}
 
 	public void draw(Graphics2D g2d, int x, int y) {
-		final Color circleToUse = circle == null ? g2d.getColor() : circle;
-		g2d.setColor(innerCircle);
-		g2d.fillOval(x, y, (int) getPreferredWidth(g2d), (int) getPreferredHeight(g2d));
-		g2d.setColor(circleToUse);
-		g2d.drawOval(x, y, (int) getPreferredWidth(g2d), (int) getPreferredHeight(g2d));
-
-		g2d.setColor(fontColor);
-		g2d.setFont(font);
-		final Rectangle2D stringDimension = getStringDimension(g2d);
-		final int descent = g2d.getFontMetrics(font).getDescent();
-		final double deltaX = (getPreferredWidth(g2d) - stringDimension.getWidth()) / 2;
-		final double deltaY = getPreferredHeight(g2d) - (getPreferredHeight(g2d) - stringDimension.getHeight()) / 2
-				- descent;
-		g2d.drawString(c, (float) (x + deltaX + 0.5), (float) (y + deltaY));
+		drawU(new UGraphicG2d(g2d, null), x, y);
 	}
 
-	private Rectangle2D getStringDimension(Graphics2D g2d) {
-		return g2d.getFontMetrics(font).getStringBounds(c, g2d);
+	public void drawU(UGraphic ug, double x, double y) {
+		final Color circleToUse = circle == null ? ug.getParam().getColor() : circle;
+		ug.getParam().setBackcolor(innerCircle);
+		ug.getParam().setColor(circleToUse);
+		ug.draw(x, y, new UEllipse(radius * 2, radius * 2));
+
+		ug.getParam().setColor(fontColor);
+
+//		if (ug instanceof UGraphicSvg) {
+//			final UPath p = getUPath(new FontRenderContext(null, true, true));
+//			ug.draw(x + radius, y + radius, p);
+//		} else {
+			ug.centerChar(x + radius, y + radius, c.charAt(0), font);
+//		}
+
 	}
 
-	final public double getPreferredWidth(Graphics2D g2d) {
-		final Rectangle2D dim = getStringDimension(g2d);
-		return Math.max(dim.getWidth(), dim.getHeight());
+	private Dimension2D getStringDimension(StringBounder stringBounder) {
+		return stringBounder.calculateDimension(font, c);
 	}
 
-	final public double getPreferredHeight(Graphics2D g2d) {
-		return getPreferredWidth(g2d);
+	final public double getPreferredWidth(StringBounder stringBounder) {
+		return 2 * radius;
+	}
+
+	final public double getPreferredHeight(StringBounder stringBounder) {
+		return 2 * radius;
+	}
+
+	public void drawU(UGraphic ug) {
+		drawU(ug, 0, 0);
+	}
+
+	private PathIterator getPathIteratorCharacter(FontRenderContext frc) {
+		final TextLayout textLayout = new TextLayout(c, font, frc);
+		final Shape s = textLayout.getOutline(null);
+		return s.getPathIterator(null);
+	}
+
+	public UPath getUPath(FontRenderContext frc) {
+		final UPath result = new UPath();
+
+		final PathIterator path = getPathIteratorCharacter(frc);
+
+		final double coord[] = new double[6];
+		while (path.isDone() == false) {
+			// final int w = path.getWindingRule();
+			final int code = path.currentSegment(coord);
+			result.add(coord, USegmentType.getByCode(code));
+			path.next();
+		}
+
+		return result;
 	}
 
 }

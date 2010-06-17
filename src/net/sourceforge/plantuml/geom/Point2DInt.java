@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 3830 $
  *
  */
 package net.sourceforge.plantuml.geom;
@@ -87,7 +89,7 @@ public class Point2DInt extends Point2D implements Pointable {
 			return this;
 		}
 		if (x == xpos) {
-			//throw new IllegalArgumentException();
+			// throw new IllegalArgumentException();
 			return translate(inflation / 2, 0);
 		}
 		return translate(inflation, 0);
@@ -96,7 +98,7 @@ public class Point2DInt extends Point2D implements Pointable {
 	public Point2DInt inflateX(InflateData inflateData) {
 		return inflateX(inflateData.getPos(), inflateData.getInflation());
 	}
-	
+
 	public Point2DInt inflateY(InflateData inflateData) {
 		return inflateY(inflateData.getPos(), inflateData.getInflation());
 	}
@@ -109,7 +111,7 @@ public class Point2DInt extends Point2D implements Pointable {
 			return this;
 		}
 		if (y == ypos) {
-			//throw new IllegalArgumentException();
+			// throw new IllegalArgumentException();
 			return translate(0, inflation / 2);
 		}
 		return translate(0, inflation);

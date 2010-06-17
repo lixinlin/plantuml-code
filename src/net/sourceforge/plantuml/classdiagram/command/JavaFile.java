@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ *
+ * Revision $Revision: 3827 $
  *
  */
 package net.sourceforge.plantuml.classdiagram.command;
@@ -48,7 +50,7 @@ class JavaFile {
 	private static final Pattern classDefinition = Pattern
 			.compile("^(?:public\\s+|abstract\\s+|final\\s+)*(class|interface|enum)\\s+(\\w+)(?:.*\\b(extends|implements)\\s+([\\w\\s,]+))?");
 
-	private static final Pattern pacakgeDefinition = Pattern.compile("^package\\s+([\\w+.]+)\\s*;");
+	private static final Pattern packageDefinition = Pattern.compile("^package\\s+([\\w+.]+)\\s*;");
 
 	private final List<JavaClass> all = new ArrayList<JavaClass>();
 
@@ -69,7 +71,7 @@ class JavaFile {
 		String s;
 		while ((s = br.readLine()) != null) {
 			s = s.trim();
-			final Matcher matchPackage = pacakgeDefinition.matcher(s);
+			final Matcher matchPackage = packageDefinition.matcher(s);
 			if (matchPackage.find()) {
 				javaPackage = matchPackage.group(1);
 			} else {

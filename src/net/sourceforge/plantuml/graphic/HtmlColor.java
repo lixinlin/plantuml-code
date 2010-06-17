@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4251 $
  *
  */
 package net.sourceforge.plantuml.graphic;
@@ -194,7 +196,8 @@ public class HtmlColor {
 		if (s.matches("#[0-9A-Fa-f]{6}")) {
 			color = new Color(Integer.parseInt(s.substring(1), 16));
 		} else {
-			final String value = htmlNames.get(s.toLowerCase());
+			s = removeFirstDieseAndToLowercase(s);
+			final String value = htmlNames.get(s);
 			if (value == null) {
 				throw new IllegalArgumentException(s);
 			}
@@ -207,18 +210,37 @@ public class HtmlColor {
 		if (s.matches("#[0-9A-Fa-f]{6}")) {
 			return true;
 		}
-		if (htmlNames.containsKey(s.toLowerCase())) {
+		s = removeFirstDieseAndToLowercase(s);
+		if (htmlNames.containsKey(s)) {
 			return true;
 		}
 		return false;
 
 	}
 
+	static public HtmlColor getColorIfValid(String s) {
+		if (s == null || isValid(s) == false) {
+			return null;
+		}
+		return new HtmlColor(s);
+	}
+
 	public static String getAsHtml(Color color) {
+		if (color == null) {
+			throw new IllegalArgumentException();
+		}
 		final int v = 0xFFFFFF & color.getRGB();
 		String s = "000000" + Integer.toHexString(v).toUpperCase();
 		s = s.substring(s.length() - 6);
 		return "#" + s;
+	}
+
+	static private String removeFirstDieseAndToLowercase(String s) {
+		s = s.toLowerCase();
+		if (s.startsWith("#")) {
+			s = s.substring(1);
+		}
+		return s;
 	}
 
 	public String getAsHtml() {
@@ -227,5 +249,10 @@ public class HtmlColor {
 
 	public Color getColor() {
 		return color;
+	}
+	
+	@Override
+	public String toString() {
+		return super.toString()+" "+getAsHtml();
 	}
 }

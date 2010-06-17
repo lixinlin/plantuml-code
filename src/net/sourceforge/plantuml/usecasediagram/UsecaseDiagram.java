@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,26 +26,39 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
  *
  */
 package net.sourceforge.plantuml.usecasediagram;
 
+import net.sourceforge.plantuml.StringUtils;
+import net.sourceforge.plantuml.UmlDiagramType;
 import net.sourceforge.plantuml.classdiagram.AbstractEntityDiagram;
 import net.sourceforge.plantuml.cucadiagram.Entity;
 import net.sourceforge.plantuml.cucadiagram.EntityType;
+import net.sourceforge.plantuml.cucadiagram.Rankdir;
 
 public class UsecaseDiagram extends AbstractEntityDiagram {
+
+	public UsecaseDiagram() {
+		setRankdir(Rankdir.TOP_TO_BOTTOM);
+	}
 
 	@Override
 	public Entity getOrCreateClass(String code) {
 		if (code.startsWith("(") && code.endsWith(")")) {
-			return getOrCreateEntity(removeFirstAndLastChar(code), EntityType.USECASE);
+			return getOrCreateEntity(StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(code), EntityType.USECASE);
 		}
 		if (code.startsWith(":") && code.endsWith(":")) {
-			return getOrCreateEntity(removeFirstAndLastChar(code), EntityType.ACTOR);
+			return getOrCreateEntity(StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(code), EntityType.ACTOR);
 		}
 		return getOrCreateEntity(code, EntityType.ACTOR);
 	}
+	
+	@Override
+	public UmlDiagramType getUmlDiagramType() {
+		return UmlDiagramType.USECASE;
+	}
+
 
 }

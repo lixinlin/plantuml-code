@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,30 +26,40 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4763 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.command;
 
 import java.util.List;
 
+import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.command.SingleLineCommand;
+import net.sourceforge.plantuml.graphic.HtmlColor;
 import net.sourceforge.plantuml.sequencediagram.GroupingType;
 import net.sourceforge.plantuml.sequencediagram.SequenceDiagram;
 
 public class CommandGrouping extends SingleLineCommand<SequenceDiagram> {
 
 	public CommandGrouping(SequenceDiagram sequenceDiagram) {
-		super(sequenceDiagram, "(?i)^(opt|alt|loop|else|end)(?:\\s+(.*?))?$");
+		super(
+				sequenceDiagram,
+				"(?i)^(opt|alt|loop|else|end)((?<!else)(?<!end)#\\w+)?(?:\\s+(#\\w+))?(?:\\s+(.*?))?$");
 	}
-	
 
 	@Override
-	protected boolean executeArg(List<String> arg) {
+	protected CommandExecutionResult executeArg(List<String> arg) {
 		final String type = arg.get(0);
-		final String comment = arg.get(1);
-		getSystem().grouping(type, comment, GroupingType.getType(type));
-		return true;
+		final HtmlColor colorElement = HtmlColor.getColorIfValid(arg.get(1));
+		final HtmlColor colorGeneral = HtmlColor.getColorIfValid(arg.get(2));
+		final String comment = arg.get(3);
+		final boolean result = getSystem().grouping(type, comment,
+				GroupingType.getType(type), colorGeneral, colorElement);
+		if (result == false) {
+			return CommandExecutionResult.error("Cannot create group");
+		}
+		return CommandExecutionResult.ok();
 	}
-
 }

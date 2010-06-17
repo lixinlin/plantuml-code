@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4093 $
  *
  */
 package net.sourceforge.plantuml.cucadiagram.dot;
@@ -55,10 +57,19 @@ class DotExpression {
 
 	private final String fontFamily;
 
-	DotExpression(String html, int defaultFontSize, HtmlColor color, String fontFamily) {
+	DotExpression(String html, int defaultFontSize, HtmlColor color, String fontFamily, int style) {
 		this.fontFamily = fontFamily;
 		this.normalFont = new Font("SansSerif", Font.PLAIN, defaultFontSize);
 		this.fontConfiguration = new FontConfiguration(normalFont, color.getColor());
+
+		if ((style & Font.ITALIC) != 0) {
+			html = "<i>" + html;
+		}
+
+		if ((style & Font.BOLD) != 0) {
+			html = "<b>" + html;
+		}
+
 		html = html.replaceAll(" \\<[uU]\\>", "<u>");
 		html = html.replaceAll("\\</[uU]\\> ", "</u>");
 		underline = html.contains("<u>") || html.contains("<U>");
@@ -116,7 +127,7 @@ class DotExpression {
 		appendFace(sb, fontFamily, modifier);
 	}
 
-	public static void appendFace(StringBuilder sb, String fontFamily, String modifier) {
+	private static void appendFace(StringBuilder sb, String fontFamily, String modifier) {
 		if (fontFamily == null && modifier == null) {
 			return;
 		}

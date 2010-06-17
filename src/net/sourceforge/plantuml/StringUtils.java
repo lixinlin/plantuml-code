@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ *
+ * Revision $Revision: 4794 $
  *
  */
 package net.sourceforge.plantuml;
@@ -95,11 +97,11 @@ public class StringUtils {
 		s = s.replace(">", "&gt;");
 		return s;
 	}
-	
+
 	public static String manageArrow(String s) {
 		s = s.replace('=', '-');
-		s = s.replace('[', '<');
-		s = s.replace(']', '>');
+		//s = s.replace('[', '<');
+		//s = s.replace(']', '>');
 		return s;
 	}
 
@@ -107,6 +109,66 @@ public class StringUtils {
 		if (s.startsWith("\"") && s.endsWith("\"")) {
 			return s.substring(1, s.length() - 1);
 		}
+		if (s.startsWith("(") && s.endsWith(")")) {
+			return s.substring(1, s.length() - 1);
+		}
+		if (s.startsWith("[") && s.endsWith("]")) {
+			return s.substring(1, s.length() - 1);
+		}
+		if (s.startsWith(":") && s.endsWith(":")) {
+			return s.substring(1, s.length() - 1);
+		}
+		return s;
+	}
+
+	public static String cleanLineFromSource(String s) {
+		if (s.startsWith("\uFEFF")) {
+			s = s.substring(1);
+		}
+		if (s.startsWith("~~")) {
+			s = s.substring("~~".length());
+		}
+		// if (s.startsWith(" * ")) {
+		// s = s.substring(" * ".length());
+		// }
+		s = s.replaceFirst("^\\s+\\* ", "");
+		if (s.equals(" *")) {
+			s = "";
+		}
+		s = s.trim();
+		while (s.startsWith(" ") || s.startsWith("/") || s.startsWith("\t") || s.startsWith("%") || s.startsWith("/*")) {
+			if (s.startsWith("/*")) {
+				s = s.substring(2).trim();
+			} else {
+				s = s.substring(1).trim();
+			}
+		}
+		return s;
+	}
+	
+	public static boolean isCJK(char c) {
+		final Character.UnicodeBlock block = Character.UnicodeBlock.of(c);
+		System.err.println(block);
+		return false;
+	}
+	
+	public static char hiddenLesserThan() {
+		return '\u0005';
+	}
+
+	public static char hiddenBiggerThan() {
+		return '\u0006';
+	}
+	
+	public static String hideComparatorCharacters(String s) {
+		s = s.replace('<', hiddenLesserThan());
+		s = s.replace('>', hiddenBiggerThan());
+		return s;
+	}
+
+	public static String showComparatorCharacters(String s) {
+		s = s.replace(hiddenLesserThan(), '<');
+		s = s.replace(hiddenBiggerThan(), '>');
 		return s;
 	}
 

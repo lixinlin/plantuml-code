@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 3831 $
  *
  */
 package net.sourceforge.plantuml.geom.kinetic;
@@ -36,7 +38,7 @@ import java.awt.geom.Point2D;
 public class Point2DCharge extends Point2D.Double {
 
 	private double charge = 1.0;
-	
+
 	private MoveObserver moveObserver = null;
 
 	public Point2DCharge(double x, double y) {
@@ -49,24 +51,24 @@ public class Point2DCharge extends Point2D.Double {
 	}
 
 	public void apply(VectorForce value) {
-		System.err.println("Applying "+value);
+		System.err.println("Applying " + value);
 		x += value.getX();
 		y += value.getY();
 		if (moveObserver != null) {
 			moveObserver.pointMoved(this);
 		}
 	}
-	
+
 	@Override
 	final public void setLocation(double x, double y) {
 		throw new UnsupportedOperationException();
 	}
-	
+
 	@Override
 	final public void setLocation(Point2D p) {
 		throw new UnsupportedOperationException();
 	}
-	
+
 	@Override
 	public String toString() {
 		return System.identityHashCode(this) + " " + String.format("[%8.2f %8.2f]", x, y);

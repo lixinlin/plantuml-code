@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,15 +26,17 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4696 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.graphic;
 
-import java.awt.Graphics2D;
-
+import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.skin.Component;
 import net.sourceforge.plantuml.skin.Context2D;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
 
 class LifeDestroy extends GraphicalElement {
 
@@ -49,24 +51,25 @@ class LifeDestroy extends GraphicalElement {
 	}
 
 	@Override
-	protected void drawInternal(Graphics2D g2d, double maxX, Context2D context) {
-		g2d.translate(getStartingX(g2d), getStartingY());
-		comp.draw(g2d, null, context);
+	protected void drawInternalU(UGraphic ug, double maxX, Context2D context) {
+		final StringBounder stringBounder = ug.getStringBounder();
+		ug.translate(getStartingX(stringBounder), getStartingY());
+		comp.drawU(ug, null, context);
 	}
 
 	@Override
-	public double getPreferredHeight(Graphics2D g2d) {
-		return comp.getPreferredHeight(g2d);
+	public double getPreferredHeight(StringBounder stringBounder) {
+		return comp.getPreferredHeight(stringBounder);
 	}
 
 	@Override
-	public double getPreferredWidth(Graphics2D g2d) {
-		return comp.getPreferredWidth(g2d);
+	public double getPreferredWidth(StringBounder stringBounder) {
+		return comp.getPreferredWidth(stringBounder);
 	}
 
 	@Override
-	public double getStartingX(Graphics2D g2d) {
-		return participant.getCenterX(g2d) - getPreferredWidth(g2d) / 2.0;
+	public double getStartingX(StringBounder stringBounder) {
+		return participant.getCenterX(stringBounder) - getPreferredWidth(stringBounder) / 2.0;
 	}
 
 }

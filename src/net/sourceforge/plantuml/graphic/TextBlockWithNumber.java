@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4125 $
  *
  */
 package net.sourceforge.plantuml.graphic;
@@ -39,6 +41,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.sourceforge.plantuml.Dimension2DDouble;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
 
 class TextBlockWithNumber extends TextBlockSimple {
 
@@ -51,27 +54,39 @@ class TextBlockWithNumber extends TextBlockSimple {
 	}
 
 	@Override
-	public Dimension2D calculateDimension(Graphics2D g2d) {
-		final double widthNum = getNumberWithAndMargin(g2d);
-		final double heightNum = numText.calculateDimension(g2d).getHeight();
+	public Dimension2D calculateDimension(StringBounder stringBounder) {
+		final double widthNum = getNumberWithAndMargin(stringBounder);
+		final double heightNum = numText.calculateDimension(stringBounder).getHeight();
 
-		final Dimension2D dim = super.calculateDimension(g2d);
+		final Dimension2D dim = super.calculateDimension(stringBounder);
 		return new Dimension2DDouble(dim.getWidth() + widthNum, Math.max(heightNum, dim.getHeight()));
 	}
 
-	private double getNumberWithAndMargin(Graphics2D g2d) {
-		final double widthNum = numText.calculateDimension(g2d).getWidth();
+	private double getNumberWithAndMargin(StringBounder stringBounder) {
+		final double widthNum = numText.calculateDimension(stringBounder).getWidth();
 		return widthNum + 4.0;
 	}
 
 	@Override
-	public void draw(Graphics2D g2d, double x, double y) {
-		final double heightNum = numText.calculateDimension(g2d).getHeight();
+	public void drawTOBEREMOVED(Graphics2D g2d, double x, double y) {
+		final StringBounder stringBounder = StringBounderUtils.asStringBounder(g2d);
+		final double heightNum = numText.calculateDimension(stringBounder).getHeight();
 
-		final double deltaY = calculateDimension(g2d).getHeight() - heightNum;
+		final double deltaY = calculateDimension(stringBounder).getHeight() - heightNum;
 
-		numText.draw(g2d, x, y + deltaY / 2.0);
-		super.draw(g2d, x + getNumberWithAndMargin(g2d), y);
+		numText.drawTOBEREMOVED(g2d, x, y + deltaY / 2.0);
+		super.drawTOBEREMOVED(g2d, x + getNumberWithAndMargin(stringBounder), y);
+	}
+	
+	@Override
+	public void drawU(UGraphic ug, double x, double y) {
+		final StringBounder stringBounder = ug.getStringBounder();
+		final double heightNum = numText.calculateDimension(stringBounder).getHeight();
+
+		final double deltaY = calculateDimension(stringBounder).getHeight() - heightNum;
+
+		numText.drawU(ug, x, y + deltaY / 2.0);
+		super.drawU(ug, x + getNumberWithAndMargin(stringBounder), y);
 	}
 
 }

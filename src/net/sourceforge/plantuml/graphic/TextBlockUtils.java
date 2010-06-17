@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4111 $
  *
  */
 package net.sourceforge.plantuml.graphic;
@@ -63,8 +65,8 @@ public class TextBlockUtils {
 			HorizontalAlignement horizontalAlignement) {
 		final Stereotype stereotype = (Stereotype) texts.get(0);
 		if (stereotype.isSpotted()) {
-			final CircledCharacter circledCharacter = new CircledCharacter(stereotype.getCharacter(),
-					deriveForCircleCharacter(font), stereotype.getColor(), null, paint);
+			final CircledCharacter circledCharacter = new CircledCharacter(stereotype.getCharacter(), stereotype
+					.getRadius(), stereotype.getCircledFont(), stereotype.getColor(), null, paint);
 			if (stereotype.getLabel() == null) {
 				return new TextBlockSpotted(circledCharacter, texts.subList(1, texts.size()), font, paint,
 						horizontalAlignement);
@@ -74,9 +76,9 @@ public class TextBlockUtils {
 		return new TextBlockSimple(texts, font, paint, horizontalAlignement);
 	}
 
-	static private Font deriveForCircleCharacter(Font font) {
-		final float size = font.getSize2D();
-		return font.deriveFont(size - 1).deriveFont(Font.BOLD);
-	}
+	// static private Font deriveForCircleCharacter(Font font) {
+	// final float size = font.getSize2D();
+	// return font.deriveFont(size - 1).deriveFont(Font.BOLD);
+	// }
 
 }

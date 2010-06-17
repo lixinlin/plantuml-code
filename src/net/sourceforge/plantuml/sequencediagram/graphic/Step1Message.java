@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,89 +26,75 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4837 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.graphic;
 
-import java.awt.Graphics2D;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
+import net.sourceforge.plantuml.ISkinParam;
+import net.sourceforge.plantuml.SkinParamBackcolored;
+import net.sourceforge.plantuml.graphic.StringBounder;
+import net.sourceforge.plantuml.sequencediagram.InGroupable;
+import net.sourceforge.plantuml.sequencediagram.InGroupableList;
 import net.sourceforge.plantuml.sequencediagram.LifeEvent;
-import net.sourceforge.plantuml.sequencediagram.LifeEventType;
 import net.sourceforge.plantuml.sequencediagram.Message;
-import net.sourceforge.plantuml.sequencediagram.MessageNumber;
 import net.sourceforge.plantuml.sequencediagram.NotePosition;
-import net.sourceforge.plantuml.sequencediagram.Participant;
-import net.sourceforge.plantuml.skin.Component;
 import net.sourceforge.plantuml.skin.ComponentType;
 
-class Step1Message {
-
-	private final Graphics2D g2d;
-
-	private final DrawableSet drawingSet;
-
-	private final Message message;
-
-	private double freeY;
+class Step1Message extends Step1Abstract {
 
 	private final MessageArrow messageArrow;
 
-	private final ComponentType type;
+	Step1Message(StringBounder stringBounder, Message message, DrawableSet drawingSet, double freeY) {
+		super(stringBounder, message, drawingSet, freeY);
 
-	private final Component note;
+		final double x1 = getParticipantBox1().getCenterX(stringBounder);
+		final double x2 = getParticipantBox2().getCenterX(stringBounder);
 
-	Step1Message(Graphics2D g2d, Message message, DrawableSet drawingSet, double freeY) {
-		this.g2d = g2d;
-		this.message = message;
-		this.freeY = freeY;
-		this.drawingSet = drawingSet;
-
-		final double x1 = getParticipantBox1().getCenterX(g2d);
-		final double x2 = getParticipantBox2().getCenterX(g2d);
-
-		this.type = isSelfMessage() ? getSelfArrowType(message) : getArrowType(message, x1, x2);
+		this.setType(isSelfMessage() ? getSelfArrowType(message) : getArrowType(message, x1, x2));
 
 		if (isSelfMessage()) {
 			this.messageArrow = null;
 		} else {
 			this.messageArrow = new MessageArrow(freeY, drawingSet.getSkin(), drawingSet.getSkin().createComponent(
-					type, drawingSet.getSkinParam(), getLabelOfMessage(message)), getLivingParticipantBox1(),
+					getType(), drawingSet.getSkinParam(), getLabelOfMessage(message)), getLivingParticipantBox1(),
 					getLivingParticipantBox2());
 		}
 
-		if (message.getNote() == null) {
-			note = null;
-		} else {
-			note = drawingSet.getSkin().createComponent(ComponentType.NOTE, drawingSet.getSkinParam(),
-					message.getNote());
+		if (message.getNote() != null) {
+			final ISkinParam skinParam = new SkinParamBackcolored(drawingSet.getSkinParam(), message
+					.getSpecificBackColor());
+			setNote(drawingSet.getSkin().createComponent(ComponentType.NOTE, drawingSet.getSkinParam(),
+					message.getNote()));
 		}
 
 	}
 
-	double prepareMessage(ConstraintSet constraintSet) {
+	double prepareMessage(ConstraintSet constraintSet, Collection<InGroupableList> groupingStructures) {
 		final Arrow graphic = createArrow();
-		final double arrowYStartLevel = graphic.getArrowYStartLevel(g2d);
-		final double arrowYEndLevel = graphic.getArrowYEndLevel(g2d);
+		final double arrowYStartLevel = graphic.getArrowYStartLevel(getStringBounder());
+		final double arrowYEndLevel = graphic.getArrowYEndLevel(getStringBounder());
 
-		for (LifeEvent lifeEvent : message.getLiveEvents()) {
+		for (LifeEvent lifeEvent : getMessage().getLiveEvents()) {
 			beforeMessage(lifeEvent, arrowYStartLevel);
 		}
 
 		final double length;
 		if (isSelfMessage()) {
-			length = graphic.getArrowOnlyWidth(g2d)
-					+ getLivingParticipantBox1().getLiveThicknessAt(g2d, arrowYStartLevel).getLength();
+			length = graphic.getArrowOnlyWidth(getStringBounder())
+					+ getLivingParticipantBox1().getLiveThicknessAt(getStringBounder(), arrowYStartLevel).getLength();
 		} else {
-			length = graphic.getArrowOnlyWidth(g2d)
+			length = graphic.getArrowOnlyWidth(getStringBounder())
 					+ getLivingParticipantBox(NotePosition.LEFT).getLifeLine().getRightShift(arrowYStartLevel)
 					+ getLivingParticipantBox(NotePosition.RIGHT).getLifeLine().getLeftShift(arrowYStartLevel);
 		}
 
-		freeY += graphic.getPreferredHeight(g2d);
-		drawingSet.addEvent(message, graphic);
+		incFreeY(graphic.getPreferredHeight(getStringBounder()));
+		getDrawingSet().addEvent(getMessage(), graphic);
 
 		if (isSelfMessage()) {
 			constraintSet.getConstraintAfter(getParticipantBox1()).ensureValue(length);
@@ -116,11 +102,21 @@ class Step1Message {
 			constraintSet.getConstraint(getParticipantBox1(), getParticipantBox2()).ensureValue(length);
 		}
 
-		for (LifeEvent lifeEvent : message.getLiveEvents()) {
-			afterMessage(g2d, lifeEvent, arrowYEndLevel);
+		for (LifeEvent lifeEvent : getMessage().getLiveEvents()) {
+			afterMessage(getStringBounder(), lifeEvent, arrowYEndLevel);
 		}
 
-		return freeY;
+		if (groupingStructures != null && graphic instanceof InGroupable) {
+			for (InGroupableList groupingStructure : groupingStructures) {
+				groupingStructure.addInGroupable((InGroupable) graphic);
+				groupingStructure.addInGroupable(getLivingParticipantBox1());
+				if (isSelfMessage() == false) {
+					groupingStructure.addInGroupable(getLivingParticipantBox2());
+				}
+			}
+		}
+
+		return getFreeY();
 	}
 
 	private boolean isSelfMessage() {
@@ -136,76 +132,55 @@ class Step1Message {
 	}
 
 	private LivingParticipantBox getLivingParticipantBox1() {
-		return drawingSet.getLivingParticipantBox(message.getParticipant1());
+		return getDrawingSet().getLivingParticipantBox(((Message) getMessage()).getParticipant1());
 	}
 
 	private LivingParticipantBox getLivingParticipantBox2() {
-		return drawingSet.getLivingParticipantBox(message.getParticipant2());
+		return getDrawingSet().getLivingParticipantBox(((Message) getMessage()).getParticipant2());
 	}
 
 	private LivingParticipantBox getLivingParticipantBox(NotePosition position) {
 		if (isSelfMessage()) {
 			throw new IllegalStateException();
 		}
-		return messageArrow.getParticipantAt(g2d, position);
-	}
-
-	private List<? extends CharSequence> getLabelOfMessage(Message message) {
-		if (message.getMessageNumber() == null) {
-			return message.getLabel();
-		}
-		final List<CharSequence> result = new ArrayList<CharSequence>();
-		result.add(new MessageNumber(message.getMessageNumber()));
-		result.addAll(message.getLabel());
-		return result;
-	}
-
-	private void beforeMessage(LifeEvent n, final double pos) {
-		final Participant p = n.getParticipant();
-		final LifeLine line = drawingSet.getLivingParticipantBox(p).getLifeLine();
-
-		if (n.getType() != LifeEventType.ACTIVATE) {
-			return;
-		}
-		assert n.getType() == LifeEventType.ACTIVATE;
-		line.addSegmentVariation(LifeSegmentVariation.LARGER, pos);
-	}
-
-	private void afterMessage(Graphics2D g2d, LifeEvent n, final double pos) {
-		final Participant p = n.getParticipant();
-		final LifeLine line = drawingSet.getLivingParticipantBox(p).getLifeLine();
-
-		if (n.getType() == LifeEventType.ACTIVATE) {
-			return;
-		}
-
-		if (n.getType() == LifeEventType.DESTROY) {
-			final Component comp = drawingSet.getSkin().createComponent(ComponentType.DESTROY,
-					drawingSet.getSkinParam(), null);
-			final double delta = comp.getPreferredHeight(g2d) / 2;
-			final LifeDestroy destroy = new LifeDestroy(pos - delta, drawingSet.getLivingParticipantBox(p)
-					.getParticipantBox(), comp);
-			drawingSet.addEvent(n, destroy);
-		} else if (n.getType() != LifeEventType.DEACTIVATE) {
-			throw new IllegalStateException();
-		}
-
-		line.addSegmentVariation(LifeSegmentVariation.SMALLER, pos);
+		return messageArrow.getParticipantAt(getStringBounder(), position);
 	}
 
 	private Arrow createArrow() {
-		if (message.getNote() != null && isSelfMessage()) {
-			return new ArrowAndNoteBox(g2d, new MessageSelfArrow(freeY, drawingSet.getSkin(), drawingSet.getSkin()
-					.createComponent(type, drawingSet.getSkinParam(), getLabelOfMessage(message)),
-					getLivingParticipantBox1()), note, message.getNotePosition());
-		} else if (message.getNote() != null) {
-			return new ArrowAndNoteBox(g2d, messageArrow, note, message.getNotePosition());
+		if (getMessage().isCreate()) {
+			return createArrowCreate();
+		}
+		final MessageSelfArrow messageSelfArrow = new MessageSelfArrow(getFreeY(), getDrawingSet().getSkin(),
+				getDrawingSet().getSkin().createComponent(getType(), getDrawingSet().getSkinParam(),
+						getLabelOfMessage(getMessage())), getLivingParticipantBox1());
+		if (getMessage().getNote() != null && isSelfMessage()) {
+			final NoteBox noteBox = createNoteBox(getStringBounder(), messageSelfArrow, getNote(), getMessage()
+					.getNotePosition());
+			return new ArrowAndNoteBox(getStringBounder(), messageSelfArrow, noteBox);
+		} else if (getMessage().getNote() != null) {
+			final NoteBox noteBox = createNoteBox(getStringBounder(), messageArrow, getNote(), getMessage()
+					.getNotePosition());
+			return new ArrowAndNoteBox(getStringBounder(), messageArrow, noteBox);
 		} else if (isSelfMessage()) {
-			return new MessageSelfArrow(freeY, drawingSet.getSkin(), drawingSet.getSkin().createComponent(type,
-					drawingSet.getSkinParam(), getLabelOfMessage(message)), getLivingParticipantBox1());
+			return messageSelfArrow;
 		} else {
 			return messageArrow;
 		}
+	}
+
+	private Arrow createArrowCreate() {
+		getLivingParticipantBox2().create(getFreeY());
+		if (getMessage().getNote() != null) {
+			final ArrowAndParticipant arrowAndParticipant = new ArrowAndParticipant(getStringBounder(), messageArrow,
+					getParticipantBox2());
+			final NoteBox noteBox = createNoteBox(getStringBounder(), arrowAndParticipant, getNote(), getMessage()
+					.getNotePosition());
+			if (getMessage().getNotePosition() == NotePosition.RIGHT) {
+				noteBox.pushToRight(getParticipantBox2().getHeadPreferredWith(getStringBounder()) / 2);
+			}
+			return new ArrowAndNoteBox(getStringBounder(), arrowAndParticipant, noteBox);
+		}
+		return new ArrowAndParticipant(getStringBounder(), messageArrow, getParticipantBox2());
 	}
 
 	private ComponentType getSelfArrowType(Message m) {
@@ -213,14 +188,19 @@ class Step1Message {
 	}
 
 	private ComponentType getArrowType(Message m, final double x1, final double x2) {
-		final ComponentType type;
-
-		if (m.isDotted()) {
-			type = x2 > x1 ? ComponentType.DOTTED_ARROW : ComponentType.RETURN_DOTTED_ARROW;
+		ComponentType result = null;
+		if (x2 > x1) {
+			result = ComponentType.ARROW;
 		} else {
-			type = x2 > x1 ? ComponentType.ARROW : ComponentType.RETURN_ARROW;
+			result = ComponentType.RETURN_ARROW;
 		}
-		return type;
+		if (m.isDotted()) {
+			result = result.getDotted();
+		}
+		if (m.isFull() == false) {
+			result = result.getAsync();
+		}
+		return result;
 	}
 
 }

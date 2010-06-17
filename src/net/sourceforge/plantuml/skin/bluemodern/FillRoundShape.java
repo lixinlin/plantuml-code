@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 3914 $
  *
  */
 package net.sourceforge.plantuml.skin.bluemodern;
@@ -35,6 +37,10 @@ import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.geom.RoundRectangle2D;
+
+import net.sourceforge.plantuml.ugraphic.UGradient;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
+import net.sourceforge.plantuml.ugraphic.URectangle;
 
 public class FillRoundShape {
 
@@ -57,7 +63,15 @@ public class FillRoundShape {
 		final GradientPaint paint = new GradientPaint(0, 0, c1, (float) width, (float) height, c2);
 		final RoundRectangle2D r = new RoundRectangle2D.Double(0, 0, width, height, corner * 2, corner * 2);
 		g2d.setPaint(paint);
-
 		g2d.fill(r);
 	}
+
+	public void drawU(UGraphic ug) {
+		final UGradient gradient = new UGradient(c1, c2);
+		final URectangle r = new URectangle(width, height, corner * 2, corner * 2);
+		ug.getParam().setGradient(gradient);
+		ug.draw(0, 0, r);
+		ug.getParam().setGradient(null);
+	}
+
 }

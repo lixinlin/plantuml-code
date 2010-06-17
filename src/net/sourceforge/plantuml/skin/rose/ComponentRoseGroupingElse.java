@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,47 +26,48 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4258 $
  *
  */
 package net.sourceforge.plantuml.skin.rose;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics2D;
 import java.awt.geom.Dimension2D;
 
 import net.sourceforge.plantuml.graphic.HorizontalAlignement;
+import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.skin.AbstractTextualComponent;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
+import net.sourceforge.plantuml.ugraphic.ULine;
+import net.sourceforge.plantuml.ugraphic.UStroke;
 
 public class ComponentRoseGroupingElse extends AbstractTextualComponent {
 
 	public ComponentRoseGroupingElse(Color fontColor, Font smallFont, CharSequence comment) {
 		super(comment == null ? null : "[" + comment + "]", fontColor, smallFont, HorizontalAlignement.LEFT, 5, 5, 1);
 	}
+	
 
 	@Override
-	protected void drawInternal(Graphics2D g2d, Dimension2D dimensionToUse) {
-		stroke(g2d, 2);
-		g2d.setColor(getFontColor());
-
-		g2d.drawLine(0, 1, (int) dimensionToUse.getWidth(), 1);
-
-		g2d.setStroke(new BasicStroke());
-
-		getTextBlock().draw(g2d, getMarginX1(), getMarginY());
-
+	protected void drawInternalU(UGraphic ug, Dimension2D dimensionToUse) {
+		stroke(ug, 2);
+		ug.getParam().setColor(getFontColor());
+		ug.draw(0, 1, new ULine(dimensionToUse.getWidth(), 0));
+		ug.getParam().setStroke(new UStroke());
+		getTextBlock().drawU(ug, getMarginX1(), getMarginY());
 	}
 
 	@Override
-	public double getPreferredHeight(Graphics2D g2d) {
+	public double getPreferredHeight(StringBounder stringBounder) {
 		return 15;
 	}
 
 	@Override
-	public double getPreferredWidth(Graphics2D g2d) {
-		return getTextWidth(g2d);
+	public double getPreferredWidth(StringBounder stringBounder) {
+		return getTextWidth(stringBounder);
 	}
 
 }

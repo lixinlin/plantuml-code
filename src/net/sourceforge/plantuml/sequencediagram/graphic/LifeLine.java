@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,28 +26,38 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4832 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.graphic;
 
-import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import net.sourceforge.plantuml.ISkinParam;
+import net.sourceforge.plantuml.SkinParam;
+import net.sourceforge.plantuml.SkinParamBackcolored;
+import net.sourceforge.plantuml.graphic.HtmlColor;
+import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.skin.Component;
+import net.sourceforge.plantuml.skin.ComponentType;
+import net.sourceforge.plantuml.skin.Skin;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
 
 class LifeLine {
 
 	static class Variation {
 		final private LifeSegmentVariation type;
+		final private HtmlColor backcolor;
 		final private double y;
 
-		Variation(LifeSegmentVariation type, double y) {
+		Variation(LifeSegmentVariation type, double y, HtmlColor backcolor) {
 			this.type = type;
 			this.y = y;
+			this.backcolor = backcolor;
 		}
 
 		@Override
@@ -67,21 +77,21 @@ class LifeLine {
 		this.nominalPreferredWidth = nominalPreferredWidth;
 	}
 
-	public void addSegmentVariation(LifeSegmentVariation type, double y) {
+	public void addSegmentVariation(LifeSegmentVariation type, double y, HtmlColor backcolor) {
 		if (events.size() > 0) {
 			final double lastY = events.get(events.size() - 1).y;
 			if (y < lastY) {
 				throw new IllegalArgumentException();
 			}
 		}
-		events.add(new Variation(type, y));
+		events.add(new Variation(type, y, backcolor));
 		maxLevel = Math.max(getLevel(y), maxLevel);
 	}
 
 	public void finish(double y) {
 		final int missingClose = getMissingClose();
 		for (int i = 0; i < missingClose; i++) {
-			addSegmentVariation(LifeSegmentVariation.SMALLER, y);
+			addSegmentVariation(LifeSegmentVariation.SMALLER, y, null);
 		}
 	}
 
@@ -146,8 +156,8 @@ class LifeLine {
 		return nominalPreferredWidth / 2.0;
 	}
 
-	private double getStartingX(Graphics2D g2d) {
-		final double delta = participant.getCenterX(g2d) - nominalPreferredWidth / 2.0;
+	private double getStartingX(StringBounder stringBounder) {
+		final double delta = participant.getCenterX(stringBounder) - nominalPreferredWidth / 2.0;
 		return delta;
 	}
 
@@ -174,27 +184,35 @@ class LifeLine {
 				level--;
 			}
 			if (level == 0) {
-				return new Segment(events.get(i).y, events.get(j).y);
+				return new Segment(events.get(i).y, events.get(j).y, events.get(i).backcolor);
 			}
 		}
-		return new Segment(events.get(i).y, events.get(events.size() - 1).y);
+		return new Segment(events.get(i).y, events.get(events.size() - 1).y, events.get(i).backcolor);
 	}
 
-	public void draw(Graphics2D g2d, final Component comp) {
-		final AffineTransform t = g2d.getTransform();
-		g2d.translate(getStartingX(g2d), 0);
+
+	public void drawU(UGraphic ug, Skin skin, SkinParam skinParam) {
+	//public void drawU(UGraphic ug, final Component comp) {
+		final StringBounder stringBounder = ug.getStringBounder();
+		
+		final double atX = ug.getTranslateX();
+		final double atY = ug.getTranslateY();
+
+		ug.translate(getStartingX(stringBounder), 0);
 
 		for (Segment seg : getSegments()) {
+			final ISkinParam skinParam2 = new SkinParamBackcolored(skinParam, seg.getSpecificBackColor());
+			final Component comp = skin.createComponent(ComponentType.ALIVE_LINE, skinParam2, null);
 			final int currentLevel = getLevel(seg.getPos1());
-			seg.draw(g2d, comp, currentLevel);
+			seg.drawU(ug, comp, currentLevel);
 		}
 
-		g2d.setTransform(t);
+		ug.setTranslate(atX, atY);
 
 	}
 
 	private double create = 0;
-	
+
 	public final void setCreate(double create) {
 		this.create = create;
 	}

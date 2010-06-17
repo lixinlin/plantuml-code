@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,20 +26,23 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4167 $
  *
  */
 package net.sourceforge.plantuml.skin.rose;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics2D;
 import java.awt.geom.Dimension2D;
 import java.util.List;
 
 import net.sourceforge.plantuml.graphic.HorizontalAlignement;
+import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.graphic.TextBlock;
 import net.sourceforge.plantuml.skin.AbstractTextualComponent;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
 
 public class ComponentRoseTitle extends AbstractTextualComponent {
 
@@ -48,21 +51,21 @@ public class ComponentRoseTitle extends AbstractTextualComponent {
 	public ComponentRoseTitle(Color fontColor, Font font, List<? extends CharSequence> stringsToDisplay) {
 		super(stringsToDisplay, fontColor, font, HorizontalAlignement.CENTER, 7, 7, 7);
 	}
-	
+
 	@Override
-	protected void drawInternal(Graphics2D g2d, Dimension2D dimensionToUse) {
+	protected void drawInternalU(UGraphic ug, Dimension2D dimensionToUse) {
 		final TextBlock textBlock = getTextBlock();
-		textBlock.draw(g2d, outMargin + getMarginX1(), getMarginY());
+		textBlock.drawU(ug, outMargin + getMarginX1(), getMarginY());
 	}
 
 	@Override
-	public double getPreferredHeight(Graphics2D g2d) {
-		return getTextHeight(g2d);
+	public double getPreferredHeight(StringBounder stringBounder) {
+		return getTextHeight(stringBounder);
 	}
 
 	@Override
-	public double getPreferredWidth(Graphics2D g2d) {
-		return getTextWidth(g2d) + outMargin * 2;
+	public double getPreferredWidth(StringBounder stringBounder) {
+		return getTextWidth(stringBounder) + outMargin * 2;
 	}
 
 }

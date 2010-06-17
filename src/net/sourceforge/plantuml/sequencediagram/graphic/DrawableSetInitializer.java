@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,24 +26,35 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4836 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.graphic;
 
-import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
+
+import sun.rmi.transport.LiveRef;
 
 import net.sourceforge.plantuml.Dimension2DDouble;
+import net.sourceforge.plantuml.ISkinParam;
 import net.sourceforge.plantuml.SkinParam;
+import net.sourceforge.plantuml.SkinParamBackcolored;
+import net.sourceforge.plantuml.graphic.StringBounder;
+import net.sourceforge.plantuml.sequencediagram.Divider;
 import net.sourceforge.plantuml.sequencediagram.Event;
-import net.sourceforge.plantuml.sequencediagram.Grouping;
+import net.sourceforge.plantuml.sequencediagram.GroupingLeaf;
+import net.sourceforge.plantuml.sequencediagram.GroupingStart;
 import net.sourceforge.plantuml.sequencediagram.GroupingType;
+import net.sourceforge.plantuml.sequencediagram.InGroupableList;
 import net.sourceforge.plantuml.sequencediagram.LifeEvent;
 import net.sourceforge.plantuml.sequencediagram.LifeEventType;
 import net.sourceforge.plantuml.sequencediagram.Message;
+import net.sourceforge.plantuml.sequencediagram.MessageExo;
 import net.sourceforge.plantuml.sequencediagram.Newpage;
 import net.sourceforge.plantuml.sequencediagram.Note;
 import net.sourceforge.plantuml.sequencediagram.Participant;
@@ -65,8 +76,7 @@ class DrawableSetInitializer {
 	private int maxGrouping = 0;
 
 	private ConstraintSet constraintSet;
-
-	// private Component compTitle;
+	private ConstraintSetHBar constraintSetHBar;
 
 	public DrawableSetInitializer(Skin skin, SkinParam skinParam, boolean showTail) {
 		this.drawableSet = new DrawableSet(skin, skinParam);
@@ -74,26 +84,28 @@ class DrawableSetInitializer {
 
 	}
 
-	public DrawableSet createDrawableSet(Graphics2D g2d/* , List<String> title */) {
+	public DrawableSet createDrawableSet(StringBounder stringBounder) {
 		if (freeY != 0) {
 			throw new IllegalStateException();
 		}
 
 		for (Participant p : drawableSet.getAllParticipants()) {
-			prepareParticipant(g2d, p);
+			prepareParticipant(stringBounder, p);
 		}
 
-		this.freeY = drawableSet.getHeadHeight(g2d);
+		this.freeY = drawableSet.getHeadHeight(stringBounder);
 
 		for (LivingParticipantBox p : drawableSet.getAllLivingParticipantBox()) {
 			p.getParticipantBox().setTopStartingY(this.freeY);
 		}
 
-		// if (title != null && title.size() > 0) {
-		// compTitle =
-		// drawableSet.getSkin().createComponent(ComponentType.TITLE, title);
-		// this.freeY += compTitle.getPreferredHeight(g2d);
-		// }
+		for (Participant p : drawableSet.getAllParticipants()) {
+			final LivingParticipantBox living = drawableSet.getLivingParticipantBox(p);
+			for (int i = 0; i < p.getInitialLife(); i++) {
+				living.getLifeLine().addSegmentVariation(LifeSegmentVariation.LARGER, this.freeY,
+						p.getLiveSpecificBackColor());
+			}
+		}
 
 		final Collection<ParticipantBox> col = new ArrayList<ParticipantBox>();
 		for (LivingParticipantBox livingParticipantBox : drawableSet.getAllLivingParticipantBox()) {
@@ -101,49 +113,46 @@ class DrawableSetInitializer {
 		}
 
 		constraintSet = new ConstraintSet(col, freeX);
+		constraintSetHBar = new ConstraintSetHBar(col);
 
 		for (Event ev : drawableSet.getAllEvents()) {
-			if (ev instanceof Message) {
-				prepareMessage(g2d, (Message) ev);
+			if (ev instanceof MessageExo) {
+				prepareMessageExo(stringBounder, (MessageExo) ev);
+			} else if (ev instanceof Message) {
+				prepareMessage(stringBounder, (Message) ev);
 			} else if (ev instanceof Note) {
-				prepareNote(g2d, (Note) ev);
+				prepareNote(stringBounder, (Note) ev);
 			} else if (ev instanceof LifeEvent) {
-				prepareLiveEvent(g2d, (LifeEvent) ev);
-			} else if (ev instanceof Grouping) {
-				prepareGrouping(g2d, (Grouping) ev);
+				prepareLiveEvent(stringBounder, (LifeEvent) ev);
+			} else if (ev instanceof GroupingLeaf) {
+				prepareGroupingLeaf(stringBounder, (GroupingLeaf) ev);
+			} else if (ev instanceof GroupingStart) {
+				prepareGroupingStart(stringBounder, (GroupingStart) ev);
 			} else if (ev instanceof Newpage) {
-				prepareNewpage(g2d, (Newpage) ev);
+				prepareNewpage(stringBounder, (Newpage) ev);
+			} else if (ev instanceof Divider) {
+				prepareDivider(stringBounder, (Divider) ev);
 			} else {
 				throw new IllegalStateException();
 			}
 		}
 
-		constraintSet.takeConstraintIntoAccount(g2d);
+		constraintSet.takeConstraintIntoAccount(stringBounder);
 
-		prepareMissingSpace(g2d);
-		final double diagramWidth = freeX + 1 + getGroupingMargin() * 2;
-		// double titleWidth = 0;
-		// if (compTitle != null) {
-		// titleWidth = compTitle.getPreferredWidth(g2d);
-		// }
-		// final double width = Math.max(titleWidth, diagramWidth);
-		drawableSet.setDimension(new Dimension2DDouble(diagramWidth, getTotalHeight(g2d))/*
-																							 * ,
-																							 * (width -
-																							 * diagramWidth) /
-																							 * 2
-																							 */);
-		drawableSet.setGroupingMargin(getGroupingMargin());
-		// drawableSet.setComponentTitle(getComponentTitle());
+		prepareMissingSpace(stringBounder);
+
+		final double diagramWidth = freeX + 1 + constraintSetHBar.takeConstraintIntoAccount2(stringBounder);
+
+		drawableSet.setDimension(new Dimension2DDouble(diagramWidth, getTotalHeight(stringBounder)));
 		return drawableSet;
 	}
 
-	private double getTotalHeight(Graphics2D g2d) {
+	private double getTotalHeight(StringBounder stringBounder) {
 		final double signature = 0;
-		return freeY + drawableSet.getTailHeight(g2d, showTail) + signature;
+		return freeY + drawableSet.getTailHeight(stringBounder, showTail) + signature;
 	}
 
-	public double getYposition(Graphics2D g2d, Newpage newpage) {
+	public double getYposition(StringBounder stringBounder, Newpage newpage) {
 		if (newpage == null) {
 			throw new IllegalArgumentException();
 		}
@@ -151,18 +160,18 @@ class DrawableSetInitializer {
 		return graphicalNewpage.getStartingY();
 	}
 
-	private void prepareMissingSpace(Graphics2D g2d) {
+	private void prepareMissingSpace(StringBounder stringBounder) {
 		freeX = constraintSet.getMaxX();
 		double missingSpace1 = 0;
 		double missingSpace2 = 0;
 
 		for (GraphicalElement ev : drawableSet.getAllGraphicalElements()) {
-			final double startX = ev.getStartingX(g2d);
+			final double startX = ev.getStartingX(stringBounder);
 			final double delta1 = -startX;
 			if (delta1 > missingSpace1) {
 				missingSpace1 = delta1;
 			}
-			final double endX = startX + ev.getPreferredWidth(g2d);
+			final double endX = startX + ev.getPreferredWidth(stringBounder);
 			final double delta2 = endX - freeX;
 			if (delta2 > missingSpace2) {
 				missingSpace2 = delta2;
@@ -174,104 +183,169 @@ class DrawableSetInitializer {
 		freeX = constraintSet.getMaxX() + missingSpace2;
 	}
 
-	private void prepareNewpage(Graphics2D g2d, Newpage newpage) {
+	private void prepareNewpage(StringBounder stringBounder, Newpage newpage) {
 		final GraphicalNewpage graphicalNewpage = new GraphicalNewpage(freeY, drawableSet.getSkin().createComponent(
 				ComponentType.NEWPAGE, drawableSet.getSkinParam(), null));
-		freeY += graphicalNewpage.getPreferredHeight(g2d);
+		freeY += graphicalNewpage.getPreferredHeight(stringBounder);
 		drawableSet.addEvent(newpage, graphicalNewpage);
 	}
 
-	private void prepareGrouping(Graphics2D g2d, Grouping m) {
+	private void prepareDivider(StringBounder stringBounder, Divider divider) {
+		final GraphicalDivider graphicalDivider = new GraphicalDivider(freeY, drawableSet.getSkin().createComponent(
+				ComponentType.DIVIDER, drawableSet.getSkinParam(), divider.getText()));
+		freeY += graphicalDivider.getPreferredHeight(stringBounder);
+		drawableSet.addEvent(divider, graphicalDivider);
+	}
+
+	private List<InGroupableList> inGroupableLists = new ArrayList<InGroupableList>();
+
+	private void prepareGroupingStart(StringBounder stringBounder, GroupingStart m) {
+		if (m.getType() != GroupingType.START) {
+			throw new IllegalStateException();
+		}
+		final ISkinParam skinParam = new SkinParamBackcolored(drawableSet.getSkinParam(), m.getBackColorElement(), m
+				.getBackColorGeneral());
+		this.maxGrouping++;
+		final Component header = drawableSet.getSkin().createComponent(ComponentType.GROUPING_HEADER, skinParam,
+				Arrays.asList(m.getTitle(), m.getComment()));
+		final InGroupableList inGroupableList = new InGroupableList(m, freeY);
+		for (InGroupableList other : inGroupableLists) {
+			other.addInGroupable(inGroupableList);
+		}
+		inGroupableLists.add(inGroupableList);
+		constraintSetHBar.add(inGroupableList);
+
+		final GraphicalElement element = new GroupingHeader(freeY, header, (m.getLevel() + 1) * groupingMargin,
+				inGroupableList);
+		inGroupableList.setMinWidth(element.getPreferredWidth(stringBounder));
+		freeY += element.getPreferredHeight(stringBounder);
+		drawableSet.addEvent(m, element);
+	}
+
+	private void prepareGroupingLeaf(StringBounder stringBounder, GroupingLeaf m) {
 		final GraphicalElement element;
-		if (m.getType() == GroupingType.START) {
-			this.maxGrouping++;
-			final Component header = drawableSet.getSkin().createComponent(ComponentType.GROUPING_HEADER,
-					drawableSet.getSkinParam(), Arrays.asList(m.getTitle(), m.getComment()));
-			element = new GroupingHeader(freeY, header, (m.getLevel() + 1) * groupingMargin);
-			freeY += element.getPreferredHeight(g2d);
-
+		if (m.getType() == GroupingType.ELSE) {
+			final ISkinParam skinParam = new SkinParamBackcolored(drawableSet.getSkinParam(), null, m.getJustBefore()
+					.getBackColorGeneral());
+			final GraphicalElement before = drawableSet.getEvent(m.getJustBefore());
+			final Component comp = drawableSet.getSkin().createComponent(ComponentType.GROUPING_ELSE, skinParam,
+					Arrays.asList(m.getComment()));
+			final Component body = drawableSet.getSkin().createComponent(ComponentType.GROUPING_BODY, skinParam, null);
+			double initY = before.getStartingY();
+			if (before instanceof GroupingHeader) {
+				initY += before.getPreferredHeight(stringBounder);
+			}
+			element = new GroupingElse(freeY, initY, body, comp, (m.getLevel() + 1) * groupingMargin,
+					getTopGroupingStructure());
+			freeY += element.getPreferredHeight(stringBounder);
 		} else if (m.getType() == GroupingType.END) {
-			final Grouping father = m.getFather();
-			final GroupingHeader header = (GroupingHeader) drawableSet.getEvent(father);
-			final Component body = drawableSet.getSkin().createComponent(ComponentType.GROUPING_BODY,
-					drawableSet.getSkinParam(), null);
-			final Component tail = drawableSet.getSkin().createComponent(ComponentType.GROUPING_TAIL,
-					drawableSet.getSkinParam(), null);
-			element = new GroupingTail(freeY, header.getStartingY() + header.getPreferredHeight(g2d) / 2.0, (m
-					.getLevel() + 1)
-					* groupingMargin, body, tail);
-			freeY += tail.getPreferredHeight(g2d);
-
-		} else if (m.getType() == GroupingType.ELSE) {
-			final Component comp = drawableSet.getSkin().createComponent(ComponentType.GROUPING_ELSE,
-					drawableSet.getSkinParam(), Arrays.asList(m.getComment()));
-			element = new GroupingElse(freeY, comp, (m.getLevel() + 1) * groupingMargin);
-			freeY += element.getPreferredHeight(g2d);
-
+			final ISkinParam skinParam = new SkinParamBackcolored(drawableSet.getSkinParam(), null, m.getJustBefore()
+					.getBackColorGeneral());
+			final GraphicalElement justBefore = drawableSet.getEvent(m.getJustBefore());
+			final Component body = drawableSet.getSkin().createComponent(ComponentType.GROUPING_BODY, skinParam, null);
+			final Component tail = drawableSet.getSkin().createComponent(ComponentType.GROUPING_TAIL, skinParam, null);
+			double initY = justBefore.getStartingY();
+			if (justBefore instanceof GroupingHeader) {
+				// initY += before.getPreferredHeight(stringBounder);
+				// A cause de ComponentRoseGroupingHeader::getPaddingY() a
+				// supprimer
+				initY += 7;
+			}
+			element = new GroupingTail(freeY, initY, (m.getLevel() + 1) * groupingMargin, body, tail,
+					getTopGroupingStructure());
+			freeY += tail.getPreferredHeight(stringBounder);
+			final int idx = inGroupableLists.size() - 1;
+			inGroupableLists.get(idx).setEndingY(freeY);
+			inGroupableLists.remove(idx);
 		} else {
 			throw new IllegalStateException();
 		}
 		drawableSet.addEvent(m, element);
 	}
 
-	private void prepareNote(Graphics2D g2d, Note n) {
+	private void prepareNote(StringBounder stringBounder, Note n) {
 		LivingParticipantBox p1 = drawableSet.getLivingParticipantBox(n.getParticipant());
 		LivingParticipantBox p2;
 		if (n.getParticipant2() == null) {
 			p2 = null;
 		} else {
 			p2 = drawableSet.getLivingParticipantBox(n.getParticipant2());
-			if (p1.getParticipantBox().getCenterX(g2d) > p2.getParticipantBox().getCenterX(g2d)) {
+			if (p1.getParticipantBox().getCenterX(stringBounder) > p2.getParticipantBox().getCenterX(stringBounder)) {
 				final LivingParticipantBox tmp = p1;
 				p1 = p2;
 				p2 = tmp;
 			}
 		}
-		final NoteBox noteBox = new NoteBox(freeY, drawableSet.getSkin().createComponent(ComponentType.NOTE,
-				drawableSet.getSkinParam(), n.getStrings()), p1, p2, n.getPosition());
+		final ISkinParam skinParam = new SkinParamBackcolored(drawableSet.getSkinParam(), n.getSpecificBackColor());
+		final NoteBox noteBox = new NoteBox(freeY, drawableSet.getSkin().createComponent(ComponentType.NOTE, skinParam,
+				n.getStrings()), p1, p2, n.getPosition());
+
+		for (InGroupableList groupingStructure : inGroupableLists) {
+			groupingStructure.addInGroupable(noteBox);
+		}
+
 		drawableSet.addEvent(n, noteBox);
-		freeY += noteBox.getPreferredHeight(g2d);
+		freeY += noteBox.getPreferredHeight(stringBounder);
 	}
 
-	private void prepareLiveEvent(Graphics2D g2d, LifeEvent lifeEvent) {
+	private void prepareLiveEvent(StringBounder stringBounder, LifeEvent lifeEvent) {
 		if (lifeEvent.getType() != LifeEventType.DESTROY && lifeEvent.getType() != LifeEventType.CREATE) {
 			throw new IllegalStateException();
 		}
-		if (lifeEvent.getType() == LifeEventType.CREATE) {
-			final Participant p = lifeEvent.getParticipant();
-			drawableSet.getLivingParticipantBox(p).create(freeY);
-			drawableSet.getLivingParticipantBox(p).getParticipantBox().setShowHead(false);
-			final Component head = drawableSet.getSkin().createComponent(ComponentType.PARTICIPANT_HEAD,
-					drawableSet.getSkinParam(), p.getDisplay());
-			final LifeDestroy destroy = new LifeDestroy(freeY, drawableSet.getLivingParticipantBox(p)
-					.getParticipantBox(), head);
-			drawableSet.addEvent(lifeEvent, destroy);
-			freeY += destroy.getPreferredHeight(g2d);
+		// if (lifeEvent.getType() == LifeEventType.CREATE) {
+		// final Participant p = lifeEvent.getParticipant();
+		// drawableSet.getLivingParticipantBox(p).create(freeY);
+		// //
+		// drawableSet.getLivingParticipantBox(p).getParticipantBox().setShowHead(false);
+		// if (1 == 1)
+		// throw new UnsupportedOperationException();
+		// final Component head =
+		// drawableSet.getSkin().createComponent(ComponentType.PARTICIPANT_HEAD,
+		// drawableSet.getSkinParam(), p.getDisplay());
+		// final LifeDestroy destroy = new LifeDestroy(freeY,
+		// drawableSet.getLivingParticipantBox(p)
+		// .getParticipantBox(), head);
+		// drawableSet.addEvent(lifeEvent, destroy);
+		// freeY += destroy.getPreferredHeight(stringBounder);
+		// }
+	}
+
+	private void prepareMessage(StringBounder stringBounder, Message m) {
+		final Step1Message step1Message = new Step1Message(stringBounder, m, drawableSet, freeY);
+		freeY = step1Message.prepareMessage(constraintSet, inGroupableLists);
+	}
+
+	private void prepareMessageExo(StringBounder stringBounder, MessageExo m) {
+		final Step1MessageExo step1Message = new Step1MessageExo(stringBounder, m, drawableSet, freeY);
+		freeY = step1Message.prepareMessage(constraintSet, inGroupableLists);
+	}
+
+	private InGroupableList getTopGroupingStructure() {
+		if (inGroupableLists.size() == 0) {
+			return null;
 		}
+		return inGroupableLists.get(inGroupableLists.size() - 1);
 	}
 
-	private void prepareMessage(Graphics2D g2d, Message m) {
-		final Step1Message step1Message = new Step1Message(g2d, m, drawableSet, freeY);
-		freeY = step1Message.prepareMessage(constraintSet);
-	}
-
-	private void prepareParticipant(Graphics2D g2d, Participant p) {
+	private void prepareParticipant(StringBounder stringBounder, Participant p) {
 		final ParticipantBox box;
 
 		if (p.getType() == ParticipantType.PARTICIPANT) {
-			final Component head = drawableSet.getSkin().createComponent(ComponentType.PARTICIPANT_HEAD,
-					drawableSet.getSkinParam(), p.getDisplay());
+			final ISkinParam skinParam = new SkinParamBackcolored(drawableSet.getSkinParam(), p.getSpecificBackColor());
+			final Component head = drawableSet.getSkin().createComponent(ComponentType.PARTICIPANT_HEAD, skinParam,
+					p.getDisplay());
+			final Component tail = drawableSet.getSkin().createComponent(ComponentType.PARTICIPANT_TAIL, skinParam,
+					p.getDisplay());
 			final Component line = drawableSet.getSkin().createComponent(ComponentType.PARTICIPANT_LINE,
-					drawableSet.getSkinParam(), p.getDisplay());
-			final Component tail = drawableSet.getSkin().createComponent(ComponentType.PARTICIPANT_TAIL,
 					drawableSet.getSkinParam(), p.getDisplay());
 			box = new ParticipantBox(head, line, tail, this.freeX);
 		} else if (p.getType() == ParticipantType.ACTOR) {
-			final Component head = drawableSet.getSkin().createComponent(ComponentType.ACTOR_HEAD,
-					drawableSet.getSkinParam(), p.getDisplay());
+			final ISkinParam skinParam = new SkinParamBackcolored(drawableSet.getSkinParam(), p.getSpecificBackColor());
+			final Component head = drawableSet.getSkin().createComponent(ComponentType.ACTOR_HEAD, skinParam,
+					p.getDisplay());
+			final Component tail = drawableSet.getSkin().createComponent(ComponentType.ACTOR_TAIL, skinParam,
+					p.getDisplay());
 			final Component line = drawableSet.getSkin().createComponent(ComponentType.ACTOR_LINE,
-					drawableSet.getSkinParam(), p.getDisplay());
-			final Component tail = drawableSet.getSkin().createComponent(ComponentType.ACTOR_TAIL,
 					drawableSet.getSkinParam(), p.getDisplay());
 			box = new ParticipantBox(head, line, tail, this.freeX);
 		} else {
@@ -281,9 +355,10 @@ class DrawableSetInitializer {
 		final Component comp = drawableSet.getSkin().createComponent(ComponentType.ALIVE_LINE,
 				drawableSet.getSkinParam(), null);
 
-		drawableSet.addParticipant(p, new LivingParticipantBox(box, new LifeLine(box, comp.getPreferredWidth(g2d))));
+		final LifeLine lifeLine = new LifeLine(box, comp.getPreferredWidth(stringBounder));
+		drawableSet.addParticipant(p, new LivingParticipantBox(box, lifeLine));
 
-		this.freeX = box.getMaxX(g2d);
+		this.freeX = box.getMaxX(stringBounder);
 	}
 
 	public void addParticipant(Participant p) {
@@ -293,13 +368,5 @@ class DrawableSetInitializer {
 	public void addEvent(Event event) {
 		drawableSet.addEvent(event, null);
 	}
-
-	private double getGroupingMargin() {
-		return maxGrouping * groupingMargin;
-	}
-
-	// private Component getComponentTitle() {
-	// return compTitle;
-	// }
 
 }

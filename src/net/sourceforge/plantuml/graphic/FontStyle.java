@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4802 $
  *
  */
 package net.sourceforge.plantuml.graphic;
@@ -35,14 +37,14 @@ import java.awt.Font;
 import java.util.EnumSet;
 
 public enum FontStyle {
-	PLAIN, ITALIC, BOLD, UNDERLINE, STRIKE;
+	PLAIN, ITALIC, BOLD, UNDERLINE, STRIKE, WAVE;
 
 	public Font mutateFont(Font font) {
 		if (this == ITALIC) {
-			return font.deriveFont(Font.ITALIC);
+			return font.deriveFont(font.getStyle() | Font.ITALIC);
 		}
 		if (this == BOLD) {
-			return font.deriveFont(Font.BOLD);
+			return font.deriveFont(font.getStyle() | Font.BOLD);
 		}
 		return font;
 	}
@@ -56,6 +58,9 @@ public enum FontStyle {
 		}
 		if (this == UNDERLINE) {
 			return "\\<[uU]\\>";
+		}
+		if (this == WAVE) {
+			return "\\<[wW]\\>";
 		}
 		if (this == STRIKE) {
 			return "\\<(?:s|S|strike|STRIKE|del|DEL)\\>";
@@ -72,6 +77,9 @@ public enum FontStyle {
 		}
 		if (this == UNDERLINE) {
 			return "\\</[uU]\\>";
+		}
+		if (this == WAVE) {
+			return "\\</[wW]\\>";
 		}
 		if (this == STRIKE) {
 			return "\\</(?:s|S|strike|STRIKE|del|DEL)\\>";

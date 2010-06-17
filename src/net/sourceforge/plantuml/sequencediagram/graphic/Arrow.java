@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,33 +26,57 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4737 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.graphic;
 
-import java.awt.Graphics2D;
-
+import net.sourceforge.plantuml.graphic.StringBounder;
+import net.sourceforge.plantuml.sequencediagram.InGroupable;
+import net.sourceforge.plantuml.sequencediagram.NotePosition;
+import net.sourceforge.plantuml.skin.Component;
 import net.sourceforge.plantuml.skin.Skin;
 
-abstract class Arrow extends GraphicalElement {
-	
-	private final Skin skin;
+abstract class Arrow extends GraphicalElement implements InGroupable {
 
-	Arrow(double startingY, Skin skin) {
+	private final Skin skin;
+	private final Component arrowComponent;
+	private double paddingArrowHead = 0;
+
+	Arrow(double startingY, Skin skin, Component arrowComponent) {
 		super(startingY);
 		this.skin = skin;
+		this.arrowComponent = arrowComponent;
 	}
 
-	public abstract int getDirection(Graphics2D g2d);
+	public abstract int getDirection(StringBounder stringBounder);
 
 	protected Skin getSkin() {
 		return skin;
 	}
-	
-	public abstract double getArrowYStartLevel(Graphics2D g2d);
-	public abstract double getArrowYEndLevel(Graphics2D g2d);
-	
-	public abstract double getArrowOnlyWidth(Graphics2D g2d);
+
+	protected final Component getArrowComponent() {
+		return arrowComponent;
+	}
+
+	public double getArrowOnlyWidth(StringBounder stringBounder) {
+		return getPreferredWidth(stringBounder);
+	}
+
+	public abstract double getArrowYStartLevel(StringBounder stringBounder);
+
+	public abstract double getArrowYEndLevel(StringBounder stringBounder);
+
+	public abstract LivingParticipantBox getParticipantAt(StringBounder stringBounder, NotePosition position);
+
+	protected final double getPaddingArrowHead() {
+		return paddingArrowHead;
+	}
+
+	protected final void setPaddingArrowHead(double paddingArrowHead) {
+		this.paddingArrowHead = paddingArrowHead;
+	}
 
 }

@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ *
+ * Revision $Revision: 4828 $
  *
  */
 package net.sourceforge.plantuml.ant;
@@ -38,6 +40,7 @@ import java.util.Collection;
 import java.util.List;
 
 import net.sourceforge.plantuml.DirWatcher;
+import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.GeneratedImage;
 import net.sourceforge.plantuml.Option;
 import net.sourceforge.plantuml.OptionFlags;
@@ -65,7 +68,6 @@ import org.apache.tools.ant.types.FileSet;
 public class PlantuTask extends Task {
 
 	private String dir = null;
-	private String recurse = "false";
 	private final Option option = new Option();
 	private List<FileSet> filesets = new ArrayList<FileSet>();
 	private List<FileList> filelists = new ArrayList<FileList>();
@@ -92,7 +94,7 @@ public class PlantuTask extends Task {
 
 		try {
 			if (dir != null) {
-				processingSingleDirectory(new File(dir), isRecurse());
+				processingSingleDirectory(new File(dir));
 			}
 			for (FileSet fileSet : filesets) {
 				manageFileSet(fileSet);
@@ -135,35 +137,32 @@ public class PlantuTask extends Task {
 
 		for (String src : srcDirs) {
 			final File dir = new File(fromDir, src);
-			processingSingleDirectory(dir, false);
+			processingSingleDirectory(dir);
 		}
 
 	}
 
 	private void processingSingleFile(final File f) throws IOException, InterruptedException {
 		this.log("Processing " + f.getAbsolutePath());
-		final Collection<GeneratedImage> result = new SourceFileReader(new Defines(), f, option.getOutputDir(), option
-				.getConfig()).getGeneratedImages();
+		final SourceFileReader sourceFileReader = new SourceFileReader(new Defines(), f, option.getOutputDir(), option
+				.getConfig(), option.getCharset(), option.getFileFormat());
+		final Collection<GeneratedImage> result = sourceFileReader.getGeneratedImages();
 		for (GeneratedImage g : result) {
 			this.log(g + " " + g.getDescription());
 		}
 	}
 
-	private void processingSingleDirectory(File f, boolean recurse) throws IOException, InterruptedException {
+	private void processingSingleDirectory(File f) throws IOException, InterruptedException {
 		if (f.exists() == false) {
 			final String s = "The file " + f.getAbsolutePath() + " does not exists.";
 			this.log(s);
 			throw new BuildException(s);
 		}
-		final DirWatcher dirWatcher = new DirWatcher(f, recurse, option);
+		final DirWatcher dirWatcher = new DirWatcher(f, option, Option.getPattern());
 		final Collection<GeneratedImage> result = dirWatcher.buildCreatedFiles();
 		for (GeneratedImage g : result) {
 			this.log(g + " " + g.getDescription());
 		}
-	}
-
-	private boolean isRecurse() {
-		return "true".equalsIgnoreCase(recurse);
 	}
 
 	public void setDir(String s) {
@@ -174,16 +173,16 @@ public class PlantuTask extends Task {
 		option.setOutputDir(new File(s));
 	}
 
+	public void setCharset(String s) {
+		option.setCharset(s);
+	}
+
 	public void setConfig(String s) {
 		try {
 			option.initConfig(s);
 		} catch (IOException e) {
 			log("Error reading " + s);
 		}
-	}
-
-	public void setRecurse(String s) {
-		this.recurse = s;
 	}
 
 	public void setKeepTmpFiles(String s) {
@@ -197,5 +196,28 @@ public class PlantuTask extends Task {
 			OptionFlags.getInstance().setVerbose(true);
 		}
 	}
+	
+	public void setFormat(String s) {
+		if ("svg".equalsIgnoreCase(s)) {
+			option.setFileFormat(FileFormat.SVG);
+		}
+	}
 
+	public void setGraphvizDot(String s) {
+		OptionFlags.getInstance().setDotExecutable(s);
+	}
+
+	public void setForcegd(String s) {
+		if ("true".equalsIgnoreCase(s)) {
+			OptionFlags.getInstance().setForceGd(true);
+		}
+	}
+	
+	public void setForcecairo(String s) {
+		if ("true".equalsIgnoreCase(s)) {
+			OptionFlags.getInstance().setForceCairo(true);
+		}
+	}
+
+	
 }

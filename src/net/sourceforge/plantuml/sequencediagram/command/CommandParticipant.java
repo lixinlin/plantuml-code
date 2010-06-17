@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,14 +26,18 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4762 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.command;
 
 import java.util.List;
 
+import net.sourceforge.plantuml.FontParam;
 import net.sourceforge.plantuml.StringUtils;
+import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.command.SingleLineCommand;
 import net.sourceforge.plantuml.cucadiagram.Stereotype;
 import net.sourceforge.plantuml.sequencediagram.Participant;
@@ -43,12 +47,16 @@ import net.sourceforge.plantuml.sequencediagram.SequenceDiagram;
 public class CommandParticipant extends SingleLineCommand<SequenceDiagram> {
 
 	public CommandParticipant(SequenceDiagram sequenceDiagram) {
-		super(sequenceDiagram, "(?i)^(participant|actor)\\s+(?:\"([^\"]+)\"\\s+as\\s+)?(\\w+)(?:\\s*(\\<\\<.*\\>\\>))?$");
+		super(sequenceDiagram,
+				"(?i)^(participant|actor)\\s+(?:\"([^\"]+)\"\\s+as\\s+)?([\\p{L}0-9_.]+)(?:\\s*(\\<\\<.*\\>\\>))?\\s*(#\\w+)?$");
 	}
 
 	@Override
-	protected boolean executeArg(List<String> arg) {
+	protected CommandExecutionResult executeArg(List<String> arg) {
 		final String code = arg.get(2);
+		if (getSystem().participants().containsKey(code)) {
+			return CommandExecutionResult.error("Duplicate participant : "+code);
+		}
 
 		List<String> strings = null;
 		if (arg.get(1) != null) {
@@ -57,16 +65,17 @@ public class CommandParticipant extends SingleLineCommand<SequenceDiagram> {
 
 		final ParticipantType type = ParticipantType.valueOf(arg.get(0).toUpperCase());
 		final Participant participant = getSystem().createNewParticipant(type, code, strings);
-		
-		final String stereotype = arg.get(3);
-		
-		if (stereotype != null) {
-			participant.setStereotype(new Stereotype(stereotype));
-		}
 
-		
-		
-		return true;
+		final String stereotype = arg.get(3);
+
+		if (stereotype != null) {
+			participant.setStereotype(new Stereotype(stereotype,
+					getSystem().getSkinParam().getCircledCharacterRadius(), getSystem().getSkinParam().getFont(
+							FontParam.CIRCLED_CHARACTER)));
+		}
+		participant.setSpecificBackcolor(arg.get(4));
+
+		return CommandExecutionResult.ok();
 	}
 
 }

@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4794 $
  *
  */
 package net.sourceforge.plantuml.graphic;
@@ -38,6 +40,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.sourceforge.plantuml.StringUtils;
 
 public class Splitter {
 
@@ -45,7 +48,7 @@ public class Splitter {
 	static final String fontPattern = "\\<font(\\s+size\\s*=\\s*\"?\\d+\"?|\\s+color\\s*=\\s*\"?(#[0-9a-fA-F]{6}|\\w+)\"?)+\\s*\\>";
 	static final String imgPattern = "<img\\s+(src\\s*=\\s*['\"]?[^\\s\">]+['\"]?\\s*|vspace\\s*=\\s*['\"]?\\d+['\"]?\\s*|valign\\s*=\\s*['\"]?(top|middle|bottom)['\"]?\\s*)+>";
 	static final String htmlTag;
-	
+
 	private static final Pattern tagOrText;
 
 	static {
@@ -67,7 +70,8 @@ public class Splitter {
 		sb.append(imgPattern);
 
 		htmlTag = sb.toString();
-		tagOrText = Pattern.compile(htmlTag + "|.+?(?=" + htmlTag + ")|.+$", Pattern.CASE_INSENSITIVE);
+		tagOrText = Pattern.compile(htmlTag + "|.+?(?=" + htmlTag + ")|.+$",
+				Pattern.CASE_INSENSITIVE);
 	}
 
 	private final List<String> splitted = new ArrayList<String>();
@@ -75,10 +79,12 @@ public class Splitter {
 	public Splitter(String s) {
 		final Matcher matcher = tagOrText.matcher(s);
 		while (matcher.find()) {
-			splitted.add(matcher.group(0));
+			String part = matcher.group(0);
+			part = StringUtils.showComparatorCharacters(part);
+			splitted.add(part);
 		}
 	}
-	
+
 	List<String> getSplittedInternal() {
 		return splitted;
 	}

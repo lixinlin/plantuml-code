@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,13 +26,16 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
  *
  */
 package net.sourceforge.plantuml.usecasediagram.command;
 
 import java.util.List;
 
+import net.sourceforge.plantuml.FontParam;
+import net.sourceforge.plantuml.StringUtils;
+import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.command.SingleLineCommand;
 import net.sourceforge.plantuml.cucadiagram.Entity;
 import net.sourceforge.plantuml.cucadiagram.EntityType;
@@ -42,20 +45,40 @@ import net.sourceforge.plantuml.usecasediagram.UsecaseDiagram;
 public class CommandCreateUsecase extends SingleLineCommand<UsecaseDiagram> {
 
 	public CommandCreateUsecase(UsecaseDiagram usecaseDiagram) {
-		super(usecaseDiagram, "(?i)^(?:\"([^\"]+)\"\\s+as\\s+)?\\((\\w+)\\)(?:\\s*([\\<\\[]{2}.*[\\>\\]]{2}))?$");
+		super(
+				usecaseDiagram,
+				"(?i)^(?:usecase\\s+)?([\\p{L}0-9_.]+|\\([^)]+\\)|\"[^\"]+\")\\s*(?:as\\s+\\(?([\\p{L}0-9_.]+)\\)?)?(?:\\s*([\\<\\[]{2}.*[\\>\\]]{2}))?$");
 	}
 
 	@Override
-	protected boolean executeArg(List<String> arg) {
-		final EntityType type = EntityType.USECASE;
-		final String code = arg.get(1);
-		final String display = arg.get(0);
-		final String stereotype = arg.get(2);
-		final Entity entity = getSystem().createEntity(code, display, type);
-		if (stereotype != null) {
-			entity.setStereotype(new Stereotype(stereotype));
+	protected boolean isForbidden(String line) {
+		if (line.matches("^[\\p{L}0-9_.]+$")) {
+			return true;
 		}
-		return true;
+		return false;
+	}
+
+	@Override
+	protected CommandExecutionResult executeArg(List<String> arg) {
+		final EntityType type = EntityType.USECASE;
+		final String code;
+		final String display;
+		if (arg.get(1) == null) {
+			code = StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(arg.get(0));
+			display = code;
+		} else {
+			display = StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(arg.get(0));
+			code = StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(arg.get(1));
+		}
+
+		final String stereotype = arg.get(2);
+		final Entity entity = getSystem().getOrCreateEntity(code, type);
+		entity.setDisplay(display);
+		if (stereotype != null) {
+			entity.setStereotype(new Stereotype(stereotype, getSystem().getSkinParam().getCircledCharacterRadius(),
+					getSystem().getSkinParam().getFont(FontParam.CIRCLED_CHARACTER)));
+		}
+		return CommandExecutionResult.ok();
 	}
 
 }

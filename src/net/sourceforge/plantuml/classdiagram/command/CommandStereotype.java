@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,14 +26,18 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ *
+ * Revision $Revision: 4762 $
  *
  */
 package net.sourceforge.plantuml.classdiagram.command;
 
 import java.util.List;
 
+import net.sourceforge.plantuml.FontParam;
 import net.sourceforge.plantuml.classdiagram.ClassDiagram;
+import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.command.SingleLineCommand;
 import net.sourceforge.plantuml.cucadiagram.Entity;
 import net.sourceforge.plantuml.cucadiagram.Stereotype;
@@ -41,16 +45,17 @@ import net.sourceforge.plantuml.cucadiagram.Stereotype;
 public class CommandStereotype extends SingleLineCommand<ClassDiagram> {
 
 	public CommandStereotype(ClassDiagram classDiagram) {
-		super(classDiagram, "(?i)^(\\w+)\\s*(\\<\\<.*\\>\\>)$");
+		super(classDiagram, "(?i)^([\\p{L}0-9_.]+)\\s*(\\<\\<.*\\>\\>)$");
 	}
 
 	@Override
-	protected boolean executeArg(List<String> arg) {
+	protected CommandExecutionResult executeArg(List<String> arg) {
 		final String code = arg.get(0);
 		final String stereotype = arg.get(1);
 		final Entity entity = getSystem().getOrCreateClass(code);
-		entity.setStereotype(new Stereotype(stereotype));
-		return true;
+		entity.setStereotype(new Stereotype(stereotype, getSystem().getSkinParam().getCircledCharacterRadius(),
+				getSystem().getSkinParam().getFont(FontParam.CIRCLED_CHARACTER)));
+		return CommandExecutionResult.ok();
 	}
 
 }

@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,8 +26,10 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
  *
+ * Revision $Revision: 4639 $
+ * 
  */
 package net.sourceforge.plantuml;
 
@@ -48,6 +50,10 @@ public enum ColorParam {
 	usecaseBackground,
 	usecaseArrow,
 
+	objectBackground,
+	objectBorder,
+	objectArrow,
+	
 	classBackground,
 	classBorder,
 	stereotypeCBackground,
@@ -55,6 +61,9 @@ public enum ColorParam {
 	stereotypeIBackground,
 	stereotypeEBackground,
 	classArrow,
+	
+	packageBackground,
+	packageBorder,
 
 	componentBackground,
 	componentBorder,
@@ -62,15 +71,45 @@ public enum ColorParam {
 	interfaceBorder,
 	componentArrow,
 
-	noteBackground,
+	stateBackground,
+	stateBorder,
+	stateArrow,
+
+	noteBackground(true),
 	noteBorder,
 	
-	sequenceActorBackground,
+	sequenceActorBackground(true),
 	sequenceActorBorder,
-	sequenceGroupBackground,
-	sequenceLifeLineBackground,
+	sequenceGroupBackground(true),
+	sequenceDividerBackground(true),
+	sequenceLifeLineBackground(true),
 	sequenceLifeLineBorder,
-	sequenceParticipantBackground,
+	sequenceParticipantBackground(true),
 	sequenceParticipantBorder,
-	sequenceArrow
+	sequenceArrow,
+	
+	iconPrivate,
+	iconPrivateBackground,
+	iconPackage,
+	iconPackageBackground,
+	iconProtected,
+	iconProtectedBackground,
+	iconPublic,
+	iconPublicBackground;
+	
+	private final boolean isBackground;
+	
+	private ColorParam() {
+		this(false);
+	}
+	
+	private ColorParam(boolean isBackground) {
+		this.isBackground = isBackground;
+	}
+
+	protected boolean isBackground() {
+		return isBackground;
+	}
+	
+	
 }

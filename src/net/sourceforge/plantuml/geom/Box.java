@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 3830 $
  *
  */
 package net.sourceforge.plantuml.geom;
@@ -106,8 +108,8 @@ public class Box implements XMoveable, Pointable {
 		if (seg.side(this) != 0) {
 			return new Point2DInt[0];
 		}
-//		System.err.println("THIS=" + this);
-//		System.err.println("LineSegment=" + seg);
+		// System.err.println("THIS=" + this);
+		// System.err.println("LineSegment=" + seg);
 		final Point2DInt corners[] = getCorners();
 		final LineSegmentInt seg1 = new LineSegmentInt(corners[0], corners[1]);
 		final LineSegmentInt seg2 = new LineSegmentInt(corners[1], corners[2]);
@@ -117,11 +119,11 @@ public class Box implements XMoveable, Pointable {
 		Point2DInt i2 = seg.getSegIntersection(seg2);
 		Point2DInt i3 = seg.getSegIntersection(seg3);
 		Point2DInt i4 = seg.getSegIntersection(seg4);
-		
-//		System.err.println("i1="+i1);
-//		System.err.println("i2="+i2);
-//		System.err.println("i3="+i3);
-//		System.err.println("i4="+i4);
+
+		// System.err.println("i1="+i1);
+		// System.err.println("i2="+i2);
+		// System.err.println("i3="+i3);
+		// System.err.println("i4="+i4);
 
 		if (i2 != null && i2.equals(i1)) {
 			i2 = null;

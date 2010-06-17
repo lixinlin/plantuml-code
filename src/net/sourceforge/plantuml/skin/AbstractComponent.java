@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,15 +26,20 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4168 $
  *
  */
 package net.sourceforge.plantuml.skin;
 
 import java.awt.BasicStroke;
 import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Dimension2D;
+
+import net.sourceforge.plantuml.graphic.StringBounder;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
+import net.sourceforge.plantuml.ugraphic.UStroke;
 
 public abstract class AbstractComponent implements Component {
 
@@ -43,24 +48,33 @@ public abstract class AbstractComponent implements Component {
 		g2d.setStroke(new BasicStroke(thickness, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, style, 0));
 	}
 
+	final protected void stroke(UGraphic ug, int dash, double thickness) {
+		ug.getParam().setStroke(new UStroke(dash, thickness));
+	}
+
 	final protected void stroke(Graphics2D g2d, float dash) {
 		stroke(g2d, dash, 1);
 	}
 
-	abstract protected void drawInternal(Graphics2D g2d, Dimension2D dimensionToUse);
-
-	protected void drawBackgroundInternal(Graphics2D g2d, Dimension2D dimensionToUse) {
+	final protected void stroke(UGraphic ug, int dash) {
+		stroke(ug, dash, 1);
 	}
 
-	public final void draw(Graphics2D g2d, Dimension2D dimensionToUse, Context2D context) {
-		final AffineTransform t = g2d.getTransform();
-		g2d.translate(getPaddingX(), getPaddingY());
+	abstract protected void drawInternalU(UGraphic ug, Dimension2D dimensionToUse);
+
+	protected void drawBackgroundInternalU(UGraphic ug, Dimension2D dimensionToUse) {
+	}
+
+	public final void drawU(UGraphic ug, Dimension2D dimensionToUse, Context2D context) {
+		final double dx = ug.getTranslateX();
+		final double dy = ug.getTranslateY();
+		ug.translate(getPaddingX(), getPaddingY());
 		if (context.isBackground()) {
-			drawBackgroundInternal(g2d, dimensionToUse);
+			drawBackgroundInternalU(ug, dimensionToUse);
 		} else {
-			drawInternal(g2d, dimensionToUse);
+			drawInternalU(ug, dimensionToUse);
 		}
-		g2d.setTransform(t);
+		ug.setTranslate(dx, dy);
 	}
 
 	public double getPaddingX() {
@@ -71,8 +85,8 @@ public abstract class AbstractComponent implements Component {
 		return 0;
 	}
 
-	public abstract double getPreferredWidth(Graphics2D g2d);
+	public abstract double getPreferredWidth(StringBounder stringBounder);
 
-	public abstract double getPreferredHeight(Graphics2D g2d);
+	public abstract double getPreferredHeight(StringBounder stringBounder);
 
 }

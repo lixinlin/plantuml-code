@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4625 $
  *
  */
 package net.sourceforge.plantuml.graph;
@@ -50,38 +52,38 @@ public class GeneralPathFactory {
 		this.linkType = linkType;
 	}
 
-
 	public Shape getLink(PolylineBreakeable polyline, Box b1, Box b2) {
 		final LineSegmentInt directSegment = new LineSegmentInt(b1.getCenterX(), b1.getCenterY(), b2.getCenterX(), b2
 				.getCenterY());
 		assert b1.intersect(directSegment).length == 1;
 		assert b2.intersect(directSegment).length == 1;
 
-		//final Point2D.Double start = polyline.clipStart(b1);
-		//final Point2D.Double end = polyline.clipEnd(b2);
+		// final Point2D.Double start = polyline.clipStart(b1);
+		// final Point2D.Double end = polyline.clipEnd(b2);
 		final GeneralPath generalPath = polyline.asGeneralPath();
-		//addSymbol(generalPath, start, polyline.getFirst(), end, polyline.getLast());
+		// addSymbol(generalPath, start, polyline.getFirst(), end,
+		// polyline.getLast());
 		return generalPath;
 
 	}
 
 	private void addSymbol(GeneralPath generalPath, Point2D.Double firstPoint, LineSegmentInt firstSeg,
 			Point2D.Double lastPoint, LineSegmentInt lastSeg) {
-		if (linkType.equals(LinkType.AGREGATION) || linkType.equals(LinkType.COMPOSITION)) {
-			addSymbolDiamond(generalPath, lastPoint, lastSeg);
-		} else if (linkType.equals(LinkType.AGREGATION_INV) || linkType.equals(LinkType.COMPOSITION_INV)) {
-			addSymbolDiamondInv(generalPath, firstPoint, firstSeg);
-		} else if (linkType.equals(LinkType.NAVASSOC) || linkType.equals(LinkType.NAVASSOC_DASHED)) {
-			addSymbolNavasoc(generalPath, lastPoint, lastSeg);
-		} else if (linkType.equals(LinkType.NAVASSOC_INV) || linkType.equals(LinkType.NAVASSOC_DASHED_INV)) {
-			addSymbolNavasocInv(generalPath, firstPoint, firstSeg);
-		} else if (linkType.equals(LinkType.EXTENDS_INV) || linkType.equals(LinkType.IMPLEMENTS_INV)) {
-			addSymbolExtends(generalPath, firstPoint, firstSeg);
-		} else if (linkType.equals(LinkType.EXTENDS) || linkType.equals(LinkType.IMPLEMENTS)) {
-			addSymbolExtendsInv(generalPath, lastPoint, lastSeg);
-		} else {
-			assert linkType.equals(LinkType.ASSOCIED) || linkType.equals(LinkType.ASSOCIED_DASHED);
-		}
+//		if (linkType.equals(LinkType.AGREGATION) || linkType.equals(LinkType.COMPOSITION)) {
+//			addSymbolDiamond(generalPath, lastPoint, lastSeg);
+//		} else if (linkType.equals(LinkType.AGREGATION_INV) || linkType.equals(LinkType.COMPOSITION_INV)) {
+//			addSymbolDiamondInv(generalPath, firstPoint, firstSeg);
+//		} else if (linkType.equals(LinkType.NAVASSOC) || linkType.equals(LinkType.NAVASSOC_DASHED)) {
+//			addSymbolNavasoc(generalPath, lastPoint, lastSeg);
+//		} else if (linkType.equals(LinkType.NAVASSOC_INV) || linkType.equals(LinkType.NAVASSOC_DASHED_INV)) {
+//			addSymbolNavasocInv(generalPath, firstPoint, firstSeg);
+//		} else if (linkType.equals(LinkType.EXTENDS_INV) || linkType.equals(LinkType.IMPLEMENTS_INV)) {
+//			addSymbolExtends(generalPath, firstPoint, firstSeg);
+//		} else if (linkType.equals(LinkType.EXTENDS) || linkType.equals(LinkType.IMPLEMENTS)) {
+//			addSymbolExtendsInv(generalPath, lastPoint, lastSeg);
+//		} else {
+//			assert linkType.equals(LinkType.ASSOCIED) || linkType.equals(LinkType.ASSOCIED_DASHED);
+//		}
 	}
 
 	private void addSymbolDiamond(GeneralPath generalPath, Point2D.Double point, LineSegmentInt seg) {

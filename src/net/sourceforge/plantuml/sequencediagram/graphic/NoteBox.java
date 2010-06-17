@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,20 +26,24 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4696 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.graphic;
 
-import java.awt.Graphics2D;
 import java.awt.geom.Dimension2D;
 
 import net.sourceforge.plantuml.Dimension2DDouble;
+import net.sourceforge.plantuml.graphic.StringBounder;
+import net.sourceforge.plantuml.sequencediagram.InGroupable;
 import net.sourceforge.plantuml.sequencediagram.NotePosition;
 import net.sourceforge.plantuml.skin.Component;
 import net.sourceforge.plantuml.skin.Context2D;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
 
-class NoteBox extends GraphicalElement {
+class NoteBox extends GraphicalElement implements InGroupable {
 
 	private final NotePosition position;
 
@@ -66,51 +70,69 @@ class NoteBox extends GraphicalElement {
 	}
 
 	@Override
-	final public double getPreferredWidth(Graphics2D g2d) {
-		return comp.getPreferredWidth(g2d);
+	final public double getPreferredWidth(StringBounder stringBounder) {
+		return comp.getPreferredWidth(stringBounder);
 	}
 
 	@Override
-	final public double getPreferredHeight(Graphics2D g2d) {
-		return comp.getPreferredHeight(g2d);
+	final public double getPreferredHeight(StringBounder stringBounder) {
+		return comp.getPreferredHeight(stringBounder);
 	}
 
 	@Override
-	protected void drawInternal(Graphics2D g2d, double maxX, Context2D context) {
-		final double xStart = getStartingX(g2d);
-		g2d.translate(xStart, getStartingY());
-		final Dimension2D dimensionToUse = new Dimension2DDouble(comp.getPreferredWidth(g2d), comp
-				.getPreferredHeight(g2d));
-		comp.draw(g2d, dimensionToUse, context);
+	protected void drawInternalU(UGraphic ug, double maxX, Context2D context) {
+		final StringBounder stringBounder = ug.getStringBounder();
+		final double xStart = getStartingX(stringBounder);
+		ug.translate(xStart, getStartingY());
+		final Dimension2D dimensionToUse = new Dimension2DDouble(comp.getPreferredWidth(stringBounder), comp
+				.getPreferredHeight(stringBounder));
+		comp.drawU(ug, dimensionToUse, context);
 	}
 
 	@Override
-	public double getStartingX(Graphics2D g2d) {
-		final Segment segment = getSegment(g2d);
+	public double getStartingX(StringBounder stringBounder) {
+		final Segment segment = getSegment(stringBounder);
 		final int xStart;
 		if (position == NotePosition.LEFT) {
-			xStart = (int) (segment.getPos1() - getPreferredWidth(g2d));
+			xStart = (int) (segment.getPos1() - getPreferredWidth(stringBounder));
 		} else if (position == NotePosition.RIGHT) {
 			xStart = (int) (segment.getPos2());
 		} else if (position == NotePosition.OVER) {
-			xStart = (int) (p1.getParticipantBox().getCenterX(g2d) - getPreferredWidth(g2d) / 2);
+			xStart = (int) (p1.getParticipantBox().getCenterX(stringBounder) - getPreferredWidth(stringBounder) / 2);
 		} else if (position == NotePosition.OVER_SEVERAL) {
-			final double centre = (p1.getParticipantBox().getCenterX(g2d) + p2.getParticipantBox().getCenterX(g2d)) / 2.0;
-			xStart = (int) (centre - getPreferredWidth(g2d) / 2.0);
+			final double centre = (p1.getParticipantBox().getCenterX(stringBounder) + p2.getParticipantBox()
+					.getCenterX(stringBounder)) / 2.0;
+			xStart = (int) (centre - getPreferredWidth(stringBounder) / 2.0);
 		} else {
 			throw new IllegalStateException();
 		}
+//		if (InGroupableList.NEW_METHOD) {
+//			System.err.println("GET STARTING X OF " + this + " " + (xStart + delta));
+//		}
 		return xStart + delta;
 	}
 
-	private Segment getSegment(Graphics2D g2d) {
-		final Segment segment = p1.getLiveThicknessAt(g2d, getStartingY());
-		final Segment segment2 = p1.getLiveThicknessAt(g2d, getStartingY() + comp.getPreferredHeight(g2d));
+	private Segment getSegment(StringBounder stringBounder) {
+		final Segment segment = p1.getLiveThicknessAt(stringBounder, getStartingY());
+		final Segment segment2 = p1.getLiveThicknessAt(stringBounder, getStartingY()
+				+ comp.getPreferredHeight(stringBounder));
 		return segment.merge(segment2);
 	}
 
 	public void pushToRight(double x) {
 		this.delta += x;
+	}
+
+	public double getMaxX(StringBounder stringBounder) {
+		return getStartingX(stringBounder) + getPreferredWidth(stringBounder);
+	}
+
+	public double getMinX(StringBounder stringBounder) {
+		return getStartingX(stringBounder);
+	}
+
+	public String toString(StringBounder stringBounder) {
+		return toString();
 	}
 
 }

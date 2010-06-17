@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ *
+ * Revision $Revision: 3851 $
  *
  */
 package net.sourceforge.plantuml.activitydiagram;
@@ -34,9 +36,11 @@ package net.sourceforge.plantuml.activitydiagram;
 import java.util.Arrays;
 import java.util.List;
 
+import net.sourceforge.plantuml.UmlDiagramType;
 import net.sourceforge.plantuml.cucadiagram.CucaDiagram;
 import net.sourceforge.plantuml.cucadiagram.Entity;
 import net.sourceforge.plantuml.cucadiagram.EntityType;
+import net.sourceforge.plantuml.cucadiagram.Link;
 
 public class ActivityDiagram extends CucaDiagram {
 
@@ -66,7 +70,21 @@ public class ActivityDiagram extends CucaDiagram {
 		return getOrCreate("end", "end", EntityType.CIRCLE_END);
 	}
 
+	final public Link getLastActivityLink() {
+		final List<Link> links = getLinks();
+		for (int i = links.size() - 1; i >= 0; i--) {
+			final Link link = links.get(i);
+			if (link.getEntity1().getType() != EntityType.NOTE && link.getEntity2().getType() != EntityType.NOTE) {
+				return link;
+			}
+		}
+		return null;
+	}
+
 	private void updateLasts(final Entity result) {
+		if (result.getType() == EntityType.NOTE) {
+			return;
+		}
 		this.lastEntityConsulted = result;
 		if (result.getType() == EntityType.BRANCH) {
 			lastEntityBrancheConsulted = result;
@@ -78,6 +96,10 @@ public class ActivityDiagram extends CucaDiagram {
 		final Entity result = super.createEntity(code, display, type);
 		updateLasts(result);
 		return result;
+	}
+
+	public Entity createNote(String code, String display) {
+		return super.createEntity(code, display, EntityType.NOTE);
 	}
 
 	final protected List<String> getDotStrings() {
@@ -95,6 +117,11 @@ public class ActivityDiagram extends CucaDiagram {
 
 	public Entity getLastEntityBrancheConsulted() {
 		return lastEntityBrancheConsulted;
+	}
+
+	@Override
+	public UmlDiagramType getUmlDiagramType() {
+		return UmlDiagramType.ACTIVITY;
 	}
 
 }

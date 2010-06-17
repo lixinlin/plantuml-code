@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4189 $
  *
  */
 package net.sourceforge.plantuml.skin;
@@ -39,7 +41,13 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
-public class StickMan {
+import net.sourceforge.plantuml.graphic.StringBounder;
+import net.sourceforge.plantuml.ugraphic.UEllipse;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
+import net.sourceforge.plantuml.ugraphic.ULine;
+import net.sourceforge.plantuml.ugraphic.UStroke;
+
+public class StickMan implements UDrawable {
 
 	private final float thickness = 2;
 
@@ -90,13 +98,44 @@ public class StickMan {
 		g2d.draw(legs2);
 
 		g2d.setStroke(new BasicStroke());
+		throw new UnsupportedOperationException();
 	}
 
-	public double getPreferredWidth(Graphics2D g2d) {
+	public void drawU(UGraphic ug) {
+
+		ug.getParam().setStroke(new UStroke(thickness));
+
+		final double startX = Math.max(armsLenght, legsX) - headDiam / 2.0 + thickness;
+
+		final UEllipse head = new UEllipse(headDiam, headDiam);
+		final double centerX = startX + headDiam / 2;
+
+		final ULine body = new ULine(0, bodyLenght);
+
+		final ULine arms = new ULine(armsLenght * 2, 0);
+
+		final double y = headDiam + thickness + bodyLenght;
+
+		final ULine legs1 = new ULine(-legsX, legsY);
+		final ULine legs2 = new ULine(legsX, legsY);
+
+		ug.getParam().setBackcolor(backgroundColor);
+		ug.getParam().setColor(foregroundColor);
+		ug.draw(startX, thickness, head);
+
+		ug.draw(centerX, headDiam + thickness, body);
+		ug.draw(centerX - armsLenght, headDiam + thickness + armsY, arms);
+		ug.draw(centerX, y, legs1);
+		ug.draw(centerX, y, legs2);
+
+		ug.getParam().setStroke(new UStroke());
+	}
+
+	public double getPreferredWidth(StringBounder stringBounder) {
 		return Math.max(armsLenght, legsX) * 2 + 2 * thickness;
 	}
 
-	public double getPreferredHeight(Graphics2D g2d) {
+	public double getPreferredHeight(StringBounder stringBounder) {
 		return headDiam + bodyLenght + legsY + 2 * thickness;
 	}
 

@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ *
+ * Revision $Revision: 4762 $
  *
  */
 package net.sourceforge.plantuml.activitydiagram.command;
@@ -35,6 +37,7 @@ import java.util.List;
 
 import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.activitydiagram.ActivityDiagram;
+import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.command.CommandMultilines;
 import net.sourceforge.plantuml.cucadiagram.Entity;
 import net.sourceforge.plantuml.cucadiagram.EntityType;
@@ -45,9 +48,9 @@ public class CommandLinkLongActivity extends CommandMultilines<ActivityDiagram> 
 	public CommandLinkLongActivity(final ActivityDiagram diagram) {
 		super(
 				diagram,
-				"(?i)^([*\\u00A7]|\\<\\>|\\[\\]|==+)?\\s*(\\(\\*\\)|\\w+|\"([^\"]+)\"(?:\\s+as\\s+(\\w+))?)?(?:\\s*=+)?"
-						+ "\\s*(\\[[^\\]]+\\])?\\s*([=-]+[\\>\\]]|[\\<\\[][=-]+)\\s*(\\[[^\\]]+\\])?\\s*\"([^\"]*?)\\s*$",
-				"(?i)^\\s*([^\"]*)\"(?:\\s+as\\s+(\\w+))?\\s*$");
+				"(?i)^([*\\u00A7]|\\<\\>|\\[\\]|==+)?\\s*(\\(\\*\\)|[\\p{L}0-9_.]+|\"([^\"]+)\"(?:\\s+as\\s+([\\p{L}0-9_.]+))?)?(?:\\s*=+)?"
+						+ "\\s*(\\[[^\\]*]+[^\\]]*\\])?\\s*([=-]+\\>|\\<[=-]+)\\s*(\\[[^\\]*]+[^\\]]*\\])?\\s*\"([^\"]*?)\\s*$",
+				"(?i)^\\s*([^\"]*)\"(?:\\s+as\\s+([\\p{L}0-9_.]+))?\\s*(?::\\s*([^\"]+))?$");
 	}
 
 	@Override
@@ -67,27 +70,27 @@ public class CommandLinkLongActivity extends CommandMultilines<ActivityDiagram> 
 	@Override
 	public String getHelpMessageForDeprecated(List<String> lines) {
 		String s = lines.get(0);
-		s = s.replaceAll("[\\u00A7]\\w+", "(*)");
+		s = s.replaceAll("[\\u00A7][\\p{L}0-9_.]+", "(*)");
 		s = s.replaceAll("\\*start", "(*)");
 		s = s.replaceAll("\\*end", "(*)");
 		return s;
 	}
 
-	public boolean execute(List<String> lines) {
+	public CommandExecutionResult execute(List<String> lines) {
 
 		final Entity lastEntityConsulted = getSystem().getLastEntityConsulted();
 
 		final List<String> line0 = StringUtils.getSplit(getStartingPattern(), lines.get(0));
 
 		final EntityType type1 = CommandLinkActivity.getTypeFromString(line0.get(0), EntityType.CIRCLE_START);
-		final String label = CommandLinkActivity.getLabel(line0.get(4), line0.get(6));
+		final String entityLabel = CommandLinkActivity.getLabel(line0.get(6), line0.get(4));
 
 		final Entity entity1;
 		if ("(*)".equals(line0.get(1))) {
 			entity1 = getSystem().getStart();
 		} else {
 			entity1 = CommandLinkActivity.getEntity(lastEntityConsulted, getSystem(), line0.get(1), line0.get(2), line0
-					.get(3), type1, label);
+					.get(3), type1, entityLabel);
 		}
 
 		final StringBuilder sb = new StringBuilder();
@@ -102,6 +105,7 @@ public class CommandLinkLongActivity extends CommandMultilines<ActivityDiagram> 
 				sb.append("\\n");
 			}
 		}
+
 		final List<String> lineLast = StringUtils.getSplit(getEnding(), lines.get(lines.size() - 1));
 		if (StringUtils.isNotEmpty(lineLast.get(0))) {
 			sb.append("\\n");
@@ -114,17 +118,20 @@ public class CommandLinkLongActivity extends CommandMultilines<ActivityDiagram> 
 		final Entity entity2 = getSystem().createEntity(code, display, EntityType.ACTIVITY);
 
 		if (entity1 == null || entity2 == null) {
-			return false;
+			return CommandExecutionResult.error("No such entity");
 		}
 
 		final String arrow = StringUtils.manageArrow(line0.get(5));
 		final int lenght = arrow.length() - 1;
 
-		final Link link = new Link(entity1, entity2, CommandLinkActivity.getLinkType(arrow), label, lenght, null, null);
+		
+		final String linkLabel = CommandLinkActivity.getLabel(entityLabel, lineLast.get(2));
+
+		final Link link = new Link(entity1, entity2, CommandLinkActivity.getLinkType(arrow), linkLabel, lenght);
 
 		getSystem().addLink(link);
 
-		return true;
+		return CommandExecutionResult.ok();
 	}
 
 }

@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,24 +26,26 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4738 $
  *
  */
 package net.sourceforge.plantuml.skin.bluemodern;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics2D;
 import java.awt.geom.Dimension2D;
 import java.util.List;
 
 import net.sourceforge.plantuml.graphic.HorizontalAlignement;
+import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.skin.AbstractTextualComponent;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
 
 public class ComponentBlueModernParticipant extends AbstractTextualComponent {
 
 	private final int shadowview = 3;
-	private final int outMargin = 5;
 	private final Color blue1;
 	private final Color blue2;
 
@@ -55,29 +57,29 @@ public class ComponentBlueModernParticipant extends AbstractTextualComponent {
 	}
 
 	@Override
-	protected void drawInternal(Graphics2D g2d, Dimension2D dimensionToUse) {
+	protected void drawInternalU(UGraphic ug, Dimension2D dimensionToUse) {
+		final StringBounder stringBounder = ug.getStringBounder();
 
-		final ShadowShape shadowShape = new ShadowShape(getTextWidth(g2d), getTextHeight(g2d), 10);
-		g2d.translate(shadowview + outMargin, shadowview);
-		shadowShape.draw(g2d);
-		g2d.translate(-shadowview - outMargin, -shadowview);
+		final ShadowShape shadowShape = new ShadowShape(getTextWidth(stringBounder), getTextHeight(stringBounder), 10);
+		ug.translate(shadowview, shadowview);
+		shadowShape.drawU(ug);
+		ug.translate(-shadowview, -shadowview);
 
-		final FillRoundShape shape = new FillRoundShape(getTextWidth(g2d), getTextHeight(g2d), blue1, blue2, 10);
-		g2d.translate(outMargin, 0);
-		shape.draw(g2d);
-		g2d.translate(-outMargin, 0);
+		final FillRoundShape shape = new FillRoundShape(getTextWidth(stringBounder), getTextHeight(stringBounder),
+				blue1, blue2, 10);
+		shape.drawU(ug);
 
-		getTextBlock().draw(g2d, outMargin + getMarginX1(), getMarginY());
+		getTextBlock().drawU(ug, getMarginX1(), getMarginY());
 	}
 
 	@Override
-	public double getPreferredHeight(Graphics2D g2d) {
-		return getTextHeight(g2d) + shadowview;
+	public double getPreferredHeight(StringBounder stringBounder) {
+		return getTextHeight(stringBounder) + shadowview;
 	}
 
 	@Override
-	public double getPreferredWidth(Graphics2D g2d) {
-		return getTextWidth(g2d) + outMargin * 2;
+	public double getPreferredWidth(StringBounder stringBounder) {
+		return getTextWidth(stringBounder);
 	}
 
 }

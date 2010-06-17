@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ *
+ * Revision $Revision: 4762 $
  *
  */
 package net.sourceforge.plantuml.activitydiagram.command;
@@ -35,10 +37,12 @@ import java.util.List;
 
 import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.activitydiagram.ActivityDiagram;
+import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.command.SingleLineCommand;
 import net.sourceforge.plantuml.cucadiagram.Entity;
 import net.sourceforge.plantuml.cucadiagram.EntityType;
 import net.sourceforge.plantuml.cucadiagram.Link;
+import net.sourceforge.plantuml.cucadiagram.LinkDecor;
 import net.sourceforge.plantuml.cucadiagram.LinkType;
 
 public class CommandLinkActivity extends SingleLineCommand<ActivityDiagram> {
@@ -46,9 +50,9 @@ public class CommandLinkActivity extends SingleLineCommand<ActivityDiagram> {
 	public CommandLinkActivity(ActivityDiagram diagram) {
 		super(
 				diagram,
-				"(?i)^([\\u00A7*]|\\<\\>|\\[\\]|==+)?\\s*(\\(\\*\\)|\\w+|\"([^\"]+)\"(?:\\s+as\\s+(\\w+))?)?(?:\\s*=+)?"
-						+ "\\s*(\\[[^\\]]+\\])?\\s*([=-]+[>\\]]|[<\\[][=-]+)\\s*(\\[[^\\]]+\\])?\\s*"
-						+ "([*\\u00A7]|\\<\\>|\\[\\]|==+)?\\s*(\\(\\*\\)|\\w+|\"([^\"]+)\"(?:\\s+as\\s+(\\w+))?)?(?:\\s*=+)?$");
+				"(?i)^([\\u00A7*]|\\<\\>|\\[\\]|==+)?\\s*(\\(\\*\\)|[\\p{L}0-9_.]+|\"([^\"]+)\"(?:\\s+as\\s+([\\p{L}0-9_.]+))?)?(?:\\s*=+)?"
+						+ "\\s*(\\[[^\\]*]+[^\\]]*\\])?\\s*([=-]+\\>|\\<[=-]+)\\s*(\\[[^\\]*]+[^\\]]*\\])?\\s*"
+						+ "([*\\u00A7]|\\<\\>|\\[\\]|==+)?\\s*(\\(\\*\\)|[\\p{L}0-9_.]+|\"([^\"]+)\"(?:\\s+as\\s+([\\p{L}0-9_.]+))?)?(?:\\s*=+)?\\s*(?::\\s*([^\"]+))?$");
 	}
 
 	@Override
@@ -68,47 +72,49 @@ public class CommandLinkActivity extends SingleLineCommand<ActivityDiagram> {
 	@Override
 	public String getHelpMessageForDeprecated(List<String> lines) {
 		String s = lines.get(0);
-		s = s.replaceAll("[\\u00A7]\\w+", "(*)");
+		s = s.replaceAll("[\\u00A7][\\p{L}0-9_.]+", "(*)");
 		s = s.replaceAll("\\*start", "(*)");
 		s = s.replaceAll("\\*end", "(*)");
 		return s;
 	}
 
 	@Override
-	protected boolean executeArg(List<String> arg) {
+	protected CommandExecutionResult executeArg(List<String> arg) {
 		final Entity lastEntityConsulted = getSystem().getLastEntityConsulted();
 
 		final EntityType type1 = getTypeFromString(arg.get(0), EntityType.CIRCLE_START);
 		final EntityType type2 = getTypeFromString(arg.get(7), EntityType.CIRCLE_END);
 
-		final String label = getLabel(arg.get(4), arg.get(6));
+		final String entityLabel = getLabel(arg.get(6), arg.get(4));
 
 		final Entity entity1;
 		if ("(*)".equals(arg.get(1))) {
 			entity1 = getSystem().getStart();
 		} else {
-			entity1 = getEntity(lastEntityConsulted, getSystem(), arg.get(1), arg.get(2), arg.get(3), type1, label);
+			entity1 = getEntity(lastEntityConsulted, getSystem(), arg.get(1), arg.get(2), arg.get(3), type1, entityLabel);
 		}
 
 		final Entity entity2;
 		if ("(*)".equals(arg.get(8))) {
 			entity2 = getSystem().getEnd();
 		} else {
-			entity2 = getEntity(lastEntityConsulted, getSystem(), arg.get(8), arg.get(9), arg.get(10), type2, label);
+			entity2 = getEntity(lastEntityConsulted, getSystem(), arg.get(8), arg.get(9), arg.get(10), type2, entityLabel);
 		}
 
 		if (entity1 == null || entity2 == null) {
-			return false;
+			return CommandExecutionResult.error("No activity defined");
 		}
 
 		final String arrow = StringUtils.manageArrow(arg.get(5));
 		final int lenght = arrow.length() - 1;
+		
+		final String linkLabel = getLabel(entityLabel, arg.get(11));
 
-		final Link link = new Link(entity1, entity2, getLinkType(arrow), label, lenght, null, null);
+		final Link link = new Link(entity1, entity2, getLinkType(arrow), linkLabel, lenght);
 
 		getSystem().addLink(link);
 
-		return true;
+		return CommandExecutionResult.ok();
 
 	}
 
@@ -117,9 +123,9 @@ public class CommandLinkActivity extends SingleLineCommand<ActivityDiagram> {
 			throw new IllegalArgumentException(arrowSring);
 		}
 		if (arrowSring.endsWith(">")) {
-			return LinkType.NAVASSOC;
+			return new LinkType(LinkDecor.ARROW, LinkDecor.NONE);
 		}
-		return LinkType.NAVASSOC_INV;
+		return new LinkType(LinkDecor.NONE, LinkDecor.ARROW);
 	}
 
 	static Entity getEntity(final Entity lastEntityConsulted, ActivityDiagram system, String arg1, String arg2,
@@ -145,8 +151,8 @@ public class CommandLinkActivity extends SingleLineCommand<ActivityDiagram> {
 
 	}
 
-	static String getLabel(String arg4, String arg6) {
-		return arg6 != null ? arg6 : arg4;
+	static String getLabel(String label1, String ifOtherNull) {
+		return label1 != null ? label1 : ifOtherNull;
 	}
 
 	static EntityType getTypeFromString(String type, final EntityType circle) {

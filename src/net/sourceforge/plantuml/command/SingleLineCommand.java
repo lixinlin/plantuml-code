@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4762 $
  *
  */
 package net.sourceforge.plantuml.command;
@@ -80,17 +82,17 @@ public abstract class SingleLineCommand<S extends PSystem> implements Command {
 		return result ? CommandControl.OK : CommandControl.NOT_OK;
 	}
 
-	public final boolean execute(List<String> lines) {
+	public final CommandExecutionResult execute(List<String> lines) {
 		if (lines.size() != 1) {
 			throw new IllegalArgumentException();
 		}
 		final String line = lines.get(0).trim();
 		if (isForbidden(line)) {
-			return false;
+			return CommandExecutionResult.error("Forbidden line "+line);
 		}
 		final List<String> arg = getSplit(line);
 		if (arg == null) {
-			return false;
+			return CommandExecutionResult.error("Cannot parse line "+line);
 		}
 		return executeArg(arg);
 	}
@@ -99,7 +101,7 @@ public abstract class SingleLineCommand<S extends PSystem> implements Command {
 		return false;
 	}
 
-	protected abstract boolean executeArg(List<String> arg);
+	protected abstract CommandExecutionResult executeArg(List<String> arg);
 
 	final public List<String> getSplit(String line) {
 		return StringUtils.getSplit(pattern, line);
@@ -111,7 +113,7 @@ public abstract class SingleLineCommand<S extends PSystem> implements Command {
 		}
 		return isDeprecated(lines.get(0));
 	}
-	
+
 	public String getHelpMessageForDeprecated(List<String> lines) {
 		return null;
 	}

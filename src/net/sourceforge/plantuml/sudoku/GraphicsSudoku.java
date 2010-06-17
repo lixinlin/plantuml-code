@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4125 $
  *
  */
 package net.sourceforge.plantuml.sudoku;
@@ -90,7 +92,7 @@ public class GraphicsSudoku {
 				if (num > 0) {
 					final TextBlock text = TextBlockUtils.create(Arrays.asList("" + num), numberFont, Color.BLACK,
 							HorizontalAlignement.CENTER);
-					text.draw(g2d, numberxOffset + x * cellWidth, numberyOffset + y * cellHeight);
+					text.drawTOBEREMOVED(g2d, numberxOffset + x * cellWidth, numberyOffset + y * cellHeight);
 				}
 			}
 		}
@@ -109,10 +111,10 @@ public class GraphicsSudoku {
 		g2d.translate(0, sudoHeight);
 		final List<String> texts = new ArrayList<String>();
 		texts.add("http://plantuml.sourceforge.net");
-		texts.add("Seed "+Long.toString(sudoku.getSeed(), 36));
-		texts.add("Difficulty "+sudoku.getRatting());
+		texts.add("Seed " + Long.toString(sudoku.getSeed(), 36));
+		texts.add("Difficulty " + sudoku.getRatting());
 		final TextBlock textBlock = TextBlockUtils.create(texts, font, Color.BLACK, HorizontalAlignement.LEFT);
-		textBlock.draw(g2d, 0, 0);
+		textBlock.drawTOBEREMOVED(g2d, 0, 0);
 
 		g2d.dispose();
 		return im;

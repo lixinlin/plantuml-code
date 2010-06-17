@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,18 +26,22 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 3836 $
  *
  */
 package net.sourceforge.plantuml.skin;
 
-import java.awt.Graphics2D;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Point2D;
 
+import net.sourceforge.plantuml.graphic.StringBounder;
+
 public interface ArrowComponent extends Component {
-	
-	Point2D getStartPoint(Graphics2D g2d, Dimension2D dimensionToUse);
-	Point2D getEndPoint(Graphics2D g2d, Dimension2D dimensionToUse);
+
+	Point2D getStartPoint(StringBounder stringBounder, Dimension2D dimensionToUse);
+
+	Point2D getEndPoint(StringBounder stringBounder, Dimension2D dimensionToUse);
 
 }

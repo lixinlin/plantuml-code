@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,8 +26,10 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
  *
+ * Revision $Revision: 4328 $
+ * 
  */
 package net.sourceforge.plantuml;
 
@@ -39,18 +41,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sourceforge.plantuml.preproc.Defines;
+
 public class DirWatcher {
 
 	final private File dir;
-	final private boolean recurse;
 	final private Option option;
+	final private String pattern;
 
 	final private Map<File, Long> modifieds = new HashMap<File, Long>();
 
-	public DirWatcher(File dir, boolean recurse, Option option) {
+	public DirWatcher(File dir, Option option, String pattern) {
 		this.dir = dir;
-		this.recurse = recurse;
 		this.option = option;
+		this.pattern = pattern;
 	}
 
 	public List<GeneratedImage> buildCreatedFiles() throws IOException, InterruptedException {
@@ -62,10 +66,6 @@ public class DirWatcher {
 
 	private void process(File dirToProcess, final List<GeneratedImage> result) throws IOException, InterruptedException {
 		for (File f : dirToProcess.listFiles()) {
-			if (recurse && f.isDirectory()) {
-				process(f, result);
-				continue;
-			}
 			if (f.isFile() == false) {
 				continue;
 			}
@@ -76,8 +76,9 @@ public class DirWatcher {
 			final Long previousModified = modifieds.get(f);
 
 			if (previousModified == null || previousModified != modified) {
-				for (GeneratedImage g : new SourceFileReader(f, option.getOutputDir())
-				.getGeneratedImages()) {
+				final SourceFileReader sourceFileReader = new SourceFileReader(new Defines(), f, option.getOutputDir(),
+						option.getConfig(), option.getCharset(), option.getFileFormat());
+				for (GeneratedImage g : sourceFileReader.getGeneratedImages()) {
 					result.add(g);
 					modifieds.put(f, modified);
 				}
@@ -86,6 +87,14 @@ public class DirWatcher {
 	}
 
 	private boolean fileToProcess(String name) {
-		return name.matches(option.getPattern());
+		return name.matches(pattern);
 	}
+
+	public final File getDir() {
+		return dir;
+	}
+
+//	public void setPattern(String pattern) {
+//		this.pattern = pattern;
+//	}
 }

@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,8 +26,10 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
- *
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4814 $
+ * 
  */
 package net.sourceforge.plantuml;
 
@@ -43,11 +45,17 @@ import java.util.TreeSet;
 import net.sourceforge.plantuml.activitydiagram.ActivityDiagramFactory;
 import net.sourceforge.plantuml.classdiagram.ClassDiagramFactory;
 import net.sourceforge.plantuml.componentdiagram.ComponentDiagramFactory;
+import net.sourceforge.plantuml.compositediagram.CompositeDiagramFactory;
 import net.sourceforge.plantuml.eggs.PSystemEggFactory;
+import net.sourceforge.plantuml.eggs.PSystemLostFactory;
+import net.sourceforge.plantuml.eggs.PSystemRIPFactory;
+import net.sourceforge.plantuml.objectdiagram.ObjectDiagramFactory;
+import net.sourceforge.plantuml.oregon.PSystemOregonFactory;
 import net.sourceforge.plantuml.preproc.Defines;
 import net.sourceforge.plantuml.preproc.Preprocessor;
 import net.sourceforge.plantuml.printskin.PrintSkinFactory;
 import net.sourceforge.plantuml.sequencediagram.SequenceDiagramFactory;
+import net.sourceforge.plantuml.statediagram.StateDiagramFactory;
 import net.sourceforge.plantuml.sudoku.PSystemSudokuFactory;
 import net.sourceforge.plantuml.usecasediagram.UsecaseDiagramFactory;
 import net.sourceforge.plantuml.version.PSystemVersionFactory;
@@ -86,10 +94,16 @@ public abstract class AbstractSourceReader {
 		factories.add(new ActivityDiagramFactory());
 		factories.add(new UsecaseDiagramFactory());
 		factories.add(new ComponentDiagramFactory());
+		factories.add(new StateDiagramFactory());
+		factories.add(new CompositeDiagramFactory());
+		factories.add(new ObjectDiagramFactory());
 		factories.add(new PrintSkinFactory());
 		factories.add(new PSystemVersionFactory());
 		factories.add(new PSystemSudokuFactory());
 		factories.add(new PSystemEggFactory());
+		factories.add(new PSystemRIPFactory());
+		factories.add(new PSystemLostFactory());
+		factories.add(new PSystemOregonFactory());
 
 		final List<SortedMap<Integer, StartUml>> allResults = new ArrayList<SortedMap<Integer, StartUml>>();
 		for (PSystemFactory systemFactory : factories) {
@@ -124,10 +138,32 @@ public abstract class AbstractSourceReader {
 		final StartUml s3 = allResults.get(cpt++).get(i);
 		final StartUml s4 = allResults.get(cpt++).get(i);
 		final StartUml s5 = allResults.get(cpt++).get(i);
-		final PSystemError merge = PSystemError.merge((PSystemError) s1.getSystem(), (PSystemError) s2
-				.getSystem(), (PSystemError) s3.getSystem(), (PSystemError) s4.getSystem(), (PSystemError) s5
-				.getSystem());
+		final StartUml s6 = allResults.get(cpt++).get(i);
+		final StartUml s7 = allResults.get(cpt++).get(i);
+		final StartUml s8 = allResults.get(cpt++).get(i);
+		final PSystemError merge = merge((PSystemError) s1.getSystem(), (PSystemError) s2.getSystem(),
+				(PSystemError) s3.getSystem(), (PSystemError) s4.getSystem(), (PSystemError) s5.getSystem(),
+				(PSystemError) s6.getSystem(), (PSystemError) s7.getSystem(), (PSystemError) s8.getSystem());
 		return new StartUml(merge, s1.getStartuml());
+	}
+
+	static public PSystemError merge(PSystemError... ps) {
+		UmlSource source = null;
+		final List<ErrorUml> errors = new ArrayList<ErrorUml>();
+		for (PSystemError system : ps) {
+//			if (system == null) {
+//				throw new IllegalStateException();
+//				// continue;
+//			}
+			if (system.getSource() != null && source == null) {
+				source = system.getSource();
+			}
+			errors.addAll(system.getErrorsUml());
+		}
+		if (source == null) {
+			throw new IllegalStateException();
+		}
+		return new PSystemError(source, errors);
 	}
 
 	private void insertConfig(List<String> strings, List<String> config) {

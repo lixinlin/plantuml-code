@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,14 +26,18 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4762 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.command;
 
 import java.util.List;
 
+import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.command.SingleLineCommand;
+import net.sourceforge.plantuml.graphic.HtmlColor;
 import net.sourceforge.plantuml.sequencediagram.LifeEventType;
 import net.sourceforge.plantuml.sequencediagram.Participant;
 import net.sourceforge.plantuml.sequencediagram.SequenceDiagram;
@@ -41,15 +45,15 @@ import net.sourceforge.plantuml.sequencediagram.SequenceDiagram;
 public class CommandActivate extends SingleLineCommand<SequenceDiagram> {
 
 	public CommandActivate(SequenceDiagram sequenceDiagram) {
-		super(sequenceDiagram, "(?i)^(activate|deactivate|destroy|create)\\s+(\\w+)$");
+		super(sequenceDiagram, "(?i)^(activate|deactivate|destroy|create)\\s+([\\p{L}0-9_.]+)\\s*(#\\w+)?$");
 	}
 
 	@Override
-	protected boolean executeArg(List<String> arg) {
+	protected CommandExecutionResult executeArg(List<String> arg) {
 		final LifeEventType type = LifeEventType.valueOf(arg.get(0).toUpperCase());
 		final Participant p = getSystem().getOrCreateParticipant(arg.get(1));
-		getSystem().activate(p, type);
-		return true;
+		getSystem().activate(p, type, HtmlColor.getColorIfValid(arg.get(2)));
+		return CommandExecutionResult.ok();
 	}
 
 }

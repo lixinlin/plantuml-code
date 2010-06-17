@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4762 $
  *
  */
 package net.sourceforge.plantuml.command;
@@ -40,17 +42,17 @@ import net.sourceforge.plantuml.graphic.HorizontalAlignement;
 public class CommandHeader extends SingleLineCommand<UmlDiagram> {
 
 	public CommandHeader(UmlDiagram diagram) {
-		super(diagram, "(?i)^(?:(left|right|center)?\\s*)header(?:\\s*:\\s*|\\s+)(.*\\w.*)$");
+		super(diagram, "(?i)^(?:(left|right|center)?\\s*)header(?:\\s*:\\s*|\\s+)(.*[\\p{L}0-9_.].*)$");
 	}
 
 	@Override
-	protected boolean executeArg(List<String> arg) {
+	protected CommandExecutionResult executeArg(List<String> arg) {
 		final String align = arg.get(0);
 		if (align != null) {
 			getSystem().setHeaderAlignement(HorizontalAlignement.valueOf(align.toUpperCase()));
 		}
 		getSystem().setHeader(StringUtils.getWithNewlines(arg.get(1)));
-		return true;
+		return CommandExecutionResult.ok();
 	}
 
 }

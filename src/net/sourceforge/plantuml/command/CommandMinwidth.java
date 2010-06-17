@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4762 $
  *
  */
 package net.sourceforge.plantuml.command;
@@ -35,7 +37,6 @@ import java.util.List;
 
 import net.sourceforge.plantuml.UmlDiagram;
 
-
 public class CommandMinwidth extends SingleLineCommand<UmlDiagram> {
 
 	public CommandMinwidth(UmlDiagram system) {
@@ -43,11 +44,11 @@ public class CommandMinwidth extends SingleLineCommand<UmlDiagram> {
 	}
 
 	@Override
-	protected boolean executeArg(List<String> arg) {
+	protected CommandExecutionResult executeArg(List<String> arg) {
 
 		final int minwidth = Integer.parseInt(arg.get(0));
 		((UmlDiagram) getSystem()).setMinwidth(minwidth);
-		return true;
+		return CommandExecutionResult.ok();
 	}
 
 }

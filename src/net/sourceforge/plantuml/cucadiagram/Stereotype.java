@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,12 +26,15 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4111 $
  *
  */
 package net.sourceforge.plantuml.cucadiagram;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -46,14 +49,18 @@ public class Stereotype implements CharSequence {
 	private final String label;
 	private final HtmlColor htmlColor;
 	private final char character;
+	private final double radius;
+	private final Font circledFont;
 
-	public Stereotype(String label) {
+	public Stereotype(String label, double radius, Font circledFont) {
 		if (label == null) {
 			throw new IllegalArgumentException();
 		}
 		if (label.startsWith("<<") == false || label.endsWith(">>") == false) {
 			throw new IllegalArgumentException(label);
 		}
+		this.radius = radius;
+		this.circledFont = circledFont;
 		final Matcher m = circle.matcher(label);
 		if (m.find()) {
 			if (StringUtils.isNotEmpty(m.group(3))) {
@@ -110,6 +117,14 @@ public class Stereotype implements CharSequence {
 
 	public CharSequence subSequence(int arg0, int arg1) {
 		return toString().subSequence(arg0, arg1);
+	}
+
+	public double getRadius() {
+		return radius;
+	}
+
+	public final Font getCircledFont() {
+		return circledFont;
 	}
 
 }

@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 3942 $
  *
  */
 package net.sourceforge.plantuml.graphic;
@@ -34,7 +36,6 @@ package net.sourceforge.plantuml.graphic;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.EnumSet;
-
 
 public class FontConfiguration {
 
@@ -46,6 +47,11 @@ public class FontConfiguration {
 
 	public FontConfiguration(Font font, Color color) {
 		this(EnumSet.noneOf(FontStyle.class), font, color, font, color);
+	}
+	
+	@Override
+	public String toString() {
+		return styles.toString()+" "+currentColor;
 	}
 
 	private FontConfiguration(EnumSet<FontStyle> styles, Font motherFont, Color motherColor, Font currentFont,

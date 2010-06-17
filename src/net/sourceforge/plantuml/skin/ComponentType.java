@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,39 +26,103 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4660 $
  *
  */
 package net.sourceforge.plantuml.skin;
 
 public enum ComponentType {
-	ACTOR_HEAD,
-	ACTOR_LINE,
-	ACTOR_TAIL,
+	ACTOR_HEAD, ACTOR_LINE, ACTOR_TAIL,
 
-	ALIVE_LINE,
-	DESTROY,
+	ALIVE_LINE, DESTROY,
+
+	ARROW, DOTTED_ARROW, DOTTED_SELF_ARROW, RETURN_ARROW, RETURN_DOTTED_ARROW, SELF_ARROW,
+
+	ASYNC_ARROW, ASYNC_DOTTED_ARROW, ASYNC_RETURN_ARROW, ASYNC_RETURN_DOTTED_ARROW,
+
+	GROUPING_BODY, GROUPING_ELSE, GROUPING_HEADER, GROUPING_TAIL,
+
+	NEWPAGE, NOTE, DIVIDER,
+
+	PARTICIPANT_HEAD, PARTICIPANT_LINE, PARTICIPANT_TAIL,
+
+	TITLE, SIGNATURE;
+
+	public ComponentType getDotted() {
+		if (this == ComponentType.ARROW) {
+			return ComponentType.DOTTED_ARROW;
+		} else if (this == ComponentType.DOTTED_ARROW) {
+			throw new IllegalStateException();
+		} else if (this == ComponentType.DOTTED_SELF_ARROW) {
+			throw new IllegalStateException();
+		} else if (this == ComponentType.RETURN_ARROW) {
+			return ComponentType.RETURN_DOTTED_ARROW;
+		} else if (this == ComponentType.RETURN_DOTTED_ARROW) {
+			throw new IllegalStateException();
+		} else if (this == ComponentType.SELF_ARROW) {
+			return ComponentType.DOTTED_SELF_ARROW;
+		} else if (this == ComponentType.ASYNC_ARROW) {
+			return ComponentType.ASYNC_DOTTED_ARROW;
+		} else if (this == ComponentType.ASYNC_DOTTED_ARROW) {
+			throw new IllegalStateException();
+		} else if (this == ComponentType.ASYNC_RETURN_ARROW) {
+			return ComponentType.ASYNC_RETURN_DOTTED_ARROW;
+		} else if (this == ComponentType.ASYNC_RETURN_DOTTED_ARROW) {
+			throw new IllegalStateException();
+		}
+		throw new UnsupportedOperationException();
+	}
 	
-	ARROW,
-	DOTTED_ARROW,
-	DOTTED_SELF_ARROW,
-	RETURN_ARROW,
-	RETURN_DOTTED_ARROW,
-	SELF_ARROW,
-	
-	GROUPING_BODY,
-	GROUPING_ELSE,
-	GROUPING_HEADER,
-	GROUPING_TAIL,
-	
-	NEWPAGE,
-	NOTE,
-	
-	PARTICIPANT_HEAD,
-	PARTICIPANT_LINE,
-	PARTICIPANT_TAIL,
-	
-	TITLE,
-	SIGNATURE,
+	public ComponentType getAsync() {
+		if (this == ComponentType.ARROW) {
+			return ComponentType.ASYNC_ARROW;
+		} else if (this == ComponentType.DOTTED_ARROW) {
+			return ComponentType.ASYNC_DOTTED_ARROW;
+		} else if (this == ComponentType.DOTTED_SELF_ARROW) {
+			throw new IllegalStateException();
+		} else if (this == ComponentType.RETURN_ARROW) {
+			return ComponentType.ASYNC_RETURN_ARROW;
+		} else if (this == ComponentType.RETURN_DOTTED_ARROW) {
+			return ComponentType.ASYNC_RETURN_DOTTED_ARROW;
+		} else if (this == ComponentType.SELF_ARROW) {
+			throw new IllegalStateException();
+		} else if (this == ComponentType.ASYNC_ARROW) {
+			throw new IllegalStateException();
+		} else if (this == ComponentType.ASYNC_DOTTED_ARROW) {
+			throw new IllegalStateException();
+		} else if (this == ComponentType.ASYNC_RETURN_ARROW) {
+			throw new IllegalStateException();
+		} else if (this == ComponentType.ASYNC_RETURN_DOTTED_ARROW) {
+			throw new IllegalStateException();
+		}
+		throw new UnsupportedOperationException();
+	}
+
+	public ComponentType getReverse() {
+		if (this == ComponentType.ARROW) {
+			return ComponentType.RETURN_ARROW;
+		} else if (this == ComponentType.DOTTED_ARROW) {
+			return ComponentType.RETURN_DOTTED_ARROW;
+		} else if (this == ComponentType.DOTTED_SELF_ARROW) {
+			throw new IllegalStateException();
+		} else if (this == ComponentType.RETURN_ARROW) {
+			throw new IllegalStateException();
+		} else if (this == ComponentType.RETURN_DOTTED_ARROW) {
+			throw new IllegalStateException();
+		} else if (this == ComponentType.SELF_ARROW) {
+			throw new IllegalStateException();
+		} else if (this == ComponentType.ASYNC_ARROW) {
+			return ComponentType.ASYNC_RETURN_ARROW;
+		} else if (this == ComponentType.ASYNC_DOTTED_ARROW) {
+			return ComponentType.ASYNC_RETURN_DOTTED_ARROW;
+		} else if (this == ComponentType.ASYNC_RETURN_ARROW) {
+			throw new IllegalStateException();
+		} else if (this == ComponentType.ASYNC_RETURN_DOTTED_ARROW) {
+			throw new IllegalStateException();
+		}
+		throw new UnsupportedOperationException();
+	}
 
 }

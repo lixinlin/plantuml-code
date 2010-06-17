@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ *
+ * Revision $Revision: 4780 $
  *
  */
 package net.sourceforge.plantuml;
@@ -38,14 +40,14 @@ import java.util.List;
 
 public interface PSystem {
 
-	List<File> createPng(File pngFile) throws IOException, InterruptedException;
+	List<File> createFiles(File suggestedFile, FileFormat fileFormat) throws IOException, InterruptedException;
 
-	void createPng(OutputStream os) throws IOException;
+	void createFile(OutputStream os, int index, FileFormat fileFormat) throws IOException;
 
 	String getDescription();
-	
-	String getSource();
-	
-	void setSource(String source);
+
+	String getMetadata();
+
+	UmlSource getSource();
 
 }

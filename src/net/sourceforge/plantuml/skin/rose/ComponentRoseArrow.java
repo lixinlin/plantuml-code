@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,26 +26,32 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4632 $
  *
  */
 package net.sourceforge.plantuml.skin.rose;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics2D;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Point2D;
 import java.util.List;
+
+import net.sourceforge.plantuml.graphic.StringBounder;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
+import net.sourceforge.plantuml.ugraphic.ULine;
+import net.sourceforge.plantuml.ugraphic.UPolygon;
+import net.sourceforge.plantuml.ugraphic.UStroke;
 
 public class ComponentRoseArrow extends AbstractComponentRoseArrow {
 
 	private final int direction;
 
-	public ComponentRoseArrow(Color foregroundColor, Color fontColor, Font font, List<? extends CharSequence> stringsToDisplay,
-			int direction, boolean dotted) {
-		super(foregroundColor, fontColor, font, stringsToDisplay, dotted);
+	public ComponentRoseArrow(Color foregroundColor, Color fontColor, Font font,
+			List<? extends CharSequence> stringsToDisplay, int direction, boolean dotted, boolean full) {
+		super(foregroundColor, fontColor, font, stringsToDisplay, dotted, full);
 		this.direction = direction;
 		if (direction != 1 && direction != -1) {
 			throw new IllegalArgumentException();
@@ -53,60 +59,81 @@ public class ComponentRoseArrow extends AbstractComponentRoseArrow {
 	}
 
 	@Override
-	protected void drawInternal(Graphics2D g2d, Dimension2D dimensionToUse) {
-		final int textHeight = (int) getTextHeight(g2d);
-		g2d.setColor(getForegroundColor());
+	public void drawInternalU(UGraphic ug, Dimension2D dimensionToUse) {
+		final StringBounder stringBounder = ug.getStringBounder();
+		final int textHeight = (int) getTextHeight(stringBounder);
+		ug.getParam().setColor(getForegroundColor());
 
 		final int x2 = (int) dimensionToUse.getWidth();
 
 		if (isDotted()) {
-			stroke(g2d, 2);
+			stroke(ug, 2);
 		}
 
-		g2d.drawLine(0, textHeight, x2, textHeight);
+		//
+		ug.draw(0, textHeight, new ULine(x2, 0));
 		if (isDotted()) {
-			g2d.setStroke(new BasicStroke());
+			ug.getParam().setStroke(new UStroke());
 		}
-		final int direction = getDirection(g2d);
+		final int direction = getDirection();
 		if (direction == 1) {
-			g2d.drawLine(x2 - getArrowDeltaX(), textHeight - getArrowDeltaY(), x2, textHeight);
-			g2d.drawLine(x2 - getArrowDeltaX(), textHeight + getArrowDeltaY(), x2, textHeight);
+			if (isFull()) {
+				ug.getParam().setBackcolor(getForegroundColor());
+				final UPolygon polygon = new UPolygon();
+				polygon.addPoint(x2 - getArrowDeltaX(), textHeight - getArrowDeltaY());
+				polygon.addPoint(x2, textHeight);
+				polygon.addPoint(x2 - getArrowDeltaX(), textHeight + getArrowDeltaY());
+				ug.draw(0, 0, polygon);
+				ug.getParam().setBackcolor(null);
+			} else {
+				ug.draw(x2, textHeight, new ULine(-getArrowDeltaX(), -getArrowDeltaY()));
+				ug.draw(x2, textHeight, new ULine(-getArrowDeltaX(), getArrowDeltaY()));
+			}
 		} else {
-			g2d.drawLine(getArrowDeltaX(), textHeight - getArrowDeltaY(), 0, textHeight);
-			g2d.drawLine(getArrowDeltaX(), textHeight + getArrowDeltaY(), 0, textHeight);
-
+			if (isFull()) {
+				ug.getParam().setBackcolor(getForegroundColor());
+				final UPolygon polygon = new UPolygon();
+				polygon.addPoint(getArrowDeltaX(), textHeight - getArrowDeltaY());
+				polygon.addPoint(0, textHeight);
+				polygon.addPoint(getArrowDeltaX(), textHeight + getArrowDeltaY());
+				ug.draw(0, 0, polygon);
+				ug.getParam().setBackcolor(null);
+			} else {
+				ug.draw(0, textHeight, new ULine(getArrowDeltaX(), -getArrowDeltaY()));
+				ug.draw(0, textHeight, new ULine(getArrowDeltaX(), getArrowDeltaY()));
+			}
 		}
-		getTextBlock().draw(g2d, getMarginX1(), 0);
+		getTextBlock().drawU(ug, getMarginX1(), 0);
 	}
 
-	public Point2D getStartPoint(Graphics2D g2d, Dimension2D dimensionToUse) {
-		final int textHeight = (int) getTextHeight(g2d);
+	public Point2D getStartPoint(StringBounder stringBounder, Dimension2D dimensionToUse) {
+		final int textHeight = (int) getTextHeight(stringBounder);
 		if (direction == 1) {
 			return new Point2D.Double(getPaddingX(), textHeight + getPaddingY());
 		}
 		return new Point2D.Double(dimensionToUse.getWidth() + getPaddingX(), textHeight + getPaddingY());
 	}
 
-	public Point2D getEndPoint(Graphics2D g2d, Dimension2D dimensionToUse) {
-		final int textHeight = (int) getTextHeight(g2d);
+	public Point2D getEndPoint(StringBounder stringBounder, Dimension2D dimensionToUse) {
+		final int textHeight = (int) getTextHeight(stringBounder);
 		if (direction == 1) {
 			return new Point2D.Double(dimensionToUse.getWidth() + getPaddingX(), textHeight + getPaddingY());
 		}
 		return new Point2D.Double(getPaddingX(), textHeight + getPaddingY());
 	}
 
-	protected int getDirection(Graphics2D g2d) {
+	final protected int getDirection() {
 		return direction;
 	}
 
 	@Override
-	public double getPreferredHeight(Graphics2D g2d) {
-		return getTextHeight(g2d) + getArrowDeltaY() + 2 * getPaddingY();
+	public double getPreferredHeight(StringBounder stringBounder) {
+		return getTextHeight(stringBounder) + getArrowDeltaY() + 2 * getPaddingY();
 	}
 
 	@Override
-	public double getPreferredWidth(Graphics2D g2d) {
-		return getTextWidth(g2d);
+	public double getPreferredWidth(StringBounder stringBounder) {
+		return getTextWidth(stringBounder);
 	}
 
 }

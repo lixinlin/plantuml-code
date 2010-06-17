@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,24 +26,29 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4258 $
  *
  */
 package net.sourceforge.plantuml.skin.bluemodern;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.Polygon;
 import java.awt.geom.Dimension2D;
 import java.util.Arrays;
 import java.util.List;
 
 import net.sourceforge.plantuml.graphic.HorizontalAlignement;
+import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.graphic.TextBlock;
 import net.sourceforge.plantuml.graphic.TextBlockUtils;
 import net.sourceforge.plantuml.skin.AbstractTextualComponent;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
+import net.sourceforge.plantuml.ugraphic.ULine;
+import net.sourceforge.plantuml.ugraphic.UPolygon;
+import net.sourceforge.plantuml.ugraphic.URectangle;
+import net.sourceforge.plantuml.ugraphic.UStroke;
 
 public class ComponentBlueModernGroupingHeader extends AbstractTextualComponent {
 
@@ -57,7 +62,8 @@ public class ComponentBlueModernGroupingHeader extends AbstractTextualComponent 
 	private final Color borderColor;
 
 	public ComponentBlueModernGroupingHeader(Color headerBackgroundColor, Color generalBackgroundColor,
-			Color borderColor, Color fontColor1, Color fontColor2, Font bigFont, Font smallFont, List<? extends CharSequence> strings) {
+			Color borderColor, Color fontColor1, Color fontColor2, Font bigFont, Font smallFont,
+			List<? extends CharSequence> strings) {
 		super(strings.get(0), fontColor1, bigFont, HorizontalAlignement.LEFT, 15, 30, 1);
 		this.headerBackgroundColor = headerBackgroundColor;
 		this.generalBackgroundColor = generalBackgroundColor;
@@ -65,7 +71,8 @@ public class ComponentBlueModernGroupingHeader extends AbstractTextualComponent 
 		if (strings.size() == 1 || strings.get(1) == null) {
 			this.commentTextBlock = null;
 		} else {
-			this.commentTextBlock = TextBlockUtils.create(Arrays.asList("[" + strings.get(1) + "]"), smallFont, fontColor2, HorizontalAlignement.LEFT);
+			this.commentTextBlock = TextBlockUtils.create(Arrays.asList("[" + strings.get(1) + "]"), smallFont,
+					fontColor2, HorizontalAlignement.LEFT);
 		}
 	}
 
@@ -75,36 +82,38 @@ public class ComponentBlueModernGroupingHeader extends AbstractTextualComponent 
 	}
 
 	@Override
-	final public double getPreferredWidth(Graphics2D g2d) {
+	final public double getPreferredWidth(StringBounder stringBounder) {
 		final double sup;
 		if (commentTextBlock == null) {
 			sup = commentMargin * 2;
 		} else {
-			final Dimension2D size = commentTextBlock.calculateDimension(g2d);
+			final Dimension2D size = commentTextBlock.calculateDimension(stringBounder);
 			sup = getMarginX1() + commentMargin + size.getWidth();
 
 		}
-		return getTextWidth(g2d) + sup;
+		return getTextWidth(stringBounder) + sup;
 	}
 
 	@Override
-	final public double getPreferredHeight(Graphics2D g2d) {
-		return getTextHeight(g2d) + 2 * getPaddingY();
+	final public double getPreferredHeight(StringBounder stringBounder) {
+		return getTextHeight(stringBounder) + 2 * getPaddingY();
 	}
 
 	@Override
-	protected void drawBackgroundInternal(Graphics2D g2d, Dimension2D dimensionToUse) {
-		g2d.setColor(generalBackgroundColor);
-		g2d.fillRect(0, 0, (int) dimensionToUse.getWidth(), (int) dimensionToUse.getHeight());
+	protected void drawBackgroundInternalU(UGraphic ug, Dimension2D dimensionToUse) {
+		ug.getParam().setColor(generalBackgroundColor);
+		ug.getParam().setBackcolor(generalBackgroundColor);
+		ug.draw(0, 0, new URectangle(dimensionToUse.getWidth(), dimensionToUse.getHeight()));
 	}
 
+
 	@Override
-	protected void drawInternal(Graphics2D g2d, Dimension2D dimensionToUse) {
+	protected void drawInternalU(UGraphic ug, Dimension2D dimensionToUse) {
+		final StringBounder stringBounder = ug.getStringBounder();
+		final int textWidth = (int) getTextWidth(stringBounder);
+		final int textHeight = (int) getTextHeight(stringBounder);
 
-		final int textWidth = (int) getTextWidth(g2d);
-		final int textHeight = (int) getTextHeight(g2d);
-
-		final Polygon polygon = new Polygon();
+		final UPolygon polygon = new UPolygon();
 		polygon.addPoint(0, 0);
 		polygon.addPoint(textWidth, 0);
 
@@ -114,27 +123,26 @@ public class ComponentBlueModernGroupingHeader extends AbstractTextualComponent 
 		polygon.addPoint(0, textHeight);
 		polygon.addPoint(0, 0);
 
-		g2d.setStroke(new BasicStroke(2));
-		g2d.setColor(headerBackgroundColor);
-		g2d.fill(polygon);
-		g2d.setColor(borderColor);
-		g2d.draw(polygon);
-		g2d.drawLine(0, 0, (int) (dimensionToUse.getWidth()), 0);
-		g2d.drawLine((int) dimensionToUse.getWidth(), 0, (int) dimensionToUse.getWidth(), textHeight);
-		g2d.setStroke(new BasicStroke());
+		ug.getParam().setStroke(new UStroke(2));
+		ug.getParam().setBackcolor(headerBackgroundColor);
+		ug.getParam().setColor(borderColor);
+		ug.draw(0, 0, polygon);
+		ug.draw(0, 0, new ULine(dimensionToUse.getWidth(), 0));
+		ug.draw(dimensionToUse.getWidth(), 0, new ULine(0, dimensionToUse.getHeight()));
+		ug.draw(0, textHeight, new ULine(0, dimensionToUse.getHeight()-textHeight));
+		ug.getParam().setStroke(new UStroke());
 
-		getTextBlock().draw(g2d, getMarginX1(), getMarginY());
+		getTextBlock().drawU(ug, getMarginX1(), getMarginY());
 
 		if (commentTextBlock != null) {
-			final Dimension2D size = commentTextBlock.calculateDimension(g2d);
-			g2d.setColor(generalBackgroundColor);
+			//final Dimension2D size = commentTextBlock.calculateDimension(stringBounder);
+			ug.getParam().setColor(generalBackgroundColor);
 			final int x1 = getMarginX1() + textWidth;
 			final int y2 = getMarginY() + 1;
-			g2d.fillRect(x1, y2, (int) size.getWidth() + 2 * commentMargin, (int) size.getHeight());
+			//ug.draw(x1, y2, new URectangle(size.getWidth() + 2 * commentMargin, size.getHeight()));
 
-			commentTextBlock.draw(g2d, x1 + commentMargin, y2);
+			commentTextBlock.drawU(ug, x1 + commentMargin, y2);
 		}
-
 	}
 
 }

@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4765 $
  *
  */
 package net.sourceforge.plantuml.command;
@@ -35,20 +37,19 @@ import java.util.List;
 
 import net.sourceforge.plantuml.UmlDiagram;
 
-
 public class CommandMultilinesTitle extends CommandMultilines<UmlDiagram> {
 
 	public CommandMultilinesTitle(final UmlDiagram diagram) {
 		super(diagram, "(?i)^title$", "(?i)^end ?title$");
 	}
 
-	public boolean execute(List<String> lines) {
+	public CommandExecutionResult execute(List<String> lines) {
 		final List<String> strings = lines.subList(1, lines.size() - 1);
 		if (strings.size() > 0) {
 			getSystem().setTitle(strings);
-			return true;
+			return CommandExecutionResult.ok();
 		}
-		return false;
+		return CommandExecutionResult.error("No title defined");
 	}
 
 }

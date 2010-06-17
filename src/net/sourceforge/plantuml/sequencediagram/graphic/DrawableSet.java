@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,13 +26,13 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4836 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.graphic;
 
-import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Dimension2D;
 import java.util.Collection;
 import java.util.Collections;
@@ -41,13 +41,15 @@ import java.util.Map;
 import java.util.Set;
 
 import net.sourceforge.plantuml.SkinParam;
+import net.sourceforge.plantuml.asciiart.CharArea;
+import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.sequencediagram.Event;
 import net.sourceforge.plantuml.sequencediagram.Participant;
-import net.sourceforge.plantuml.skin.Component;
-import net.sourceforge.plantuml.skin.ComponentType;
 import net.sourceforge.plantuml.skin.Context2D;
 import net.sourceforge.plantuml.skin.SimpleContext2D;
 import net.sourceforge.plantuml.skin.Skin;
+import net.sourceforge.plantuml.ugraphic.UClip;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
 
 class DrawableSet {
 
@@ -102,22 +104,22 @@ class DrawableSet {
 		return events.get(ev);
 	}
 
-	public double getHeadHeight(Graphics2D g2d) {
+	public double getHeadHeight(StringBounder stringBounder) {
 		double r = 0;
 		for (LivingParticipantBox livingParticipantBox : participants.values()) {
-			final double y = livingParticipantBox.getParticipantBox().getHeadHeight(g2d);
+			final double y = livingParticipantBox.getParticipantBox().getHeadHeight(stringBounder);
 			r = Math.max(r, y);
 		}
 		return r;
 	}
 
-	public double getTailHeight(Graphics2D g2d, boolean showTail) {
+	public double getTailHeight(StringBounder stringBounder, boolean showTail) {
 		if (showTail == false) {
 			return 1;
 		}
 		double r = 0;
 		for (LivingParticipantBox livingParticipantBox : participants.values()) {
-			final double y = livingParticipantBox.getParticipantBox().getTailHeight(g2d);
+			final double y = livingParticipantBox.getParticipantBox().getTailHeight(stringBounder);
 			r = Math.max(r, y);
 		}
 		return r;
@@ -132,11 +134,10 @@ class DrawableSet {
 
 	}
 
-	void setDimension(Dimension2D dim/* , double titleWidthOffset */) {
+	void setDimension(Dimension2D dim) {
 		if (dimension != null) {
 			throw new IllegalStateException();
 		}
-		// this.titleWidthOffset = titleWidthOffset;
 		this.dimension = dim;
 	}
 
@@ -144,82 +145,83 @@ class DrawableSet {
 		return dimension;
 	}
 
-	// public final Component getComponentTitle() {
-	// return componentTitle;
-	// }
-	//
-	// public final void setComponentTitle(Component componentTitle) {
-	// this.componentTitle = componentTitle;
-	// }
+	void drawU(UGraphic ug, final double delta, double width, Page page, boolean showTail) {
 
-	// ---------
+		final double atX = ug.getTranslateX();
+		final double atY = ug.getTranslateY();
 
-	void draw(Graphics2D g2d, final double delta, int width, Page page, /*
-																		 * boolean
-																		 * showTitle,
-																		 */boolean showTail) {
-
-		// double titleHeight = 0;
-		// if (showTitle && componentTitle != null) {
-		// this.drawTitle(g2d, componentTitle);
-		// titleHeight = componentTitle.getPreferredHeight(g2d);
-		// }
-		//
-		// g2d.translate(titleWidthOffset, 0);
-		final AffineTransform at = g2d.getTransform();
 		final int height = (int) page.getHeight();
-		clipAndTranslate(delta, width, page, g2d);
-		this.drawPlayground(g2d, height, new SimpleContext2D(true));
 
-		g2d.setClip(null);
-		g2d.setTransform(at);
+		clipAndTranslate(delta, width, page, ug);
+		this.drawPlaygroundU(ug, height, new SimpleContext2D(true));
 
-		// g2d.translate(0, titleHeight);
-		this.drawLine(g2d, height /*- titleHeight*/, showTail);
-		this.drawHeadTail(g2d, showTail ? height : 0);
-		// g2d.translate(0, -titleHeight);
+		ug.setClip(null);
+		ug.setTranslate(atX, atY);
 
-		clipAndTranslate(delta, width, page, g2d);
-		this.drawPlayground(g2d, height, new SimpleContext2D(false));
+		this.drawLineU(ug, showTail, page);
+		this.drawHeadTailU(ug, showTail ? height : 0, page);
+
+		clipAndTranslate(delta, width, page, ug);
+		this.drawPlaygroundU(ug, height, new SimpleContext2D(false));
 	}
 
-	private void clipAndTranslate(final double delta, int width, Page p, final Graphics2D g2d) {
-		g2d.setClip(0, (int) p.getBodyRelativePosition(), width, (int) (p.getBodyHeight() + 1));
+	public void drawTxt(CharArea charArea, int diagramWidth, Page page, boolean showTail) {
+		final int height = (int) page.getHeight();
+		this.drawLineTxt(charArea, height, showTail);
+	}
+
+	private void clipAndTranslate(final double delta, double width, Page p, final UGraphic ug) {
+		ug.setClip(new UClip(0, p.getBodyRelativePosition(), width, p.getBodyHeight() + 1));
 		if (delta > 0) {
-			g2d.translate(0, -delta);
+			ug.translate(0, -delta);
 		}
 	}
 
-	public final void setGroupingMargin(double groupingMargin) {
-		this.groupingMargin = groupingMargin;
-	}
-
-	private void drawLine(Graphics2D g2d, double height, boolean showTail) {
-		g2d.translate(groupingMargin, 0);
+	private void drawLineU(UGraphic ug, boolean showTail, Page page) {
+		ug.translate(groupingMargin, 0);
 		for (LivingParticipantBox box : getAllLivingParticipantBox()) {
-			box.drawLine(g2d, height, showTail);
+			final double create = box.getCreate();
+			final double startMin = page.getBodyRelativePosition() - box.magicMargin(ug.getStringBounder());
+			// final double endMax = page.getHeight() - 1;
+			final double endMax = startMin + page.getBodyHeight() + 2 * box.magicMargin(ug.getStringBounder());
+			double start = startMin;
+			if (create > 0) {
+				if (create > page.getNewpage2()) {
+					continue;
+				}
+				if (create > page.getNewpage1() && create < page.getNewpage2()) {
+					start += create - page.getNewpage1() + page.getBodyRelativePosition();
+				}
+			}
+			box.drawLineU(ug, start, endMax, showTail);
 		}
-		g2d.translate(-groupingMargin, 0);
+		ug.translate(-groupingMargin, 0);
 
 	}
 
-	private void drawHeadTail(Graphics2D g2d, double height) {
-		g2d.translate(groupingMargin, 0);
+	private void drawLineTxt(CharArea charArea, int height, boolean showTail) {
 		for (LivingParticipantBox box : getAllLivingParticipantBox()) {
-			box.getParticipantBox().drawHeadTail(g2d, height);
+			box.drawLineTxt(charArea, height, showTail);
 		}
-		g2d.translate(-groupingMargin, 0);
 	}
 
-	// private void drawTitle(Graphics2D g2d, Component compTitle) {
-	// final double h = compTitle.getPreferredHeight(g2d);
-	// final double w = compTitle.getPreferredWidth(g2d);
-	// final double xpos = (getMaxX() - w) / 2;
-	// g2d.translate(xpos, 0);
-	// compTitle.draw(g2d, new Dimension2DDouble(w, h), new
-	// SimpleContext2D(false));
-	// g2d.translate(-xpos, 0);
-	// }
+	private void drawHeadTailU(UGraphic ug, double height, Page page) {
+		ug.translate(groupingMargin, 0);
+		for (LivingParticipantBox box : getAllLivingParticipantBox()) {
+			final double create = box.getCreate();
+			boolean showHead = true;
+			if (create > 0) {
+				if (create > page.getNewpage2()) {
+					continue;
+				}
+				if (create > page.getNewpage1() && create < page.getNewpage2()) {
+					showHead = false;
+				}
+			}
+			box.getParticipantBox().drawHeadTailU(ug, height, showHead);
+		}
+		ug.translate(-groupingMargin, 0);
+	}
 
 	private double getMaxX() {
 		return dimension.getWidth();
@@ -229,27 +231,28 @@ class DrawableSet {
 		return dimension.getHeight();
 	}
 
-	private void drawPlayground(Graphics2D g2d, double height, Context2D context) {
-		g2d.translate(groupingMargin, 0);
+	private void drawPlaygroundU(UGraphic ug, double height, Context2D context) {
+		ug.translate(groupingMargin, 0);
 
 		for (Participant p : getAllParticipants()) {
-			drawLifeLine(g2d, p);
+			drawLifeLineU(ug, p);
 		}
 		for (GraphicalElement element : getAllGraphicalElements()) {
-			element.draw(g2d, getMaxX(), context);
+			element.drawU(ug, getMaxX(), context);
 		}
-		g2d.setClip(null);
-		g2d.translate(-groupingMargin, 0);
+		ug.setClip(null);
+		ug.translate(-groupingMargin, 0);
 	}
 
-	// Drawing
-	private void drawLifeLine(Graphics2D g2d, Participant p) {
+	private void drawLifeLineU(UGraphic ug, Participant p) {
 		final LifeLine line = getLivingParticipantBox(p).getLifeLine();
 
 		line.finish(getMaxY());
-		final Component comp = getSkin().createComponent(ComponentType.ALIVE_LINE, skinParam, null);
-		line.draw(g2d, comp);
-
+		// skinParam.overideBackColor(new HtmlColor(("#00FF00")));
+		// final Component comp =
+		// getSkin().createComponent(ComponentType.ALIVE_LINE, skinParam, null);
+		// skinParam.overideBackColor(null);
+		line.drawU(ug, getSkin(), skinParam);
 	}
 
 }

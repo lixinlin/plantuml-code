@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,25 +26,30 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ *
+ * Revision $Revision: 4751 $
  *
  */
 package net.sourceforge.plantuml.classdiagram;
 
 import net.sourceforge.plantuml.classdiagram.command.CommandAddMethod;
-import net.sourceforge.plantuml.classdiagram.command.CommandCreateEntity;
-import net.sourceforge.plantuml.classdiagram.command.CommandCreateNote;
+import net.sourceforge.plantuml.classdiagram.command.CommandCreateEntityClass;
+import net.sourceforge.plantuml.classdiagram.command.CommandCreateEntityClassMultilines;
+import net.sourceforge.plantuml.classdiagram.command.CommandEndNamespace;
 import net.sourceforge.plantuml.classdiagram.command.CommandImport;
-import net.sourceforge.plantuml.classdiagram.command.CommandLink;
-import net.sourceforge.plantuml.classdiagram.command.CommandMultilinesNoteEntity;
-import net.sourceforge.plantuml.classdiagram.command.CommandMultilinesStandaloneNote;
-import net.sourceforge.plantuml.classdiagram.command.CommandMultiple;
-import net.sourceforge.plantuml.classdiagram.command.CommandNoopClass;
-import net.sourceforge.plantuml.classdiagram.command.CommandNoteEntity;
-import net.sourceforge.plantuml.classdiagram.command.CommandPackage;
-import net.sourceforge.plantuml.classdiagram.command.CommandPage;
+import net.sourceforge.plantuml.classdiagram.command.CommandLinkClass;
+import net.sourceforge.plantuml.classdiagram.command.CommandMultilinesClassNote;
+import net.sourceforge.plantuml.classdiagram.command.CommandNamespace;
 import net.sourceforge.plantuml.classdiagram.command.CommandStereotype;
+import net.sourceforge.plantuml.classdiagram.command.CommandUrl;
 import net.sourceforge.plantuml.command.AbstractUmlSystemCommandFactory;
+import net.sourceforge.plantuml.command.CommandCreateNote;
+import net.sourceforge.plantuml.command.CommandEndPackage;
+import net.sourceforge.plantuml.command.CommandMultilinesStandaloneNote;
+import net.sourceforge.plantuml.command.CommandNoteEntity;
+import net.sourceforge.plantuml.command.CommandPackage;
+import net.sourceforge.plantuml.command.CommandPage;
 
 public class ClassDiagramFactory extends AbstractUmlSystemCommandFactory {
 
@@ -58,23 +63,27 @@ public class ClassDiagramFactory extends AbstractUmlSystemCommandFactory {
 	protected void initCommands() {
 		system = new ClassDiagram();
 
-		addCommand(new CommandPage(system));
-		addCommand(new CommandLink(system));
+		addCommonCommands(system);
 
-		addCommand(new CommandCreateEntity(system));
+		addCommand(new CommandPage(system));
+		addCommand(new CommandAddMethod(system));
+		addCommand(new CommandLinkClass(system));
+
+		addCommand(new CommandCreateEntityClass(system));
 		addCommand(new CommandCreateNote(system));
 		addCommand(new CommandPackage(system));
+		addCommand(new CommandEndPackage(system));
+		addCommand(new CommandNamespace(system));
+		addCommand(new CommandEndNamespace(system));
 		addCommand(new CommandStereotype(system));
+
 		addCommand(new CommandImport(system));
 		addCommand(new CommandNoteEntity(system));
-		addCommand(new CommandAddMethod(system));
+		addCommand(new CommandUrl(system));
 
-		addCommand(new CommandMultiple(system, this));
-		addCommand(new CommandMultilinesNoteEntity(system));
+		addCommand(new CommandMultilinesClassNote(system));
 		addCommand(new CommandMultilinesStandaloneNote(system));
-		
-		addCommand(new CommandNoopClass(system));
-		
-		addCommonCommands(system);
+		addCommand(new CommandCreateEntityClassMultilines(system));
+
 	}
 }

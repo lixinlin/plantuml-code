@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,50 +26,72 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4696 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.graphic;
 
-import java.awt.Graphics2D;
 import java.awt.geom.Dimension2D;
 
 import net.sourceforge.plantuml.Dimension2DDouble;
+import net.sourceforge.plantuml.graphic.StringBounder;
+import net.sourceforge.plantuml.sequencediagram.InGroupableList;
 import net.sourceforge.plantuml.skin.Component;
 import net.sourceforge.plantuml.skin.Context2D;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
 
 class GroupingHeader extends GraphicalElement {
 
 	private final Component comp;
 	private final double xpos;
+	private final InGroupableList inGroupableList;
 
-	public GroupingHeader(double currentY, Component comp, double xpos) {
+	public GroupingHeader(double currentY, Component comp, double xpos,
+			InGroupableList inGroupableList) {
 		super(currentY);
 		this.xpos = xpos;
 		this.comp = comp;
+		this.inGroupableList = inGroupableList;
+		if (inGroupableList == null) {
+			throw new IllegalArgumentException();
+		}
 	}
 
 	@Override
-	final public double getPreferredWidth(Graphics2D g2d) {
-		return comp.getPreferredWidth(g2d);
+	public String toString() {
+		return super.toString() + " "
+				+ (inGroupableList == null ? "no" : inGroupableList.toString());
 	}
 
 	@Override
-	final public double getPreferredHeight(Graphics2D g2d) {
-		return comp.getPreferredHeight(g2d);
+	final public double getPreferredWidth(StringBounder stringBounder) {
+		return comp.getPreferredWidth(stringBounder);
 	}
-	
+
 	@Override
-	public double getStartingX(Graphics2D g2d) {
+	final public double getPreferredHeight(StringBounder stringBounder) {
+		return comp.getPreferredHeight(stringBounder);
+	}
+
+	@Override
+	public double getStartingX(StringBounder stringBounder) {
 		return xpos;
 	}
 
 	@Override
-	protected void drawInternal(Graphics2D g2d, double maxX, Context2D context) {
-		final double x = g2d.getTransform().getTranslateX();
-		g2d.translate(xpos - x, getStartingY());
-		final Dimension2D dim = new Dimension2DDouble(maxX - 2 * xpos, comp.getPreferredHeight(g2d));
-		comp.draw(g2d, dim, context);
+	protected void drawInternalU(UGraphic ug, double maxX, Context2D context) {
+		final StringBounder stringBounder = ug.getStringBounder();
+		// final double x1 = inGroupableList.getMinX(stringBounder);
+		final double x1 = inGroupableList.getBarStart().getCenterX(
+				stringBounder);
+		final double x2 = inGroupableList.getBarEnd().getCenterX(stringBounder);
+		// final double x2 = inGroupableList.getMaxX(stringBounder);
+		ug.translate(x1, getStartingY());
+		final Dimension2D dim = new Dimension2DDouble(x2 - x1, comp
+				.getPreferredHeight(stringBounder));
+		comp.drawU(ug, dim, context);
 	}
 
 }

@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4762 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.command;
@@ -34,6 +36,7 @@ package net.sourceforge.plantuml.sequencediagram.command;
 import java.util.List;
 
 import net.sourceforge.plantuml.StringUtils;
+import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.command.CommandMultilines;
 import net.sourceforge.plantuml.sequencediagram.Note;
 import net.sourceforge.plantuml.sequencediagram.Participant;
@@ -42,10 +45,10 @@ import net.sourceforge.plantuml.sequencediagram.SequenceDiagram;
 public class CommandMultilinesNoteOverSeveral extends CommandMultilines<SequenceDiagram> {
 
 	public CommandMultilinesNoteOverSeveral(final SequenceDiagram sequenceDiagram) {
-		super(sequenceDiagram, "(?i)^note\\s+over\\s+(\\w+)\\s*\\,\\s*(\\w+)$", "(?i)^end ?note$");
+		super(sequenceDiagram, "(?i)^note\\s+over\\s+([\\p{L}0-9_.]+)\\s*\\,\\s*([\\p{L}0-9_.]+)\\s*(#\\w+)?$", "(?i)^end ?note$");
 	}
 
-	public boolean execute(List<String> lines) {
+	public CommandExecutionResult execute(List<String> lines) {
 		final List<String> line0 = StringUtils.getSplit(getStartingPattern(), lines.get(0));
 
 		final Participant p1 = getSystem().getOrCreateParticipant(line0.get(0));
@@ -54,9 +57,10 @@ public class CommandMultilinesNoteOverSeveral extends CommandMultilines<Sequence
 		final List<String> strings = lines.subList(1, lines.size() - 1);
 		if (strings.size() > 0) {
 			final Note note = new Note(p1, p2, strings);
+			note.setSpecificBackcolor(line0.get(2));
 			getSystem().addNote(note);
 		}
-		return true;
+		return CommandExecutionResult.ok();
 	}
 
 }

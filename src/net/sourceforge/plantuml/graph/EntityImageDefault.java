@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4125 $
  *
  */
 package net.sourceforge.plantuml.graph;
@@ -39,6 +41,8 @@ import java.util.Arrays;
 import net.sourceforge.plantuml.Dimension2DDouble;
 import net.sourceforge.plantuml.cucadiagram.Entity;
 import net.sourceforge.plantuml.graphic.HorizontalAlignement;
+import net.sourceforge.plantuml.graphic.StringBounder;
+import net.sourceforge.plantuml.graphic.StringBounderUtils;
 import net.sourceforge.plantuml.graphic.TextBlock;
 import net.sourceforge.plantuml.graphic.TextBlockUtils;
 
@@ -52,17 +56,19 @@ class EntityImageDefault extends AbstractEntityImage {
 				HorizontalAlignement.CENTER);
 	}
 
-	public Dimension2D getDimension(Graphics2D g2d) {
-		final Dimension2D dim = textBlock.calculateDimension(g2d);
+	@Override
+	public Dimension2D getDimension(StringBounder stringBounder) {
+		final Dimension2D dim = textBlock.calculateDimension(stringBounder);
 		return new Dimension2DDouble(dim.getWidth(), dim.getHeight());
 	}
 
+	@Override
 	public void draw(Graphics2D g2d) {
-		final Dimension2D dim = textBlock.calculateDimension(g2d);
+		final Dimension2D dim = textBlock.calculateDimension(StringBounderUtils.asStringBounder(g2d));
 		final int width = (int) dim.getWidth();
 		final int height = (int) dim.getHeight();
 		g2d.setColor(Color.BLACK);
 		g2d.drawRect(0, 0, width, height);
-		textBlock.draw(g2d, 0, 0);
+		textBlock.drawTOBEREMOVED(g2d, 0, 0);
 	}
 }

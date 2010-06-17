@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,20 +26,24 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4169 $
  *
  */
 package net.sourceforge.plantuml.skin.bluemodern;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.Polygon;
 import java.awt.geom.Dimension2D;
 import java.util.List;
 
 import net.sourceforge.plantuml.graphic.HorizontalAlignement;
+import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.skin.AbstractTextualComponent;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
+import net.sourceforge.plantuml.ugraphic.ULine;
+import net.sourceforge.plantuml.ugraphic.UPolygon;
 
 final public class ComponentBlueModernNote extends AbstractTextualComponent {
 
@@ -48,21 +52,22 @@ final public class ComponentBlueModernNote extends AbstractTextualComponent {
 	private final Color back;
 	private final Color foregroundColor;
 
-	public ComponentBlueModernNote(Color back, Color foregroundColor, Color fontColor, Font font, List<? extends CharSequence> strings) {
+	public ComponentBlueModernNote(Color back, Color foregroundColor, Color fontColor, Font font,
+			List<? extends CharSequence> strings) {
 		super(strings, fontColor, font, HorizontalAlignement.LEFT, 6, 15, 5);
 		this.back = back;
 		this.foregroundColor = foregroundColor;
 	}
 
 	@Override
-	final public double getPreferredWidth(Graphics2D g2d) {
-		final double result = getTextWidth(g2d) + 2 * getPaddingX();
+	final public double getPreferredWidth(StringBounder stringBounder) {
+		final double result = getTextWidth(stringBounder) + 2 * getPaddingX();
 		return result;
 	}
 
 	@Override
-	final public double getPreferredHeight(Graphics2D g2d) {
-		return getTextHeight(g2d) + 2 * getPaddingY();
+	final public double getPreferredHeight(StringBounder stringBounder) {
+		return getTextHeight(stringBounder) + 2 * getPaddingY();
 	}
 
 	@Override
@@ -76,17 +81,18 @@ final public class ComponentBlueModernNote extends AbstractTextualComponent {
 	}
 
 	@Override
-	protected void drawInternal(Graphics2D g2d, Dimension2D dimensionToUse) {
-		final int textHeight = (int) getTextHeight(g2d);
+	protected void drawInternalU(UGraphic ug, Dimension2D dimensionToUse) {
+		final StringBounder stringBounder = ug.getStringBounder();
+		final double textHeight = getTextHeight(stringBounder);
 
-		final int textWidth = (int) getTextWidth(g2d);
+		final double textWidth = getTextWidth(stringBounder);
 
 		final ShadowShape shadowShape = new ShadowShape(textWidth, textHeight, 3);
-		g2d.translate(shadowview, shadowview);
-		shadowShape.draw(g2d);
-		g2d.translate(-shadowview, -shadowview);
+		ug.translate(shadowview, shadowview);
+		shadowShape.drawU(ug);
+		ug.translate(-shadowview, -shadowview);
 
-		final Polygon polygon = new Polygon();
+		final UPolygon polygon = new UPolygon();
 		polygon.addPoint(0, 0);
 		polygon.addPoint(0, textHeight);
 		polygon.addPoint(textWidth, textHeight);
@@ -94,15 +100,15 @@ final public class ComponentBlueModernNote extends AbstractTextualComponent {
 		polygon.addPoint(textWidth - cornersize, 0);
 		polygon.addPoint(0, 0);
 
-		g2d.setColor(back);
-		g2d.fill(polygon);
-		g2d.setColor(foregroundColor);
-		g2d.draw(polygon);
+		ug.getParam().setBackcolor(back);
+		ug.getParam().setColor(foregroundColor);
+		ug.draw(0, 0, polygon);
 
-		g2d.drawLine(textWidth - cornersize, 0, textWidth - cornersize, cornersize);
-		g2d.drawLine(textWidth, cornersize, textWidth - cornersize, cornersize);
+		ug.draw(textWidth - cornersize, 0, new ULine(0, cornersize));
+		ug.draw(textWidth, cornersize, new ULine(-cornersize, 0));
 
-		getTextBlock().draw(g2d, getMarginX1(), getMarginY());
+		getTextBlock().drawU(ug, getMarginX1(), getMarginY());
+
 	}
 
 }

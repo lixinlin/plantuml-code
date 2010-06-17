@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,13 +26,16 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4762 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.command;
 
 import java.util.List;
 
+import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.command.SingleLineCommand;
 import net.sourceforge.plantuml.sequencediagram.SequenceDiagram;
 
@@ -43,8 +46,11 @@ public class CommandSkin extends SingleLineCommand<SequenceDiagram> {
 	}
 
 	@Override
-	protected boolean executeArg(List<String> arg) {
-		return getSystem().changeSkin(arg.get(0));
+	protected CommandExecutionResult executeArg(List<String> arg) {
+		if (getSystem().changeSkin(arg.get(0))) {
+			return CommandExecutionResult.ok();
+		}
+		return CommandExecutionResult.error("Cannot change skin");
 	}
 
 }

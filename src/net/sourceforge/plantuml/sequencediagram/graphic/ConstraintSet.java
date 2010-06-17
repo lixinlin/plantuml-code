@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,18 +26,21 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4683 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.graphic;
 
-import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import net.sourceforge.plantuml.graphic.StringBounder;
 
 class ConstraintSet {
 
@@ -49,10 +52,14 @@ class ConstraintSet {
 	final private Map<List<Pushable>, Constraint> constraints = new HashMap<List<Pushable>, Constraint>();
 
 	public ConstraintSet(Collection<? extends Pushable> all, double freeX) {
-
-		this.participantList.add(firstBorder = new ParticipantBoxSimple(0));
+		this.participantList.add(firstBorder = new ParticipantBoxSimple(0, "LEFT"));
 		this.participantList.addAll(all);
-		this.participantList.add(lastborder = new ParticipantBoxSimple(freeX));
+		this.participantList.add(lastborder = new ParticipantBoxSimple(freeX, "RIGHT"));
+	}
+
+	@Override
+	public String toString() {
+		return constraints.values().toString();
 	}
 
 	public double getMaxX() {
@@ -102,18 +109,18 @@ class ConstraintSet {
 		return participantList.get(i + delta);
 	}
 
-	public void takeConstraintIntoAccount(Graphics2D g2d) {
+	public void takeConstraintIntoAccount(StringBounder stringBounder) {
 		for (int dist = 1; dist < participantList.size(); dist++) {
-			pushEverybody(g2d, dist);
+			pushEverybody(stringBounder, dist);
 		}
 	}
 
-	private void pushEverybody(Graphics2D g2d, int dist) {
+	private void pushEverybody(StringBounder stringBounder, int dist) {
 		for (int i = 0; i < participantList.size() - dist; i++) {
 			final Pushable p1 = participantList.get(i);
 			final Pushable p2 = participantList.get(i + dist);
 			final Constraint c = getConstraint(p1, p2);
-			ensureSpaceAfter(g2d, p1, p2, c.getValue());
+			ensureSpaceAfter(stringBounder, p1, p2, c.getValue());
 		}
 	}
 
@@ -140,16 +147,16 @@ class ConstraintSet {
 		pushToLeftParticipantBox(delta, firstBorder);
 	}
 
-	private void ensureSpaceAfter(Graphics2D g2d, Pushable p1, Pushable p2, double space) {
+	private void ensureSpaceAfter(StringBounder stringBounder, Pushable p1, Pushable p2, double space) {
 		if (p1.equals(p2)) {
 			throw new IllegalArgumentException();
 		}
-		if (p1.getCenterX(g2d) > p2.getCenterX(g2d)) {
-			ensureSpaceAfter(g2d, p2, p1, space);
+		if (p1.getCenterX(stringBounder) > p2.getCenterX(stringBounder)) {
+			ensureSpaceAfter(stringBounder, p2, p1, space);
 			return;
 		}
-		assert p1.getCenterX(g2d) < p2.getCenterX(g2d);
-		final double existingSpace = p2.getCenterX(g2d) - p1.getCenterX(g2d);
+		assert p1.getCenterX(stringBounder) < p2.getCenterX(stringBounder);
+		final double existingSpace = p2.getCenterX(stringBounder) - p1.getCenterX(stringBounder);
 		if (existingSpace < space) {
 			pushToLeftParticipantBox(space - existingSpace, p2);
 		}

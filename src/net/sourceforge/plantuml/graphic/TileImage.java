@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 3932 $
  *
  */
 package net.sourceforge.plantuml.graphic;
@@ -36,6 +38,8 @@ import java.awt.geom.Dimension2D;
 import java.awt.image.BufferedImage;
 
 import net.sourceforge.plantuml.Dimension2DDouble;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
+import net.sourceforge.plantuml.ugraphic.UImage;
 
 class TileImage implements Tile {
 
@@ -47,12 +51,16 @@ class TileImage implements Tile {
 		this.vspace = vspace;
 	}
 
-	public Dimension2D calculateDimension(Graphics2D g2d) {
+	public Dimension2D calculateDimension(StringBounder stringBounder) {
 		return new Dimension2DDouble(image.getWidth(), image.getHeight() + 2 * vspace);
 	}
 
 	public void draw(Graphics2D g2d, double x, double y) {
 		g2d.drawImage(image, (int) x, (int) y + vspace, null);
+	}
+
+	public void drawU(UGraphic ug, double x, double y) {
+		ug.draw(x, y + vspace, new UImage(image));
 	}
 
 }

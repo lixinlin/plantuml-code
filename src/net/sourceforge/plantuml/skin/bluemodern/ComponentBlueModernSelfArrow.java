@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,81 +26,90 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4634 $
  *
  */
 package net.sourceforge.plantuml.skin.bluemodern;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.Polygon;
 import java.awt.geom.Dimension2D;
 import java.util.List;
+
+import net.sourceforge.plantuml.graphic.StringBounder;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
+import net.sourceforge.plantuml.ugraphic.ULine;
+import net.sourceforge.plantuml.ugraphic.UPolygon;
+import net.sourceforge.plantuml.ugraphic.UStroke;
 
 public class ComponentBlueModernSelfArrow extends AbstractComponentBlueModernArrow {
 
 	private final double arrowWidth = 45;
 
-	public ComponentBlueModernSelfArrow(Color foregroundColor, Color colorFont, Font font, List<? extends CharSequence> stringsToDisplay,
-			boolean dotted) {
-		super(foregroundColor, colorFont, font, stringsToDisplay, dotted);
+	public ComponentBlueModernSelfArrow(Color foregroundColor, Color colorFont, Font font,
+			List<? extends CharSequence> stringsToDisplay, boolean dotted, boolean full) {
+		super(foregroundColor, colorFont, font, stringsToDisplay, dotted, full);
 	}
 
 	@Override
-	protected void drawInternal(Graphics2D g2d, Dimension2D dimensionToUse) {
-		final int textHeight = (int) getTextHeight(g2d);
+	protected void drawInternalU(UGraphic ug, Dimension2D dimensionToUse) {
+		final StringBounder stringBounder = ug.getStringBounder();
+		final int textHeight = (int) getTextHeight(stringBounder);
 
-		g2d.setColor(getForegroundColor());
+		ug.getParam().setBackcolor(getForegroundColor());
+		ug.getParam().setColor(getForegroundColor());
 		final int x2 = (int) arrowWidth;
 
 		if (isDotted()) {
-			stroke(g2d, 5, 2);
+			stroke(ug, 5, 2);
 		} else {
-			g2d.setStroke(new BasicStroke(2));
+			ug.getParam().setStroke(new UStroke(2));
 		}
 
-		g2d.drawLine(0, textHeight, x2, textHeight);
+		ug.draw(0, textHeight, new ULine(x2, 0));
 
-		final int textAndArrowHeight = (int) (textHeight + getArrowOnlyHeight(g2d));
+		final int textAndArrowHeight = (int) (textHeight + getArrowOnlyHeight(stringBounder));
 
-		g2d.drawLine(x2, textHeight, x2, textAndArrowHeight);
-		g2d.drawLine(x2, textAndArrowHeight, 2, textAndArrowHeight);
+		ug.draw(x2, textHeight, new ULine(0, textAndArrowHeight - textHeight));
+		ug.draw(x2, textAndArrowHeight, new ULine(2 - x2, 0));
 
-		g2d.setStroke(new BasicStroke());
+		ug.getParam().setStroke(new UStroke());
 
-		final int delta = (int) getArrowOnlyHeight(g2d);
+		final int delta = (int) getArrowOnlyHeight(stringBounder);
 
-		if (isDotted()) {
-			g2d.setStroke(new BasicStroke((float) 1.5));
-			g2d.drawLine(getArrowDeltaX2(), textHeight - getArrowDeltaY2() + delta, 0, textHeight + delta);
-			g2d.drawLine(getArrowDeltaX2(), textHeight + getArrowDeltaY2() + delta, 0, textHeight + delta);
-			g2d.setStroke(new BasicStroke());
-		} else {
-			final Polygon polygon = new Polygon();
+		if (isFull()) {
+			final UPolygon polygon = new UPolygon();
 			polygon.addPoint(getArrowDeltaX(), textHeight - getArrowDeltaY() + delta);
 			polygon.addPoint(0, textHeight + delta);
 			polygon.addPoint(getArrowDeltaX(), textHeight + getArrowDeltaY() + delta);
-			g2d.fill(polygon);
-
+			ug.draw(0, 0, polygon);
+		} else {
+			ug.getParam().setStroke(new UStroke(1.5));
+			ug.draw(getArrowDeltaX2(), textHeight - getArrowDeltaY2() + delta, new ULine(-getArrowDeltaX2(),
+					getArrowDeltaY2()));
+			ug.draw(getArrowDeltaX2(), textHeight + getArrowDeltaY2() + delta, new ULine(-getArrowDeltaX2(),
+					-getArrowDeltaY2()));
+			ug.getParam().setStroke(new UStroke());
 		}
 
-		getTextBlock().draw(g2d, getMarginX1(), 0);
+		getTextBlock().drawU(ug, getMarginX1(), 0);
+
 	}
 
 	@Override
-	public double getPreferredHeight(Graphics2D g2d) {
-		return getTextHeight(g2d) + getArrowDeltaY() + getArrowOnlyHeight(g2d) + 2 * getPaddingY();
+	public double getPreferredHeight(StringBounder stringBounder) {
+		return getTextHeight(stringBounder) + getArrowDeltaY() + getArrowOnlyHeight(stringBounder) + 2 * getPaddingY();
 	}
 
-	private double getArrowOnlyHeight(Graphics2D g2d) {
+	private double getArrowOnlyHeight(StringBounder stringBounder) {
 		return 13;
 	}
 
 	@Override
-	public double getPreferredWidth(Graphics2D g2d) {
-		return Math.max(getTextWidth(g2d), arrowWidth);
+	public double getPreferredWidth(StringBounder stringBounder) {
+		return Math.max(getTextWidth(stringBounder), arrowWidth);
 	}
 
 }

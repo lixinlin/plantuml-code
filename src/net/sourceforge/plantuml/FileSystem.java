@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ *
+ * Revision $Revision: 3824 $
  *
  */
 package net.sourceforge.plantuml;
@@ -49,6 +51,9 @@ public class FileSystem {
 	}
 
 	public void setCurrentDir(File f) {
+		if (f == null) {
+			throw new IllegalArgumentException();
+		}
 		Log.info("Setting current dir: " + f);
 		this.currentDir = f;
 	}

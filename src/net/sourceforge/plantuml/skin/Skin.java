@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,19 +26,21 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4246 $
  *
  */
 package net.sourceforge.plantuml.skin;
 
 import java.util.List;
 
-import net.sourceforge.plantuml.SkinParam;
+import net.sourceforge.plantuml.ISkinParam;
 
 public interface Skin {
-	
+
 	Object getProtocolVersion();
-	
-	Component createComponent(ComponentType type, SkinParam param, List<? extends CharSequence> stringsToDisplay);
+
+	Component createComponent(ComponentType type, ISkinParam param, List<? extends CharSequence> stringsToDisplay);
 
 }

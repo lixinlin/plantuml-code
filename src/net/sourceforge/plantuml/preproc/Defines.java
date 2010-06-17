@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,32 +26,21 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4154 $
  *
  */
 package net.sourceforge.plantuml.preproc;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class Defines {
+import net.sourceforge.plantuml.Pragma;
 
-	private final Map<String, String> defines = new LinkedHashMap<String, String>();
-
-	public void define(String name, String value) {
-		defines.put(name, value);
-	}
-
-	public boolean isDefine(String name) {
-		return defines.containsKey(name);
-	}
-
-	public void undefine(String name) {
-		defines.remove(name);
-	}
+public class Defines extends Pragma {
 
 	public String applyDefines(String line) {
-		for (Map.Entry<String, String> ent : defines.entrySet()) {
+		for (Map.Entry<String, String> ent : this.entrySet()) {
 			final String key = ent.getKey();
 			final String value = ent.getValue();
 			if (value == null) {
@@ -61,14 +50,6 @@ public class Defines {
 			line = line.replaceAll(regex, value);
 		}
 		return line;
-	}
-
-	public String getValue(String name) {
-		final String result = defines.get(name);
-		if (result == null) {
-			throw new IllegalArgumentException();
-		}
-		return result;
 	}
 
 }

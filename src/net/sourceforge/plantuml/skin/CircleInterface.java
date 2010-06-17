@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4189 $
  *
  */
 package net.sourceforge.plantuml.skin;
@@ -37,7 +39,12 @@ import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 
-public class CircleInterface {
+import net.sourceforge.plantuml.graphic.StringBounder;
+import net.sourceforge.plantuml.ugraphic.UEllipse;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
+import net.sourceforge.plantuml.ugraphic.UStroke;
+
+public class CircleInterface implements UDrawable {
 
 	private final float thickness = 2;
 
@@ -64,13 +71,28 @@ public class CircleInterface {
 		g2d.draw(head);
 
 		g2d.setStroke(new BasicStroke());
+		throw new UnsupportedOperationException();
+	}
+	
+	public void drawU(UGraphic ug) {
+
+		ug.getParam().setStroke(new UStroke(thickness));
+
+		final UEllipse head = new UEllipse(headDiam, headDiam);
+
+		ug.getParam().setBackcolor(backgroundColor);
+		ug.getParam().setColor(foregroundColor);
+		ug.draw(thickness, thickness, head);
+
+		ug.getParam().setStroke(new UStroke());
 	}
 
-	public double getPreferredWidth(Graphics2D g2d) {
+
+	public double getPreferredWidth(StringBounder stringBounder) {
 		return headDiam + 2 * thickness;
 	}
 
-	public double getPreferredHeight(Graphics2D g2d) {
+	public double getPreferredHeight(StringBounder stringBounder) {
 		return headDiam + 2 * thickness;
 	}
 

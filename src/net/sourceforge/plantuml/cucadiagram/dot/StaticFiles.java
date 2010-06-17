@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4581 $
  *
  */
 package net.sourceforge.plantuml.cucadiagram.dot;
@@ -37,23 +39,33 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
 
 import net.sourceforge.plantuml.ColorParam;
 import net.sourceforge.plantuml.EmptyImageBuilder;
+import net.sourceforge.plantuml.FontParam;
+import net.sourceforge.plantuml.ISkinParam;
 import net.sourceforge.plantuml.Log;
-import net.sourceforge.plantuml.SkinParam;
+import net.sourceforge.plantuml.OptionFlags;
 import net.sourceforge.plantuml.cucadiagram.EntityType;
 import net.sourceforge.plantuml.graphic.CircledCharacter;
+import net.sourceforge.plantuml.graphic.StringBounder;
+import net.sourceforge.plantuml.graphic.StringBounderUtils;
 import net.sourceforge.plantuml.skin.CircleInterface;
 import net.sourceforge.plantuml.skin.StickMan;
+import net.sourceforge.plantuml.skin.UDrawable;
+import net.sourceforge.plantuml.skin.VisibilityModifier;
 import net.sourceforge.plantuml.skin.rose.Rose;
+import net.sourceforge.plantuml.ugraphic.eps.UGraphicEps;
+import net.sourceforge.plantuml.ugraphic.g2d.UGraphicG2d;
 
 public class StaticFiles {
 
@@ -77,28 +89,43 @@ public class StaticFiles {
 	private final Color interfaceBackground;
 	private final Color background;
 
-	final private Font font = new Font("Courier", Font.BOLD, 17);
+	final private Font circledFont;
+	final private double radius;
 
-	private final Map<EntityType, File> staticImages = new EnumMap<EntityType, File>(EntityType.class);
+	private final Map<EntityType, DrawFile> staticImages = new EnumMap<EntityType, DrawFile>(EntityType.class);
+	private final Map<VisibilityModifier, DrawFile> visibilityImages = new EnumMap<VisibilityModifier, DrawFile>(
+			VisibilityModifier.class);
 
-	private static final Collection<File> toDelete = new ArrayList<File>();
+	private final Map<VisibilityModifier, Color> foregroundColor = new EnumMap<VisibilityModifier, Color>(
+			VisibilityModifier.class);
+	private final Map<VisibilityModifier, Color> backgroundColor = new EnumMap<VisibilityModifier, Color>(
+			VisibilityModifier.class);
+
+	private static final Collection<DrawFile> toDelete = new ArrayList<DrawFile>();
 
 	private void deleteOnExit() {
 		if (toDelete.isEmpty()) {
 			toDelete.addAll(staticImages.values());
+			toDelete.addAll(visibilityImages.values());
 			Runtime.getRuntime().addShutdownHook(new Thread() {
 				@Override
 				public void run() {
-					for (File f : toDelete) {
-						delete(f);
+					if (OptionFlags.getInstance().isKeepTmpFiles() == false) {
+						for (DrawFile f : toDelete) {
+							f.delete();
+						}
 					}
 				}
 			});
 		}
 	}
 
-	public StaticFiles(SkinParam param) throws IOException {
+	public StaticFiles(ISkinParam param) throws IOException {
 		final Rose rose = new Rose();
+		radius = param.getCircledCharacterRadius();
+		circledFont = param.getFont(FontParam.CIRCLED_CHARACTER);
+		// circledFont = new Font("Courier", Font.BOLD, 17);
+
 		actorBorder = rose.getHtmlColor(param, ColorParam.actorBorder).getColor();
 		classborder = rose.getHtmlColor(param, ColorParam.classBorder).getColor();
 		interfaceBorder = rose.getHtmlColor(param, ColorParam.interfaceBorder).getColor();
@@ -119,6 +146,20 @@ public class StaticFiles {
 		staticImages.put(EntityType.CLASS, ensurePngCPresent(dir));
 		staticImages.put(EntityType.INTERFACE, ensurePngIPresent(dir));
 		staticImages.put(EntityType.ENUM, ensurePngEPresent(dir));
+
+		if (param.classAttributeIconSize() > 0) {
+			for (VisibilityModifier modifier : EnumSet.allOf(VisibilityModifier.class)) {
+
+				final Color back = modifier.getBackground() == null ? null : rose.getHtmlColor(param,
+						modifier.getBackground()).getColor();
+				final Color fore = rose.getHtmlColor(param, modifier.getForeground()).getColor();
+
+				backgroundColor.put(modifier, back);
+				foregroundColor.put(modifier, fore);
+				visibilityImages.put(modifier, ensureVisibilityModifierPresent(modifier, dir, param
+						.classAttributeIconSize()));
+			}
+		}
 
 		deleteOnExit();
 	}
@@ -143,25 +184,31 @@ public class StaticFiles {
 		}
 	}
 
-	private File ensurePngActorPresent(File dir) throws IOException {
-		final StickMan smallMan = new StickMan(actorBackground, actorBorder);
+	private DrawFile ensurePngActorPresent(File dir) throws IOException {
+		final StickMan stickMan = new StickMan(actorBackground, actorBorder);
 
-		final EmptyImageBuilder builder = new EmptyImageBuilder((int) smallMan.getPreferredWidth(null), (int) smallMan
+		final EmptyImageBuilder builder = new EmptyImageBuilder((int) stickMan.getPreferredWidth(null), (int) stickMan
 				.getPreferredHeight(null), background);
 
 		final BufferedImage im = builder.getBufferedImage();
 		final Graphics2D g2d = builder.getGraphics2D();
 
-		smallMan.draw(g2d);
+		// stickMan.draw(g2d);
+		stickMan.drawU(new UGraphicG2d(g2d, null));
 
 		final File result = new File(dir, actorName);
 		Log.info("Creating temporary file: " + result);
 		ImageIO.write(im, "png", result);
-		return result;
 
+		final File epsFile = new File(dir, actorName.replaceFirst("\\.png", ".eps"));
+		final PrintWriter pw = new PrintWriter(epsFile);
+		pw.print(UGraphicEps.getEpsString(stickMan));
+		pw.close();
+
+		return new DrawFile(result, UGraphicG2d.getSvgString(stickMan), epsFile);
 	}
 
-	private File ensurePngCircleInterfacePresent(File dir) throws IOException {
+	private DrawFile ensurePngCircleInterfacePresent(File dir) throws IOException {
 
 		final CircleInterface circleInterface = new CircleInterface(interfaceBackground, interfaceBorder);
 
@@ -171,63 +218,100 @@ public class StaticFiles {
 		final BufferedImage im = builder.getBufferedImage();
 		final Graphics2D g2d = builder.getGraphics2D();
 
-		circleInterface.draw(g2d);
+		circleInterface.drawU(new UGraphicG2d(g2d, null));
 
 		final File result = new File(dir, circleInterfaceName);
 		Log.info("Creating temporary file: " + result);
 		ImageIO.write(im, "png", result);
-		return result;
+		return new DrawFile(result, UGraphicG2d.getSvgString(circleInterface));
 
 	}
 
-	private File ensurePngCPresent(File dir) throws IOException {
-		final CircledCharacter circledCharacter = new CircledCharacter('C', font, stereotypeCBackground, classborder,
-				Color.BLACK);
+	private DrawFile ensurePngCPresent(File dir) throws IOException {
+		final CircledCharacter circledCharacter = new CircledCharacter('C', radius, circledFont, stereotypeCBackground,
+				classborder, Color.BLACK);
 		return generateCircleCharacterFile(dir, cName, circledCharacter, classBackground);
 	}
 
-	private File ensurePngAPresent(File dir) throws IOException {
-		final CircledCharacter circledCharacter = new CircledCharacter('A', font, stereotypeABackground, classborder,
-				Color.BLACK);
+	private DrawFile ensurePngAPresent(File dir) throws IOException {
+		final CircledCharacter circledCharacter = new CircledCharacter('A', radius, circledFont, stereotypeABackground,
+				classborder, Color.BLACK);
 		return generateCircleCharacterFile(dir, aName, circledCharacter, classBackground);
 	}
 
-	private File ensurePngIPresent(File dir) throws IOException {
-		final CircledCharacter circledCharacter = new CircledCharacter('I', font, stereotypeIBackground, classborder,
-				Color.BLACK);
+	private DrawFile ensurePngIPresent(File dir) throws IOException {
+		final CircledCharacter circledCharacter = new CircledCharacter('I', radius, circledFont, stereotypeIBackground,
+				classborder, Color.BLACK);
 		return generateCircleCharacterFile(dir, iName, circledCharacter, classBackground);
 	}
 
-	private File ensurePngEPresent(File dir) throws IOException {
-		final CircledCharacter circledCharacter = new CircledCharacter('E', font, stereotypeEBackground, classborder,
-				Color.BLACK);
+	private DrawFile ensurePngEPresent(File dir) throws IOException {
+		final CircledCharacter circledCharacter = new CircledCharacter('E', radius, circledFont, stereotypeEBackground,
+				classborder, Color.BLACK);
 		return generateCircleCharacterFile(dir, eName, circledCharacter, classBackground);
 	}
 
-	private File generateCircleCharacterFile(File dir, String filename, final CircledCharacter circledCharacter,
+	private DrawFile generateCircleCharacterFile(File dir, String filename, final CircledCharacter circledCharacter,
 			final Color yellow) throws IOException {
-		final File result = new File(dir, filename);
-		Log.info("Creating temporary file: " + result);
-		generateCircleCharacterFile(result, circledCharacter, yellow);
-		return result;
+		final File png = new File(dir, filename);
+		Log.info("Creating temporary file: " + png);
+		generateCircleCharacterPng(png, circledCharacter, yellow);
+		return new DrawFile(png, UGraphicG2d.getSvgString(circledCharacter));
 	}
 
-	public void generateCircleCharacterFile(File file, final CircledCharacter circledCharacter, Color yellow)
+	public void generateCircleCharacterPng(File file, final CircledCharacter circledCharacter, Color yellow)
 			throws IOException {
-		final EmptyImageBuilder builder = new EmptyImageBuilder(30, 30, yellow);
+		final EmptyImageBuilder builder = new EmptyImageBuilder(90, 90, yellow);
 
 		BufferedImage im = builder.getBufferedImage();
 		final Graphics2D g2d = builder.getGraphics2D();
+		final StringBounder stringBounder = StringBounderUtils.asStringBounder(g2d);
 
 		circledCharacter.draw(g2d, 0, 0);
-		im = im.getSubimage(0, 0, (int) circledCharacter.getPreferredWidth(g2d) + 5, (int) circledCharacter
-				.getPreferredHeight(g2d) + 1);
+		im = im.getSubimage(0, 0, (int) circledCharacter.getPreferredWidth(stringBounder) + 5, (int) circledCharacter
+				.getPreferredHeight(stringBounder) + 1);
 
 		ImageIO.write(im, "png", file);
 	}
 
-	public final Map<EntityType, File> getStaticImages() {
+	public final Map<EntityType, DrawFile> getStaticImages() {
 		return Collections.unmodifiableMap(staticImages);
+	}
+
+	public final Map<VisibilityModifier, DrawFile> getVisibilityImages() {
+		return Collections.unmodifiableMap(visibilityImages);
+	}
+
+	public DrawFile getDrawFile(String pngPath) throws IOException {
+		final File searched = new File(pngPath).getCanonicalFile();
+		for (DrawFile drawFile : staticImages.values()) {
+			final File png = drawFile.getPng().getCanonicalFile();
+			if (png.equals(searched)) {
+				return drawFile;
+			}
+		}
+		for (DrawFile drawFile : visibilityImages.values()) {
+			final File png = drawFile.getPng().getCanonicalFile();
+			if (png.equals(searched)) {
+				return drawFile;
+			}
+		}
+		return null;
+	}
+
+	private DrawFile ensureVisibilityModifierPresent(VisibilityModifier modifier, File dir, int size)
+			throws IOException {
+		final File png = new File(dir, modifier.name() + ".png");
+		Log.info("Creating temporary file: " + png);
+
+		final EmptyImageBuilder builder = new EmptyImageBuilder(size, size, classBackground);
+		final BufferedImage im = builder.getBufferedImage();
+		final UDrawable drawable = modifier.getUDrawable(size, foregroundColor.get(modifier), backgroundColor
+				.get(modifier));
+		drawable.drawU(new UGraphicG2d(builder.getGraphics2D(), im));
+		ImageIO.write(im, "png", png);
+
+		return new DrawFile(png, UGraphicG2d.getSvgString(drawable));
 	}
 
 }

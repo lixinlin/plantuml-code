@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4640 $
  *
  */
 package net.sourceforge.plantuml.skin.rose;
@@ -40,7 +42,7 @@ import java.util.Map;
 
 import net.sourceforge.plantuml.ColorParam;
 import net.sourceforge.plantuml.FontParam;
-import net.sourceforge.plantuml.SkinParam;
+import net.sourceforge.plantuml.ISkinParam;
 import net.sourceforge.plantuml.graphic.HtmlColor;
 import net.sourceforge.plantuml.skin.Component;
 import net.sourceforge.plantuml.skin.ComponentType;
@@ -54,12 +56,16 @@ public class Rose implements Skin {
 		defaultsColor.put(ColorParam.sequenceArrow, new HtmlColor("#A80036"));
 		defaultsColor.put(ColorParam.usecaseArrow, new HtmlColor("#A80036"));
 		defaultsColor.put(ColorParam.classArrow, new HtmlColor("#A80036"));
+		defaultsColor.put(ColorParam.objectArrow, new HtmlColor("#A80036"));
 		defaultsColor.put(ColorParam.activityArrow, new HtmlColor("#A80036"));
 		defaultsColor.put(ColorParam.componentArrow, new HtmlColor("#A80036"));
-		
+		defaultsColor.put(ColorParam.stateArrow, new HtmlColor("#A80036"));
+
 		defaultsColor.put(ColorParam.sequenceLifeLineBackground, new HtmlColor("white"));
 		defaultsColor.put(ColorParam.sequenceLifeLineBorder, new HtmlColor("#A80036"));
 		defaultsColor.put(ColorParam.sequenceGroupBackground, new HtmlColor("#EEEEEE"));
+		defaultsColor.put(ColorParam.sequenceDividerBackground, new HtmlColor("#EEEEEE"));
+
 		defaultsColor.put(ColorParam.noteBackground, new HtmlColor("#FBFB77"));
 		defaultsColor.put(ColorParam.noteBorder, new HtmlColor("#A80036"));
 
@@ -68,6 +74,9 @@ public class Rose implements Skin {
 		defaultsColor.put(ColorParam.activityStart, new HtmlColor("black"));
 		defaultsColor.put(ColorParam.activityEnd, new HtmlColor("black"));
 		defaultsColor.put(ColorParam.activityBar, new HtmlColor("black"));
+
+		defaultsColor.put(ColorParam.stateBackground, new HtmlColor("#FEFECE"));
+		defaultsColor.put(ColorParam.stateBorder, new HtmlColor("#A80036"));
 
 		defaultsColor.put(ColorParam.usecaseBackground, new HtmlColor("#FEFECE"));
 		defaultsColor.put(ColorParam.usecaseBorder, new HtmlColor("#A80036"));
@@ -85,17 +94,32 @@ public class Rose implements Skin {
 		defaultsColor.put(ColorParam.classBackground, new HtmlColor("#FEFECE"));
 		defaultsColor.put(ColorParam.classBorder, new HtmlColor("#A80036"));
 
+		defaultsColor.put(ColorParam.objectBackground, new HtmlColor("#FEFECE"));
+		defaultsColor.put(ColorParam.objectBorder, new HtmlColor("#A80036"));
+		
 		defaultsColor.put(ColorParam.stereotypeCBackground, new HtmlColor("#ADD1B2"));
 		defaultsColor.put(ColorParam.stereotypeABackground, new HtmlColor("#A9DCDF"));
 		defaultsColor.put(ColorParam.stereotypeIBackground, new HtmlColor("#B4A7E5"));
 		defaultsColor.put(ColorParam.stereotypeEBackground, new HtmlColor("#EB937F"));
+
+		defaultsColor.put(ColorParam.packageBackground, new HtmlColor("#FEFECE"));
+		defaultsColor.put(ColorParam.packageBorder, new HtmlColor("black"));
+		
+		defaultsColor.put(ColorParam.iconPrivate, new HtmlColor("#C82930"));
+		defaultsColor.put(ColorParam.iconPrivateBackground, new HtmlColor("#F24D5C"));
+		defaultsColor.put(ColorParam.iconProtected, new HtmlColor("#B38D22"));
+		defaultsColor.put(ColorParam.iconProtectedBackground, new HtmlColor("#FFFF44"));
+		defaultsColor.put(ColorParam.iconPackage, new HtmlColor("#1963A0"));
+		defaultsColor.put(ColorParam.iconPackageBackground, new HtmlColor("#4177AF"));
+		defaultsColor.put(ColorParam.iconPublic, new HtmlColor("#038048"));
+		defaultsColor.put(ColorParam.iconPublicBackground, new HtmlColor("#84BE84"));
 	}
 
-	public Color getFontColor(SkinParam skin, FontParam fontParam) {
+	public Color getFontColor(ISkinParam skin, FontParam fontParam) {
 		return skin.getFontHtmlColor(fontParam).getColor();
 	}
 
-	public HtmlColor getHtmlColor(SkinParam param, ColorParam color) {
+	public HtmlColor getHtmlColor(ISkinParam param, ColorParam color) {
 		HtmlColor result = param.getHtmlColor(color);
 		if (result == null) {
 			result = defaultsColor.get(color);
@@ -106,9 +130,10 @@ public class Rose implements Skin {
 		return result;
 	}
 
-	public Component createComponent(ComponentType type, SkinParam param, List<? extends CharSequence> stringsToDisplay) {
+	public Component createComponent(ComponentType type, ISkinParam param, List<? extends CharSequence> stringsToDisplay) {
 		final Color background = param.getBackgroundColor().getColor();
 		final Color groundBackgroundColor = getHtmlColor(param, ColorParam.sequenceGroupBackground).getColor();
+		final Color sequenceDividerBackground = getHtmlColor(param, ColorParam.sequenceDividerBackground).getColor();
 		final Color lifeLineBackgroundColor = getHtmlColor(param, ColorParam.sequenceLifeLineBackground).getColor();
 		final Color sequenceArrow = getHtmlColor(param, ColorParam.sequenceArrow).getColor();
 		final Color sequenceActorBackground = getHtmlColor(param, ColorParam.sequenceActorBackground).getColor();
@@ -122,29 +147,47 @@ public class Rose implements Skin {
 		final Font fontParticipant = param.getFont(FontParam.SEQUENCE_PARTICIPANT);
 		final Font fontActor = param.getFont(FontParam.SEQUENCE_ACTOR);
 
+
 		if (type == ComponentType.SELF_ARROW) {
 			return new ComponentRoseSelfArrow(sequenceArrow, getFontColor(param, FontParam.SEQUENCE_ARROW), fontArrow,
-					stringsToDisplay, false);
+					stringsToDisplay, false, true);
 		}
 		if (type == ComponentType.DOTTED_SELF_ARROW) {
 			return new ComponentRoseSelfArrow(sequenceArrow, getFontColor(param, FontParam.SEQUENCE_ARROW), fontArrow,
-					stringsToDisplay, true);
+					stringsToDisplay, true, true);
 		}
 		if (type == ComponentType.ARROW) {
 			return new ComponentRoseArrow(sequenceArrow, getFontColor(param, FontParam.SEQUENCE_ARROW), fontArrow,
-					stringsToDisplay, 1, false);
+					stringsToDisplay, 1, false, true);
 		}
+		if (type == ComponentType.ASYNC_ARROW) {
+			return new ComponentRoseArrow(sequenceArrow, getFontColor(param, FontParam.SEQUENCE_ARROW), fontArrow,
+					stringsToDisplay, 1, false, false);
+		}
+		
 		if (type == ComponentType.RETURN_ARROW) {
 			return new ComponentRoseArrow(sequenceArrow, getFontColor(param, FontParam.SEQUENCE_ARROW), fontArrow,
-					stringsToDisplay, -1, false);
+					stringsToDisplay, -1, false, true);
+		}
+		if (type == ComponentType.ASYNC_RETURN_ARROW) {
+			return new ComponentRoseArrow(sequenceArrow, getFontColor(param, FontParam.SEQUENCE_ARROW), fontArrow,
+					stringsToDisplay, -1, false, false);
 		}
 		if (type == ComponentType.DOTTED_ARROW) {
 			return new ComponentRoseArrow(sequenceArrow, getFontColor(param, FontParam.SEQUENCE_ARROW), fontArrow,
-					stringsToDisplay, 1, true);
+					stringsToDisplay, 1, true, true);
+		}
+		if (type == ComponentType.ASYNC_DOTTED_ARROW) {
+			return new ComponentRoseArrow(sequenceArrow, getFontColor(param, FontParam.SEQUENCE_ARROW), fontArrow,
+					stringsToDisplay, 1, true, false);
 		}
 		if (type == ComponentType.RETURN_DOTTED_ARROW) {
 			return new ComponentRoseArrow(sequenceArrow, getFontColor(param, FontParam.SEQUENCE_ARROW), fontArrow,
-					stringsToDisplay, -1, true);
+					stringsToDisplay, -1, true, true);
+		}
+		if (type == ComponentType.ASYNC_RETURN_DOTTED_ARROW) {
+			return new ComponentRoseArrow(sequenceArrow, getFontColor(param, FontParam.SEQUENCE_ARROW), fontArrow,
+					stringsToDisplay, -1, true, false);
 		}
 
 		if (type == ComponentType.PARTICIPANT_HEAD) {
@@ -188,7 +231,7 @@ public class Rose implements Skin {
 					groundBackgroundColor, fontGroupingHeader, fontGrouping, stringsToDisplay);
 		}
 		if (type == ComponentType.GROUPING_BODY) {
-			return new ComponentRoseGroupingBody(getFontColor(param, FontParam.SEQUENCE_GROUPING));
+			return new ComponentRoseGroupingBody(background, getFontColor(param, FontParam.SEQUENCE_GROUPING));
 		}
 		if (type == ComponentType.GROUPING_TAIL) {
 			return new ComponentRoseGroupingTail(getFontColor(param, FontParam.SEQUENCE_GROUPING));
@@ -207,6 +250,10 @@ public class Rose implements Skin {
 		}
 		if (type == ComponentType.NEWPAGE) {
 			return new ComponentRoseNewpage(getFontColor(param, FontParam.SEQUENCE_GROUPING));
+		}
+		if (type == ComponentType.DIVIDER) {
+			return new ComponentRoseDivider(getFontColor(param, FontParam.SEQUENCE_DIVIDER), param.getFont(FontParam.SEQUENCE_DIVIDER),
+					sequenceDividerBackground, stringsToDisplay);
 		}
 		if (type == ComponentType.TITLE) {
 			return new ComponentRoseTitle(getFontColor(param, FontParam.SEQUENCE_TITLE), param

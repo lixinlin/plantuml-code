@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 3830 $
  *
  */
 package net.sourceforge.plantuml.geom;
@@ -113,7 +115,7 @@ abstract class AbstractFigure {
 	public Polyline addDirectLink(Point2DInt start, Point2DInt end) {
 		final LineSegmentInt direct = new LineSegmentInt(start, end);
 		addSegment(direct);
-		System.err.println("AbstractFigure::addDirectLink "+direct);
+		System.err.println("AbstractFigure::addDirectLink " + direct);
 		return new PolylineImpl(start, end);
 	}
 
@@ -127,11 +129,11 @@ abstract class AbstractFigure {
 			throw new IllegalArgumentException();
 		}
 		if (knowThisPoint(end.getPosition()) == false) {
-			throw new IllegalArgumentException(""+end.getPosition());
+			throw new IllegalArgumentException("" + end.getPosition());
 		}
 		if (isSimpleSegmentPossible(start.getPosition(), end.getPosition())) {
 			throw new IllegalArgumentException();
-			//return new PolylineImpl(start, end);
+			// return new PolylineImpl(start, end);
 		}
 		if (arePointsConnectable(start.getPosition(), end.getPosition()) == false) {
 			return null;
@@ -175,7 +177,8 @@ abstract class AbstractFigure {
 		}
 		for (int i = 0; i < neighborhoods.size(); i++) {
 			if (isConnectable(end.getPosition(), neighborhoods.get(i))) {
-				dijkstra.addLink(i + 1, neighborhoods.size() + 1, distance(end.getPosition(), neighborhoods.get(i).getCenter()));
+				dijkstra.addLink(i + 1, neighborhoods.size() + 1, distance(end.getPosition(), neighborhoods.get(i)
+						.getCenter()));
 			}
 		}
 		final List<Integer> path = dijkstra.getBestPath();
@@ -194,7 +197,8 @@ abstract class AbstractFigure {
 	}
 
 	private Polyline findApproximatePath(Pointable start, Pointable end, final List<Neighborhood> neighborhoods) {
-		System.err.println("findApproximatePath " + start.getPosition() + " " + end.getPosition() + " " + neighborhoods);
+		System.err
+				.println("findApproximatePath " + start.getPosition() + " " + end.getPosition() + " " + neighborhoods);
 		final PolylineImpl result = new PolylineImpl(start, end);
 		for (Neighborhood n : neighborhoods) {
 			System.err.println("Neighborhood =" + n);
@@ -273,8 +277,8 @@ abstract class AbstractFigure {
 				continue;
 			}
 			if (seg.doesIntersect(direct)) {
-				System.err.println("seg="+seg);
-				System.err.println("direct="+direct);
+				System.err.println("seg=" + seg);
+				System.err.println("direct=" + direct);
 				System.err.println("AbstractFigure::hasIntersectionStrict true");
 				return true;
 			}

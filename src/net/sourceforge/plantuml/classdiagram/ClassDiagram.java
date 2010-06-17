@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,61 +26,113 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ *
+ * Revision $Revision: 4558 $
  *
  */
 package net.sourceforge.plantuml.classdiagram;
 
-import java.util.List;
-
+import net.sourceforge.plantuml.UmlDiagramType;
 import net.sourceforge.plantuml.cucadiagram.Entity;
 import net.sourceforge.plantuml.cucadiagram.EntityType;
-import net.sourceforge.plantuml.cucadiagram.Link;
+import net.sourceforge.plantuml.cucadiagram.Group;
+import net.sourceforge.plantuml.cucadiagram.GroupType;
+import net.sourceforge.plantuml.objectdiagram.AbstractClassOrObjectDiagram;
 
-public class ClassDiagram extends AbstractEntityDiagram {
+public class ClassDiagram extends AbstractClassOrObjectDiagram {
+
+	@Override
+	public Entity getOrCreateEntity(String code, EntityType defaultType) {
+		assert defaultType == EntityType.ABSTRACT_CLASS || defaultType == EntityType.CLASS
+				|| defaultType == EntityType.INTERFACE || defaultType == EntityType.ENUM;
+		code = getFullyQualifiedCode(code);
+		if (super.entityExist(code)) {
+			return super.getOrCreateEntity(code, defaultType);
+		}
+		return createEntityWithNamespace(code, getShortName(code), defaultType);
+	}
+
+	@Override
+	public Entity createEntity(String code, String display, EntityType type) {
+		if (type != EntityType.ABSTRACT_CLASS && type != EntityType.CLASS && type != EntityType.INTERFACE
+				&& type != EntityType.ENUM) {
+			return super.createEntity(code, display, type);
+		}
+		code = getFullyQualifiedCode(code);
+		if (super.entityExist(code)) {
+			throw new IllegalArgumentException("Already known: " + code);
+		}
+		return createEntityWithNamespace(code, display, type);
+	}
+
+	private Entity createEntityWithNamespace(String fullyCode, String display, EntityType type) {
+		Group group = getCurrentGroup();
+		final String namespace = getNamespace(fullyCode);
+		if (namespace != null && (group == null || group.getCode().equals(namespace) == false)) {
+			group = getOrCreateGroupInternal(namespace, namespace, namespace, GroupType.PACKAGE, null);
+			group.setBold(true);
+		}
+		return createEntityInternal(fullyCode, display == null ? getShortName(fullyCode) : display, type, group);
+	}
+
+	@Override
+	public final boolean entityExist(String code) {
+		return super.entityExist(getFullyQualifiedCode(code));
+	}
 
 	@Override
 	public Entity getOrCreateClass(String code) {
 		return getOrCreateEntity(code, EntityType.CLASS);
 	}
-	
-	final public Entity getOrCreateClass(String name, EntityType type) {
+
+	final public Entity getOrCreateClass(String code, EntityType type) {
 		if (type != EntityType.ABSTRACT_CLASS && type != EntityType.CLASS && type != EntityType.INTERFACE
 				&& type != EntityType.ENUM) {
 			throw new IllegalArgumentException();
 		}
-		return getOrCreateEntity(name, type);
+		return getOrCreateEntity(code, type);
 	}
 
-	public boolean insertBetween(Entity entity1, Entity entity2, Entity node) {
-		final Link link = foundLink(entity1, entity2);
-		if (link == null) {
-			return false;
+	private String getFullyQualifiedCode(String code) {
+		if (code.startsWith("\\") || code.startsWith("~") || code.startsWith(".")) {
+			return code.substring(1);
 		}
-		final Link l1 = new Link(entity1, node, link.getType(), link.getLabel(), link.getLenght(),
-				link.getQualifier1(), null);
-		final Link l2 = new Link(node, entity2, link.getType(), link.getLabel(), link.getLenght(), null, link
-				.getQualifier2());
-		addLink(l1);
-		addLink(l2);
-		removeLink(link);
-		return true;
-
+		if (code.contains(".")) {
+			return code;
+		}
+		final Group g = this.getCurrentGroup();
+		if (g == null) {
+			return code;
+		}
+		final String namespace = g.getNamespace();
+		if (namespace == null) {
+			return code;
+		}
+		return namespace + "." + code;
 	}
 
-	private Link foundLink(Entity entity1, Entity entity2) {
-		Link result = null;
-		final List<Link> links = getLinks();
-		for (int i = links.size() - 1; i >= 0; i--) {
-			final Link l = links.get(i);
-			if (l.isBetween(entity1, entity2)) {
-				if (result != null) {
-					return null;
-				}
-				result = l;
-			}
+	private String getShortName(String code) {
+		final int x = code.lastIndexOf('.');
+		if (x == -1) {
+			return code;
 		}
-		return result;
+		return code.substring(x + 1);
+	}
+
+	private String getNamespace(String code) {
+		assert code.startsWith("\\") == false;
+		assert code.startsWith("~") == false;
+		final int x = code.lastIndexOf('.');
+		if (x == -1) {
+			return null;
+		}
+		return code.substring(0, x);
+	}
+
+	@Override
+	public UmlDiagramType getUmlDiagramType() {
+		return UmlDiagramType.CLASS;
 	}
 
 }

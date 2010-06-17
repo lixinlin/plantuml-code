@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 3831 $
  *
  */
 package net.sourceforge.plantuml.graph;
@@ -37,6 +39,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Dimension2D;
 
 import net.sourceforge.plantuml.cucadiagram.Entity;
+import net.sourceforge.plantuml.graphic.StringBounder;
 
 abstract class AbstractEntityImage {
 
@@ -60,7 +63,7 @@ abstract class AbstractEntityImage {
 		this.entity = entity;
 	}
 
-	public abstract Dimension2D getDimension(Graphics2D g2d);
+	public abstract Dimension2D getDimension(StringBounder stringBounder);
 
 	public abstract void draw(Graphics2D g2d);
 
@@ -79,7 +82,7 @@ abstract class AbstractEntityImage {
 	protected final Font getFont17() {
 		return font17;
 	}
-	
+
 	protected final Font getFont14() {
 		return font14;
 	}

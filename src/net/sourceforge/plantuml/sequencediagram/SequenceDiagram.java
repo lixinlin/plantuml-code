@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,7 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
  *
  */
 package net.sourceforge.plantuml.sequencediagram;
@@ -42,8 +42,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.UmlDiagram;
-import net.sourceforge.plantuml.sequencediagram.graphic.SequenceDiagramPngMaker;
+import net.sourceforge.plantuml.UmlDiagramType;
+import net.sourceforge.plantuml.graphic.HtmlColor;
+import net.sourceforge.plantuml.sequencediagram.graphic.FileMaker;
+import net.sourceforge.plantuml.sequencediagram.graphic.SequenceDiagramFileMaker;
 import net.sourceforge.plantuml.skin.ProtectedSkin;
 import net.sourceforge.plantuml.skin.Skin;
 import net.sourceforge.plantuml.skin.SkinUtils;
@@ -66,9 +70,9 @@ public class SequenceDiagram extends UmlDiagram {
 		return result;
 	}
 
-	private Message lastMessage;
+	private AbstractMessage lastMessage;
 
-	public Message getLastMessage() {
+	public AbstractMessage getLastMessage() {
 		return lastMessage;
 	}
 
@@ -88,9 +92,13 @@ public class SequenceDiagram extends UmlDiagram {
 		return Collections.unmodifiableMap(participants);
 	}
 
-	public void addMessage(Message m) {
+	public void addMessage(AbstractMessage m) {
 		lastMessage = m;
 		events.add(m);
+		if (pendingCreate != null) {
+			m.addLifeEvent(pendingCreate);
+			pendingCreate = null;
+		}
 	}
 
 	public void addNote(Note n) {
@@ -101,48 +109,73 @@ public class SequenceDiagram extends UmlDiagram {
 		events.add(new Newpage(strings));
 	}
 
+	public void divider(List<String> strings) {
+		events.add(new Divider(strings));
+	}
+
 	public List<Event> events() {
 		return Collections.unmodifiableList(events);
 	}
 
-	public List<File> createPng(File pngFile) throws IOException {
-		final SequenceDiagramPngMaker maker = new SequenceDiagramPngMaker(this, skin);
-		return maker.createPng(pngFile);
+	private FileMaker getSequenceDiagramPngMaker(FileFormat fileFormat) {
+
+		return new SequenceDiagramFileMaker(this, skin, fileFormat);
+		// if (fileFormat == FileFormat.TXT) {
+		// return new SequenceDiagramPngMaker(this, new TextSkin());
+		// } else if (OptionFlags.getInstance().useU()) {
+		// return new SequenceDiagramFileMaker(this, skin, fileFormat);
+		// }
+		// return new SequenceDiagramPngMaker(this, skin);
 	}
 
-	public void createPng(OutputStream os) throws IOException {
-		final SequenceDiagramPngMaker maker = new SequenceDiagramPngMaker(this, skin);
-		maker.createPng(os);
+	public List<File> createFiles(File suggestedFile, FileFormat fileFormat) throws IOException {
+		return getSequenceDiagramPngMaker(fileFormat).createMany(suggestedFile);
 	}
 
-	public void activate(Participant p, LifeEventType lifeEventType) {
+	public void createFile(OutputStream os, int index, FileFormat fileFormat) throws IOException {
+		getSequenceDiagramPngMaker(fileFormat).createOne(os, index);
+	}
+
+	private LifeEvent pendingCreate = null;
+
+	public void activate(Participant p, LifeEventType lifeEventType, HtmlColor backcolor) {
 		if (lifeEventType == LifeEventType.CREATE) {
-			events.add(new LifeEvent(p, lifeEventType));
+			pendingCreate = new LifeEvent(p, lifeEventType, backcolor);
 			return;
 		}
 		if (lastMessage == null) {
+			if (lifeEventType == LifeEventType.ACTIVATE) {
+				p.incInitialLife(backcolor);
+			}
 			return;
+			// throw new
+			// UnsupportedOperationException("Step1Message::beforeMessage");
 		}
-		lastMessage.addLifeEvent(new LifeEvent(p, lifeEventType));
+		lastMessage.addLifeEvent(new LifeEvent(p, lifeEventType, backcolor));
 	}
 
-	private final List<Grouping> openGroupings = new ArrayList<Grouping>();
+	private final List<GroupingStart> openGroupings = new ArrayList<GroupingStart>();
 
-	public void grouping(String title, String comment, GroupingType type) {
+	public boolean grouping(String title, String comment, GroupingType type, HtmlColor backColorGeneral,
+			HtmlColor backColorElement) {
 		if (type != GroupingType.START && openGroupings.size() == 0) {
-			throw new IllegalArgumentException();
+			return false;
 		}
 
-		final Grouping g = new Grouping(title, comment, type);
+		final GroupingStart top = openGroupings.size() > 0 ? openGroupings.get(0) : null;
+
+		final Grouping g = type == GroupingType.START ? new GroupingStart(title, comment, backColorGeneral,
+				backColorElement, top)
+				: new GroupingLeaf(title, comment, type, backColorGeneral, backColorElement, top);
 		events.add(g);
-		if (openGroupings.size() > 0) {
-			g.setFather(openGroupings.get(0));
-		}
+
 		if (type == GroupingType.START) {
-			openGroupings.add(0, g);
+			openGroupings.add(0, (GroupingStart) g);
 		} else if (type == GroupingType.END) {
 			openGroupings.remove(0);
 		}
+		
+		return true;
 	}
 
 	public String getDescription() {
@@ -192,5 +225,10 @@ public class SequenceDiagram extends UmlDiagram {
 	public void setShowFootbox(boolean footbox) {
 		this.showFootbox = footbox;
 
+	}
+
+	@Override
+	public UmlDiagramType getUmlDiagramType() {
+		return UmlDiagramType.SEQUENCE;
 	}
 }

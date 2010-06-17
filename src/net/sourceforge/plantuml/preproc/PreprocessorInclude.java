@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 3835 $
  *
  */
 package net.sourceforge.plantuml.preproc;
@@ -41,6 +43,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import net.sourceforge.plantuml.FileSystem;
+import net.sourceforge.plantuml.StringUtils;
 
 class PreprocessorInclude implements ReadLine {
 
@@ -68,7 +71,7 @@ class PreprocessorInclude implements ReadLine {
 		if (s == null) {
 			return null;
 		}
-		s = cleanLine(s);
+		s = StringUtils.cleanLineFromSource(s);
 		final Matcher m = includePattern.matcher(s);
 		assert included == null;
 		if (m.find()) {
@@ -86,20 +89,6 @@ class PreprocessorInclude implements ReadLine {
 			included = new PreprocessorInclude(new FileReader(f));
 		}
 		return this.readLine();
-	}
-
-	private String cleanLine(String s) {
-		if (s.startsWith(" * ")) {
-			s = s.substring(" * ".length());
-		}
-		if (s.equals(" *")) {
-			s = "";
-		}
-		s = s.trim();
-		while (s.startsWith(" ") || s.startsWith("/") || s.startsWith("\t") || s.startsWith("%")) {
-			s = s.substring(1).trim();
-		}
-		return s;
 	}
 
 	public int getLineNumber() {

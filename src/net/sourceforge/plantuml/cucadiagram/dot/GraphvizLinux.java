@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4826 $
  *
  */
 package net.sourceforge.plantuml.cucadiagram.dot;
@@ -35,26 +37,26 @@ import java.io.File;
 
 class GraphvizLinux extends AbstractGraphviz {
 
-	private static File exeOnLinux;
-	static {
-		final String getenv = getenvGraphvizDot();
-
-		if (getenv == null) {
-			exeOnLinux = new File("/usr/bin/dot");
-		} else {
-			exeOnLinux = new File(getenv);
-		}
+	GraphvizLinux(String dotString, String... type) {
+		super(dotString, type);
 	}
 
-	GraphvizLinux(String dotString) {
-		super(exeOnLinux, dotString);
+	@Override
+	protected File specificDotExe() {
+		final File usrLocalBinDot = new File("/usr/local/bin/dot");
+
+		if (usrLocalBinDot.exists()) {
+			return usrLocalBinDot;
+		}
+		final File usrBinDot = new File("/usr/bin/dot");
+		return usrBinDot;
 	}
 
 	@Override
 	String getCommandLine() {
 		final StringBuilder sb = new StringBuilder();
 		sb.append(getDotExe().getAbsolutePath());
-		sb.append(" -Tpng ");
+		appendImageType(sb);
 		return sb.toString();
 	}
 

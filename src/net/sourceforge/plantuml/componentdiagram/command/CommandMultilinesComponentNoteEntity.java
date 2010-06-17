@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,18 +26,22 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4239 $
  *
  */
 package net.sourceforge.plantuml.componentdiagram.command;
 
-import net.sourceforge.plantuml.classdiagram.command.AbstractCommandMultilinesNoteEntity;
+import net.sourceforge.plantuml.command.AbstractCommandMultilinesNoteEntity;
 import net.sourceforge.plantuml.componentdiagram.ComponentDiagram;
 
 public class CommandMultilinesComponentNoteEntity extends AbstractCommandMultilinesNoteEntity {
 
 	public CommandMultilinesComponentNoteEntity(final ComponentDiagram system) {
-		super(system, "(?i)^note\\s+(right|left|top|bottom)\\s+(?:of\\s+)?(\\(\\)\\w+|\\u00B0[^\\u00B0]+\\u00B0|\\[[^\\]]+\\])$");
+		super(
+				system,
+				"(?i)^note\\s+(right|left|top|bottom)\\s+(?:of\\s+)?([\\p{L}0-9_.]+|\\(\\)\\s*[\\p{L}0-9_.]+|\\(\\)\\s*\"[^\"]+\"|\\[[^\\]*]+[^\\]]*\\])\\s*(#\\w+)?$");
 	}
 
 }

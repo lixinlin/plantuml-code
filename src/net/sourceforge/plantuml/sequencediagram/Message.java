@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,41 +26,25 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4663 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-public class Message implements Event {
+public class Message extends AbstractMessage {
 
 	final private Participant p1;
 	final private Participant p2;
-	final private List<String> label;
-	final private boolean dotted;
-	final private List<LifeEvent> lifeEvents = new ArrayList<LifeEvent>();
 
-	private List<String> notes;
-	private NotePosition notePosition;
-	private final String messageNumber;
-
-	public Message(Participant p1, Participant p2, List<String> label, boolean dotted, String messageNumber) {
+	public Message(Participant p1, Participant p2, List<String> label,
+			boolean dotted, boolean full, String messageNumber) {
+		super(label, dotted, full, messageNumber);
 		this.p1 = p1;
 		this.p2 = p2;
-		this.label = label;
-		this.dotted = dotted;
-		this.messageNumber = messageNumber;
-	}
-
-	public void addLifeEvent(LifeEvent lifeEvent) {
-		this.lifeEvents.add(lifeEvent);
-	}
-
-	public List<LifeEvent> getLiveEvents() {
-		return Collections.unmodifiableList(lifeEvents);
 	}
 
 	public Participant getParticipant1() {
@@ -69,34 +53,6 @@ public class Message implements Event {
 
 	public Participant getParticipant2() {
 		return p2;
-	}
-
-	public List<String> getLabel() {
-		return Collections.unmodifiableList(label);
-	}
-
-	public boolean isDotted() {
-		return dotted;
-	}
-
-	public List<String> getNote() {
-		return notes == null ? notes : Collections.unmodifiableList(notes);
-	}
-
-	public void setNote(List<String> strings, NotePosition notePosition) {
-		if (notePosition != NotePosition.LEFT && notePosition != NotePosition.RIGHT) {
-			throw new IllegalArgumentException();
-		}
-		this.notes = strings;
-		this.notePosition = notePosition;
-	}
-
-	public NotePosition getNotePosition() {
-		return notePosition;
-	}
-
-	public final String getMessageNumber() {
-		return messageNumber;
 	}
 
 }

@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,14 +26,19 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4237 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram;
 
 import java.util.List;
 
-public class Note implements Event {
+import net.sourceforge.plantuml.SpecificBackcolorable;
+import net.sourceforge.plantuml.graphic.HtmlColor;
+
+public class Note implements Event, SpecificBackcolorable {
 
 	private final Participant p;
 	private final Participant p2;
@@ -70,6 +75,16 @@ public class Note implements Event {
 
 	public NotePosition getPosition() {
 		return position;
+	}
+
+	private HtmlColor specificBackcolor;
+	
+	public HtmlColor getSpecificBackColor() {
+		return specificBackcolor;
+	}
+
+	public void setSpecificBackcolor(String s) {
+		this.specificBackcolor = HtmlColor.getColorIfValid(s);
 	}
 
 }

@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4633 $
  *
  */
 package net.sourceforge.plantuml.printskin;
@@ -34,7 +36,6 @@ package net.sourceforge.plantuml.printskin;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -46,6 +47,7 @@ import java.util.List;
 import net.sourceforge.plantuml.AbstractPSystem;
 import net.sourceforge.plantuml.Dimension2DDouble;
 import net.sourceforge.plantuml.EmptyImageBuilder;
+import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.SkinParam;
 import net.sourceforge.plantuml.graphic.HorizontalAlignement;
 import net.sourceforge.plantuml.graphic.TextBlock;
@@ -56,6 +58,9 @@ import net.sourceforge.plantuml.skin.ComponentType;
 import net.sourceforge.plantuml.skin.SimpleContext2D;
 import net.sourceforge.plantuml.skin.Skin;
 import net.sourceforge.plantuml.skin.SkinUtils;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
+import net.sourceforge.plantuml.ugraphic.URectangle;
+import net.sourceforge.plantuml.ugraphic.g2d.UGraphicG2d;
 
 class PrintSkin extends AbstractPSystem {
 
@@ -63,37 +68,38 @@ class PrintSkin extends AbstractPSystem {
 
 	final private Skin skin;
 	final private List<String> toPrint;
-	private Graphics2D g2d;
+	private UGraphic ug;
 	private float xpos = 10;
 	private float ypos = 0;
 	private float maxYpos = 0;
 
-	public List<File> createPng(File pngFile) throws IOException, InterruptedException {
-		final List<File> result = Arrays.asList(pngFile);
+	public List<File> createFiles(File suggestedFile, FileFormat fileFormat) throws IOException, InterruptedException {
+		final List<File> result = Arrays.asList(suggestedFile);
 		final BufferedImage im = createImage();
 
-		PngIO.write(im.getSubimage(0, 0, im.getWidth(), (int) maxYpos), pngFile);
+		PngIO.write(im.getSubimage(0, 0, im.getWidth(), (int) maxYpos), suggestedFile);
 		return result;
 
 	}
-	
-	public void createPng(OutputStream os) throws IOException {
+
+	public void createFile(OutputStream os, int index, FileFormat fileFormat) throws IOException {
 		final BufferedImage im = createImage();
 		PngIO.write(im.getSubimage(0, 0, im.getWidth(), (int) maxYpos), os);
 	}
 
-
 	private BufferedImage createImage() {
-		final EmptyImageBuilder builder = new EmptyImageBuilder(1000, 600, Color.WHITE);
-		
+		final EmptyImageBuilder builder = new EmptyImageBuilder(1000, 1000, Color.WHITE);
+
 		final BufferedImage im = builder.getBufferedImage();
-		g2d = builder.getGraphics2D();
+		final Graphics2D g2d = builder.getGraphics2D();
+		
+		ug = new UGraphicG2d(g2d, null);
 
 		for (ComponentType type : EnumSet.allOf(ComponentType.class)) {
 			printComponent(type);
 			ypos += 10;
 			maxYpos = Math.max(maxYpos, ypos);
-			if (ypos > 400) {
+			if (ypos > 500) {
 				ypos = 0;
 				xpos += 200;
 			}
@@ -101,8 +107,6 @@ class PrintSkin extends AbstractPSystem {
 		g2d.dispose();
 		return im;
 	}
-	
-
 
 	private void printComponent(ComponentType type) {
 		println(type.name());
@@ -111,8 +115,8 @@ class PrintSkin extends AbstractPSystem {
 			println("null");
 			return;
 		}
-		double height = comp.getPreferredHeight(g2d);
-		double width = comp.getPreferredWidth(g2d);
+		double height = comp.getPreferredHeight(ug.getStringBounder());
+		double width = comp.getPreferredWidth(ug.getStringBounder());
 		println("height = " + String.format("%4.2f", height));
 		println("width = " + width);
 
@@ -122,21 +126,27 @@ class PrintSkin extends AbstractPSystem {
 		if (width == 0) {
 			width = 42;
 		}
-		g2d.setColor(Color.LIGHT_GRAY);
-		g2d.drawRect((int) xpos - 1, (int) ypos - 1, (int) width + 2, (int) height + 2);
+		ug.getParam().setColor(Color.LIGHT_GRAY);
+		ug.getParam().setBackcolor(Color.LIGHT_GRAY);
+		ug.draw(xpos-1, ypos-1, new URectangle(width+2, height+2));
+		//g2d.drawRect((int) xpos - 1, (int) ypos - 1, (int) width + 2, (int) height + 2);
 
-		final AffineTransform at = g2d.getTransform();
-		g2d.translate(xpos, ypos);
-		comp.draw(g2d, new Dimension2DDouble(width, height), new SimpleContext2D(false));
-		g2d.setTransform(at);
+		//final AffineTransform at = g2d.getTransform();
+		//g2d.translate(xpos, ypos);
+		ug.translate(xpos, ypos);
+		ug.getParam().reset();
+		comp.drawU(ug, new Dimension2DDouble(width, height), new SimpleContext2D(false));
+		ug.translate(-xpos, -ypos);
+		//g2d.setTransform(at);
 
 		ypos += height;
 	}
 
 	private void println(String s) {
-		final TextBlock textBlock = TextBlockUtils.create(Arrays.asList(s), FONT1, Color.BLACK, HorizontalAlignement.LEFT);
-		textBlock.draw(g2d, xpos, ypos);
-		ypos += textBlock.calculateDimension(g2d).getHeight();
+		final TextBlock textBlock = TextBlockUtils.create(Arrays.asList(s), FONT1, Color.BLACK,
+				HorizontalAlignement.LEFT);
+		textBlock.drawU(ug, xpos, ypos);
+		ypos += textBlock.calculateDimension(ug.getStringBounder()).getHeight();
 	}
 
 	public String getDescription() {

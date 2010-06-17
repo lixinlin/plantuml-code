@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 3830 $
  *
  */
 package net.sourceforge.plantuml.geom;
@@ -93,17 +95,18 @@ public class Kingdom extends AbstractFigure {
 	// return Collections.unmodifiableSet(result);
 	// }
 
-//	static private boolean containsAnotherArea(ClosedArea area, Set<ClosedArea> all) {
-//		for (ClosedArea another : all) {
-//			if (another == area) {
-//				continue;
-//			}
-//			if (area.contains(another)) {
-//				return true;
-//			}
-//		}
-//		return false;
-//	}
+	// static private boolean containsAnotherArea(ClosedArea area,
+	// Set<ClosedArea> all) {
+	// for (ClosedArea another : all) {
+	// if (another == area) {
+	// continue;
+	// }
+	// if (area.contains(another)) {
+	// return true;
+	// }
+	// }
+	// return false;
+	// }
 
 	@Override
 	boolean arePointsConnectable(Point2DInt p1, Point2DInt p2) {

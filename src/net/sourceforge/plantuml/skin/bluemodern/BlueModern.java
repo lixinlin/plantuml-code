@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4633 $
  *
  */
 package net.sourceforge.plantuml.skin.bluemodern;
@@ -36,7 +38,7 @@ import java.awt.Font;
 import java.util.Arrays;
 import java.util.List;
 
-import net.sourceforge.plantuml.SkinParam;
+import net.sourceforge.plantuml.ISkinParam;
 import net.sourceforge.plantuml.skin.Component;
 import net.sourceforge.plantuml.skin.ComponentType;
 import net.sourceforge.plantuml.skin.Skin;
@@ -60,7 +62,7 @@ public class BlueModern implements Skin {
 	private final Color lineColor = new Color(Integer.parseInt("989898", 16));
 	private final Color borderGroupColor = new Color(Integer.parseInt("BBBBBB", 16));
 
-	public Component createComponent(ComponentType type, SkinParam param, List<? extends CharSequence> stringsToDisplay) {
+	public Component createComponent(ComponentType type, ISkinParam param, List<? extends CharSequence> stringsToDisplay) {
 
 		if (type == ComponentType.PARTICIPANT_HEAD) {
 			return new ComponentBlueModernParticipant(blue1, blue2, Color.WHITE, participantFont, stringsToDisplay);
@@ -72,22 +74,34 @@ public class BlueModern implements Skin {
 			return new ComponentBlueModernLine(lineColor);
 		}
 		if (type == ComponentType.SELF_ARROW) {
-			return new ComponentBlueModernSelfArrow(Color.BLACK, Color.BLACK, normalFont, stringsToDisplay, false);
+			return new ComponentBlueModernSelfArrow(Color.BLACK, Color.BLACK, normalFont, stringsToDisplay, false, true);
 		}
 		if (type == ComponentType.DOTTED_SELF_ARROW) {
-			return new ComponentBlueModernSelfArrow(Color.BLACK, Color.BLACK, normalFont, stringsToDisplay, true);
+			return new ComponentBlueModernSelfArrow(Color.BLACK, Color.BLACK, normalFont, stringsToDisplay, true, true);
 		}
 		if (type == ComponentType.ARROW) {
-			return new ComponentBlueModernArrow(Color.BLACK, Color.BLACK, normalFont, stringsToDisplay, 1, false);
+			return new ComponentBlueModernArrow(Color.BLACK, Color.BLACK, normalFont, stringsToDisplay, 1, false, true);
+		}
+		if (type == ComponentType.ASYNC_ARROW) {
+			return new ComponentBlueModernArrow(Color.BLACK, Color.BLACK, normalFont, stringsToDisplay, 1, false, false);
 		}
 		if (type == ComponentType.DOTTED_ARROW) {
-			return new ComponentBlueModernArrow(Color.BLACK, Color.BLACK, normalFont, stringsToDisplay, 1, true);
+			return new ComponentBlueModernArrow(Color.BLACK, Color.BLACK, normalFont, stringsToDisplay, 1, true, true);
+		}
+		if (type == ComponentType.ASYNC_DOTTED_ARROW) {
+			return new ComponentBlueModernArrow(Color.BLACK, Color.BLACK, normalFont, stringsToDisplay, 1, true, false);
 		}
 		if (type == ComponentType.RETURN_ARROW) {
-			return new ComponentBlueModernArrow(Color.BLACK, Color.BLACK, normalFont, stringsToDisplay, -1, false);
+			return new ComponentBlueModernArrow(Color.BLACK, Color.BLACK, normalFont, stringsToDisplay, -1, false, true);
+		}
+		if (type == ComponentType.ASYNC_RETURN_ARROW) {
+			return new ComponentBlueModernArrow(Color.BLACK, Color.BLACK, normalFont, stringsToDisplay, -1, false, false);
 		}
 		if (type == ComponentType.RETURN_DOTTED_ARROW) {
-			return new ComponentBlueModernArrow(Color.BLACK, Color.BLACK, normalFont, stringsToDisplay, -1, true);
+			return new ComponentBlueModernArrow(Color.BLACK, Color.BLACK, normalFont, stringsToDisplay, -1, true, true);
+		}
+		if (type == ComponentType.ASYNC_RETURN_DOTTED_ARROW) {
+			return new ComponentBlueModernArrow(Color.BLACK, Color.BLACK, normalFont, stringsToDisplay, -1, true, false);
 		}
 		if (type == ComponentType.ACTOR_HEAD) {
 			return new ComponentBlueModernActor(blue2, blue1, blue1, participantFont, stringsToDisplay, true);
@@ -125,6 +139,9 @@ public class BlueModern implements Skin {
 		}
 		if (type == ComponentType.NEWPAGE) {
 			return new ComponentBlueModernNewpage(blue1);
+		}
+		if (type == ComponentType.DIVIDER) {
+			return new ComponentBlueModernDivider(Color.BLACK, normalFont, blue2, blue1, Color.BLACK, stringsToDisplay);
 		}
 		if (type == ComponentType.SIGNATURE) {
 			return new ComponentRoseTitle(Color.BLACK, smallFont, Arrays.asList("This skin was created ",

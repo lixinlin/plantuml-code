@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,13 +26,25 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ *
+ * Revision $Revision: 4828 $
  *
  */
 package net.sourceforge.plantuml;
 
-
 public class OptionFlags {
+
+	void reset() {
+		keepTmpFiles = false;
+		verbose = false;
+		metadata = false;
+		word = false;
+		debugDot = false;
+		forceGd = false;
+		forceCairo = false;
+		dotExecutable = null;
+	}
 
 	public boolean useJavaInsteadOfDot() {
 		return false;
@@ -45,6 +57,20 @@ public class OptionFlags {
 	private boolean metadata = false;
 	private boolean word = false;
 	private boolean systemExit = true;
+	private boolean pipe = false;
+	private boolean debugDot = false;
+	private boolean forceGd = false;
+	private boolean forceCairo = false;
+	private String dotExecutable = null;
+	private boolean gui = false;
+
+	public final boolean isPipe() {
+		return pipe;
+	}
+
+	public final void setPipe(boolean pipe) {
+		this.pipe = pipe;
+	}
 
 	private OptionFlags() {
 		reset();
@@ -52,14 +78,6 @@ public class OptionFlags {
 
 	public static OptionFlags getInstance() {
 		return singleton;
-	}
-
-
-	void reset() {
-		keepTmpFiles = false;
-		verbose = false;
-		metadata = false;
-		word = false;
 	}
 
 	public final boolean isKeepTmpFiles() {
@@ -102,10 +120,44 @@ public class OptionFlags {
 		this.systemExit = systemExit;
 	}
 
-	public static final OptionFlags getSingleton() {
-		return singleton;
+	public final boolean isDebugDot() {
+		return debugDot;
 	}
 
+	public final void setDebugDot(boolean debugDot) {
+		this.debugDot = debugDot;
+	}
 
+	public final String getDotExecutable() {
+		return dotExecutable;
+	}
+
+	public final void setDotExecutable(String dotExecutable) {
+		this.dotExecutable = dotExecutable;
+	}
+
+	public final boolean isGui() {
+		return gui;
+	}
+
+	public final void setGui(boolean gui) {
+		this.gui = gui;
+	}
+
+	public final boolean isForceGd() {
+		return forceGd;
+	}
+
+	public final void setForceGd(boolean forceGd) {
+		this.forceGd = forceGd;
+	}
+
+	public final boolean isForceCairo() {
+		return forceCairo;
+	}
+
+	public final void setForceCairo(boolean forceCairo) {
+		this.forceCairo = forceCairo;
+	}
 
 }

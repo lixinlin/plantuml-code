@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 3830 $
  *
  */
 package net.sourceforge.plantuml.geom;
@@ -34,7 +36,7 @@ package net.sourceforge.plantuml.geom;
 import java.awt.geom.GeneralPath;
 
 abstract class AbstractPolyline implements Polyline {
-	
+
 	private final Pointable start;
 	private final Pointable end;
 
@@ -72,7 +74,6 @@ abstract class AbstractPolyline implements Polyline {
 		return false;
 	}
 
-
 	final public LineSegmentInt getFirst() {
 		return segments().get(0);
 	}
@@ -95,8 +96,8 @@ abstract class AbstractPolyline implements Polyline {
 		assert inter.length == 1;
 		segments().set(
 				0,
-				new LineSegmentInt(inter[0].getXint(), inter[0].getYint(), segments().get(0).getP2().getXint(), segments()
-						.get(0).getP2().getYint()));
+				new LineSegmentInt(inter[0].getXint(), inter[0].getYint(), segments().get(0).getP2().getXint(),
+						segments().get(0).getP2().getYint()));
 		return inter[0];
 	}
 
@@ -193,6 +194,5 @@ abstract class AbstractPolyline implements Polyline {
 	public final Pointable getEnd() {
 		return end;
 	}
-
 
 }

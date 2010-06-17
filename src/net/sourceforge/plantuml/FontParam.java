@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ *
+ * Revision $Revision: 4639 $
  *
  */
 package net.sourceforge.plantuml;
@@ -35,48 +37,67 @@ import java.awt.Font;
 
 public enum FontParam {
 
-	ACTIVITY(14, Font.PLAIN, "black"),
-	ACTIVITY_ARROW(13, Font.PLAIN, "black"),
-	CLASS_ARROW(10, Font.PLAIN, "black"),
-	CLASS_ATTRIBUTE(10, Font.PLAIN, "black"),
-	CLASS(12, Font.PLAIN, "black"),
-	COMPONENT(14, Font.PLAIN, "black"),
-	COMPONENT_ARROW(13, Font.PLAIN, "black"),
-	NOTE(13, Font.PLAIN, "black"),
-	PACKAGE(14, Font.PLAIN, "black"),
-	SEQUENCE_ACTOR(13, Font.PLAIN, "black"),
-	SEQUENCE_ARROW(13, Font.PLAIN, "black"),
-	SEQUENCE_GROUPING(11, Font.BOLD, "black"),
-	SEQUENCE_GROUPING_HEADER(13, Font.BOLD, "black"),
-	SEQUENCE_PARTICIPANT(13, Font.PLAIN, "black"),
-	SEQUENCE_TITLE(13, Font.BOLD, "black"),
-	TITLE(18, Font.PLAIN, "black"),
-	FOOTER(10, Font.PLAIN, "#888888"),
-	HEADER(10, Font.PLAIN, "#888888"),
-	USECASE(14, Font.PLAIN, "black"),
-	USECASE_ACTOR(14, Font.PLAIN, "black"),
-	USECASE_ARROW(13, Font.PLAIN, "black");
+	ACTIVITY(14, Font.PLAIN, "black", null),
+	ACTIVITY_ARROW(13, Font.PLAIN, "black", null),
+	CIRCLED_CHARACTER(17, Font.BOLD, "black", "Courier"),
+	OBJECT_ARROW(10, Font.PLAIN, "black", null),
+	OBJECT_ATTRIBUTE(10, Font.PLAIN, "black", null),
+	OBJECT(12, Font.PLAIN, "black", null),
+	OBJECT_STEREOTYPE(12, Font.ITALIC, "black", null),
+	CLASS_ARROW(10, Font.PLAIN, "black", null),
+	CLASS_ATTRIBUTE(10, Font.PLAIN, "black", null),
+	CLASS(12, Font.PLAIN, "black", null),
+	CLASS_STEREOTYPE(12, Font.ITALIC, "black", null),
+	COMPONENT(14, Font.PLAIN, "black", null),
+	COMPONENT_STEREOTYPE(14, Font.ITALIC, "black", null),
+	COMPONENT_ARROW(13, Font.PLAIN, "black", null),
+	NOTE(13, Font.PLAIN, "black", null),
+	PACKAGE(14, Font.PLAIN, "black", null),
+	SEQUENCE_ACTOR(13, Font.PLAIN, "black", null),
+	SEQUENCE_ARROW(13, Font.PLAIN, "black", null),
+	SEQUENCE_DIVIDER(13, Font.BOLD, "black", null),
+	SEQUENCE_GROUPING(11, Font.BOLD, "black", null),
+	SEQUENCE_GROUPING_HEADER(13, Font.BOLD, "black", null),
+	SEQUENCE_PARTICIPANT(13, Font.PLAIN, "black", null),
+	SEQUENCE_TITLE(13, Font.BOLD, "black", null),
+	STATE(14, Font.PLAIN, "black", null),
+	STATE_ARROW(13, Font.PLAIN, "black", null),
+	STATE_ATTRIBUTE(12, Font.PLAIN, "black", null),
+	TITLE(18, Font.PLAIN, "black", null),
+	FOOTER(10, Font.PLAIN, "#888888", null),
+	HEADER(10, Font.PLAIN, "#888888", null),
+	USECASE(14, Font.PLAIN, "black", null),
+	USECASE_STEREOTYPE(14, Font.ITALIC, "black", null),
+	USECASE_ACTOR(14, Font.PLAIN, "black", null),
+	USECASE_ACTOR_STEREOTYPE(14, Font.ITALIC, "black", null),
+	USECASE_ARROW(13, Font.PLAIN, "black", null);
 	
 	private final int defaultSize;
-	private final int fontType;
+	private final int fontStyle;
 	private final String defaultColor;
+	private final String defaultFamily;
 
-	private FontParam(int defaultSize, int fontType, String defaultColor) {
+	private FontParam(int defaultSize, int fontStyle, String defaultColor, String defaultFamily) {
 		this.defaultSize = defaultSize;
-		this.fontType = fontType;
+		this.fontStyle = fontStyle;
 		this.defaultColor = defaultColor;
+		this.defaultFamily = defaultFamily;
 	}
 
 	public final int getDefaultSize() {
 		return defaultSize;
 	}
 
-	public final int getFontType() {
-		return fontType;
+	public final int getDefaultFontStyle() {
+		return fontStyle;
 	}
 
 	public final String getDefaultColor() {
 		return defaultColor;
+	}
+
+	public String getDefaultFamily() {
+		return defaultFamily;
 	}
 	
 	

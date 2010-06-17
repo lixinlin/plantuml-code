@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 3830 $
  *
  */
 package net.sourceforge.plantuml.geom;
@@ -86,9 +88,9 @@ public class InflationTransform {
 
 	Collection<Point2DInt> cutPoints(LineSegmentInt original) {
 
-//		System.err.println("original=" + original);
-//		System.err.println("inflateX=" + inflateX);
-//		System.err.println("inflateY=" + inflateY);
+		// System.err.println("original=" + original);
+		// System.err.println("inflateX=" + inflateX);
+		// System.err.println("inflateY=" + inflateY);
 
 		final SortedSet<Point2DInt> result = new TreeSet<Point2DInt>(new Point2DIntComparatorDistance(original.getP1()));
 
@@ -104,8 +106,8 @@ public class InflationTransform {
 		}
 		if (original.isVertical() == false) {
 			for (InflateData y : inflateY) {
-				final LineSegmentInt horizontal = new LineSegmentInt(original.getMinX(), y.getPos(), original.getMaxX(), y
-						.getPos());
+				final LineSegmentInt horizontal = new LineSegmentInt(original.getMinX(), y.getPos(),
+						original.getMaxX(), y.getPos());
 				final Point2DInt inter = original.getSegIntersection(horizontal);
 				if (inter != null) {
 					result.add(inter);

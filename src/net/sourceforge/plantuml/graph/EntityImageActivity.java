@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4125 $
  *
  */
 package net.sourceforge.plantuml.graph;
@@ -40,6 +42,8 @@ import net.sourceforge.plantuml.Dimension2DDouble;
 import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.cucadiagram.Entity;
 import net.sourceforge.plantuml.graphic.HorizontalAlignement;
+import net.sourceforge.plantuml.graphic.StringBounder;
+import net.sourceforge.plantuml.graphic.StringBounderUtils;
 import net.sourceforge.plantuml.graphic.TextBlock;
 import net.sourceforge.plantuml.graphic.TextBlockUtils;
 
@@ -56,13 +60,15 @@ class EntityImageActivity extends AbstractEntityImage {
 				HorizontalAlignement.CENTER);
 	}
 
-	public Dimension2D getDimension(Graphics2D g2d) {
-		final Dimension2D dim = text.calculateDimension(g2d);
+	@Override
+	public Dimension2D getDimension(StringBounder stringBounder) {
+		final Dimension2D dim = text.calculateDimension(stringBounder);
 		return new Dimension2DDouble(dim.getWidth() + 2 * xMargin, dim.getHeight() + 2 * yMargin);
 	}
 
+	@Override
 	public void draw(Graphics2D g2d) {
-		final Dimension2D dimTotal = getDimension(g2d);
+		final Dimension2D dimTotal = getDimension(StringBounderUtils.asStringBounder(g2d));
 
 		final int width = (int) dimTotal.getWidth();
 		final int height = (int) dimTotal.getHeight();
@@ -88,7 +94,7 @@ class EntityImageActivity extends AbstractEntityImage {
 		g2d.draw(p);
 		// g2d.drawRect(0, 0, width - 1, height - 1);
 		g2d.setColor(Color.BLACK);
-		text.draw(g2d, xMargin, yMargin);
+		text.drawTOBEREMOVED(g2d, xMargin, yMargin);
 
 	}
 }

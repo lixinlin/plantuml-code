@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,11 +26,12 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ *
+ * Revision $Revision: 3827 $
  *
  */
 package net.sourceforge.plantuml.code;
-
 
 public class AsciiEncoder implements URLEncoder {
 
@@ -108,6 +109,5 @@ public class AsciiEncoder implements URLEncoder {
 		r[pos + 1] = (byte) (((c2 & 0x0F) << 4) | (c3 >> 2));
 		r[pos + 2] = (byte) (((c3 & 0x3) << 6) | c4);
 	}
-
 
 }

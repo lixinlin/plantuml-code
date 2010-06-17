@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,38 +26,61 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
  *
  */
 package net.sourceforge.plantuml.usecasediagram.command;
 
 import java.util.List;
 
+import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.command.SingleLineCommand;
 import net.sourceforge.plantuml.cucadiagram.Entity;
+import net.sourceforge.plantuml.cucadiagram.Group;
 import net.sourceforge.plantuml.cucadiagram.Link;
+import net.sourceforge.plantuml.cucadiagram.LinkDecor;
 import net.sourceforge.plantuml.cucadiagram.LinkType;
 import net.sourceforge.plantuml.usecasediagram.UsecaseDiagram;
 
 public class CommandLinkUsecase extends SingleLineCommand<UsecaseDiagram> {
 
 	public CommandLinkUsecase(UsecaseDiagram diagram) {
-		super(diagram, "(?i)^(\\w+|:[^:]+:|\\((?!\\*\\))[^)]+\\))\\s*"
+		super(diagram, "(?i)^([\\p{L}0-9_.]+|:[^:]+:|\\((?!\\*\\))[^)]+\\))\\s*"
 				+ "(?:(([=-]+|\\.+)([\\]>]|\\|[>\\]])?)|(([\\[<]|[<\\[]\\|)?([=-]+|\\.+)))"
-				+ "\\s*(\\w+|:[^:]+:|\\((?!\\*\\))[^)]+\\))\\s*(?::\\s*([^\"]*))?$");
+				+ "\\s*([\\p{L}0-9_.]+|:[^:]+:|\\((?!\\*\\))[^)]+\\))\\s*(?::\\s*([^\"]+))?$");
 	}
 
 	@Override
-	protected boolean executeArg(List<String> arg) {
+	protected CommandExecutionResult executeArg(List<String> arg) {
+		if (getSystem().isGroup(arg.get(0)) && getSystem().isGroup(arg.get(7))) {
+			return executePackageLink(arg);
+		}
+		if (getSystem().isGroup(arg.get(0)) || getSystem().isGroup(arg.get(7))) {
+			return CommandExecutionResult.error("Package can be only linked to other package");
+		}
+
 		final Entity cl1 = getSystem().getOrCreateClass(arg.get(0));
 		final Entity cl2 = getSystem().getOrCreateClass(arg.get(7));
 
 		final LinkType linkType = arg.get(1) != null ? getLinkTypeNormal(arg) : getLinkTypeInv(arg);
 		final String queue = arg.get(1) != null ? arg.get(2) : arg.get(6);
 
-		final Link link = new Link(cl1, cl2, linkType, arg.get(8), queue.length(), null, null);
+		final Link link = new Link(cl1, cl2, linkType, arg.get(8), queue.length());
 		getSystem().addLink(link);
-		return true;
+		return CommandExecutionResult.ok();
+	}
+	
+	private CommandExecutionResult executePackageLink(List<String> arg) {
+		final Group cl1 = getSystem().getGroup(arg.get(0));
+		final Group cl2 = getSystem().getGroup(arg.get(7));
+
+		final LinkType linkType = arg.get(1) != null ? getLinkTypeNormal(arg) : getLinkTypeInv(arg);
+		final String queue = arg.get(1) != null ? arg.get(2) : arg.get(6);
+
+		final Link link = new Link(cl1.getEntityCluster(), cl2.getEntityCluster(), linkType, arg.get(8), queue
+				.length());
+		getSystem().addLink(link);
+		return CommandExecutionResult.ok();
 	}
 
 
@@ -85,13 +108,13 @@ public class CommandLinkUsecase extends SingleLineCommand<UsecaseDiagram> {
 
 	private LinkType getLinkTypeFromKey(String k) {
 		if (k == null) {
-			return LinkType.ASSOCIED;
+			return new LinkType(LinkDecor.NONE, LinkDecor.NONE);
 		}
 		if (k.equals("<") || k.equals(">")) {
-			return LinkType.NAVASSOC;
+			return new LinkType(LinkDecor.ARROW, LinkDecor.NONE);
 		}
 		if (k.equals("<|") || k.equals("|>")) {
-			return LinkType.EXTENDS;
+			return new LinkType(LinkDecor.EXTENDS, LinkDecor.NONE);
 		}
 		return null;
 	}

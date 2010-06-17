@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 3833 $
  *
  */
 package net.sourceforge.plantuml.graph;
@@ -40,6 +42,7 @@ import java.util.List;
 
 import net.sourceforge.plantuml.EmptyImageBuilder;
 import net.sourceforge.plantuml.cucadiagram.Entity;
+import net.sourceforge.plantuml.graphic.StringBounderUtils;
 
 public class Graph2 {
 
@@ -58,7 +61,7 @@ public class Graph2 {
 		board.normalize();
 
 		for (ANode n : board.getNodes()) {
-			final Dimension2D dim = images(n).getDimension(dummyGraphics2D);
+			final Dimension2D dim = images(n).getDimension(StringBounderUtils.asStringBounder(dummyGraphics2D));
 			widthCell = Math.max(widthCell, (int) dim.getWidth());
 			heightCell = Math.max(heightCell, (int) dim.getHeight());
 		}
@@ -66,7 +69,7 @@ public class Graph2 {
 		elastane = new Elastane(galaxy);
 
 		for (ANode n : board.getNodes()) {
-			final Dimension2D dim = images(n).getDimension(dummyGraphics2D);
+			final Dimension2D dim = images(n).getDimension(StringBounderUtils.asStringBounder(dummyGraphics2D));
 			elastane.addBox(n, (int) dim.getWidth(), (int) dim.getHeight());
 		}
 

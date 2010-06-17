@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,26 +26,30 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4167 $
  *
  */
 package net.sourceforge.plantuml.skin;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics2D;
 import java.awt.geom.Dimension2D;
 import java.util.ArrayList;
 import java.util.List;
 
 import net.sourceforge.plantuml.graphic.HorizontalAlignement;
+import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.graphic.TextBlock;
 import net.sourceforge.plantuml.graphic.TextBlockUtils;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
+import net.sourceforge.plantuml.ugraphic.URectangle;
 
 class GrayComponent extends AbstractComponent {
 
 	private static final Font NORMAL = new Font("SansSerif", Font.PLAIN, 7);
-	
+
 	private final ComponentType type;
 
 	public GrayComponent(ComponentType type) {
@@ -53,11 +57,11 @@ class GrayComponent extends AbstractComponent {
 	}
 
 	@Override
-	protected void drawInternal(Graphics2D g2d, Dimension2D dimensionToUse) {
-		g2d.setColor(Color.LIGHT_GRAY);
-		g2d.fillRect(0, 0, (int) getPreferredWidth(g2d), (int) getPreferredHeight(g2d));
-		g2d.setColor(Color.BLACK);
-		g2d.drawRect(0, 0, (int) getPreferredWidth(g2d), (int) getPreferredHeight(g2d));
+	protected void drawInternalU(UGraphic ug, Dimension2D dimensionToUse) {
+		final StringBounder stringBounder = ug.getStringBounder();
+		ug.getParam().setBackcolor(Color.LIGHT_GRAY);
+		ug.getParam().setColor(Color.BLACK);
+		ug.draw(0, 0, new URectangle(getPreferredWidth(stringBounder), getPreferredHeight(stringBounder)));
 
 		final String n = type.name();
 		final int split = 9;
@@ -67,16 +71,16 @@ class GrayComponent extends AbstractComponent {
 		}
 
 		final TextBlock textBlock = TextBlockUtils.create(strings, NORMAL, Color.BLACK, HorizontalAlignement.LEFT);
-		textBlock.draw(g2d, 0, 0);
+		textBlock.drawU(ug, 0, 0);
 	}
 
 	@Override
-	public double getPreferredHeight(Graphics2D g2d) {
+	public double getPreferredHeight(StringBounder stringBounder) {
 		return 42;
 	}
 
 	@Override
-	public double getPreferredWidth(Graphics2D g2d) {
+	public double getPreferredWidth(StringBounder stringBounder) {
 		return 42;
 	}
 

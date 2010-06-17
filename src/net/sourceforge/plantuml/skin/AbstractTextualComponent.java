@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,19 +26,21 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 3836 $
  *
  */
 package net.sourceforge.plantuml.skin;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics2D;
 import java.awt.geom.Dimension2D;
 import java.util.Arrays;
 import java.util.List;
 
 import net.sourceforge.plantuml.graphic.HorizontalAlignement;
+import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.graphic.TextBlock;
 import net.sourceforge.plantuml.graphic.TextBlockUtils;
 
@@ -77,25 +79,25 @@ public abstract class AbstractTextualComponent extends AbstractComponent {
 		return textBlock;
 	}
 
-	final public double getTextWidth(Graphics2D g2d) {
+	final public double getTextWidth(StringBounder stringBounder) {
 		final TextBlock textBlock = getTextBlock();
-		final Dimension2D size = getSize(g2d, textBlock);
+		final Dimension2D size = getSize(stringBounder, textBlock);
 		return size.getWidth() + marginX1 + marginX2;
 	}
 
 	// For cache
 	private Dimension2D size;
 
-	private Dimension2D getSize(Graphics2D g2d, final TextBlock textBlock) {
+	private Dimension2D getSize(StringBounder stringBounder, final TextBlock textBlock) {
 		if (size == null) {
-			size = textBlock.calculateDimension(g2d);
+			size = textBlock.calculateDimension(stringBounder);
 		}
 		return size;
 	}
 
-	final protected double getTextHeight(Graphics2D g2d) {
+	final protected double getTextHeight(StringBounder stringBounder) {
 		final TextBlock textBlock = getTextBlock();
-		final Dimension2D size = getSize(g2d, textBlock);
+		final Dimension2D size = getSize(stringBounder, textBlock);
 		return size.getHeight() + 2 * marginY;
 	}
 

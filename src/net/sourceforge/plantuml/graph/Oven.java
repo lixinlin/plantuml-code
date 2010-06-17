@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 3833 $
  *
  */
 package net.sourceforge.plantuml.graph;
@@ -48,7 +50,7 @@ public class Oven {
 		Board bestBoard = board.copy();
 		for (int i = 0; i < nbTic; i++) {
 			final double current = tic(board, rnd);
-			//System.err.println("current=" + current + " best=" + best);
+			// System.err.println("current=" + current + " best=" + best);
 			if (current < best) {
 				best = current;
 				bestBoard = board.copy();
@@ -59,29 +61,30 @@ public class Oven {
 	}
 
 	public double tic(Board board, Random rnd) {
-		//System.err.println("Oven::tic");
+		// System.err.println("Oven::tic");
 		final double costBefore = costComputer.getCost(board);
-		final Move move = null;//board.getRandomMove(rnd);
+		final Move move = null;// board.getRandomMove(rnd);
 		board.applyMove(move);
 		final double costAfter = costComputer.getCost(board);
 		final double delta = costAfter - costBefore;
-		//System.err.println("delta=" + delta);
+		// System.err.println("delta=" + delta);
 		if (delta <= 0) {
 			return costAfter;
 		}
 		assert delta > 0;
 		assert costAfter > costBefore;
-		//System.err.println("temp=" + temp);
+		// System.err.println("temp=" + temp);
 		if (temp > 0) {
 			final double probability = Math.exp(-delta / temp);
 			final double dice = rnd.nextDouble();
-			//System.err.println("probability=" + probability + " dice=" + dice);
+			// System.err.println("probability=" + probability + " dice=" +
+			// dice);
 			if (dice < probability) {
-				//System.err.println("We keep it");
+				// System.err.println("We keep it");
 				return costAfter;
 			}
 		}
-		//System.err.println("Roolback");
+		// System.err.println("Roolback");
 		board.applyMove(move.getBackMove());
 		assert costBefore == costComputer.getCost(board);
 		return costBefore;

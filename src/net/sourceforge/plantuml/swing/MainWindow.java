@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4494 $
  *
  */
 package net.sourceforge.plantuml.swing;
@@ -35,6 +37,8 @@ import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -49,12 +53,18 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 import java.util.prefs.Preferences;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
@@ -67,28 +77,97 @@ public class MainWindow extends JFrame {
 
 	final private static Preferences prefs = Preferences.userNodeForPackage(MainWindow.class);
 	final private static String KEY_DIR = "cur";
+	final private static String KEY_PATTERN = "pat";
 
 	private final JList jList1 = new JList();
 	private final JScrollPane scrollPane;
 	private final JButton changeDirButton = new JButton("Change Directory");
+	private final JTextField extensions = new JTextField();
 
 	final private List<SimpleLine> currentDirectoryListing = new ArrayList<SimpleLine>();
 	final private Set<ImageWindow> openWindows = new HashSet<ImageWindow>();
+	final private Option option;
 
 	private DirWatcher dirWatcher;
 
-	public MainWindow() {
-		this(new File(prefs.get(KEY_DIR, ".")));
+	public MainWindow(Option option) {
+		this(new File(prefs.get(KEY_DIR, ".")), option);
 
 	}
 
-	private MainWindow(File dir) {
+	private String getExtensions() {
+		return prefs.get(KEY_PATTERN, getDefaultFileExtensions());
+	}
+
+	private String getDefaultFileExtensions() {
+		return "txt, tex, java, htm, html, c, h, cpp, apt";
+	}
+
+	private void changeExtensions(String ext) {
+		if (ext.equals(getExtensions())) {
+			return;
+		}
+		final Pattern p = Pattern.compile("\\w+");
+		final Matcher m = p.matcher(ext);
+		final StringBuilder sb = new StringBuilder();
+
+		while (m.find()) {
+			final String value = m.group();
+			if (sb.length() > 0) {
+				sb.append(", ");
+			}
+			sb.append(value);
+
+		}
+		ext = sb.toString();
+		if (ext.length() == 0) {
+			ext = getDefaultFileExtensions();
+		}
+		extensions.setText(ext);
+		prefs.put(KEY_PATTERN, ext);
+		changeDir(dirWatcher.getDir());
+	}
+
+	private String getRegexpPattern(String ext) {
+		final Pattern p = Pattern.compile("\\w+");
+		final Matcher m = p.matcher(ext);
+		final StringBuilder filePattern = new StringBuilder("(?i)^.*\\.(");
+
+		while (m.find()) {
+			final String value = m.group();
+			if (filePattern.toString().endsWith("(") == false) {
+				filePattern.append("|");
+			}
+			filePattern.append(value);
+		}
+		if (filePattern.toString().endsWith("(") == false) {
+			filePattern.append(")$");
+			return filePattern.toString();
+		}
+		return Option.getPattern();
+	}
+
+	private MainWindow(File dir, Option option) {
 		super(dir.getAbsolutePath());
-		dirWatcher = new DirWatcher(dir, false, new Option());
+		this.option = option;
+		dirWatcher = new DirWatcher(dir, option, getRegexpPattern(getExtensions()));
 
 		Log.info("Showing MainWindow");
 		scrollPane = new JScrollPane(jList1);
-		getContentPane().add(changeDirButton, BorderLayout.SOUTH);
+
+		final JPanel south = new JPanel(new BorderLayout());
+		final JLabel labelFileExtensions = new JLabel("File extensions: ");
+		extensions.setText(getExtensions());
+
+		labelFileExtensions.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
+		south.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3), BorderFactory
+				.createEtchedBorder()));
+		south.add(labelFileExtensions, BorderLayout.WEST);
+		south.add(extensions, BorderLayout.CENTER);
+
+		south.add(changeDirButton, BorderLayout.SOUTH);
+
+		getContentPane().add(south, BorderLayout.SOUTH);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
 		setSize(320, 200);
 		setVisible(true);
@@ -105,10 +184,24 @@ public class MainWindow extends JFrame {
 		};
 		jList1.addMouseListener(mouseListener);
 		changeDirButton.addActionListener(new ActionListener() {
-
 			public void actionPerformed(ActionEvent e) {
 				System.err.println("Opening Directory Window");
 				displayDialogChangeDir();
+			}
+		});
+
+		extensions.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				changeExtensions(extensions.getText());
+			}
+		});
+		extensions.addFocusListener(new FocusListener() {
+
+			public void focusGained(FocusEvent e) {
+			}
+
+			public void focusLost(FocusEvent e) {
+				changeExtensions(extensions.getText());
 			}
 		});
 
@@ -132,6 +225,7 @@ public class MainWindow extends JFrame {
 		chooser.setDialogType(JFileChooser.CUSTOM_DIALOG);
 		chooser.setDialogTitle("Directory to watch:");
 		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		chooser.setAcceptAllFileFilterUsed(false);
 		final String currentPath = prefs.get(KEY_DIR, ".");
 		chooser.setCurrentDirectory(new File(currentPath));
 		Log.info("Showing OpenDialog");
@@ -146,7 +240,7 @@ public class MainWindow extends JFrame {
 
 	private void changeDir(File dir) {
 		prefs.put(KEY_DIR, dir.getAbsolutePath());
-		dirWatcher = new DirWatcher(dir, false, new Option());
+		dirWatcher = new DirWatcher(dir, option, getRegexpPattern(getExtensions()));
 		setTitle(dir.getAbsolutePath());
 		Log.info("Creating DirWatcher");
 		currentDirectoryListing.clear();

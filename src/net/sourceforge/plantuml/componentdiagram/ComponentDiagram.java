@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,11 +26,15 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4586 $
  *
  */
 package net.sourceforge.plantuml.componentdiagram;
 
+import net.sourceforge.plantuml.StringUtils;
+import net.sourceforge.plantuml.UmlDiagramType;
 import net.sourceforge.plantuml.classdiagram.AbstractEntityDiagram;
 import net.sourceforge.plantuml.cucadiagram.Entity;
 import net.sourceforge.plantuml.cucadiagram.EntityType;
@@ -40,15 +44,24 @@ public class ComponentDiagram extends AbstractEntityDiagram {
 	@Override
 	public Entity getOrCreateClass(String code) {
 		if (code.startsWith("[") && code.endsWith("]")) {
-			return getOrCreateEntity(removeFirstAndLastChar(code), EntityType.COMPONENT);
+			return getOrCreateEntity(StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(code),
+					EntityType.COMPONENT);
 		}
-		if (code.startsWith("\u00B0") && code.endsWith("\u00B0")) {
-			return getOrCreateEntity(removeFirstAndLastChar(code), EntityType.CIRCLE_INTERFACE);
+		if (code.startsWith(":") && code.endsWith(":")) {
+			return getOrCreateEntity(StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(code), EntityType.ACTOR);
 		}
 		if (code.startsWith("()")) {
-			return getOrCreateEntity(code.substring(2).trim(), EntityType.CIRCLE_INTERFACE);
+			code = code.substring(2).trim();
+			code = StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(code);
+			return getOrCreateEntity(code, EntityType.CIRCLE_INTERFACE);
 		}
-		throw new IllegalArgumentException();
+		code = StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(code);
+		return getOrCreateEntity(code, EntityType.CIRCLE_INTERFACE);
+	}
+
+	@Override
+	public UmlDiagramType getUmlDiagramType() {
+		return UmlDiagramType.COMPONENT;
 	}
 
 }

@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,17 +26,22 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4167 $
  *
  */
 package net.sourceforge.plantuml.skin.bluemodern;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.geom.Dimension2D;
 
+import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.skin.AbstractComponent;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
+import net.sourceforge.plantuml.ugraphic.ULine;
+import net.sourceforge.plantuml.ugraphic.URectangle;
+import net.sourceforge.plantuml.ugraphic.UStroke;
 
 public class ComponentBlueModernGroupingBody extends AbstractComponent {
 
@@ -49,31 +54,30 @@ public class ComponentBlueModernGroupingBody extends AbstractComponent {
 	}
 
 	@Override
-	protected void drawBackgroundInternal(Graphics2D g2d, Dimension2D dimensionToUse) {
-		g2d.setColor(generalBackgroundColor);
-		g2d.fillRect(0, 0, (int) dimensionToUse.getWidth(), (int) dimensionToUse.getHeight());
+	protected void drawBackgroundInternalU(UGraphic ug, Dimension2D dimensionToUse) {
+		ug.getParam().setColor(generalBackgroundColor);
+		ug.getParam().setBackcolor(generalBackgroundColor);
+		ug.draw(0, 0, new URectangle(dimensionToUse.getWidth(), dimensionToUse.getHeight()));
 	}
 
 	@Override
-	protected void drawInternal(Graphics2D g2d, Dimension2D dimensionToUse) {
-		g2d.setStroke(new BasicStroke(2));
-		g2d.setColor(foregroundColor);
+	protected void drawInternalU(UGraphic ug, Dimension2D dimensionToUse) {
+		ug.getParam().setStroke(new UStroke(2));
+		ug.getParam().setColor(foregroundColor);
 
-		g2d.drawLine(0, 0, 0, (int) dimensionToUse.getHeight());
-		g2d.drawLine((int) dimensionToUse.getWidth(), 0, (int) dimensionToUse.getWidth(), (int) dimensionToUse
-				.getHeight());
+		ug.draw(0, 0, new ULine(0, dimensionToUse.getHeight()));
+		ug.draw(dimensionToUse.getWidth(), 0, new ULine(0, dimensionToUse.getHeight()));
 
-		g2d.setStroke(new BasicStroke());
-
+		ug.getParam().setStroke(new UStroke());
 	}
 
 	@Override
-	public double getPreferredWidth(Graphics2D g2d) {
+	public double getPreferredWidth(StringBounder stringBounder) {
 		return 0;
 	}
 
 	@Override
-	public double getPreferredHeight(Graphics2D g2d) {
+	public double getPreferredHeight(StringBounder stringBounder) {
 		return 5;
 	}
 

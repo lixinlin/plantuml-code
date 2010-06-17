@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4125 $
  *
  */
 package net.sourceforge.plantuml.graph;
@@ -40,6 +42,8 @@ import java.util.List;
 
 import net.sourceforge.plantuml.Dimension2DDouble;
 import net.sourceforge.plantuml.graphic.HorizontalAlignement;
+import net.sourceforge.plantuml.graphic.StringBounder;
+import net.sourceforge.plantuml.graphic.StringBounderUtils;
 import net.sourceforge.plantuml.graphic.TextBlock;
 import net.sourceforge.plantuml.graphic.TextBlockUtils;
 
@@ -53,12 +57,12 @@ class MethodsOrFieldsArea {
 		this.strings = strings;
 	}
 
-	public Dimension2D calculateDimension(Graphics2D g2d) {
+	public Dimension2D calculateDimension(StringBounder stringBounder) {
 		double x = 0;
 		double y = 0;
 		for (String s : strings) {
 			final TextBlock bloc = createTextBlock(s);
-			final Dimension2D dim = bloc.calculateDimension(g2d);
+			final Dimension2D dim = bloc.calculateDimension(stringBounder);
 			y += dim.getHeight();
 			x = Math.max(dim.getWidth(), x);
 		}
@@ -72,8 +76,8 @@ class MethodsOrFieldsArea {
 	public void draw(Graphics2D g2d, double x, double y) {
 		for (String s : strings) {
 			final TextBlock bloc = createTextBlock(s);
-			bloc.draw(g2d, x, y);
-			y += bloc.calculateDimension(g2d).getHeight();
+			bloc.drawTOBEREMOVED(g2d, x, y);
+			y += bloc.calculateDimension(StringBounderUtils.asStringBounder(g2d)).getHeight();
 		}
 
 	}

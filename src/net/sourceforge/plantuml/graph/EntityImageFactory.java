@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,7 +26,9 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 3831 $
  *
  */
 package net.sourceforge.plantuml.graph;
@@ -61,6 +63,18 @@ public class EntityImageFactory {
 		}
 		if (entity.getType() == EntityType.SYNCHRO_BAR) {
 			return new EntityImageActivityBar(entity);
+		}
+		if (entity.getType() == EntityType.USECASE) {
+			return new EntityImageUsecase(entity);
+		}
+		if (entity.getType() == EntityType.ACTOR) {
+			return new EntityImageActor(entity);
+		}
+		if (entity.getType() == EntityType.CIRCLE_INTERFACE) {
+			return new EntityImageCircleInterface(entity);
+		}
+		if (entity.getType() == EntityType.COMPONENT) {
+			return new EntityImageComponent(entity);
 		}
 		return new EntityImageDefault(entity);
 	}

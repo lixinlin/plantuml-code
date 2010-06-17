@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009, Arnaud Roques (for Atos Origin).
+ * (C) Copyright 2009, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -26,19 +26,25 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Arnaud Roques (for Atos Origin).
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 4836 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.graphic;
 
-import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
-
 import net.sourceforge.plantuml.Dimension2DDouble;
+import net.sourceforge.plantuml.asciiart.CharArea;
+import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.skin.Component;
 import net.sourceforge.plantuml.skin.SimpleContext2D;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
 
-class ParticipantBox implements Pushable {
+public class ParticipantBox implements Pushable {
+
+	private static int CPT = 0;
+
+	private final int outMargin = 5;
 
 	private double startingX;
 	private double topStartingY;
@@ -46,6 +52,7 @@ class ParticipantBox implements Pushable {
 	private final Component head;
 	private final Component line;
 	private final Component tail;
+	private int cpt = CPT++;
 
 	public ParticipantBox(Component head, Component line, Component tail, double startingX) {
 		this.startingX = startingX;
@@ -54,20 +61,29 @@ class ParticipantBox implements Pushable {
 		this.tail = tail;
 	}
 
-	public double getMaxX(Graphics2D g2d) {
-		return startingX + head.getPreferredWidth(g2d);
+	@Override
+	public String toString() {
+		return "PB" + cpt;
 	}
 
-	public double getCenterX(Graphics2D g2d) {
-		return startingX + head.getPreferredWidth(g2d) / 2.0;
+	public double getMaxX(StringBounder stringBounder) {
+		return startingX + head.getPreferredWidth(stringBounder) + 2 * outMargin;
 	}
 
-	public double getHeadHeight(Graphics2D g2d) {
-		return head.getPreferredHeight(g2d) + line.getPreferredHeight(g2d) / 2.0;
+	public double getCenterX(StringBounder stringBounder) {
+		return startingX + head.getPreferredWidth(stringBounder) / 2.0 + outMargin;
 	}
 
-	public double getTailHeight(Graphics2D g2d) {
-		return tail.getPreferredHeight(g2d) + line.getPreferredHeight(g2d) / 2.0;
+	public double getHeadHeight(StringBounder stringBounder) {
+		return head.getPreferredHeight(stringBounder) + line.getPreferredHeight(stringBounder) / 2.0;
+	}
+
+	public double getHeadPreferredWith(StringBounder stringBounder) {
+		return head.getPreferredWidth(stringBounder);
+	}
+
+	public double getTailHeight(StringBounder stringBounder) {
+		return tail.getPreferredHeight(stringBounder) + line.getPreferredHeight(stringBounder) / 2.0;
 	}
 
 	public void pushToLeft(double deltaX) {
@@ -78,57 +94,64 @@ class ParticipantBox implements Pushable {
 		this.topStartingY = topStartingY;
 	}
 
-	public void drawHeadTail(Graphics2D g2d, double dimensionToUseHeight) {
+	public void drawHeadTailU(UGraphic ug, double dimensionToUseHeight, boolean showHead) {
 		if (topStartingY == 0) {
 			throw new IllegalStateException("setTopStartingY not called");
 		}
 
-		final AffineTransform t = g2d.getTransform();
+		final double atX = ug.getTranslateX();
+		final double atY = ug.getTranslateY();
+		final StringBounder stringBounder = ug.getStringBounder();
 
 		if (showHead) {
-			final double y1 = topStartingY - head.getPreferredHeight(g2d) - line.getPreferredHeight(g2d) / 2;
-			g2d.translate(startingX, y1);
-			head.draw(g2d, new Dimension2DDouble(head.getPreferredWidth(g2d), head.getPreferredHeight(g2d)),
-					new SimpleContext2D(false));
-
-			g2d.setTransform(t);
+			final double y1 = topStartingY - head.getPreferredHeight(stringBounder)
+					- line.getPreferredHeight(stringBounder) / 2;
+			ug.translate(startingX + outMargin, y1);
+			head.drawU(ug, new Dimension2DDouble(head.getPreferredWidth(stringBounder), head
+					.getPreferredHeight(stringBounder)), new SimpleContext2D(false));
+			ug.setTranslate(atX, atY);
 		}
 
 		if (dimensionToUseHeight > 0) {
-			final double y2 = dimensionToUseHeight - topStartingY + line.getPreferredHeight(g2d) / 2 - 1;
-			// final double y2 = dimensionToUseHeight -
-			// tail.getPreferredHeight(g2d) - 1;
-			g2d.translate(startingX, y2);
-			// final double y2 = dimensionToUseHeight +
-			// line.getPreferredHeight(g2d) / 2 - topStartingY - 1;
-			// g2d.translate(startingX, y2 - t.getTranslateY());
-			tail.draw(g2d, new Dimension2DDouble(tail.getPreferredWidth(g2d), tail.getPreferredHeight(g2d)),
-					new SimpleContext2D(false));
-
-			g2d.setTransform(t);
+			final double y2 = dimensionToUseHeight - topStartingY + line.getPreferredHeight(stringBounder) / 2 - 1;
+			ug.translate(startingX + outMargin, y2);
+			tail.drawU(ug, new Dimension2DDouble(tail.getPreferredWidth(stringBounder), tail
+					.getPreferredHeight(stringBounder)), new SimpleContext2D(false));
+			ug.setTranslate(atX, atY);
 		}
 	}
 
-	public void drawLine(Graphics2D g2d, double startingY, double endingY, boolean showTail) {
-		if (topStartingY == 0) {
-			throw new IllegalStateException("setTopStartingY not called");
-		}
-		final AffineTransform t = g2d.getTransform();
-
-		final double yStart = startingY + topStartingY - line.getPreferredHeight(g2d) / 2;
-		final double yEnd = endingY + line.getPreferredHeight(g2d) / 2 - (showTail ? topStartingY : 0) - 1;
-
-		g2d.translate(startingX, yStart);
-		line.draw(g2d, new Dimension2DDouble(head.getPreferredWidth(g2d), yEnd - yStart), new SimpleContext2D(false));
-
-		g2d.setTransform(t);
-
+	public void drawParticipantHead(UGraphic ug) {
+		ug.translate(outMargin, 0);
+		final StringBounder stringBounder = ug.getStringBounder();
+		head.drawU(ug, new Dimension2DDouble(head.getPreferredWidth(stringBounder), head
+				.getPreferredHeight(stringBounder)), new SimpleContext2D(false));
+		ug.translate(-outMargin, 0);
 	}
 
-	private boolean showHead = true;
+	public void drawLineU(UGraphic ug, double startingY, double endingY, boolean showTail) {
+		final double atX = ug.getTranslateX();
+		final double atY = ug.getTranslateY();
+		final StringBounder stringBounder = ug.getStringBounder();
 
-	public final void setShowHead(boolean showHead) {
-		this.showHead = showHead;
+		ug.translate(startingX, startingY);
+		line.drawU(ug,
+				new Dimension2DDouble(head.getPreferredWidth(stringBounder) + outMargin * 2, endingY - startingY),
+				new SimpleContext2D(false));
+
+		ug.setTranslate(atX, atY);
+	}
+
+	public double magicMargin(StringBounder stringBounder) {
+		return line.getPreferredHeight(stringBounder) / 2;
+	}
+
+	public void drawLineArea(CharArea charArea, double create, double endingY, boolean showTail) {
+		charArea.drawBoxSimple(1, 1, 10, 10);
+	}
+
+	public double getStartingX() {
+		return startingX;
 	}
 
 }
