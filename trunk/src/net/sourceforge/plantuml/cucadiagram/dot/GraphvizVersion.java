@@ -34,9 +34,11 @@
 package net.sourceforge.plantuml.cucadiagram.dot;
 
 
-public enum GraphvizVersion {
 	
-	COMMON, V2_34_0
+public interface GraphvizVersion {
+	public boolean useShield();
+	
+	//COMMON, V2_34_0
 
 
 }

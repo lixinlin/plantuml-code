@@ -41,7 +41,8 @@ public enum LineParam {
 //	sequenceGroupBorder(0.1),
 //	sequenceReferenceBorder(0.1),
 	sequenceLifeLineBorder,
-	sequenceParticipantBorder, noteBorder, sequenceGroupBorder, sequenceReferenceBorder;
+	sequenceParticipantBorder, noteBorder, sequenceGroupBorder, sequenceReferenceBorder,
+	classBorder, objectBorder;
 //	sequenceBoxBorder(0.1);
 	
 }

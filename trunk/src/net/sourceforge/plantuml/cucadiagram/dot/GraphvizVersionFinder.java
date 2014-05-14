@@ -34,23 +34,39 @@
 package net.sourceforge.plantuml.cucadiagram.dot;
 
 import java.io.File;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import net.sourceforge.plantuml.StringUtils;
 
 public class GraphvizVersionFinder {
 
 	final private File dotExe;
+	final private static GraphvizVersion DEFAULT = new GraphvizVersion() {
+		public boolean useShield() {
+			return true;
+		}
+	};
 
 	public GraphvizVersionFinder(File dotExe) {
 		this.dotExe = dotExe;
 	}
 
 	public GraphvizVersion getVersion() {
-		final String s = dotVersion();
-		if (s.contains("2.34.0")) {
-			return GraphvizVersion.V2_34_0;
+		final String dotVersion = dotVersion();
+		final Pattern p = Pattern.compile("\\d\\.\\d\\d");
+		final Matcher m = p.matcher(dotVersion);
+		final boolean find = m.find();
+		if (find == false) {
+			return DEFAULT;
 		}
-		return GraphvizVersion.COMMON;
+		final String vv = m.group(0);
+		final int v = Integer.parseInt(vv.replaceAll("\\.", ""));
+		return new GraphvizVersion() {
+			public boolean useShield() {
+				return v <= 228;
+			}
+		};
 	}
 
 	public String dotVersion() {

@@ -319,6 +319,9 @@ public enum License {
 		} else {
 			throw new IllegalStateException();
 		}
+		text.add("");
+		text.add("Icon provided by OpenIconic :  https://useiconic.com/open/");
+		text.add("");
 		return text;
 	}
 

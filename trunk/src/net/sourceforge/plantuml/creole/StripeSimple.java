@@ -43,6 +43,7 @@ import net.sourceforge.plantuml.graphic.FontConfiguration;
 import net.sourceforge.plantuml.graphic.FontPosition;
 import net.sourceforge.plantuml.graphic.FontStyle;
 import net.sourceforge.plantuml.graphic.ImgValign;
+import net.sourceforge.plantuml.openiconic.OpenIcon;
 import net.sourceforge.plantuml.ugraphic.Sprite;
 
 public class StripeSimple implements Stripe {
@@ -88,6 +89,7 @@ public class StripeSimple implements Stripe {
 		this.commands.add(CommandCreoleExposantChange.create(FontPosition.EXPOSANT));
 		this.commands.add(CommandCreoleExposantChange.create(FontPosition.INDICE));
 		this.commands.add(CommandCreoleImg.create());
+		this.commands.add(CommandCreoleOpenIcon.create());
 		this.commands.add(CommandCreoleSprite.create());
 		this.commands.add(CommandCreoleSpace.create());
 		this.commands.add(CommandCreoleFontFamilyChange.create());
@@ -146,7 +148,14 @@ public class StripeSimple implements Stripe {
 	public void addSprite(String src) {
 		final Sprite sprite = skinParam.getSprite(src);
 		if (sprite != null) {
-			atoms.add(new AtomSprite(sprite.asTextBlock(fontConfiguration.getColor())));
+			atoms.add(new AtomSprite(sprite.asTextBlock(fontConfiguration.getColor()), fontConfiguration));
+		}
+	}
+
+	public void addOpenIcon(String src) {
+		final OpenIcon openIcon = OpenIcon.retrieve(src);
+		if (openIcon != null) {
+			atoms.add(new AtomOpenIcon(openIcon, fontConfiguration));
 		}
 	}
 

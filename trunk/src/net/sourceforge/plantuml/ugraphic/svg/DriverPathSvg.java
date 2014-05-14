@@ -55,19 +55,24 @@ public class DriverPathSvg extends DriverShadowedG2d implements UDriver<SvgGraph
 		final UPath shape = (UPath) ushape;
 
 		final String color = StringUtils.getAsSvg(mapper, param.getColor());
-		final HtmlColor back = param.getBackcolor();
-		if (back instanceof HtmlColorGradient) {
-			final HtmlColorGradient gr = (HtmlColorGradient) back;
-			final String id = svg.createSvgGradient(StringUtils.getAsHtml(mapper.getMappedColor(gr.getColor1())),
-					StringUtils.getAsHtml(mapper.getMappedColor(gr.getColor2())), gr.getPolicy());
-			svg.setFillColor("url(#" + id + ")");
+		if (shape.isOpenIconic()) {
+			svg.setFillColor(color);
+			svg.setStrokeColor("");
+			svg.setStrokeWidth(0, "");
 		} else {
-			final String backcolor = StringUtils.getAsSvg(mapper, back);
-			svg.setFillColor(backcolor);
+			final HtmlColor back = param.getBackcolor();
+			if (back instanceof HtmlColorGradient) {
+				final HtmlColorGradient gr = (HtmlColorGradient) back;
+				final String id = svg.createSvgGradient(StringUtils.getAsHtml(mapper.getMappedColor(gr.getColor1())),
+						StringUtils.getAsHtml(mapper.getMappedColor(gr.getColor2())), gr.getPolicy());
+				svg.setFillColor("url(#" + id + ")");
+			} else {
+				final String backcolor = StringUtils.getAsSvg(mapper, back);
+				svg.setFillColor(backcolor);
+			}
+			svg.setStrokeColor(color);
+			svg.setStrokeWidth(param.getStroke().getThickness(), param.getStroke().getDasharraySvg());
 		}
-
-		svg.setStrokeColor(color);
-		svg.setStrokeWidth(param.getStroke().getThickness(), param.getStroke().getDasharraySvg());
 
 		svg.svgPath(x, y, shape, shape.getDeltaShadow());
 

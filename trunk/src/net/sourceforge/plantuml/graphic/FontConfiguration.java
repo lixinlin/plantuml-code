@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 12451 $
+ * Revision $Revision: 13328 $
  *
  */
 package net.sourceforge.plantuml.graphic;
@@ -186,5 +186,10 @@ public class FontConfiguration {
 	public Map<String, String> getAttributes() {
 		return svgAttributes.attributes();
 	}
+	
+	public double getSize2D() {
+		return currentFont.getSize2D();
+	}
+
 
 }
