@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 12328 $
+ * Revision $Revision: 13029 $
  *
  */
 package net.sourceforge.plantuml;
@@ -130,10 +130,10 @@ public class SkinParam implements ISkinParam {
 		return sb.toString();
 	}
 
-	public HtmlColor getHtmlColor(ColorParam param, Stereotype stereotype2, boolean clickable) {
-		if (stereotype2 != null) {
-			checkStereotype(stereotype2);
-			final String value2 = getValue(param.name() + "color" + stereotype2.getLabel());
+	public HtmlColor getHtmlColor(ColorParam param, Stereotype stereotype, boolean clickable) {
+		if (stereotype != null) {
+			checkStereotype(stereotype);
+			final String value2 = getValue(param.name() + "color" + stereotype.getLabel());
 			if (value2 != null && HtmlColorUtils.getColorIfValid(value2) != null) {
 				return HtmlColorUtils.getColorIfValid(value2);
 			}
@@ -162,10 +162,10 @@ public class SkinParam implements ISkinParam {
 //		}
 	}
 
-	private int getFontSize(FontParam param, Stereotype stereotype2) {
-		if (stereotype2 != null) {
-			checkStereotype(stereotype2);
-			final String value2 = getValue(param.name() + "fontsize" + stereotype2.getLabel());
+	private int getFontSize(FontParam param, Stereotype stereotype) {
+		if (stereotype != null) {
+			checkStereotype(stereotype);
+			final String value2 = getValue(param.name() + "fontsize" + stereotype.getLabel());
 			if (value2 != null && value2.matches("\\d+")) {
 				return Integer.parseInt(value2);
 			}
@@ -180,10 +180,10 @@ public class SkinParam implements ISkinParam {
 		return Integer.parseInt(value);
 	}
 
-	private String getFontFamily(FontParam param, Stereotype stereotype2) {
-		if (stereotype2 != null) {
-			checkStereotype(stereotype2);
-			final String value2 = getValue(param.name() + "fontname" + stereotype2.getLabel());
+	private String getFontFamily(FontParam param, Stereotype stereotype) {
+		if (stereotype != null) {
+			checkStereotype(stereotype);
+			final String value2 = getValue(param.name() + "fontname" + stereotype.getLabel());
 			if (value2 != null) {
 				return StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(value2);
 			}
@@ -202,11 +202,11 @@ public class SkinParam implements ISkinParam {
 		return param.getDefaultFamily();
 	}
 
-	public HtmlColor getFontHtmlColor(FontParam param, Stereotype stereotype2) {
+	public HtmlColor getFontHtmlColor(FontParam param, Stereotype stereotype) {
 		String value = null;
-		if (stereotype2 != null) {
-			checkStereotype(stereotype2);
-			value = getValue(param.name() + "fontcolor" + stereotype2.getLabel());
+		if (stereotype != null) {
+			checkStereotype(stereotype);
+			value = getValue(param.name() + "fontcolor" + stereotype.getLabel());
 		}
 		if (value == null || HtmlColorUtils.getColorIfValid(value) == null) {
 			value = getValue(param.name() + "fontcolor");
@@ -220,11 +220,11 @@ public class SkinParam implements ISkinParam {
 		return HtmlColorUtils.getColorIfValid(value);
 	}
 
-	private int getFontStyle(FontParam param, Stereotype stereotype2) {
+	private int getFontStyle(FontParam param, Stereotype stereotype) {
 		String value = null;
-		if (stereotype2 != null) {
-			checkStereotype(stereotype2);
-			value = getValue(param.name() + "fontstyle" + stereotype2.getLabel());
+		if (stereotype != null) {
+			checkStereotype(stereotype);
+			value = getValue(param.name() + "fontstyle" + stereotype.getLabel());
 		}
 		if (value == null) {
 			value = getValue(param.name() + "fontstyle");
@@ -245,13 +245,13 @@ public class SkinParam implements ISkinParam {
 		return result;
 	}
 
-	public UFont getFont(FontParam fontParam, Stereotype stereotype2) {
-		if (stereotype2 != null) {
-			checkStereotype(stereotype2);
+	public UFont getFont(FontParam fontParam, Stereotype stereotype) {
+		if (stereotype != null) {
+			checkStereotype(stereotype);
 		}
-		final String fontFamily = getFontFamily(fontParam, stereotype2);
-		final int fontStyle = getFontStyle(fontParam, stereotype2);
-		return new UFont(fontFamily, fontStyle, getFontSize(fontParam, stereotype2));
+		final String fontFamily = getFontFamily(fontParam, stereotype);
+		final int fontStyle = getFontStyle(fontParam, stereotype);
+		return new UFont(fontFamily, fontStyle, getFontSize(fontParam, stereotype));
 	}
 
 	public int getCircledCharacterRadius() {
@@ -297,6 +297,10 @@ public class SkinParam implements ISkinParam {
 		for (ColorParam p : EnumSet.allOf(ColorParam.class)) {
 			final String h = capitalize(p.name());
 			result.add(h + "Color");
+		}
+		for (LineParam p : EnumSet.allOf(LineParam.class)) {
+			final String h = capitalize(p.name());
+			result.add(h + "Thickness");
 		}
 		return Collections.unmodifiableSet(result);
 	}
@@ -461,7 +465,14 @@ public class SkinParam implements ISkinParam {
 		return 0;
 	}
 
-	public UStroke getThickness(LineParam param) {
+	public UStroke getThickness(LineParam param, Stereotype stereotype) {
+		if (stereotype != null) {
+			checkStereotype(stereotype);
+			final String value2 = getValue(param.name() + "thickness" + stereotype.getLabel());
+			if (value2 != null && value2.matches("[\\d.]+")) {
+				return new UStroke(Double.parseDouble(value2));
+			}
+		}
 		final String value = getValue(param.name() + "thickness");
 		if (value != null && value.matches("[\\d.]+")) {
 			return new UStroke(Double.parseDouble(value));

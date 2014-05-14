@@ -69,6 +69,7 @@ import net.sourceforge.plantuml.cucadiagram.PortionShower;
 import net.sourceforge.plantuml.cucadiagram.Stereotype;
 import net.sourceforge.plantuml.cucadiagram.UnparsableGraphvizException;
 import net.sourceforge.plantuml.cucadiagram.dot.DotData;
+import net.sourceforge.plantuml.cucadiagram.dot.GraphvizVersion;
 import net.sourceforge.plantuml.cucadiagram.entity.EntityFactory;
 import net.sourceforge.plantuml.graphic.FontConfiguration;
 import net.sourceforge.plantuml.graphic.GraphicStrings;
@@ -336,7 +337,7 @@ public final class CucaDiagramFileMakerSvek2 {
 			}
 
 			return createEntityImageBlock(ent, skinParam, dotData.isHideEmptyDescriptionForState(), dotData,
-					getBibliotekon());
+					getBibliotekon(), dotStringFactory.getGraphvizVersion());
 		}
 		return ent.getSvekImage();
 	}
@@ -347,7 +348,8 @@ public final class CucaDiagramFileMakerSvek2 {
 			if (ent.getEntityType().isLikeClass() == false) {
 				continue;
 			}
-			final IEntityImage im = new EntityImageClass(ent, dotData.getSkinParam(), dotData);
+			final IEntityImage im = new EntityImageClass(dotStringFactory.getGraphvizVersion(), ent,
+					dotData.getSkinParam(), dotData);
 			final double w = im.calculateDimension(stringBounder).getWidth();
 			if (w > result) {
 				result = w;
@@ -357,12 +359,13 @@ public final class CucaDiagramFileMakerSvek2 {
 	}
 
 	public static IEntityImage createEntityImageBlock(ILeaf leaf, ISkinParam skinParam,
-			boolean isHideEmptyDescriptionForState, PortionShower portionShower, Bibliotekon bibliotekon) {
+			boolean isHideEmptyDescriptionForState, PortionShower portionShower, Bibliotekon bibliotekon,
+			GraphvizVersion graphvizVersion) {
 		if (leaf.isRemoved()) {
 			throw new IllegalStateException();
 		}
 		if (leaf.getEntityType().isLikeClass()) {
-			return new EntityImageClass((ILeaf) leaf, skinParam, portionShower);
+			return new EntityImageClass(graphvizVersion, (ILeaf) leaf, skinParam, portionShower);
 		}
 		if (leaf.getEntityType() == LeafType.NOTE) {
 			return new EntityImageNote(leaf, skinParam);

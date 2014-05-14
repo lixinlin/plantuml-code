@@ -53,7 +53,7 @@ public interface ISkinParam extends ISkinSimple {
 
 	public HtmlColor getFontHtmlColor(FontParam param, Stereotype stereotype);
 
-	public UStroke getThickness(LineParam param);
+	public UStroke getThickness(LineParam param, Stereotype stereotype);
 
 	public UFont getFont(FontParam fontParam, Stereotype stereotype);
 

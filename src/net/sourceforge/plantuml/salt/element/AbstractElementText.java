@@ -57,12 +57,17 @@ abstract class AbstractElementText extends AbstractElement {
 	public AbstractElementText(String text, UFont font, boolean manageLength, ISkinSimple spriteContainer) {
 		config = new FontConfiguration(font, HtmlColorUtils.BLACK);
 		if (manageLength) {
-			this.charLength = text.length();
+			this.charLength = getCharNumber(text);
 			text = text.trim();
 		} else {
 			this.charLength = 0;
 		}
 		this.block = TextBlockUtils.create(Display.create(text), config, HorizontalAlignment.LEFT, spriteContainer);
+	}
+
+	private int getCharNumber(String text) {
+		text = text.replaceAll("<&[-\\w]+>", "00");
+		return text.length();
 	}
 
 	protected void drawText(UGraphic ug, double x, double y) {

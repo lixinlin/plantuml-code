@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 12835 $
+ * Revision $Revision: 13350 $
  *
  */
 package net.sourceforge.plantuml.graphic;
@@ -195,8 +195,7 @@ public class GraphicStrings implements IEntityImage {
 	}
 
 	private Dimension2D drawAndGetSize(final UGraphic ug) {
-		TextBlock textBlock = TextBlockUtils.create(Display.create(strings), new FontConfiguration(font, green),
-				HorizontalAlignment.LEFT, new SpriteContainerEmpty());
+		TextBlock textBlock = getTextBlock();
 		textBlock = DateEventUtils.addEvent(textBlock, green);
 
 		Dimension2D size = getSizeWithMin(textBlock.calculateDimension(ug.getStringBounder()));
@@ -215,6 +214,28 @@ public class GraphicStrings implements IEntityImage {
 			}
 		}
 		return size;
+	}
+
+	private int maxLine = 0;
+
+	private TextBlock getTextBlock() {
+		if (maxLine == 0) {
+			return TextBlockUtils.create(Display.create(strings), new FontConfiguration(font, green),
+					HorizontalAlignment.LEFT, new SpriteContainerEmpty());
+		}
+		TextBlock result = null;
+		for (int i = 0; i < strings.size(); i += maxLine) {
+			final int n = Math.min(i + maxLine, strings.size());
+			final TextBlock textBlock1 = TextBlockUtils.create(Display.create(strings.subList(i, n)),
+					new FontConfiguration(font, green), HorizontalAlignment.LEFT, new SpriteContainerEmpty());
+			if (result == null) {
+				result = textBlock1;
+			} else {
+				result = TextBlockUtils.withMargin(result, 0, 10, 0, 0);
+				result = TextBlockUtils.mergeLR(result, textBlock1, VerticalAlignment.TOP);
+			}
+		}
+		return result;
 	}
 
 	public void drawU(UGraphic ug) {
@@ -241,6 +262,10 @@ public class GraphicStrings implements IEntityImage {
 
 	public boolean isHidden() {
 		return false;
+	}
+
+	public final void setMaxLine(int maxLine) {
+		this.maxLine = maxLine;
 	}
 
 }

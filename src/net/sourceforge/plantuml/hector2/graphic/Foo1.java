@@ -58,7 +58,7 @@ public class Foo1 {
 
 	private static IEntityImage computeImage(final ILeaf leaf, CucaDiagram diagram) {
 		final IEntityImage image = CucaDiagramFileMakerSvek2.createEntityImageBlock(leaf, diagram.getSkinParam(),
-				false, diagram, null);
+				false, diagram, null, null);
 		return image;
 	}
 

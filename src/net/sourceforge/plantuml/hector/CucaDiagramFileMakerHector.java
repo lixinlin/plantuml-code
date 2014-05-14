@@ -98,7 +98,7 @@ public class CucaDiagramFileMakerHector implements CucaDiagramFileMaker {
 
 	private IEntityImage computeImage(final ILeaf leaf) {
 		final IEntityImage image = CucaDiagramFileMakerSvek2.createEntityImageBlock(leaf, diagram.getSkinParam(),
-				false, diagram, null);
+				false, diagram, null, null);
 		return image;
 	}
 }

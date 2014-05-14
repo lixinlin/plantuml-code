@@ -138,8 +138,8 @@ public class SkinParamDelegator implements ISkinParam {
 		return skinParam.getRoundCorner();
 	}
 
-	public UStroke getThickness(LineParam param) {
-		return skinParam.getThickness(param);
+	public UStroke getThickness(LineParam param, Stereotype stereotype) {
+		return skinParam.getThickness(param, stereotype);
 	}
 
 	public double maxMessageSize() {

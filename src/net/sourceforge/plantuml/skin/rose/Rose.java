@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 12523 $
+ * Revision $Revision: 13029 $
  *
  */
 package net.sourceforge.plantuml.skin.rose;
@@ -297,7 +297,7 @@ public class Rose implements Skin {
 	}
 
 	static public UStroke getStroke(ISkinParam param, LineParam lineParam, double defaultValue) {
-		final UStroke result = param.getThickness(lineParam);
+		final UStroke result = param.getThickness(lineParam, null);
 		if (result == null) {
 			return new UStroke(defaultValue);
 		}
