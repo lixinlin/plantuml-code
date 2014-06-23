@@ -116,6 +116,7 @@ public class LanguageDescriptor {
 		keyword.add("down");
 		keyword.add("if");
 		keyword.add("else");
+		keyword.add("elseif");
 		keyword.add("endif");
 		keyword.add("partition");
 		keyword.add("footer");

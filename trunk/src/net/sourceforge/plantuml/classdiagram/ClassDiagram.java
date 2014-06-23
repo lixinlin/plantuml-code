@@ -28,12 +28,10 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 12881 $
+ * Revision $Revision: 13483 $
  *
  */
 package net.sourceforge.plantuml.classdiagram;
-
-import java.util.Map;
 
 import net.sourceforge.plantuml.UmlDiagramType;
 import net.sourceforge.plantuml.cucadiagram.Code;

@@ -130,8 +130,8 @@ public class FtileFactoryDelegator implements FtileFactory {
 		return factory.createSplit(all);
 	}
 
-	public Ftile createGroup(Ftile list, Display name) {
-		return factory.createGroup(list, name);
+	public Ftile createGroup(Ftile list, Display name, HtmlColor backColor, HtmlColor titleColor) {
+		return factory.createGroup(list, name, backColor, titleColor);
 	}
 
 	public StringBounder getStringBounder() {

@@ -28,33 +28,46 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 4762 $
+ * Revision $Revision: 12235 $
  *
  */
 package net.sourceforge.plantuml.activitydiagram3.command;
 
+import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.activitydiagram3.ActivityDiagram3;
 import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.command.SingleLineCommand2;
 import net.sourceforge.plantuml.command.regex.RegexConcat;
 import net.sourceforge.plantuml.command.regex.RegexLeaf;
 import net.sourceforge.plantuml.command.regex.RegexResult;
+import net.sourceforge.plantuml.cucadiagram.Display;
+import net.sourceforge.plantuml.graphic.HtmlColor;
+import net.sourceforge.plantuml.graphic.HtmlColorUtils;
 
-public class CommandGroupEnd3 extends SingleLineCommand2<ActivityDiagram3> {
+public class CommandPartition3 extends SingleLineCommand2<ActivityDiagram3> {
 
-	public CommandGroupEnd3() {
+	public CommandPartition3() {
 		super(getRegexConcat());
 	}
 
 	static RegexConcat getRegexConcat() {
 		return new RegexConcat(new RegexLeaf("^"), //
-				new RegexLeaf("(end[%s]?group|group[%s]?end)"), //
-				new RegexLeaf(";?$"));
+				new RegexLeaf("partition"), //
+				new RegexLeaf("[%s]+"), //
+				new RegexLeaf("BACKCOLOR", "(?:(#\\w+)[%s]+)?"), //
+				new RegexLeaf("TITLECOLOR", "(?:(#\\w+)[%s]+)?"), //
+				new RegexLeaf("NAME", "([%g][^%g]+[%g]|\\S+)"), //
+				new RegexLeaf("[%s]*\\{?$"));
 	}
 
 	@Override
 	protected CommandExecutionResult executeArg(ActivityDiagram3 diagram, RegexResult arg) {
-		return diagram.endGroup();
+		final String partitionTitle = StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(arg.get("NAME", 0));
+		final HtmlColor backColor = HtmlColorUtils.getColorIfValid(arg.get("BACKCOLOR", 0));
+		final HtmlColor titleColor = HtmlColorUtils.getColorIfValid(arg.get("TITLECOLOR", 0));
+		diagram.startGroup(Display.getWithNewlines(partitionTitle), backColor, titleColor);
+
+		return CommandExecutionResult.ok();
 	}
 
 }

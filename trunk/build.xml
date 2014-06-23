@@ -25,6 +25,12 @@
 			todir="build/net/sourceforge/plantuml/version" />
 		<copy file="src/net/sourceforge/plantuml/version/favicon.png"
 			todir="build/net/sourceforge/plantuml/version" />
+		<copy todir="build/net/sourceforge/plantuml/openiconic/data">
+			<fileset dir="src/net/sourceforge/plantuml/openiconic/data">
+				<include name="*.txt" />
+				<include name="*.svg" />
+			</fileset>
+		</copy>
 	</target>
 
 	<target name="dist" depends="compile">

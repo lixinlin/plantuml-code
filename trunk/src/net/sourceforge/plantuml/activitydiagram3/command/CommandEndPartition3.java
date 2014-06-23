@@ -28,39 +28,30 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 4762 $
+ * Revision $Revision: 12235 $
  *
  */
 package net.sourceforge.plantuml.activitydiagram3.command;
 
+import java.util.List;
+
 import net.sourceforge.plantuml.activitydiagram3.ActivityDiagram3;
 import net.sourceforge.plantuml.command.CommandExecutionResult;
-import net.sourceforge.plantuml.command.SingleLineCommand2;
-import net.sourceforge.plantuml.command.regex.RegexConcat;
-import net.sourceforge.plantuml.command.regex.RegexLeaf;
-import net.sourceforge.plantuml.command.regex.RegexResult;
-import net.sourceforge.plantuml.cucadiagram.Display;
+import net.sourceforge.plantuml.command.SingleLineCommand;
 
-public class CommandGroup3 extends SingleLineCommand2<ActivityDiagram3> {
+public class CommandEndPartition3 extends SingleLineCommand<ActivityDiagram3> {
 
-	public CommandGroup3() {
-		super(getRegexConcat());
-	}
-
-	static RegexConcat getRegexConcat() {
-		return new RegexConcat(new RegexLeaf("^"), //
-				new RegexLeaf("group"), //
-				new RegexLeaf("[%s]*"), //
-				new RegexLeaf("NAME", "(.*)"), //
-				new RegexLeaf(";?$"));
+	public CommandEndPartition3() {
+		super("(?i)^(\\})$");
 	}
 
 	@Override
-	protected CommandExecutionResult executeArg(ActivityDiagram3 diagram, RegexResult arg) {
-
-		diagram.startGroup(Display.getWithNewlines(arg.get("NAME", 0)));
-
-		return CommandExecutionResult.ok();
+	protected CommandExecutionResult executeArg(ActivityDiagram3 diagram, List<String> arg) {
+//		final IEntity currentPackage = diagram.getCurrentGroup();
+//		if (currentPackage == null) {
+//			return CommandExecutionResult.error("No partition defined");
+//		}
+		return diagram.endGroup();
 	}
 
 }

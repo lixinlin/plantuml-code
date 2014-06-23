@@ -43,7 +43,7 @@ import net.sourceforge.plantuml.sequencediagram.SequenceDiagram;
 public class CommandDelay extends SingleLineCommand<SequenceDiagram> {
 
 	public CommandDelay() {
-		super("(?i)^\\.{3}(?:(.*)\\.{3})?$$");
+		super("(?i)^(?:\\.{3}|\u2026)(?:(.*)(?:\\.{3}|\u2026))?$");
 	}
 
 	@Override

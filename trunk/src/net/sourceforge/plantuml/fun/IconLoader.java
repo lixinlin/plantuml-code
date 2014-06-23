@@ -58,7 +58,9 @@ public class IconLoader {
 		BufferedImage result = all.get(name);
 		if (result == null) {
 			result = getIconSlow(name);
-			all.put(name, result);
+			if (result != null) {
+				all.put(name, result);
+			}
 		}
 		return result;
 	}
@@ -66,6 +68,9 @@ public class IconLoader {
 	private static BufferedImage getIconSlow(String name) {
 		try {
 			final InputStream is = IconLoader.class.getResourceAsStream(name);
+			if (is == null) {
+				return null;
+			}
 			final BufferedImage image = ImageIO.read(is);
 			is.close();
 			return image;
@@ -76,6 +81,9 @@ public class IconLoader {
 	}
 
 	private static BufferedImage addTransparent(BufferedImage ico) {
+		if (ico == null) {
+			return null;
+		}
 		final BufferedImage transparentIcon = new BufferedImage(ico.getWidth(), ico.getHeight(),
 				BufferedImage.TYPE_INT_ARGB_PRE);
 		for (int i = 0; i < ico.getWidth(); i++) {

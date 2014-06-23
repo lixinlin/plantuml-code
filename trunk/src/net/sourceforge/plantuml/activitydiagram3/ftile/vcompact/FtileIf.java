@@ -134,15 +134,10 @@ class FtileIf extends AbstractFtile {
 		final TextBlock tb2 = TextBlockUtils.create(branch2.getLabelPositive(), fcArrow, HorizontalAlignment.LEFT,
 				ftileFactory);
 
-		final TextBlock tbTest;
-		if (OptionFlags.USE_CREOLE) {
-			final Sheet sheet = new CreoleParser(fcTest, HorizontalAlignment.LEFT, skinParam).createSheet(branch1
-					.getLabelTest());
-			final SheetBlock1 sheetBlock1 = new SheetBlock1(sheet, 0);
-			tbTest = new SheetBlock2(sheetBlock1, Diamond.asStencil(sheetBlock1), new UStroke(1.5));
-		} else {
-			tbTest = TextBlockUtils.create(branch1.getLabelTest(), fcTest, HorizontalAlignment.LEFT, ftileFactory);
-		}
+		final Sheet sheet = new CreoleParser(fcTest, HorizontalAlignment.LEFT, skinParam).createSheet(branch1
+				.getLabelTest());
+		final SheetBlock1 sheetBlock1 = new SheetBlock1(sheet, 0);
+		final TextBlock tbTest = new SheetBlock2(sheetBlock1, Diamond.asStencil(sheetBlock1), new UStroke(1.5));
 
 		final Ftile diamond1;
 		if (conditionStyle == ConditionStyle.INSIDE) {
@@ -509,7 +504,7 @@ class FtileIf extends AbstractFtile {
 
 	public FtileGeometry calculateDimension(StringBounder stringBounder) {
 		final Dimension2D dimTotal = calculateDimensionInternal(stringBounder);
-			return new FtileGeometry(dimTotal, getLeft(stringBounder), 0, dimTotal.getHeight());
+		return new FtileGeometry(dimTotal, getLeft(stringBounder), 0, dimTotal.getHeight());
 	}
 
 	public boolean isKilled() {

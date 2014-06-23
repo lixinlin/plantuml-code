@@ -107,4 +107,9 @@ public class Branch {
 	public final HtmlColor getColor() {
 		return color;
 	}
+	
+	public boolean isEmpty() {
+		return list.isEmpty();
+	}
+
 }

@@ -39,47 +39,19 @@ import net.sourceforge.plantuml.activitydiagram3.ftile.Ftile;
 import net.sourceforge.plantuml.activitydiagram3.ftile.FtileFactory;
 import net.sourceforge.plantuml.activitydiagram3.ftile.Swimlane;
 import net.sourceforge.plantuml.cucadiagram.Display;
-import net.sourceforge.plantuml.graphic.HtmlColor;
 import net.sourceforge.plantuml.sequencediagram.NotePosition;
 
-public class InstructionGroup implements Instruction {
+public class InstructionPartition implements Instruction {
 
 	private final InstructionList list = new InstructionList();
 	private final Instruction parent;
-	private final HtmlColor backColor;
-	private final HtmlColor titleColor;
 
-	private final Display test;
-
-	public InstructionGroup(Instruction parent, Display test, HtmlColor backColor, HtmlColor titleColor) {
+	public InstructionPartition(Instruction parent, String partitionTitle) {
 		this.parent = parent;
-		this.test = test;
-		this.backColor = backColor;
-		this.titleColor = titleColor;
 	}
-
-	public void add(Instruction ins) {
-		list.add(ins);
-	}
-
-	public Ftile createFtile(FtileFactory factory) {
-		return factory.createGroup(list.createFtile(factory), test, backColor, titleColor);
-	}
-
+	
 	public Instruction getParent() {
 		return parent;
-	}
-
-	final public boolean kill() {
-		return list.kill();
-	}
-
-	public LinkRendering getInLinkRendering() {
-		return null;
-	}
-
-	public void addNote(Display note, NotePosition position) {
-		list.addNote(note, position);
 	}
 
 	public Set<Swimlane> getSwimlanes() {
@@ -92,6 +64,26 @@ public class InstructionGroup implements Instruction {
 
 	public Swimlane getSwimlaneOut() {
 		return list.getSwimlaneOut();
+	}
+
+	public Ftile createFtile(FtileFactory factory) {
+		return list.createFtile(factory);
+	}
+
+	public void add(Instruction other) {
+		list.add(other);
+	}
+
+	public boolean kill() {
+		return list.kill();
+	}
+
+	public LinkRendering getInLinkRendering() {
+		return list.getInLinkRendering();
+	}
+
+	public void addNote(Display note, NotePosition position) {
+		throw new UnsupportedOperationException();
 	}
 
 }

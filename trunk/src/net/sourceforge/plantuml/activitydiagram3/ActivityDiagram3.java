@@ -280,7 +280,7 @@ public class ActivityDiagram3 extends UmlDiagram {
 	public void startIf(Display test, Display whenThen, HtmlColor color) {
 		manageSwimlaneStrategy();
 		final InstructionIf instructionIf = new InstructionIf(swinlanes.getCurrentSwimlane(), current(), test,
-				whenThen, nextLinkRenderer(), color);
+				whenThen, nextLinkRenderer(), color, getSkinParam());
 		current().add(instructionIf);
 		setCurrent(instructionIf);
 	}
@@ -363,9 +363,9 @@ public class ActivityDiagram3 extends UmlDiagram {
 		return CommandExecutionResult.ok();
 	}
 
-	public void startGroup(Display name) {
+	public void startGroup(Display name, HtmlColor backColor, HtmlColor titleColor) {
 		manageSwimlaneStrategy();
-		final InstructionGroup instructionGroup = new InstructionGroup(current(), name);
+		final InstructionGroup instructionGroup = new InstructionGroup(current(), name, backColor, titleColor);
 		current().add(instructionGroup);
 		setCurrent(instructionGroup);
 	}
@@ -377,6 +377,18 @@ public class ActivityDiagram3 extends UmlDiagram {
 		}
 		return CommandExecutionResult.error("Cannot find group");
 	}
+
+	// public CommandExecutionResult openPartition(String partitionTitle) {
+	// manageSwimlaneStrategy();
+	// final InstructionPartition instructionPartition = new InstructionPartition(current(), partitionTitle);
+	// current().add(instructionPartition);
+	// setCurrent(instructionPartition);
+	// return CommandExecutionResult.ok();
+	// }
+	//
+	// public CommandExecutionResult closePartition() {
+	// return CommandExecutionResult.ok();
+	// }
 
 	private void setNextLinkRendererInternal(LinkRendering link) {
 		swinlanes.setNextLinkRenderer(link);

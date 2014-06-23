@@ -39,7 +39,6 @@ import java.util.Set;
 
 import net.sourceforge.plantuml.Dimension2DDouble;
 import net.sourceforge.plantuml.ISkinParam;
-import net.sourceforge.plantuml.OptionFlags;
 import net.sourceforge.plantuml.activitydiagram3.LinkRendering;
 import net.sourceforge.plantuml.activitydiagram3.ftile.AbstractFtile;
 import net.sourceforge.plantuml.activitydiagram3.ftile.BoxStyle;
@@ -57,7 +56,6 @@ import net.sourceforge.plantuml.graphic.HtmlColor;
 import net.sourceforge.plantuml.graphic.HtmlColorUtils;
 import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.graphic.TextBlock;
-import net.sourceforge.plantuml.graphic.TextBlockUtils;
 import net.sourceforge.plantuml.graphic.UDrawable;
 import net.sourceforge.plantuml.ugraphic.UChangeBackColor;
 import net.sourceforge.plantuml.ugraphic.UChangeColor;
@@ -119,12 +117,8 @@ public class FtileBox extends AbstractFtile {
 		this.backColor = backColor;
 		this.inRenreding = new LinkRendering(arrowColor);
 		final FontConfiguration fc = new FontConfiguration(font, HtmlColorUtils.BLACK);
-		if (OptionFlags.USE_CREOLE) {
-			final Sheet sheet = new CreoleParser(fc, HorizontalAlignment.LEFT, skinParam).createSheet(label);
-			tb = new SheetBlock2(new SheetBlock1(sheet, 0), new MyStencil(), new UStroke(1));
-		} else {
-			tb = TextBlockUtils.create(label, fc, HorizontalAlignment.LEFT, skinParam);
-		}
+		final Sheet sheet = new CreoleParser(fc, HorizontalAlignment.LEFT, skinParam).createSheet(label);
+		this.tb = new SheetBlock2(new SheetBlock1(sheet, 0), new MyStencil(), new UStroke(1));
 		this.print = label.toString();
 	}
 
