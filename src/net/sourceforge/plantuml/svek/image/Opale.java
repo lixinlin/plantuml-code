@@ -62,11 +62,14 @@ public class Opale implements TextBlock {
 	private Direction strategy;
 	private Point2D pp1;
 	private Point2D pp2;
+	private final boolean withLink;
 
 	private final TextBlock textBlock;
 
-	public Opale(HtmlColor borderColor, HtmlColor noteBackgroundColor, TextBlock textBlock, boolean withShadow) {
+	public Opale(HtmlColor borderColor, HtmlColor noteBackgroundColor, TextBlock textBlock, boolean withShadow,
+			boolean withLink) {
 		this.noteBackgroundColor = noteBackgroundColor;
+		this.withLink = withLink;
 
 		this.withShadow = withShadow;
 		this.borderColor = borderColor;
@@ -104,21 +107,21 @@ public class Opale implements TextBlock {
 		ug = ug.apply(new UChangeBackColor(noteBackgroundColor)).apply(new UChangeColor(borderColor));
 		ug.draw(polygon);
 
-		final UShape polygonOpale;
-		if (strategy == Direction.LEFT) {
-			polygonOpale = getPolygonLeft(stringBounder, pp1, pp2);
-		} else if (strategy == Direction.RIGHT) {
-			polygonOpale = getPolygonRight(stringBounder, pp1, pp2);
-		} else if (strategy == Direction.UP) {
-			polygonOpale = getPolygonUp(stringBounder, pp1, pp2);
-		} else if (strategy == Direction.DOWN) {
-			polygonOpale = getPolygonDown(stringBounder, pp1, pp2);
-		} else {
-			throw new IllegalArgumentException();
+		if (withLink) {
+			final UShape polygonOpale;
+			if (strategy == Direction.LEFT) {
+				polygonOpale = getPolygonLeft(stringBounder, pp1, pp2);
+			} else if (strategy == Direction.RIGHT) {
+				polygonOpale = getPolygonRight(stringBounder, pp1, pp2);
+			} else if (strategy == Direction.UP) {
+				polygonOpale = getPolygonUp(stringBounder, pp1, pp2);
+			} else if (strategy == Direction.DOWN) {
+				polygonOpale = getPolygonDown(stringBounder, pp1, pp2);
+			} else {
+				throw new IllegalArgumentException();
+			}
+			ug.draw(polygonOpale);
 		}
-
-		ug.draw(polygonOpale);
-
 		ug.apply(new UTranslate(getWidth(stringBounder) - cornersize, 0)).draw(new ULine(0, cornersize));
 		ug.apply(new UTranslate(getWidth(stringBounder), cornersize)).draw(new ULine(-cornersize, 0));
 		textBlock.drawU(ug.apply(new UTranslate(marginX1, marginY)));

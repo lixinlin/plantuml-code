@@ -60,21 +60,26 @@ import net.sourceforge.plantuml.ugraphic.UTranslate;
 
 public class FtileGroup extends AbstractFtile {
 
-	private final double diffYY = 25;
+	private final double diffYY2 = 20;
 	private final Ftile inner;
 	private final TextBlock name;
 	private final HtmlColor color;
+	private final HtmlColor backColor;
+	private final HtmlColor titleColor;
 
-	public FtileGroup(Ftile inner, Display test, HtmlColor color, ISkinSimple spriteContainer) {
+	public FtileGroup(Ftile inner, Display title, HtmlColor color, HtmlColor backColor, HtmlColor titleColor,
+			ISkinSimple spriteContainer) {
 		super(inner.shadowing());
+		this.backColor = backColor == null ? HtmlColorUtils.WHITE : backColor;
 		this.inner = new FtileMarged(inner, 10);
 		this.color = color;
+		this.titleColor = titleColor;
 		final UFont font = new UFont("Serif", Font.PLAIN, 14);
 		final FontConfiguration fc = new FontConfiguration(font, HtmlColorUtils.BLACK);
-		if (test == null) {
+		if (title == null) {
 			this.name = TextBlockUtils.empty(0, 0);
 		} else {
-			this.name = TextBlockUtils.create(test, fc, HorizontalAlignment.LEFT, spriteContainer);
+			this.name = TextBlockUtils.create(title, fc, HorizontalAlignment.LEFT, spriteContainer);
 		}
 	}
 
@@ -90,28 +95,45 @@ public class FtileGroup extends AbstractFtile {
 		return inner.getSwimlaneOut();
 	}
 
-	private UTranslate getTranslate() {
-		return new UTranslate(0, diffYY);
+	private double diffYY1(StringBounder stringBounder) {
+		final Dimension2D dimTitle = name.calculateDimension(stringBounder);
+		return Math.max(25, dimTitle.getHeight() + 20);
+	}
+
+	private UTranslate getTranslate(StringBounder stringBounder) {
+		final double suppWidth = suppWidth(stringBounder);
+		return new UTranslate(suppWidth / 2, diffYY1(stringBounder));
+	}
+
+	public double suppWidth(StringBounder stringBounder) {
+		final FtileGeometry orig = inner.calculateDimension(stringBounder);
+		final Dimension2D dimTitle = name.calculateDimension(stringBounder);
+		final double suppWidth = Math.max(orig.getWidth(), dimTitle.getWidth() + 20) - orig.getWidth();
+		return suppWidth;
 	}
 
 	public FtileGeometry calculateDimension(StringBounder stringBounder) {
 		final FtileGeometry orig = inner.calculateDimension(stringBounder);
+		final double suppWidth = suppWidth(stringBounder);
 		if (orig.hasPointOut()) {
-			return new FtileGeometry(orig.getWidth(), orig.getHeight() + diffYY * 2, orig.getLeft(), orig.getInY()
-					+ diffYY, orig.getOutY() + diffYY);
+			return new FtileGeometry(orig.getWidth() + suppWidth, orig.getHeight() + diffYY1(stringBounder) + diffYY2,
+					orig.getLeft() + suppWidth / 2, orig.getInY() + diffYY1(stringBounder), orig.getOutY()
+							+ diffYY1(stringBounder));
 		}
-		return new FtileGeometry(orig.getWidth(), orig.getHeight() + diffYY * 2, orig.getLeft(), orig.getInY() + diffYY);
+		return new FtileGeometry(orig.getWidth() + suppWidth, orig.getHeight() + diffYY1(stringBounder) + diffYY2,
+				orig.getLeft() + suppWidth / 2, orig.getInY() + diffYY1(stringBounder));
 	}
 
 	public void drawU(UGraphic ug) {
-		final Dimension2D dimTotal = calculateDimension(ug.getStringBounder());
+		final StringBounder stringBounder = ug.getStringBounder();
+		final Dimension2D dimTotal = calculateDimension(stringBounder);
 
-		final SymbolContext symbolContext = new SymbolContext(HtmlColorUtils.WHITE, HtmlColorUtils.BLACK).withShadow(
-				shadowing()).withStroke(new UStroke(2));
+		final SymbolContext symbolContext = new SymbolContext(backColor, HtmlColorUtils.BLACK).withShadow(shadowing())
+				.withStroke(new UStroke(2));
 		USymbol.FRAME.asBig(name, TextBlockUtils.empty(0, 0), dimTotal.getWidth(), dimTotal.getHeight(), symbolContext)
 				.drawU(ug);
 
-		ug.apply(getTranslate()).draw(inner);
+		ug.apply(getTranslate(stringBounder)).draw(inner);
 
 	}
 

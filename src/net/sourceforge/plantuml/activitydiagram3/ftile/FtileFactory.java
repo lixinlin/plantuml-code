@@ -77,6 +77,6 @@ public interface FtileFactory extends ISkinSimple {
 
 	public Ftile createSplit(List<Ftile> all);
 
-	public Ftile createGroup(Ftile list, Display name);
+	public Ftile createGroup(Ftile list, Display name, HtmlColor backColor, HtmlColor titleColor);
 
 }

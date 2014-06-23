@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 12841 $
+ * Revision $Revision: 13482 $
  *
  */
 package net.sourceforge.plantuml.statediagram.command;
@@ -94,11 +94,11 @@ public class CommandCreateState extends SingleLineCommand2<StateDiagram> {
 		}
 		final String stereotype = arg.get("STEREOTYPE", 0);
 		final LeafType type = getTypeFromStereotype(stereotype);
-		final IEntity ent = system.getOrCreateLeaf(code, type, null);
 		if (system.checkConcurrentStateOk(code) == false) {
-			return CommandExecutionResult.error("The state " + code
+			return CommandExecutionResult.error("The state " + code.getFullName()
 					+ " has been created in a concurrent state : it cannot be used here.");
 		}
+		final IEntity ent = system.getOrCreateLeaf(code, type, null);
 		ent.setDisplay(Display.getWithNewlines(display));
 
 		if (stereotype != null) {

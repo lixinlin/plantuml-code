@@ -37,6 +37,8 @@ import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sourceforge.plantuml.fun.IconLoader;
+import net.sourceforge.plantuml.graphic.GraphicPosition;
 import net.sourceforge.plantuml.graphic.GraphicStrings;
 import net.sourceforge.plantuml.graphic.HtmlColorUtils;
 import net.sourceforge.plantuml.graphic.QuoteUtils;
@@ -49,7 +51,8 @@ public class GraphvizCrash extends GraphicStrings implements IEntityImage {
 	private static final UFont font = new UFont("SansSerif", Font.PLAIN, 12);
 
 	public GraphvizCrash() {
-		super(init(), font, HtmlColorUtils.BLACK, HtmlColorUtils.WHITE, UAntiAliasing.ANTI_ALIASING_ON);
+		super(init(), font, HtmlColorUtils.BLACK, HtmlColorUtils.WHITE, UAntiAliasing.ANTI_ALIASING_ON, IconLoader
+				.getRandom(), GraphicPosition.BACKGROUND_CORNER_TOP_RIGHT);
 	}
 
 	private static List<String> init() {

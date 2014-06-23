@@ -193,7 +193,7 @@ public class EntityImageNote extends AbstractEntityImage implements Stencil {
 			final Direction strategy = getOpaleStrategy(textWidth, textHeight, p1);
 			final Point2D pp1 = path.getStartPoint();
 			final Point2D pp2 = path.getEndPoint();
-			final Opale opale = new Opale(borderColor, noteBackgroundColor, textBlock, skinParam.shadowing());
+			final Opale opale = new Opale(borderColor, noteBackgroundColor, textBlock, skinParam.shadowing(), true);
 			opale.setOpale(strategy, pp1, pp2);
 			opale.drawU(ug2);
 		}

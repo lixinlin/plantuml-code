@@ -39,9 +39,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import net.sourceforge.plantuml.ISkinParam;
 import net.sourceforge.plantuml.activitydiagram3.ftile.Ftile;
 import net.sourceforge.plantuml.activitydiagram3.ftile.FtileFactory;
 import net.sourceforge.plantuml.activitydiagram3.ftile.Swimlane;
+import net.sourceforge.plantuml.activitydiagram3.ftile.vcompact.FtileWithNoteOpale;
 import net.sourceforge.plantuml.cucadiagram.Display;
 import net.sourceforge.plantuml.graphic.HtmlColor;
 import net.sourceforge.plantuml.sequencediagram.NotePosition;
@@ -50,6 +52,7 @@ public class InstructionIf implements Instruction {
 
 	private final List<Branch> thens = new ArrayList<Branch>();
 	private Branch elseBranch;
+	private final ISkinParam skinParam;
 
 	private final Instruction parent;
 
@@ -59,8 +62,9 @@ public class InstructionIf implements Instruction {
 	private final Swimlane swimlane;
 
 	public InstructionIf(Swimlane swimlane, Instruction parent, Display labelTest, Display whenThen,
-			LinkRendering inlinkRendering, HtmlColor color) {
+			LinkRendering inlinkRendering, HtmlColor color, ISkinParam skinParam) {
 		this.parent = parent;
+		this.skinParam = skinParam;
 
 		this.inlinkRendering = inlinkRendering;
 		this.swimlane = swimlane;
@@ -72,6 +76,9 @@ public class InstructionIf implements Instruction {
 		current.add(ins);
 	}
 
+	private Display note;
+	private NotePosition position;
+
 	public Ftile createFtile(FtileFactory factory) {
 		for (Branch branch : thens) {
 			branch.updateFtile(factory);
@@ -80,7 +87,11 @@ public class InstructionIf implements Instruction {
 			this.elseBranch = new Branch(swimlane, null, null, null);
 		}
 		elseBranch.updateFtile(factory);
-		return factory.createIf(swimlane, thens, elseBranch);
+		Ftile result = factory.createIf(swimlane, thens, elseBranch);
+		if (note != null) {
+			result = new FtileWithNoteOpale(result, note, position, skinParam, false);
+		}
+		return result;
 	}
 
 	public Instruction getParent() {
@@ -123,7 +134,12 @@ public class InstructionIf implements Instruction {
 	}
 
 	public void addNote(Display note, NotePosition position) {
-		current.addNote(note, position);
+		if (current.isEmpty()) {
+			this.note = note;
+			this.position = position;
+		} else {
+			current.addNote(note, position);
+		}
 	}
 
 	public Set<Swimlane> getSwimlanes() {

@@ -56,6 +56,10 @@ public class InstructionList implements Instruction {
 	public InstructionList() {
 		this(null);
 	}
+	
+	public boolean isEmpty() {
+		return all.isEmpty();
+	}
 
 	public InstructionList(Swimlane defaultSwimlane) {
 		this.defaultSwimlane = defaultSwimlane;

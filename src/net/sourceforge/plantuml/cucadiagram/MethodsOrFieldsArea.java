@@ -111,7 +111,10 @@ public class MethodsOrFieldsArea implements TextBlockWidth, TextBlock {
 
 	private TextBlock createTextBlock(Member m) {
 		final boolean withVisibilityChar = skinParam.classAttributeIconSize() == 0;
-		final String s = m.getDisplay(withVisibilityChar);
+		String s = m.getDisplay(withVisibilityChar);
+		if (withVisibilityChar && s.startsWith("#")) {
+			s = "\\" + s;
+		}
 		FontConfiguration config = new FontConfiguration(font, color);
 		if (m.isAbstract()) {
 			config = config.italic();

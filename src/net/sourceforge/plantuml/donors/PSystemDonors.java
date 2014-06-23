@@ -56,7 +56,7 @@ import net.sourceforge.plantuml.version.PSystemVersion;
 
 public class PSystemDonors extends AbstractPSystem {
 
-	public static final String DONORS = "UDfTK4kkmZ0CtCyfikujeY9LuYT4tmKC61hKsbMIFb5EJv28KfYLH_xCZ6rVVS0U1uxiZPMeukYCFwuATC1M2_K1Dg_I2OqlBPxHyeb2T2Hchvt0oaMzQPJZaz_bzPecyZW9jhGGaeYLoyJriEMq_gETYeKPZQk-8OfrTZa5j977ZiNKgcFAjyew7B0PVbRLezRUYJdg51ZhwQTVtJK5oMHqs2rSqx2aIShs_22vf7VMdKjNR-JdbFG5JH5Trm00";
+	public static final String DONORS = "UDfTK45kmZ0GlCyhVCulh4IAH2cj21ymi91jazt8Tb33wp5INQVCoQFTsPcn7QfVaCSdHVB6IbHXTyA1gW8TiTL2VO3DKdT4wyk85dHqT26o4xFJNc3bhDwqIl5Ep-VbaZRokXDitSf88XhEX0VOSbflwEOIOK7BrN-8OfDJpW5TfAadCRNgbFersOS2tiONgNhKEh2OlSw1i9bVvjMNfYAPJ8ptLMethccoiWFzE3cdxwnxJbUlpY-fwVwljbonMwUFTtmCV4k2Xa_VU00VacXG";
 
 	public ImageData exportDiagram(OutputStream os, int num, FileFormatOption fileFormat) throws IOException {
 		return getGraphicStrings().exportDiagram(os, fileFormat);
