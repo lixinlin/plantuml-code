@@ -46,6 +46,10 @@ public class GraphvizVersionFinder {
 		public boolean useShield() {
 			return true;
 		}
+
+		public boolean useProtectionWhenThereALinkFromOrToGroup() {
+			return true;
+		}
 	};
 
 	public GraphvizVersionFinder(File dotExe) {
@@ -66,6 +70,11 @@ public class GraphvizVersionFinder {
 			public boolean useShield() {
 				return v <= 228;
 			}
+
+			public boolean useProtectionWhenThereALinkFromOrToGroup() {
+				return v < 238;
+			}
+
 		};
 	}
 

@@ -122,7 +122,7 @@ public class MethodsOrFieldsArea implements TextBlockWidth, TextBlock {
 		if (m.isStatic()) {
 			config = config.underline();
 		}
-		final TextBlock bloc = TextBlockUtils.create(Display.getWithNewlines(s), config, align, skinParam);
+		final TextBlock bloc = TextBlockUtils.create(Display.getWithNewlines(s), config, align, skinParam, true);
 		return new TextBlockTracer(m, bloc);
 	}
 

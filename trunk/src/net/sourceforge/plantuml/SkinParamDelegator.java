@@ -169,5 +169,10 @@ public class SkinParamDelegator implements ISkinParam {
 	public Rankdir getRankdir() {
 		return skinParam.getRankdir();
 	}
+	
+	public boolean useOctagonForActivity() {
+		return skinParam.useOctagonForActivity();
+	}
+
 
 }

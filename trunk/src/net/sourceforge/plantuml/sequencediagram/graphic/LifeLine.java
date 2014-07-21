@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 12235 $
+ * Revision $Revision: 13707 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.graphic;
@@ -123,22 +123,6 @@ class LifeLine {
 	}
 
 	int getLevel(double y) {
-//		int level = 0;
-//		for (Variation ev : events) {
-//			if (ev.y > y) {
-//				return level;
-//			}
-//			if (ev.type == LifeSegmentVariation.LARGER) {
-//				level++;
-//			} else {
-//				level--;
-//				if (level < 0) {
-//					level = 0;
-//				}
-//			}
-//		}
-//		assert level >= 0;
-//		return level;
 		return stairs.getValue(y);
 	}
 

@@ -61,6 +61,15 @@ public class EntityFactory {
 	private final Map<Code, IGroup> groups = new Protect<IGroup>(new LinkedHashMap<Code, IGroup>());
 
 	private final IGroup rootGroup = new GroupRoot(this);
+	private final Set<LeafType> hiddenTypes;
+
+	public EntityFactory(Set<LeafType> hiddenTypes) {
+		this.hiddenTypes = hiddenTypes;
+	}
+
+	public boolean isHidden(LeafType leafType) {
+		return hiddenTypes.contains(leafType);
+	}
 
 	public ILeaf createLeaf(Code code, Display display, LeafType entityType, IGroup parentContainer,
 			Set<VisibilityModifier> hides, String namespaceSeparator) {
@@ -77,11 +86,11 @@ public class EntityFactory {
 
 	private LongCode getLongCode(Code code, String namespaceSeparator) {
 		final LongCode result = LongCode.of(code.getFullName(), namespaceSeparator);
-//		if (result.toString().equals(code.toString()) == false) {
-//			System.err.println("result=" + result);
-//			System.err.println(" code =" + code);
-//			throw new UnsupportedOperationException();
-//		}
+		// if (result.toString().equals(code.toString()) == false) {
+		// System.err.println("result=" + result);
+		// System.err.println(" code =" + code);
+		// throw new UnsupportedOperationException();
+		// }
 		return result;
 	}
 
@@ -227,4 +236,5 @@ public class EntityFactory {
 		}
 
 	}
+
 }

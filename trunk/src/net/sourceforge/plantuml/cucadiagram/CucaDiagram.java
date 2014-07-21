@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 12853 $
+ * Revision $Revision: 13737 $
  *
  */
 package net.sourceforge.plantuml.cucadiagram;
@@ -67,8 +67,9 @@ public abstract class CucaDiagram extends UmlDiagram implements GroupHierarchy, 
 
 	private int horizontalPages = 1;
 	private int verticalPages = 1;
+	private final Set<LeafType> hiddenType = new HashSet<LeafType>();
 
-	private final EntityFactory entityFactory = new EntityFactory();
+	private final EntityFactory entityFactory = new EntityFactory(hiddenType);
 	private IGroup currentGroup = entityFactory.getRootGroup();
 
 	// private Rankdir rankdir = Rankdir.TOP_TO_BOTTOM;
@@ -470,6 +471,14 @@ public abstract class CucaDiagram extends UmlDiagram implements GroupHierarchy, 
 
 	public void hideOrShow(ILeaf leaf, boolean show) {
 		leaf.setRemoved(!show);
+	}
+
+	public void hideOrShow(LeafType leafType, boolean show) {
+		if (show) {
+			hiddenType.remove(leafType);
+		} else {
+			hiddenType.add(leafType);
+		}
 	}
 
 	private final List<HideOrShow> hideOrShows = new ArrayList<HideOrShow>();

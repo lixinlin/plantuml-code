@@ -100,5 +100,8 @@ public interface ISkinParam extends ISkinSimple {
 	public boolean sameClassWidth();
 
 	public Rankdir getRankdir();
+	
+	public boolean useOctagonForActivity();
+
 
 }

@@ -37,7 +37,7 @@ import net.sourceforge.plantuml.ColorParam;
 import net.sourceforge.plantuml.FontParam;
 import net.sourceforge.plantuml.svek.CircleInterface2;
 
-class USymbolInterface extends USymbolSimpleAbstract {
+public class USymbolInterface extends USymbolSimpleAbstract {
 
 	public USymbolInterface() {
 		super(ColorParam.interfaceBackground, ColorParam.interfaceBorder, FontParam.INTERFACE,

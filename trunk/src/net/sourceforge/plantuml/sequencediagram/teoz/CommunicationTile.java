@@ -34,12 +34,16 @@
 package net.sourceforge.plantuml.sequencediagram.teoz;
 
 import java.awt.geom.Dimension2D;
+import java.awt.geom.Point2D;
 
 import net.sourceforge.plantuml.ISkinParam;
 import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.real.Real;
+import net.sourceforge.plantuml.sequencediagram.Event;
+import net.sourceforge.plantuml.sequencediagram.LifeEvent;
 import net.sourceforge.plantuml.sequencediagram.Message;
 import net.sourceforge.plantuml.skin.Area;
+import net.sourceforge.plantuml.skin.ArrowComponent;
 import net.sourceforge.plantuml.skin.ArrowConfiguration;
 import net.sourceforge.plantuml.skin.Component;
 import net.sourceforge.plantuml.skin.ComponentType;
@@ -56,6 +60,10 @@ public class CommunicationTile implements Tile {
 	private final Skin skin;
 	private final ISkinParam skinParam;
 
+	public Event getEvent() {
+		return message;
+	}
+
 	public CommunicationTile(LivingSpace livingSpace1, LivingSpace livingSpace2, Message message, Skin skin,
 			ISkinParam skinParam) {
 		if (livingSpace1 == livingSpace2) {
@@ -66,6 +74,11 @@ public class CommunicationTile implements Tile {
 		this.message = message;
 		this.skin = skin;
 		this.skinParam = skinParam;
+		for (LifeEvent lifeEvent : message.getLiveEvents()) {
+			System.err.println("lifeEvent = " + lifeEvent);
+			// livingSpace1.addLifeEvent(this, lifeEvent);
+			// livingSpace2.addLifeEvent(this, lifeEvent);
+		}
 	}
 
 	public boolean isReverse(StringBounder stringBounder) {
@@ -91,23 +104,44 @@ public class CommunicationTile implements Tile {
 		return comp;
 	}
 
+	public static final double LIVE_DELTA_SIZE = 8;
+
+	public void updateStairs(StringBounder stringBounder, double y) {
+		final ArrowComponent comp = (ArrowComponent) getComponent(stringBounder);
+		final Dimension2D dim = comp.getPreferredDimension(stringBounder);
+		final Point2D p1 = comp.getStartPoint(stringBounder, dim);
+		final Point2D p2 = comp.getEndPoint(stringBounder, dim);
+		System.err.println("CommunicationTile y=" + y + " p1=" + p1 + " p2=" + p2 + " dim=" + dim);
+		final double arrowY = p1.getY();
+
+		final int level1 = livingSpace1.getLevelAt(this);
+		livingSpace1.addStep(y + arrowY, level1);
+		// livingSpace1.addStep(y + dim.getHeight(), level1);
+		final int level2 = livingSpace2.getLevelAt(this);
+		livingSpace2.addStep(y + arrowY, level2);
+		// livingSpace2.addStep(y + dim.getHeight(), level2);
+	}
+
 	public void drawU(UGraphic ug) {
 		final StringBounder stringBounder = ug.getStringBounder();
 		final Component comp = getComponent(stringBounder);
 		final Dimension2D dim = comp.getPreferredDimension(stringBounder);
-		final double x1 = getPoint1(stringBounder).getCurrentValue();
-		// if (isSelf()) {
-		// final Area area = new Area(dim.getWidth(), dim.getHeight());
-		// ug = ug.apply(new UTranslate(x1, 0));
-		// comp.drawU(ug, area, new SimpleContext2D(false));
-		// return;
-		// }
-		final double x2 = getPoint2(stringBounder).getCurrentValue();
+		double x1 = getPoint1(stringBounder).getCurrentValue();
+		double x2 = getPoint2(stringBounder).getCurrentValue();
+
+		final int level1 = livingSpace1.getLevelAt(this);
+		final int level2 = livingSpace2.getLevelAt(this);
+		System.err.println("msg=" + message + " " + level1 + " " + level2);
+
 		final Area area;
 		if (isReverse(stringBounder)) {
+			x1 -= LIVE_DELTA_SIZE * level1;
+			x2 += LIVE_DELTA_SIZE * level2;
 			area = new Area(x1 - x2, dim.getHeight());
 			ug = ug.apply(new UTranslate(x2, 0));
 		} else {
+			x1 += LIVE_DELTA_SIZE * level1;
+			x2 -= LIVE_DELTA_SIZE * level2;
 			area = new Area(x2 - x1, dim.getHeight());
 			ug = ug.apply(new UTranslate(x1, 0));
 		}

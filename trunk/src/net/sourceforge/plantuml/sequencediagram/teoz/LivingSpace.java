@@ -34,13 +34,17 @@
 package net.sourceforge.plantuml.sequencediagram.teoz;
 
 import java.awt.geom.Dimension2D;
+import java.util.List;
 
 import net.sourceforge.plantuml.ISkinParam;
 import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.real.Real;
+import net.sourceforge.plantuml.sequencediagram.Delay;
+import net.sourceforge.plantuml.sequencediagram.Event;
 import net.sourceforge.plantuml.sequencediagram.Participant;
 import net.sourceforge.plantuml.sequencediagram.ParticipantEnglober;
 import net.sourceforge.plantuml.sequencediagram.ParticipantType;
+import net.sourceforge.plantuml.sequencediagram.graphic.Stairs;
 import net.sourceforge.plantuml.skin.Area;
 import net.sourceforge.plantuml.skin.Component;
 import net.sourceforge.plantuml.skin.ComponentType;
@@ -55,13 +59,28 @@ public class LivingSpace {
 	private final ISkinParam skinParam;
 	private final ComponentType headType;
 	private final ComponentType tailType;
+	private final boolean useContinueLineBecauseOfDelay;
+	private final MutingLine mutingLine;
 
-	private final LivingSpace previous;
-	private LivingSpace next;
+	// private final LivingSpaceImpl previous;
+	// private LivingSpace next;
 
 	private final Real posB;
 	private Real posC;
 	private Real posD;
+
+	private final EventsHistory eventsHistory;
+
+	public int getLevelAt(Tile tile) {
+		return eventsHistory.getLevelAt(tile.getEvent());
+	}
+
+	private final Stairs stairs = new Stairs();
+
+	public void addStep(double y, int value) {
+		stairs.addStep(y, value);
+	}
+
 
 	@Override
 	public String toString() {
@@ -76,12 +95,12 @@ public class LivingSpace {
 	}
 
 	public LivingSpace(Participant p, ParticipantEnglober englober, Skin skin, ISkinParam skinParam, Real position,
-			LivingSpace previous) {
+			List<Event> events) {
+		this.eventsHistory = new EventsHistory(p, events);
 		this.p = p;
 		this.skin = skin;
 		this.skinParam = skinParam;
 		this.posB = position;
-		this.previous = previous;
 		if (p.getType() == ParticipantType.PARTICIPANT) {
 			headType = ComponentType.PARTICIPANT_HEAD;
 			tailType = ComponentType.PARTICIPANT_TAIL;
@@ -103,8 +122,42 @@ public class LivingSpace {
 		} else {
 			throw new IllegalArgumentException();
 		}
+		this.stairs.addStep(0, p.getInitialLife());
+		this.useContinueLineBecauseOfDelay = useContinueLineBecauseOfDelay(events);
+		this.mutingLine = new MutingLine(skin, skinParam, events);
 
 	}
+
+	private boolean useContinueLineBecauseOfDelay(List<Event> events) {
+		final String strategy = skinParam.getValue("lifelineStrategy");
+		if ("nosolid".equalsIgnoreCase(strategy)) {
+			return false;
+		}
+		for (Event ev : events) {
+			if (ev instanceof Delay) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public void drawLine(UGraphic ug, double height) {
+		
+		mutingLine.drawLine(ug, height);
+//		final ComponentType defaultLineType = useContinueLineBecauseOfDelay ? ComponentType.CONTINUE_LINE
+//				: ComponentType.PARTICIPANT_LINE;
+//		final Component comp = skin.createComponent(defaultLineType, null, skinParam, p.getDisplay(false));
+//		final Dimension2D dim = comp.getPreferredDimension(ug.getStringBounder());
+//		final Area area = new Area(dim.getWidth(), height);
+//		comp.drawU(ug, area, new SimpleContext2D(false));
+
+		final LiveBoxes liveBoxes = new LiveBoxes(stairs, skin, skinParam, height);
+		liveBoxes.drawU(ug);
+	}
+
+	// public void addDelayTile(DelayTile tile) {
+	// System.err.println("addDelayTile " + this + " " + tile);
+	// }
 
 	public void drawHead(UGraphic ug) {
 		final Component comp = skin.createComponent(headType, null, skinParam, p.getDisplay(false));
@@ -141,12 +194,8 @@ public class LivingSpace {
 		return posB;
 	}
 
-	public final LivingSpace getNext() {
-		return next;
-	}
-
-	final void setNext(LivingSpace next) {
-		this.next = next;
+	public Participant getParticipant() {
+		return p;
 	}
 
 }

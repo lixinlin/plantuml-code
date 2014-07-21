@@ -36,8 +36,10 @@ package net.sourceforge.plantuml.sequencediagram.teoz;
 import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.graphic.UDrawable;
 import net.sourceforge.plantuml.real.Real;
+import net.sourceforge.plantuml.sequencediagram.Event;
+import net.sourceforge.plantuml.ugraphic.UShape;
 
-public interface Tile extends UDrawable {
+public interface Tile extends UDrawable, UShape {
 
 	public double getPreferredHeight(StringBounder stringBounder);
 
@@ -46,5 +48,7 @@ public interface Tile extends UDrawable {
 	public Real getMinX(StringBounder stringBounder);
 
 	public Real getMaxX(StringBounder stringBounder);
+	
+	public Event getEvent();
 
 }

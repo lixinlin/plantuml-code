@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 12444 $
+ * Revision $Revision: 13687 $
  *
  */
 package net.sourceforge.plantuml.skin;
@@ -86,7 +86,7 @@ public abstract class AbstractTextualComponent extends AbstractComponent {
 					fontColor);
 		} else {
 			textBlock = TextBlockUtils.create(strings, new FontConfiguration(font, fontColor), horizontalAlignment,
-					spriteContainer, maxMessageSize);
+					spriteContainer, maxMessageSize, false);
 		}
 	}
 

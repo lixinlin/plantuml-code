@@ -134,7 +134,7 @@ class FtileIf extends AbstractFtile {
 		final TextBlock tb2 = TextBlockUtils.create(branch2.getLabelPositive(), fcArrow, HorizontalAlignment.LEFT,
 				ftileFactory);
 
-		final Sheet sheet = new CreoleParser(fcTest, HorizontalAlignment.LEFT, skinParam).createSheet(branch1
+		final Sheet sheet = new CreoleParser(fcTest, HorizontalAlignment.LEFT, skinParam, false).createSheet(branch1
 				.getLabelTest());
 		final SheetBlock1 sheetBlock1 = new SheetBlock1(sheet, 0);
 		final TextBlock tbTest = new SheetBlock2(sheetBlock1, Diamond.asStencil(sheetBlock1), new UStroke(1.5));

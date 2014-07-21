@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 13350 $
+ * Revision $Revision: 13703 $
  *
  */
 package net.sourceforge.plantuml.graphic;
@@ -129,6 +129,7 @@ public class GraphicStrings implements IEntityImage {
 			final UGraphicEps ug = new UGraphicEps(colorMapper, EpsStrategy.getDefault2());
 			drawAndGetSize(ug);
 			os.write(ug.getEPSCode().getBytes());
+		} else if (fileFormat == FileFormat.LATEX) {
 		} else {
 			throw new UnsupportedOperationException();
 		}
@@ -184,28 +185,14 @@ public class GraphicStrings implements IEntityImage {
 		this.minWidth = minWidth;
 	}
 
-	private Dimension2D getSizeWithMin(Dimension2D dim) {
-		if (minWidth == 0) {
-			return dim;
-		}
-		if (dim.getWidth() < minWidth) {
-			return new Dimension2DDouble(minWidth, dim.getHeight());
-		}
-		return dim;
-	}
-
 	private Dimension2D drawAndGetSize(final UGraphic ug) {
-		TextBlock textBlock = getTextBlock();
-		textBlock = DateEventUtils.addEvent(textBlock, green);
-
-		Dimension2D size = getSizeWithMin(textBlock.calculateDimension(ug.getStringBounder()));
-		textBlock.drawU(ug.apply(new UChangeColor(green)));
+		final Dimension2D size = calculateDimension(ug.getStringBounder());
+		getTextBlock().drawU(ug.apply(new UChangeColor(green)));
 
 		if (image != null) {
 			if (position == GraphicPosition.BOTTOM) {
-				ug.apply(new UTranslate((size.getWidth() - image.getWidth()) / 2, size.getHeight())).draw(
-						new UImage(image));
-				size = new Dimension2DDouble(size.getWidth(), size.getHeight() + image.getHeight());
+				ug.apply(new UTranslate((size.getWidth() - image.getWidth()) / 2, size.getHeight() - image.getHeight()))
+						.draw(new UImage(image));
 			} else if (position == GraphicPosition.BACKGROUND_CORNER_BOTTOM_RIGHT) {
 				ug.apply(new UTranslate(size.getWidth() - image.getWidth(), size.getHeight() - image.getHeight()))
 						.draw(new UImage(image));
@@ -219,22 +206,24 @@ public class GraphicStrings implements IEntityImage {
 	private int maxLine = 0;
 
 	private TextBlock getTextBlock() {
-		if (maxLine == 0) {
-			return TextBlockUtils.create(Display.create(strings), new FontConfiguration(font, green),
-					HorizontalAlignment.LEFT, new SpriteContainerEmpty());
-		}
 		TextBlock result = null;
-		for (int i = 0; i < strings.size(); i += maxLine) {
-			final int n = Math.min(i + maxLine, strings.size());
-			final TextBlock textBlock1 = TextBlockUtils.create(Display.create(strings.subList(i, n)),
-					new FontConfiguration(font, green), HorizontalAlignment.LEFT, new SpriteContainerEmpty());
-			if (result == null) {
-				result = textBlock1;
-			} else {
-				result = TextBlockUtils.withMargin(result, 0, 10, 0, 0);
-				result = TextBlockUtils.mergeLR(result, textBlock1, VerticalAlignment.TOP);
+		if (maxLine == 0) {
+			result = TextBlockUtils.create(Display.create(strings), new FontConfiguration(font, green),
+					HorizontalAlignment.LEFT, new SpriteContainerEmpty());
+		} else {
+			for (int i = 0; i < strings.size(); i += maxLine) {
+				final int n = Math.min(i + maxLine, strings.size());
+				final TextBlock textBlock1 = TextBlockUtils.create(Display.create(strings.subList(i, n)),
+						new FontConfiguration(font, green), HorizontalAlignment.LEFT, new SpriteContainerEmpty());
+				if (result == null) {
+					result = textBlock1;
+				} else {
+					result = TextBlockUtils.withMargin(result, 0, 10, 0, 0);
+					result = TextBlockUtils.mergeLR(result, textBlock1, VerticalAlignment.TOP);
+				}
 			}
 		}
+		result = DateEventUtils.addEvent(result, green);
 		return result;
 	}
 
@@ -243,9 +232,20 @@ public class GraphicStrings implements IEntityImage {
 	}
 
 	public Dimension2D calculateDimension(StringBounder stringBounder) {
-		final TextBlock textBlock = TextBlockUtils.create(Display.create(strings), new FontConfiguration(font, green),
-				HorizontalAlignment.LEFT, new SpriteContainerEmpty());
-		return getSizeWithMin(textBlock.calculateDimension(stringBounder));
+		Dimension2D dim = getTextBlock().calculateDimension(stringBounder);
+		if (dim.getWidth() < minWidth) {
+			dim = new Dimension2DDouble(minWidth, dim.getHeight());
+		}
+		if (image != null) {
+			if (position == GraphicPosition.BOTTOM) {
+				dim = new Dimension2DDouble(dim.getWidth(), dim.getHeight() + image.getHeight());
+			} else if (position == GraphicPosition.BACKGROUND_CORNER_BOTTOM_RIGHT) {
+				dim = new Dimension2DDouble(dim.getWidth() + image.getWidth(), dim.getHeight());
+			} else if (position == GraphicPosition.BACKGROUND_CORNER_TOP_RIGHT) {
+				dim = new Dimension2DDouble(dim.getWidth() + image.getWidth(), dim.getHeight());
+			}
+		}
+		return dim;
 	}
 
 	public ShapeType getShapeType() {

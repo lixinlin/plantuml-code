@@ -39,6 +39,7 @@ import net.sourceforge.plantuml.ISkinParam;
 import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.real.Real;
 import net.sourceforge.plantuml.real.RealUtils;
+import net.sourceforge.plantuml.sequencediagram.Event;
 import net.sourceforge.plantuml.sequencediagram.Note;
 import net.sourceforge.plantuml.sequencediagram.NotePosition;
 import net.sourceforge.plantuml.skin.Area;
@@ -56,6 +57,11 @@ public class NoteTile implements Tile {
 	private final Skin skin;
 	private final ISkinParam skinParam;
 	private final Note note;
+	
+	public Event getEvent() {
+		return note;
+	}
+
 
 	public NoteTile(LivingSpace livingSpace1, LivingSpace livingSpace2, Note note, Skin skin, ISkinParam skinParam) {
 		this.livingSpace1 = livingSpace1;

@@ -61,6 +61,7 @@ import net.sourceforge.plantuml.cucadiagram.Member;
 import net.sourceforge.plantuml.cucadiagram.MethodsOrFieldsArea;
 import net.sourceforge.plantuml.cucadiagram.Stereotype;
 import net.sourceforge.plantuml.cucadiagram.dot.DotData;
+import net.sourceforge.plantuml.cucadiagram.dot.GraphvizVersion;
 import net.sourceforge.plantuml.graphic.HtmlColor;
 import net.sourceforge.plantuml.graphic.HtmlColorTransparent;
 import net.sourceforge.plantuml.graphic.StringBounder;
@@ -437,7 +438,7 @@ public class Cluster implements Moveable {
 
 	private boolean isThereALinkFromOrToGroup(Collection<Line> lines) {
 		for (Line line : lines) {
-			if (line.isLinkFromOrToGroup(group)) {
+			if (line.isLinkFromOrTo(group)) {
 				return true;
 			}
 		}
@@ -509,7 +510,8 @@ public class Cluster implements Moveable {
 		}
 	}
 
-	public boolean printCluster2(StringBuilder sb, Collection<Line> lines, StringBounder stringBounder, DotMode dotMode) {
+	public boolean printCluster2(StringBuilder sb, Collection<Line> lines, StringBounder stringBounder,
+			DotMode dotMode, GraphvizVersion graphvizVersion) {
 		// Log.println("Cluster::printCluster " + this);
 
 		boolean added = false;
@@ -523,7 +525,7 @@ public class Cluster implements Moveable {
 		}
 
 		for (Cluster child : getChildren()) {
-			child.printInternal(sb, lines, stringBounder, dotMode);
+			child.printInternal(sb, lines, stringBounder, dotMode, graphvizVersion);
 		}
 
 		return added;
@@ -627,22 +629,30 @@ public class Cluster implements Moveable {
 		return null;
 	}
 
-	private void printInternal(StringBuilder sb, Collection<Line> lines, StringBounder stringBounder, DotMode dotMode) {
-		final boolean thereALinkFromOrToGroup = isThereALinkFromOrToGroup(lines);
-		if (thereALinkFromOrToGroup) {
+	private void printInternal(StringBuilder sb, Collection<Line> lines, StringBounder stringBounder, DotMode dotMode,
+			GraphvizVersion graphvizVersion) {
+		final boolean thereALinkFromOrToGroup2 = isThereALinkFromOrToGroup(lines);
+		boolean thereALinkFromOrToGroup1 = thereALinkFromOrToGroup2;
+		final boolean useProtectionWhenThereALinkFromOrToGroup = graphvizVersion
+				.useProtectionWhenThereALinkFromOrToGroup();
+		if (useProtectionWhenThereALinkFromOrToGroup == false) {
+			thereALinkFromOrToGroup1 = false;
+		}
+		// final boolean thereALinkFromOrToGroup1 = false;
+		if (thereALinkFromOrToGroup1) {
 			subgraphCluster(sb, "a");
 		}
 		final boolean hasEntryOrExitPoint = hasEntryOrExitPoint();
 		if (hasEntryOrExitPoint) {
 			for (Line line : lines) {
-				if (line.isLinkFromOrToGroup(group)) {
+				if (line.isLinkFromOrTo(group)) {
 					line.setProjectionCluster(this);
 				}
 			}
 		}
 		boolean protection0 = protection0();
 		boolean protection1 = protection1();
-		if (hasEntryOrExitPoint) {
+		if (hasEntryOrExitPoint || useProtectionWhenThereALinkFromOrToGroup == false) {
 			protection0 = false;
 			protection1 = false;
 		}
@@ -677,8 +687,10 @@ public class Cluster implements Moveable {
 		// subgraphCluster(sb, "ee");
 		// }
 
-		if (thereALinkFromOrToGroup) {
+		if (thereALinkFromOrToGroup2) {
 			sb.append(getSpecialPointId(group) + " [shape=point,width=.01,label=\"\"];");
+		}
+		if (thereALinkFromOrToGroup1) {
 			subgraphCluster(sb, "i");
 		}
 		if (protection1) {
@@ -700,7 +712,7 @@ public class Cluster implements Moveable {
 		}
 		SvekUtils.println(sb);
 		printCluster1(sb, lines);
-		final boolean added = printCluster2(sb, lines, stringBounder, dotMode);
+		final boolean added = printCluster2(sb, lines, stringBounder, dotMode, graphvizVersion);
 		if (hasEntryOrExitPoint && added == false) {
 			final String empty = "empty" + color;
 			sb.append(empty + " [shape=point,width=.01,label=\"\"];");
@@ -709,7 +721,7 @@ public class Cluster implements Moveable {
 		if (protection1) {
 			sb.append("}");
 		}
-		if (thereALinkFromOrToGroup) {
+		if (thereALinkFromOrToGroup1) {
 			sb.append("}");
 			sb.append("}");
 		}

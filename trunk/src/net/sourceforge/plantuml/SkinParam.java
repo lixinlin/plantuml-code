@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 13029 $
+ * Revision $Revision: 13767 $
  *
  */
 package net.sourceforge.plantuml;
@@ -532,6 +532,18 @@ public class SkinParam implements ISkinParam {
 	public final void setRankdir(Rankdir rankdir) {
 		this.rankdir = rankdir;
 	}
+	
+	public boolean useOctagonForActivity() {
+		final String value = getValue("activityshape");
+		if ("roundedbox".equalsIgnoreCase(value)) {
+			return false;
+		}
+		if ("octagon".equalsIgnoreCase(value)) {
+			return true;
+		}
+		return false;
+	}
+
 
 
 }

@@ -37,7 +37,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import net.sourceforge.plantuml.ISkinParam;
 import net.sourceforge.plantuml.graphic.StringBounder;
@@ -51,7 +50,6 @@ import net.sourceforge.plantuml.sequencediagram.Message;
 import net.sourceforge.plantuml.sequencediagram.MessageExo;
 import net.sourceforge.plantuml.sequencediagram.Note;
 import net.sourceforge.plantuml.sequencediagram.NotePosition;
-import net.sourceforge.plantuml.sequencediagram.Participant;
 import net.sourceforge.plantuml.sequencediagram.Reference;
 import net.sourceforge.plantuml.skin.Skin;
 
@@ -75,7 +73,7 @@ public class TileBuilder {
 		final StringBounder stringBounder = tileArguments.getStringBounder();
 		final Skin skin = tileArguments.getSkin();
 		final ISkinParam skinParam = tileArguments.getSkinParam();
-		final Map<Participant, LivingSpace> livingSpaces = tileArguments.getLivingSpaces();
+		final LivingSpaces livingSpaces = tileArguments.getLivingSpaces();
 
 		Tile tile = null;
 		if (ev instanceof Message) {
@@ -84,8 +82,9 @@ public class TileBuilder {
 			final LivingSpace livingSpace2 = livingSpaces.get(msg.getParticipant2());
 			boolean reverse = false;
 			if (msg.isSelfMessage()) {
-				tile = new CommunicationTileSelf(livingSpace1, msg, skin, skinParam);
+				tile = new CommunicationTileSelf(livingSpace1, msg, skin, skinParam, livingSpaces);
 			} else {
+				System.err.println("msg=" + msg + " " + msg.getLiveEvents());
 				tile = new CommunicationTile(livingSpace1, livingSpace2, msg, skin, skinParam);
 				reverse = ((CommunicationTile) tile).isReverse(stringBounder);
 			}

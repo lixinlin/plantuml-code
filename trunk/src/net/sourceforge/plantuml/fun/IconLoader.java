@@ -41,6 +41,8 @@ import javax.imageio.ImageIO;
 
 public class IconLoader {
 
+	private static final int NUMBER_OF_ICONS = 19;
+	
 	private final static Map<String, BufferedImage> all = new ConcurrentHashMap<String, BufferedImage>();
 
 	public static BufferedImage getRandom() {
@@ -50,7 +52,7 @@ public class IconLoader {
 
 	private static String getSomeQuote() {
 		final int v = (int) (System.currentTimeMillis() / 1000L);
-		final int n = v % 18;
+		final int n = v % NUMBER_OF_ICONS;
 		return "sprite" + String.format("%03d", n) + ".png";
 	}
 
