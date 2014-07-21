@@ -83,6 +83,7 @@ import net.sourceforge.plantuml.graphic.TextBlockEmpty;
 import net.sourceforge.plantuml.graphic.TextBlockUtils;
 import net.sourceforge.plantuml.graphic.TextBlockWidth;
 import net.sourceforge.plantuml.graphic.USymbol;
+import net.sourceforge.plantuml.graphic.USymbolInterface;
 import net.sourceforge.plantuml.skin.rose.Rose;
 import net.sourceforge.plantuml.svek.image.EntityImageActivity;
 import net.sourceforge.plantuml.svek.image.EntityImageArcCircle;
@@ -96,6 +97,8 @@ import net.sourceforge.plantuml.svek.image.EntityImageComponent;
 import net.sourceforge.plantuml.svek.image.EntityImageEmptyPackage2;
 import net.sourceforge.plantuml.svek.image.EntityImageGroup;
 import net.sourceforge.plantuml.svek.image.EntityImageLollipopInterface;
+import net.sourceforge.plantuml.svek.image.EntityImageLollipopInterfaceEye1;
+import net.sourceforge.plantuml.svek.image.EntityImageLollipopInterfaceEye2;
 import net.sourceforge.plantuml.svek.image.EntityImageNote;
 import net.sourceforge.plantuml.svek.image.EntityImageObject;
 import net.sourceforge.plantuml.svek.image.EntityImagePseudoState;
@@ -371,7 +374,7 @@ public final class CucaDiagramFileMakerSvek2 {
 			return new EntityImageNote(leaf, skinParam);
 		}
 		if (leaf.getEntityType() == LeafType.ACTIVITY) {
-			return new EntityImageActivity(leaf, skinParam);
+			return new EntityImageActivity(leaf, skinParam, bibliotekon);
 		}
 		if (leaf.getEntityType() == LeafType.STATE) {
 			if (leaf.getEntityPosition() != EntityPosition.NORMAL) {
@@ -400,7 +403,13 @@ public final class CucaDiagramFileMakerSvek2 {
 			return new EntityImageLollipopInterface(leaf, skinParam);
 		}
 		if (leaf.getEntityType() == LeafType.DESCRIPTION) {
-			return new EntityImageComponent(leaf, skinParam, portionShower);
+			if (OptionFlags.USE_INTERFACE_EYE1 && leaf.getUSymbol() instanceof USymbolInterface) {
+				return new EntityImageLollipopInterfaceEye1(leaf, skinParam, bibliotekon);
+			} else if (OptionFlags.USE_INTERFACE_EYE2 && leaf.getUSymbol() instanceof USymbolInterface) {
+				return new EntityImageLollipopInterfaceEye2(leaf, skinParam, portionShower);
+			} else {
+				return new EntityImageComponent(leaf, skinParam, portionShower);
+			}
 		}
 		if (leaf.getEntityType() == LeafType.USECASE) {
 			return new EntityImageUseCase(leaf, skinParam);

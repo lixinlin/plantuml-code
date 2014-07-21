@@ -38,6 +38,7 @@ import java.awt.geom.Dimension2D;
 import net.sourceforge.plantuml.cucadiagram.Display;
 import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.real.Real;
+import net.sourceforge.plantuml.sequencediagram.Event;
 import net.sourceforge.plantuml.sequencediagram.Participant;
 import net.sourceforge.plantuml.sequencediagram.Reference;
 import net.sourceforge.plantuml.skin.Area;
@@ -53,6 +54,11 @@ public class ReferenceTile implements Tile {
 	private final TileArguments tileArguments;
 	private Real first;
 	private Real last;
+
+	public Event getEvent() {
+		return reference;
+	}
+
 
 	public ReferenceTile(Reference reference, TileArguments tileArguments) {
 		this.reference = reference;

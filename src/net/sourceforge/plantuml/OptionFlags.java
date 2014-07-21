@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 13659 $
+ * Revision $Revision: 13767 $
  *
  */
 package net.sourceforge.plantuml;
@@ -58,6 +58,8 @@ public class OptionFlags {
 	static public final boolean CRASH_SPRITE = false;
 	static public final boolean STRICT_SELFMESSAGE_POSITION = true;
 	static public final boolean TEOZ = false;
+	static public final boolean USE_INTERFACE_EYE1 = false;
+	static public final boolean USE_INTERFACE_EYE2 = false;
 
 	void reset() {
 		reset(false);

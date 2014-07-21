@@ -39,6 +39,7 @@ import net.sourceforge.plantuml.ISkinParam;
 import net.sourceforge.plantuml.cucadiagram.Display;
 import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.real.Real;
+import net.sourceforge.plantuml.sequencediagram.Event;
 import net.sourceforge.plantuml.sequencediagram.GroupingLeaf;
 import net.sourceforge.plantuml.skin.Area;
 import net.sourceforge.plantuml.skin.Component;
@@ -54,6 +55,11 @@ public class ElseTile implements Tile {
 	private final ISkinParam skinParam;
 	private final GroupingLeaf anElse;
 	private final Tile parent;
+	
+	public Event getEvent() {
+		return anElse;
+	}
+
 
 	public ElseTile(GroupingLeaf anElse, Skin skin, ISkinParam skinParam, Tile parent) {
 		this.anElse = anElse;

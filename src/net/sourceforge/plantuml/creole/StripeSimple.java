@@ -57,7 +57,7 @@ public class StripeSimple implements Stripe {
 	final private ISkinSimple skinParam;
 
 	public StripeSimple(FontConfiguration fontConfiguration, StripeStyle style, CreoleContext context,
-			ISkinSimple skinParam) {
+			ISkinSimple skinParam, boolean modeSimpleLine) {
 		this.fontConfiguration = fontConfiguration;
 		this.style = style;
 		this.skinParam = skinParam;
@@ -69,7 +69,9 @@ public class StripeSimple implements Stripe {
 		this.commands.add(CommandCreoleStyle.createCreole(FontStyle.ITALIC));
 		this.commands.add(CommandCreoleStyle.createLegacy(FontStyle.ITALIC));
 		this.commands.add(CommandCreoleStyle.createLegacyEol(FontStyle.ITALIC));
-		this.commands.add(CommandCreoleStyle.createCreole(FontStyle.UNDERLINE));
+		if (modeSimpleLine == false) {
+			this.commands.add(CommandCreoleStyle.createCreole(FontStyle.UNDERLINE));
+		}
 		this.commands.add(CommandCreoleStyle.createLegacy(FontStyle.UNDERLINE));
 		this.commands.add(CommandCreoleStyle.createLegacyEol(FontStyle.UNDERLINE));
 		this.commands.add(CommandCreoleStyle.createCreole(FontStyle.STRIKE));

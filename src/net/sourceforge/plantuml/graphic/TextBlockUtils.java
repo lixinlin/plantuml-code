@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 13659 $
+ * Revision $Revision: 13688 $
  *
  */
 package net.sourceforge.plantuml.graphic;
@@ -67,14 +67,20 @@ public class TextBlockUtils {
 
 	public static TextBlock create(Display texts, FontConfiguration fontConfiguration,
 			HorizontalAlignment horizontalAlignment, ISkinSimple spriteContainer) {
-		if (texts == null) {
-			return empty(0, 0);
-		}
-		return create(texts, fontConfiguration, horizontalAlignment, spriteContainer, 0);
+		return create(texts, fontConfiguration, horizontalAlignment, spriteContainer, false);
 	}
 
 	public static TextBlock create(Display texts, FontConfiguration fontConfiguration,
-			HorizontalAlignment horizontalAlignment, ISkinSimple spriteContainer, double maxMessageSize) {
+			HorizontalAlignment horizontalAlignment, ISkinSimple spriteContainer, boolean modeSimpleLine) {
+		if (texts == null) {
+			return empty(0, 0);
+		}
+		return create(texts, fontConfiguration, horizontalAlignment, spriteContainer, 0, modeSimpleLine);
+	}
+
+	public static TextBlock create(Display texts, FontConfiguration fontConfiguration,
+			HorizontalAlignment horizontalAlignment, ISkinSimple spriteContainer, double maxMessageSize,
+			boolean modeSimpleLine) {
 		if (texts.size() > 0) {
 			if (texts.get(0) instanceof Stereotype) {
 				return createStereotype(texts, fontConfiguration, horizontalAlignment, spriteContainer, 0);
@@ -89,12 +95,13 @@ public class TextBlockUtils {
 			}
 		}
 
-		return getCreole(texts, fontConfiguration, horizontalAlignment, spriteContainer, maxMessageSize);
+		return getCreole(texts, fontConfiguration, horizontalAlignment, spriteContainer, maxMessageSize, modeSimpleLine);
 	}
 
 	private static TextBlock getCreole(Display texts, FontConfiguration fontConfiguration,
-			HorizontalAlignment horizontalAlignment, ISkinSimple spriteContainer, double maxMessageSize) {
-		final Sheet sheet = new CreoleParser(fontConfiguration, horizontalAlignment, spriteContainer)
+			HorizontalAlignment horizontalAlignment, ISkinSimple spriteContainer, double maxMessageSize,
+			boolean modeSimpleLine) {
+		final Sheet sheet = new CreoleParser(fontConfiguration, horizontalAlignment, spriteContainer, modeSimpleLine)
 				.createSheet(texts);
 		final SheetBlock1 sheetBlock1 = new SheetBlock1(sheet, maxMessageSize);
 		return new SheetBlock2(sheetBlock1, sheetBlock1, new UStroke(1.5));
@@ -103,10 +110,10 @@ public class TextBlockUtils {
 	private static TextBlock createMessageNumber(Display texts, FontConfiguration fontConfiguration,
 			HorizontalAlignment horizontalAlignment, ISkinSimple spriteContainer, double maxMessageSize) {
 		TextBlock tb1 = getCreole(texts.subList(0, 1), fontConfiguration, horizontalAlignment, spriteContainer,
-				maxMessageSize);
+				maxMessageSize, false);
 		tb1 = TextBlockUtils.withMargin(tb1, 0, 4, 0, 0);
 		final TextBlock tb2 = getCreole(texts.subList(1, texts.size()), fontConfiguration, horizontalAlignment,
-				spriteContainer, maxMessageSize);
+				spriteContainer, maxMessageSize, false);
 		return TextBlockUtils.mergeLR(tb1, tb2, VerticalAlignment.CENTER);
 
 	}

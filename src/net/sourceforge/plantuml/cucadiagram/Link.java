@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 12495 $
+ * Revision $Revision: 13759 $
  *
  */
 package net.sourceforge.plantuml.cucadiagram;
@@ -37,6 +37,7 @@ import java.awt.geom.Dimension2D;
 
 import net.sourceforge.plantuml.Hideable;
 import net.sourceforge.plantuml.ISkinSimple;
+import net.sourceforge.plantuml.OptionFlags;
 import net.sourceforge.plantuml.Removeable;
 import net.sourceforge.plantuml.UniqueSequence;
 import net.sourceforge.plantuml.Url;
@@ -48,6 +49,7 @@ import net.sourceforge.plantuml.graphic.HtmlColorUtils;
 import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.graphic.TextBlock;
 import net.sourceforge.plantuml.graphic.TextBlockUtils;
+import net.sourceforge.plantuml.graphic.USymbolInterface;
 import net.sourceforge.plantuml.ugraphic.UFont;
 
 public class Link implements Hideable, Removeable {
@@ -207,7 +209,36 @@ public class Link implements Hideable, Removeable {
 		if (opale) {
 			return new LinkType(LinkDecor.NONE, LinkDecor.NONE);
 		}
-		return type;
+		LinkType result = type;
+		if (OptionFlags.USE_INTERFACE_EYE1) {
+			if (isLollipopInterfaceEye(cl1)) {
+				type = type.withLollipopInterfaceEye1();
+			}
+			if (isLollipopInterfaceEye(cl2)) {
+				type = type.withLollipopInterfaceEye2();
+			}
+		}
+		return result;
+	}
+
+	private LinkType getTypeSpecialForPrinting() {
+		if (opale) {
+			return new LinkType(LinkDecor.NONE, LinkDecor.NONE);
+		}
+		LinkType result = type;
+		if (OptionFlags.USE_INTERFACE_EYE1) {
+			if (isLollipopInterfaceEye(cl1)) {
+				type = type.withLollipopInterfaceEye1();
+			}
+			if (isLollipopInterfaceEye(cl2)) {
+				type = type.withLollipopInterfaceEye2();
+			}
+		}
+		return result;
+	}
+
+	private boolean isLollipopInterfaceEye(IEntity ent) {
+		return ent.getUSymbol() instanceof USymbolInterface;
 	}
 
 	public Display getLabel() {

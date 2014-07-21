@@ -173,7 +173,7 @@ public class DotStringFactory implements Moveable {
 			line.appendLine(sb);
 		}
 		root.fillRankMin(rankMin);
-		root.printCluster2(sb, bibliotekon.allLines(), stringBounder, dotData.getDotMode());
+		root.printCluster2(sb, bibliotekon.allLines(), stringBounder, dotData.getDotMode(), getGraphvizVersion());
 		printMinRanking(sb);
 
 		for (Line line : bibliotekon.lines1()) {
@@ -320,6 +320,14 @@ public class DotStringFactory implements Moveable {
 				final double minY = SvekUtils.getMinY(points);
 				corner1.manage(minX, minY);
 				sh.moveSvek(minX, minY);
+			} else if (sh.getType() == ShapeType.OCTAGON) {
+				idx = svg.indexOf("points=\"", idx + 1);
+				final List<Point2D.Double> points = SvekUtils.extractPointsList(svg, idx, fullHeight);
+				final double minX = SvekUtils.getMinX(points);
+				final double minY = SvekUtils.getMinY(points);
+				corner1.manage(minX, minY);
+				sh.moveSvek(minX, minY);
+				sh.setOctagon(minX, minY, points);
 			} else if (sh.getType() == ShapeType.CIRCLE || sh.getType() == ShapeType.CIRCLE_IN_RECT
 					|| sh.getType() == ShapeType.OVAL) {
 				final double cx = SvekUtils.getValue(svg, idx, "cx");

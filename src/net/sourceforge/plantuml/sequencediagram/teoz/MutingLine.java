@@ -34,11 +34,10 @@
 package net.sourceforge.plantuml.sequencediagram.teoz;
 
 import java.awt.geom.Dimension2D;
+import java.util.List;
 
 import net.sourceforge.plantuml.ISkinParam;
-import net.sourceforge.plantuml.graphic.StringBounder;
-import net.sourceforge.plantuml.real.Real;
-import net.sourceforge.plantuml.sequencediagram.Divider;
+import net.sourceforge.plantuml.sequencediagram.Delay;
 import net.sourceforge.plantuml.sequencediagram.Event;
 import net.sourceforge.plantuml.skin.Area;
 import net.sourceforge.plantuml.skin.Component;
@@ -47,60 +46,38 @@ import net.sourceforge.plantuml.skin.SimpleContext2D;
 import net.sourceforge.plantuml.skin.Skin;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
 
-public class DividerTile implements Tile {
+public class MutingLine {
 
 	private final Skin skin;
 	private final ISkinParam skinParam;
-	private final Divider divider;
-	private final Real origin;
-	private final Real omega;
-	
-	public Event getEvent() {
-		return divider;
-	}
+	private final boolean useContinueLineBecauseOfDelay;
 
-
-	public DividerTile(Divider divider, Skin skin, ISkinParam skinParam, Real origin, Real omega) {
-		this.divider = divider;
+	public MutingLine(Skin skin, ISkinParam skinParam, List<Event> events) {
 		this.skin = skin;
 		this.skinParam = skinParam;
-		this.origin = origin;
-		this.omega = omega;
+		this.useContinueLineBecauseOfDelay = useContinueLineBecauseOfDelay(events);
 	}
 
-	private Component getComponent(StringBounder stringBounder) {
-		final Component comp = skin.createComponent(ComponentType.DIVIDER, null, skinParam, divider.getText());
-		return comp;
+	private boolean useContinueLineBecauseOfDelay(List<Event> events) {
+		final String strategy = skinParam.getValue("lifelineStrategy");
+		if ("nosolid".equalsIgnoreCase(strategy)) {
+			return false;
+		}
+		for (Event ev : events) {
+			if (ev instanceof Delay) {
+				return true;
+			}
+		}
+		return false;
 	}
 
-	public void drawU(UGraphic ug) {
-		final StringBounder stringBounder = ug.getStringBounder();
-		final Component comp = getComponent(stringBounder);
-		final Dimension2D dim = comp.getPreferredDimension(stringBounder);
-		final Area area = new Area(omega.getCurrentValue() - origin.getCurrentValue(), dim.getHeight());
-
-		// ug = ug.apply(new UTranslate(x, 0));
+	public void drawLine(UGraphic ug, double height) {
+		final ComponentType defaultLineType = useContinueLineBecauseOfDelay ? ComponentType.CONTINUE_LINE
+				: ComponentType.PARTICIPANT_LINE;
+		final Component comp = skin.createComponent(defaultLineType, null, skinParam, null);
+		final Dimension2D dim = comp.getPreferredDimension(ug.getStringBounder());
+		final Area area = new Area(dim.getWidth(), height);
 		comp.drawU(ug, area, new SimpleContext2D(false));
-	}
-
-	public double getPreferredHeight(StringBounder stringBounder) {
-		final Component comp = getComponent(stringBounder);
-		final Dimension2D dim = comp.getPreferredDimension(stringBounder);
-		return dim.getHeight();
-	}
-
-	public void addConstraints(StringBounder stringBounder) {
-		// final Component comp = getComponent(stringBounder);
-		// final Dimension2D dim = comp.getPreferredDimension(stringBounder);
-		// final double width = dim.getWidth();
-	}
-
-	public Real getMinX(StringBounder stringBounder) {
-		return origin;
-	}
-
-	public Real getMaxX(StringBounder stringBounder) {
-		return omega;
 	}
 
 }

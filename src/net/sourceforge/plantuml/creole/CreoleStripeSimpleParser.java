@@ -44,13 +44,15 @@ public class CreoleStripeSimpleParser {
 
 	final private String line;
 	final private StripeStyle style;
+	private final boolean modeSimpleLine;
 
 	private final FontConfiguration fontConfiguration;
 	private final ISkinSimple skinParam;
 
 	public CreoleStripeSimpleParser(String line, CreoleContext creoleContext, FontConfiguration fontConfiguration,
-			ISkinSimple skinParam) {
+			ISkinSimple skinParam, boolean modeSimpleLine) {
 		this.fontConfiguration = fontConfiguration;
+		this.modeSimpleLine = modeSimpleLine;
 		this.skinParam = skinParam;
 
 		final Pattern p4 = MyPattern.cmpile("^--([^-]*)--$");
@@ -76,12 +78,14 @@ public class CreoleStripeSimpleParser {
 			return;
 		}
 
-		final Pattern p6 = MyPattern.cmpile("^__([^_]*)__$");
-		final Matcher m6 = p6.matcher(line);
-		if (m6.find()) {
-			this.line = m6.group(1);
-			this.style = new StripeStyle(StripeStyleType.HORIZONTAL_LINE, 0, '_');
-			return;
+		if (modeSimpleLine == false) {
+			final Pattern p6 = MyPattern.cmpile("^__([^_]*)__$");
+			final Matcher m6 = p6.matcher(line);
+			if (m6.find()) {
+				this.line = m6.group(1);
+				this.style = new StripeStyle(StripeStyleType.HORIZONTAL_LINE, 0, '_');
+				return;
+			}
 		}
 
 		final Pattern p7 = MyPattern.cmpile("^\\.\\.([^\\.]*)\\.\\.$");
@@ -125,7 +129,7 @@ public class CreoleStripeSimpleParser {
 	}
 
 	public Stripe createStripe(CreoleContext context) {
-		final StripeSimple result = new StripeSimple(fontConfiguration, style, context, skinParam);
+		final StripeSimple result = new StripeSimple(fontConfiguration, style, context, skinParam, modeSimpleLine);
 		result.analyzeAndAdd(line);
 		return result;
 	}

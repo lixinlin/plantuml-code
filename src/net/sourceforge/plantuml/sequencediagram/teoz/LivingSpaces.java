@@ -28,16 +28,31 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 11325 $
+ * Revision $Revision: 4636 $
  *
  */
-package net.sourceforge.plantuml.cucadiagram.dot;
+package net.sourceforge.plantuml.sequencediagram.teoz;
 
-public interface GraphvizVersion {
-	public boolean useShield();
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-	public boolean useProtectionWhenThereALinkFromOrToGroup();
+import net.sourceforge.plantuml.sequencediagram.Participant;
 
-	// COMMON, V2_34_0
+public class LivingSpaces {
+
+	private final Map<Participant, LivingSpace> all = new LinkedHashMap<Participant, LivingSpace>();
+
+	public Collection<LivingSpace> values() {
+		return all.values();
+	}
+
+	public void put(Participant participant, LivingSpace livingSpace) {
+		all.put(participant, livingSpace);
+	}
+
+	public LivingSpace get(Participant participant) {
+		return all.get(participant);
+	}
 
 }

@@ -47,9 +47,11 @@ public class CreoleParser {
 	private final FontConfiguration fontConfiguration;
 	private final ISkinSimple skinParam;
 	private final HorizontalAlignment horizontalAlignment;
+	private final boolean modeSimpleLine;
 
 	public CreoleParser(FontConfiguration fontConfiguration, HorizontalAlignment horizontalAlignment,
-			ISkinSimple skinParam) {
+			ISkinSimple skinParam, boolean modeSimpleLine) {
+		this.modeSimpleLine = modeSimpleLine;
 		this.fontConfiguration = fontConfiguration;
 		this.skinParam = skinParam;
 		this.horizontalAlignment = horizontalAlignment;
@@ -63,7 +65,7 @@ public class CreoleParser {
 		} else if (line.startsWith("|=") && line.endsWith("|")) {
 			return new StripeTable(fontConfiguration, skinParam, line);
 		}
-		return new CreoleStripeSimpleParser(line, context, fontConfiguration, skinParam).createStripe(context);
+		return new CreoleStripeSimpleParser(line, context, fontConfiguration, skinParam, modeSimpleLine).createStripe(context);
 	}
 
 	public Sheet createSheet(Display display) {

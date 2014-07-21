@@ -160,4 +160,14 @@ public class Bibliotekon {
 		return Collections.unmodifiableCollection(shapeMap.values());
 	}
 
+	public List<Line> getAllLineConnectedTo(IEntity leaf) {
+		final List<Line> result = new ArrayList<Line>();
+		for (Line line : allLines) {
+			if (line.isLinkFromOrTo(leaf)) {
+				result.add(line);
+			}
+		}
+		return Collections.unmodifiableList(result);
+	}
+
 }

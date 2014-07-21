@@ -38,6 +38,7 @@ import java.awt.geom.Dimension2D;
 import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.real.Real;
 import net.sourceforge.plantuml.sequencediagram.Delay;
+import net.sourceforge.plantuml.sequencediagram.Event;
 import net.sourceforge.plantuml.skin.Area;
 import net.sourceforge.plantuml.skin.Component;
 import net.sourceforge.plantuml.skin.ComponentType;
@@ -51,6 +52,11 @@ public class DelayTile implements Tile {
 	private final TileArguments tileArguments;
 	private Real first;
 	private Real last;
+	
+	public Event getEvent() {
+		return delay;
+	}
+
 
 	public DelayTile(Delay delay, TileArguments tileArguments) {
 		this.delay = delay;
@@ -104,5 +110,15 @@ public class DelayTile implements Tile {
 		init(stringBounder);
 		return this.last;
 	}
+
+//	private double startingY;
+//
+//	public void setStartingY(double startingY) {
+//		this.startingY = startingY;
+//	}
+//
+//	public double getStartingY() {
+//		return startingY;
+//	}
 
 }

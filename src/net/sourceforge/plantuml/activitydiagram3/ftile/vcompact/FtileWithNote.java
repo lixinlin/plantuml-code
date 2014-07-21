@@ -95,7 +95,7 @@ public class FtileWithNote extends AbstractFtile implements Stencil {
 
 		final FontConfiguration fc = new FontConfiguration(fontNote, fontColor);
 
-		final Sheet sheet = new CreoleParser(fc, HorizontalAlignment.LEFT, skinParam).createSheet(note);
+		final Sheet sheet = new CreoleParser(fc, HorizontalAlignment.LEFT, skinParam, false).createSheet(note);
 		this.text = new SheetBlock2(new SheetBlock1(sheet, 0), this, new UStroke(1));
 
 	}

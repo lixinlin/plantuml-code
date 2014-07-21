@@ -34,6 +34,8 @@
 package net.sourceforge.plantuml.svek.image;
 
 import java.awt.geom.Dimension2D;
+import java.awt.geom.Point2D;
+import java.util.List;
 
 import net.sourceforge.plantuml.ColorParam;
 import net.sourceforge.plantuml.Dimension2DDouble;
@@ -45,110 +47,88 @@ import net.sourceforge.plantuml.cucadiagram.ILeaf;
 import net.sourceforge.plantuml.cucadiagram.Stereotype;
 import net.sourceforge.plantuml.graphic.FontConfiguration;
 import net.sourceforge.plantuml.graphic.HorizontalAlignment;
-import net.sourceforge.plantuml.graphic.HtmlColor;
 import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.graphic.TextBlock;
 import net.sourceforge.plantuml.graphic.TextBlockUtils;
 import net.sourceforge.plantuml.svek.AbstractEntityImage;
 import net.sourceforge.plantuml.svek.Bibliotekon;
-import net.sourceforge.plantuml.svek.Shape;
+import net.sourceforge.plantuml.svek.Line;
 import net.sourceforge.plantuml.svek.ShapeType;
-import net.sourceforge.plantuml.ugraphic.Shadowable;
 import net.sourceforge.plantuml.ugraphic.UChangeBackColor;
 import net.sourceforge.plantuml.ugraphic.UChangeColor;
+import net.sourceforge.plantuml.ugraphic.UEllipse;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
-import net.sourceforge.plantuml.ugraphic.URectangle;
-import net.sourceforge.plantuml.ugraphic.UShape;
 import net.sourceforge.plantuml.ugraphic.UStroke;
 import net.sourceforge.plantuml.ugraphic.UTranslate;
 
-public class EntityImageActivity extends AbstractEntityImage {
+public class EntityImageLollipopInterfaceEye1 extends AbstractEntityImage {
 
-	public static final int CORNER = 25;
-	final private TextBlock desc;
-	final private static int MARGIN = 10;
-	final private Url url;
+	private static final int SIZE = 24;
+	private final TextBlock desc;
 	private final Bibliotekon bibliotekon;
+	final private Url url;
 
-	public EntityImageActivity(ILeaf entity, ISkinParam skinParam, Bibliotekon bibliotekon) {
+	public EntityImageLollipopInterfaceEye1(ILeaf entity, ISkinParam skinParam, Bibliotekon bibliotekon) {
 		super(entity, skinParam);
 		this.bibliotekon = bibliotekon;
 		final Stereotype stereotype = entity.getStereotype();
-
 		this.desc = TextBlockUtils.create(entity.getDisplay(),
-				new FontConfiguration(SkinParamUtils.getFont(getSkinParam(), FontParam.ACTIVITY, stereotype),
-						SkinParamUtils.getFontColor(getSkinParam(), FontParam.ACTIVITY, stereotype)),
+				new FontConfiguration(SkinParamUtils.getFont(getSkinParam(), FontParam.CLASS, stereotype),
+						SkinParamUtils.getFontColor(getSkinParam(), FontParam.CLASS, stereotype)),
 				HorizontalAlignment.CENTER, skinParam);
 		this.url = entity.getUrl99();
+
 	}
 
 	public Dimension2D calculateDimension(StringBounder stringBounder) {
-		final Dimension2D dim = desc.calculateDimension(stringBounder);
-		return Dimension2DDouble.delta(dim, MARGIN * 2);
+		return new Dimension2DDouble(SIZE, SIZE);
 	}
 
 	final public void drawU(UGraphic ug) {
+		ug = ug.apply(new UChangeColor(SkinParamUtils.getColor(getSkinParam(), ColorParam.classBorder, getStereo())));
+		ug = ug.apply(new UChangeBackColor(SkinParamUtils.getColor(getSkinParam(), ColorParam.classBackground,
+				getStereo())));
 		if (url != null) {
 			ug.startUrl(url);
 		}
-		if (getShapeType() == ShapeType.ROUND_RECTANGLE) {
-			ug = drawNormal(ug);
-		} else if (getShapeType() == ShapeType.OCTAGON) {
-			ug = drawOctagon(ug);
-		} else {
-			throw new UnsupportedOperationException();
+		final double sizeSmall = 14;
+		final double diff = (SIZE - sizeSmall) / 2;
+		final UEllipse circle1 = new UEllipse(sizeSmall, sizeSmall);
+		if (getSkinParam().shadowing()) {
+			// circle.setDeltaShadow(4);
 		}
+		ug.apply(new UStroke(1.5)).apply(new UTranslate(diff, diff)).draw(circle1);
+		ug = ug.apply(new UChangeBackColor(null));
+
+		Point2D pos = bibliotekon.getShape(getEntity()).getPosition();
+
+		final List<Line> lines = bibliotekon.getAllLineConnectedTo(getEntity());
+		final UTranslate reverse = new UTranslate(pos).reverse();
+		final ConnectedCircle connectedCircle = new ConnectedCircle(SIZE / 2);
+		for (Line line : lines) {
+			Point2D pt = line.getMyPoint(getEntity());
+			pt = reverse.getTranslated(pt);
+			connectedCircle.addSecondaryConnection(pt);
+
+		}
+		// connectedCircle.drawU(ug.apply(new UStroke(1.5)));
+		connectedCircle.drawU(ug);
+
+		//
+		// final Dimension2D dimDesc = desc.calculateDimension(ug.getStringBounder());
+		// final double widthDesc = dimDesc.getWidth();
+		// // final double totalWidth = Math.max(widthDesc, SIZE);
+		//
+		// final double x = SIZE / 2 - widthDesc / 2;
+		// final double y = SIZE;
+		// desc.drawU(ug.apply(new UTranslate(x, y)));
 		if (url != null) {
 			ug.closeAction();
 		}
 	}
 
-	private UGraphic drawOctagon(UGraphic ug) {
-		final Shape shape = bibliotekon.getShape(getEntity());
-		final Shadowable octagon = shape.getOctagon();
-		if (getSkinParam().shadowing()) {
-			octagon.setDeltaShadow(4);
-		}
-		ug = applyColors(ug);
-		ug.apply(new UStroke(1.5)).draw(octagon);
-		desc.drawU(ug.apply(new UTranslate(MARGIN, MARGIN)));
-		return ug;
-
-	}
-
-	private UGraphic drawNormal(UGraphic ug) {
-		final StringBounder stringBounder = ug.getStringBounder();
-		final Dimension2D dimTotal = calculateDimension(stringBounder);
-
-		final double widthTotal = dimTotal.getWidth();
-		final double heightTotal = dimTotal.getHeight();
-		final Shadowable rect = new URectangle(widthTotal, heightTotal, CORNER, CORNER);
-		if (getSkinParam().shadowing()) {
-			rect.setDeltaShadow(4);
-		}
-
-		ug = applyColors(ug);
-		ug.apply(new UStroke(1.5)).draw(rect);
-
-		desc.drawU(ug.apply(new UTranslate(MARGIN, MARGIN)));
-		return ug;
-	}
-
-	private UGraphic applyColors(UGraphic ug) {
-		ug = ug.apply(new UChangeColor(SkinParamUtils.getColor(getSkinParam(), ColorParam.activityBorder, getStereo())));
-		HtmlColor backcolor = getEntity().getSpecificBackColor();
-		if (backcolor == null) {
-			backcolor = SkinParamUtils.getColor(getSkinParam(), ColorParam.activityBackground, getStereo());
-		}
-		ug = ug.apply(new UChangeBackColor(backcolor));
-		return ug;
-	}
-
 	public ShapeType getShapeType() {
-		if (getSkinParam().useOctagonForActivity()) {
-			return ShapeType.OCTAGON;
-		}
-		return ShapeType.ROUND_RECTANGLE;
+		return ShapeType.CIRCLE;
 	}
 
 	public int getShield() {

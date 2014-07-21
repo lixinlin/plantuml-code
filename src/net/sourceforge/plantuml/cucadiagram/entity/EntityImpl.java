@@ -541,6 +541,9 @@ final class EntityImpl implements ILeaf, IGroup {
 	}
 
 	public boolean isHidden() {
+		if (entityFactory.isHidden(leafType)) {
+			return true;
+		}
 		if (stereotype != null) {
 			return stereotype.isHidden();
 		}

@@ -46,12 +46,12 @@ public class TileArguments {
 	private final StringBounder stringBounder;
 	private final Real omega;
 	private final Real origin;
-	private final Map<Participant, LivingSpace> livingSpaces;
+	private final LivingSpaces livingSpaces;
 	private final Skin skin;
 	private final ISkinParam skinParam;
 
-	public TileArguments(StringBounder stringBounder, Real omega, Map<Participant, LivingSpace> livingSpaces,
-			Skin skin, ISkinParam skinParam, Real origin) {
+	public TileArguments(StringBounder stringBounder, Real omega, LivingSpaces livingSpaces, Skin skin,
+			ISkinParam skinParam, Real origin) {
 		this.stringBounder = stringBounder;
 		this.origin = origin;
 		this.omega = omega;
@@ -72,8 +72,8 @@ public class TileArguments {
 		return origin;
 	}
 
-	public final Map<Participant, LivingSpace> getLivingSpaces() {
-		return Collections.unmodifiableMap(livingSpaces);
+	public final LivingSpaces getLivingSpaces() {
+		return livingSpaces;
 	}
 
 	public final Skin getSkin() {
@@ -89,7 +89,7 @@ public class TileArguments {
 	}
 
 	public LivingSpace getFirstLivingSpace() {
-		return livingSpaces.entrySet().iterator().next().getValue();
+		return livingSpaces.values().iterator().next();
 	}
 
 	public LivingSpace getLastLivingSpace() {

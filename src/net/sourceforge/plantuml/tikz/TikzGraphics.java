@@ -64,11 +64,11 @@ public class TikzGraphics {
 	private final Map<Color, String> colornames = new LinkedHashMap<Color, String>();
 
 	private String getColorName(Color c) {
-		if (c.equals(Color.BLACK)) {
-			return "black";
-		}
 		if (c.equals(Color.WHITE)) {
 			return "white";
+		}
+		if (c.equals(Color.BLACK)) {
+			return "black";
 		}
 		final String result = colornames.get(c);
 		if (result == null) {
@@ -230,11 +230,17 @@ public class TikzGraphics {
 	}
 
 	public void setFillColor(Color c) {
+		if (c == null) {
+			c = Color.WHITE;
+		}
 		this.fillcolor = c;
 		addColor(c);
 	}
 
 	public void setStrokeColor(Color c) {
+		if (c == null) {
+			throw new IllegalArgumentException();
+		}
 		this.color = c;
 		addColor(c);
 	}

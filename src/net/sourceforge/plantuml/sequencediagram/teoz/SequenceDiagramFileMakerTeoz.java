@@ -37,10 +37,7 @@ import java.awt.geom.Dimension2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import net.sourceforge.plantuml.Dimension2DDouble;
 import net.sourceforge.plantuml.FileFormatOption;
@@ -54,6 +51,7 @@ import net.sourceforge.plantuml.real.RealUtils;
 import net.sourceforge.plantuml.sequencediagram.Participant;
 import net.sourceforge.plantuml.sequencediagram.SequenceDiagram;
 import net.sourceforge.plantuml.sequencediagram.graphic.FileMaker;
+import net.sourceforge.plantuml.skin.ComponentType;
 import net.sourceforge.plantuml.skin.Skin;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
 import net.sourceforge.plantuml.ugraphic.UTranslate;
@@ -63,8 +61,6 @@ public class SequenceDiagramFileMakerTeoz implements FileMaker {
 	private final SequenceDiagram diagram;
 	private final FileFormatOption fileFormatOption;
 	private final Skin skin;
-
-	private final Map<Participant, LivingSpace> livingSpaces = new LinkedHashMap<Participant, LivingSpace>();
 
 	public SequenceDiagramFileMakerTeoz(SequenceDiagram sequenceDiagram, Skin skin, FileFormatOption fileFormatOption,
 			List<BufferedImage> flashcodes) {
@@ -82,22 +78,20 @@ public class SequenceDiagramFileMakerTeoz implements FileMaker {
 		final Real origin = RealUtils.createOrigin();
 		Real currentPos = origin.addAtLeast(0);
 		double headHeight = 0;
-		LivingSpace previous = null;
+		LivingSpace last = null;
+		LivingSpaces livingSpaces = new LivingSpaces();
 		for (Participant p : diagram.participants().values()) {
-			final LivingSpace livingSpace = new LivingSpace(p, diagram.getEnglober(p), skin, skinParam, currentPos,
-					previous);
-			if (previous != null) {
-				previous.setNext(livingSpace);
-			}
-			previous = livingSpace;
-			livingSpaces.put(p, livingSpace);
+			final LivingSpace livingSpace = new LivingSpace(p, diagram.getEnglober(p), skin, skinParam, currentPos, diagram.events());
+			last = livingSpace;
+			((LivingSpaces) livingSpaces).put(p, livingSpace);
 			final Dimension2D headDim = livingSpace.getHeadPreferredDimension(stringBounder);
 			currentPos = livingSpace.getPosD(stringBounder).addAtLeast(0);
 			headHeight = Math.max(headHeight, headDim.getHeight());
 		}
+		// livingSpaces = new LivingSpacesDeltaSimple(livingSpaces);
 
-		final MainTile mainTile = new MainTile(diagram, skin, previous.getPosD(stringBounder).addAtLeast(0),
-				Collections.unmodifiableMap(livingSpaces), origin);
+		final MainTile mainTile = new MainTile(diagram, skin, last.getPosD(stringBounder).addAtLeast(0), livingSpaces,
+				origin);
 		mainTile.addConstraints(stringBounder);
 		origin.compile();
 
@@ -112,9 +106,11 @@ public class SequenceDiagramFileMakerTeoz implements FileMaker {
 		final UGraphic ug = fileFormatOption.createUGraphic(dim).apply(new UTranslate(-min1.getCurrentValue(), 0));
 		stringBounder = ug.getStringBounder();
 
-		drawHeads(ug);
+		drawHeads(ug, livingSpaces);
+		// mainTile.beforeDrawing(ug.getStringBounder(), livingSpaces.values());
 		mainTile.drawU(ug.apply(new UTranslate(0, headHeight)));
-		drawHeads(ug.apply(new UTranslate(0, mainTile.getPreferredHeight(stringBounder) + headHeight)));
+		drawLifeLines(ug.apply(new UTranslate(0, headHeight)), mainTile.getPreferredHeight(stringBounder), livingSpaces);
+		drawHeads(ug.apply(new UTranslate(0, mainTile.getPreferredHeight(stringBounder) + headHeight)), livingSpaces);
 
 		ug.writeImage(os, isWithMetadata ? diagram.getMetadata() : null, diagram.getDpi(fileFormatOption));
 		final Dimension2D info = new Dimension2DDouble(dim.getWidth(), dim.getHeight());
@@ -132,9 +128,17 @@ public class SequenceDiagramFileMakerTeoz implements FileMaker {
 		return new ImageDataSimple(info);
 	}
 
-	private void drawHeads(final UGraphic ug) {
+	private void drawLifeLines(final UGraphic ug, double height, LivingSpaces livingSpaces) {
 		for (LivingSpace livingSpace : livingSpaces.values()) {
-			System.err.println("drawing " + livingSpace);
+			System.err.println("drawing lines " + livingSpace);
+			final double x = livingSpace.getPosC(ug.getStringBounder()).getCurrentValue();
+			livingSpace.drawLine(ug.apply(new UTranslate(x, 0)), height);
+		}
+	}
+
+	private void drawHeads(final UGraphic ug, LivingSpaces livingSpaces) {
+		for (LivingSpace livingSpace : livingSpaces.values()) {
+			System.err.println("drawing heads " + livingSpace);
 			final double x = livingSpace.getPosB().getCurrentValue();
 			livingSpace.drawHead(ug.apply(new UTranslate(x, 0)));
 		}

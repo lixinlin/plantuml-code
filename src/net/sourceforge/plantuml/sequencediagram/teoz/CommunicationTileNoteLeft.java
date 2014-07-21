@@ -39,6 +39,7 @@ import net.sourceforge.plantuml.ISkinParam;
 import net.sourceforge.plantuml.cucadiagram.Display;
 import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.real.Real;
+import net.sourceforge.plantuml.sequencediagram.Event;
 import net.sourceforge.plantuml.sequencediagram.Message;
 import net.sourceforge.plantuml.skin.Area;
 import net.sourceforge.plantuml.skin.Component;
@@ -57,6 +58,11 @@ public class CommunicationTileNoteLeft implements Tile {
 	private final Display notes;
 	// private final NotePosition notePosition;
 	private final LivingSpace livingSpace;
+	
+	public Event getEvent() {
+		return message;
+	}
+
 
 	public CommunicationTileNoteLeft(Tile tile, Message message, Skin skin, ISkinParam skinParam,
 			LivingSpace livingSpace) {

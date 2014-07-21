@@ -38,6 +38,7 @@ import java.awt.geom.Dimension2D;
 import net.sourceforge.plantuml.ISkinParam;
 import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.real.Real;
+import net.sourceforge.plantuml.sequencediagram.Event;
 import net.sourceforge.plantuml.sequencediagram.MessageExo;
 import net.sourceforge.plantuml.skin.Area;
 import net.sourceforge.plantuml.skin.ArrowConfiguration;
@@ -56,6 +57,11 @@ public class CommunicationExoTile implements Tile {
 	private final ISkinParam skinParam;
 	private final Real alpha;
 	private final Real omega;
+	
+	public Event getEvent() {
+		return message;
+	}
+
 
 	public CommunicationExoTile(LivingSpace livingSpace, MessageExo message, Skin skin, ISkinParam skinParam,
 			Real alpha, Real omega) {

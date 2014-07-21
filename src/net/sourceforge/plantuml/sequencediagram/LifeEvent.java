@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 12235 $
+ * Revision $Revision: 13707 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram;
@@ -46,6 +46,11 @@ public class LifeEvent implements Event {
 		this.p = p;
 		this.type = type;
 		this.backcolor = backcolor;
+	}
+
+	@Override
+	public String toString() {
+		return "LifeEvent:" + p + " " + type;
 	}
 
 	public Participant getParticipant() {
@@ -67,10 +72,9 @@ public class LifeEvent implements Event {
 	public Url getUrl() {
 		return null;
 	}
-	
+
 	public boolean hasUrl() {
 		return false;
 	}
-
 
 }
