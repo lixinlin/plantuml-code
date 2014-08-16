@@ -64,6 +64,9 @@ import net.sourceforge.plantuml.ugraphic.UStroke;
 
 public class CommandCreateClassMultilines extends CommandMultilines2<ClassDiagram> {
 
+	private static final String CODE = "(?:\\.|::)?[\\p{L}0-9_]+(?:(?:\\.|::)[\\p{L}0-9_]+)*";
+	public static final String CODES = CODE + "(?:\\s*,\\s*" + CODE + ")*";
+
 	enum Mode {
 		EXTENDS, IMPLEMENTS
 	};
@@ -100,8 +103,8 @@ public class CommandCreateClassMultilines extends CommandMultilines2<ClassDiagra
 				new RegexLeaf("COLOR", "(" + HtmlColorUtils.COLOR_REGEXP + ")?"), //
 				new RegexLeaf("[%s]*"), //
 				new RegexLeaf("LINECOLOR", "(?:##(?:\\[(dotted|dashed|bold)\\])?(\\w+)?)?"), //
-				new RegexLeaf("EXTENDS",
-						"([%s]+(extends|implements)[%s]+((?:\\.|::)?[\\p{L}0-9_]+(?:(?:\\.|::)[\\p{L}0-9_]+)*))?"), //
+				new RegexLeaf("EXTENDS", "([%s]+(extends)[%s]+(" + CODES + "))?"), //
+				new RegexLeaf("IMPLEMENTS", "([%s]+(implements)[%s]+(" + CODES + "))?"), //
 				new RegexLeaf("[%s]*\\{[%s]*$"));
 	}
 
@@ -133,15 +136,15 @@ public class CommandCreateClassMultilines extends CommandMultilines2<ClassDiagra
 			entity.addUrl(url);
 		}
 
-		manageExtends(diagram, line0, entity);
+		manageExtends("EXTENDS", diagram, line0, entity);
+		manageExtends("IMPLEMENTS", diagram, line0, entity);
 
 		return CommandExecutionResult.ok();
 	}
 
-	private static void manageExtends(ClassDiagram system, RegexResult arg, final IEntity entity) {
-		if (arg.get("EXTENDS", 1) != null) {
-			final Mode mode = arg.get("EXTENDS", 1).equalsIgnoreCase("extends") ? Mode.EXTENDS : Mode.IMPLEMENTS;
-			final Code other = Code.of(arg.get("EXTENDS", 2));
+	public static void manageExtends(String keyword, ClassDiagram system, RegexResult arg, final IEntity entity) {
+		if (arg.get(keyword, 1) != null) {
+			final Mode mode = arg.get(keyword, 1).equalsIgnoreCase("extends") ? Mode.EXTENDS : Mode.IMPLEMENTS;
 			LeafType type2 = LeafType.CLASS;
 			if (mode == Mode.IMPLEMENTS) {
 				type2 = LeafType.INTERFACE;
@@ -149,14 +152,18 @@ public class CommandCreateClassMultilines extends CommandMultilines2<ClassDiagra
 			if (mode == Mode.EXTENDS && entity.getEntityType() == LeafType.INTERFACE) {
 				type2 = LeafType.INTERFACE;
 			}
-			final IEntity cl2 = system.getOrCreateLeaf(other, type2, null);
-			LinkType typeLink = new LinkType(LinkDecor.NONE, LinkDecor.EXTENDS);
-			if (type2 == LeafType.INTERFACE && entity.getEntityType() != LeafType.INTERFACE) {
-				typeLink = typeLink.getDashed();
+			final String codes = arg.get(keyword, 2);
+			for (String s : codes.split(",")) {
+				final Code other = Code.of(s.trim());
+				final IEntity cl2 = system.getOrCreateLeaf(other, type2, null);
+				LinkType typeLink = new LinkType(LinkDecor.NONE, LinkDecor.EXTENDS);
+				if (type2 == LeafType.INTERFACE && entity.getEntityType() != LeafType.INTERFACE) {
+					typeLink = typeLink.getDashed();
+				}
+				final Link link = new Link(cl2, entity, typeLink, null, 2, null, null, system.getLabeldistance(),
+						system.getLabelangle());
+				system.addLink(link);
 			}
-			final Link link = new Link(cl2, entity, typeLink, null, 2, null, null, system.getLabeldistance(),
-					system.getLabelangle());
-			system.addLink(link);
 		}
 	}
 
