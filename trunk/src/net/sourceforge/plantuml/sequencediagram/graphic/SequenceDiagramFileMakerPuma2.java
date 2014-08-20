@@ -65,6 +65,7 @@ import net.sourceforge.plantuml.graphic.HtmlColorSimple;
 import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.graphic.TextBlock;
 import net.sourceforge.plantuml.graphic.TextBlockUtils;
+import net.sourceforge.plantuml.graphic.UDrawable;
 import net.sourceforge.plantuml.png.PngTitler;
 import net.sourceforge.plantuml.sequencediagram.Event;
 import net.sourceforge.plantuml.sequencediagram.LifeEvent;
@@ -78,6 +79,7 @@ import net.sourceforge.plantuml.skin.Component;
 import net.sourceforge.plantuml.skin.ComponentType;
 import net.sourceforge.plantuml.skin.SimpleContext2D;
 import net.sourceforge.plantuml.skin.Skin;
+import net.sourceforge.plantuml.ugraphic.ImageBuilder;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
 import net.sourceforge.plantuml.ugraphic.UGraphic2;
 import net.sourceforge.plantuml.ugraphic.UTranslate;
@@ -88,7 +90,7 @@ import net.sourceforge.plantuml.ugraphic.svg.UGraphicSvg;
 import net.sourceforge.plantuml.ugraphic.tikz.UGraphicTikz;
 import net.sourceforge.plantuml.ugraphic.visio.UGraphicVdx;
 
-public class SequenceDiagramFileMakerPuma implements FileMaker {
+public class SequenceDiagramFileMakerPuma2 implements FileMaker {
 
 	private static final StringBounder dummyStringBounder = TextBlockUtils.getDummyStringBounder();
 
@@ -97,17 +99,11 @@ public class SequenceDiagramFileMakerPuma implements FileMaker {
 	private final Dimension2D fullDimension;
 	private final List<Page> pages;
 	private final FileFormatOption fileFormatOption;
-	private final List<BufferedImage> flashcodes;
 
 	private double scale;
 
-	private int offsetX;
-	private int offsetY;
-
-	public SequenceDiagramFileMakerPuma(SequenceDiagram sequenceDiagram, Skin skin, FileFormatOption fileFormatOption,
+	public SequenceDiagramFileMakerPuma2(SequenceDiagram sequenceDiagram, Skin skin, FileFormatOption fileFormatOption,
 			List<BufferedImage> flashcodes) {
-		// HtmlColor.setForceMonochrome(sequenceDiagram.getSkinParam().isMonochrome());
-		this.flashcodes = flashcodes;
 		this.diagram = sequenceDiagram;
 		this.fileFormatOption = fileFormatOption;
 		final DrawableSetInitializer initializer = new DrawableSetInitializer(skin, sequenceDiagram.getSkinParam(),
@@ -165,7 +161,99 @@ public class SequenceDiagramFileMakerPuma implements FileMaker {
 				newpageHeight, title);
 	}
 
-	public ImageData createOne(OutputStream os, int index, boolean isWithMetadata) throws IOException {
+	public ImageData createOne(OutputStream os, final int index, boolean isWithMetadata) throws IOException {
+
+		final Page page = pages.get(index);
+		final SequenceDiagramArea area = new SequenceDiagramArea(fullDimension.getWidth(), page.getHeight());
+
+		final Component compTitle;
+		if (page.getTitle() == null) {
+			compTitle = null;
+		} else {
+			compTitle = drawableSet.getSkin().createComponent(ComponentType.TITLE, null, drawableSet.getSkinParam(),
+					page.getTitle());
+			area.setTitleArea(compTitle.getPreferredWidth(dummyStringBounder),
+					compTitle.getPreferredHeight(dummyStringBounder));
+		}
+		addFooter2(area);
+		addHeader2(area);
+
+		// final FileFormat fileFormat = fileFormatOption.getFileFormat();
+
+		final Display legend = diagram.getLegend();
+		final TextBlock legendBlock;
+		if (legend == null) {
+			legendBlock = TextBlockUtils.empty(0, 0);
+		} else {
+			legendBlock = EntityImageLegend.create(legend, diagram.getSkinParam());
+		}
+		final Dimension2D dimLegend = TextBlockUtils.getDimension(legendBlock);
+
+		scale = getScale(area.getWidth(), area.getHeight());
+
+		final double dpiFactor = diagram.getDpiFactor(fileFormatOption);
+		// System.err.println("dpiFactor=" + dpiFactor);
+		// System.err.println("scale=" + scale);
+
+		final ImageBuilder imageBuilder = new ImageBuilder(fileFormatOption.getFileFormat(), diagram.getSkinParam()
+				.getColorMapper(), oneOf(scale, dpiFactor), diagram.getSkinParam().getBackgroundColor(), null, null, 3,
+				10);
+
+		imageBuilder.addUDrawable(new UDrawable() {
+			public void drawU(UGraphic ug) {
+
+				double delta = 0;
+				if (index > 0) {
+					delta = page.getNewpage1() - page.getHeaderHeight();
+				}
+				if (delta < 0) {
+					delta = 0;
+				}
+
+				if (compTitle != null) {
+					final StringBounder stringBounder = ug.getStringBounder();
+					final double h = compTitle.getPreferredHeight(stringBounder);
+					final double w = compTitle.getPreferredWidth(stringBounder);
+					compTitle.drawU(ug.apply(new UTranslate(area.getTitleX(), area.getTitleY())), new Area(
+							new Dimension2DDouble(w, h)), new SimpleContext2D(false));
+				}
+
+				// ug.apply(new UTranslate(area.getSequenceAreaX() + delta1 / 2, area.getSequenceAreaY()))
+				// final double delta1 = Math.max(0, dimLegend.getWidth() - area.getWidth());
+				final double delta1 = Math.max(0, dimLegend.getWidth() - area.getWidth());
+
+				drawableSet.drawU22(
+						ug.apply(new UTranslate(area.getSequenceAreaX() + delta1 / 2, area.getSequenceAreaY())), delta,
+						fullDimension.getWidth(), page, diagram.isShowFootbox());
+
+				addHeader3(area, ug);
+				addFooter3(area, ug);
+
+				if (legend != null) {
+					final double delta2;
+					if (diagram.getLegendAlignment() == HorizontalAlignment.LEFT) {
+						delta2 = 0;
+					} else if (diagram.getLegendAlignment() == HorizontalAlignment.RIGHT) {
+						delta2 = Math.max(0, area.getWidth() - dimLegend.getWidth());
+					} else {
+						delta2 = Math.max(0, area.getWidth() - dimLegend.getWidth()) / 2;
+					}
+					legendBlock.drawU(ug.apply(new UTranslate(delta2, area.getHeight())));
+				}
+
+			}
+		});
+		return imageBuilder.writeImageTOBEMOVED(os);
+	}
+
+	private double oneOf(double a, double b) {
+		if (a == 1) {
+			return b;
+		}
+		return a;
+	}
+
+	public ImageData createOneOld(OutputStream os, int index, boolean isWithMetadata) throws IOException {
 		final UGraphic2 ug = createImage((int) fullDimension.getWidth(), pages.get(index), index);
 
 		ug.writeImageTOBEMOVED(os, isWithMetadata ? diagram.getMetadata() : null, diagram.getDpi(fileFormatOption));
@@ -184,9 +272,10 @@ public class SequenceDiagramFileMakerPuma implements FileMaker {
 		return new ImageDataSimple(info);
 	}
 
-	private double getImageWidth(SequenceDiagramArea area, boolean rotate, double dpiFactor, double legendWidth) {
+	private double getImageWidth(SequenceDiagramArea area, double dpiFactor, double legendWidth) {
 		final int minsize = diagram.getMinwidth();
-		final double w = Math.max(getImageWidthWithoutMinsize(area, rotate, dpiFactor), legendWidth);
+		final double w = Math.max(area.getWidth() * getScale(area.getWidth(), area.getHeight()) * dpiFactor,
+				legendWidth);
 		if (minsize == Integer.MAX_VALUE) {
 			return w;
 		}
@@ -201,23 +290,6 @@ public class SequenceDiagramFileMakerPuma implements FileMaker {
 			return 1;
 		}
 		return diagram.getScale().getScale(width, height);
-	}
-
-	private double getImageWidthWithoutMinsize(SequenceDiagramArea area, boolean rotate, double dpiFactor) {
-		final double w;
-		if (rotate) {
-			w = area.getHeight() * getScale(area.getWidth(), area.getHeight()) * dpiFactor;
-		} else {
-			w = area.getWidth() * getScale(area.getWidth(), area.getHeight()) * dpiFactor;
-		}
-		return w;
-	}
-
-	private double getImageHeight(SequenceDiagramArea area, final Page page, boolean rotate, double dpiFactor) {
-		if (rotate) {
-			return area.getWidth() * getScale(area.getWidth(), area.getHeight()) * dpiFactor;
-		}
-		return area.getHeight() * getScale(area.getWidth(), area.getHeight()) * dpiFactor;
 	}
 
 	private UGraphic2 createImage(final int diagramWidth, final Page page, final int indice) {
@@ -242,9 +314,6 @@ public class SequenceDiagramFileMakerPuma implements FileMaker {
 		addFooter2(area);
 		addHeader2(area);
 
-		offsetX = (int) Math.round(area.getSequenceAreaX());
-		offsetY = (int) Math.round(area.getSequenceAreaY());
-
 		Color backColor = null;
 		if (diagram.getSkinParam().getBackgroundColor() instanceof HtmlColorSimple) {
 			backColor = diagram.getSkinParam().getColorMapper()
@@ -265,26 +334,16 @@ public class SequenceDiagramFileMakerPuma implements FileMaker {
 		scale = getScale(area.getWidth(), area.getHeight());
 		UGraphic2 ug;
 		if (fileFormat == FileFormat.PNG) {
-			double imageHeight = getImageHeight(area, page, diagram.isRotation(), 1);
+			double imageHeight = area.getHeight() * getScale(area.getWidth(), area.getHeight()) * 1;
 			if (imageHeight == 0) {
 				imageHeight = 1;
 			}
-			final double flashCodeHeight = flashcodes == null ? 0 : flashcodes.get(0).getHeight();
-
-			final Dimension2D dim;
-			final double imageWidthWithDpi = getImageWidth(area, diagram.isRotation(), 1, dimLegend.getWidth());
-			if (diagram.isRotation()) {
-				dim = new Dimension2DDouble(imageHeight + dimLegend.getHeight(), imageWidthWithDpi + flashCodeHeight);
-			} else {
-				dim = new Dimension2DDouble(imageWidthWithDpi, imageHeight + flashCodeHeight + dimLegend.getHeight());
-			}
+			final double imageWidthWithDpi = getImageWidth(area, 1, dimLegend.getWidth());
+			final Dimension2D dim = new Dimension2DDouble(imageWidthWithDpi, imageHeight + dimLegend.getHeight());
 
 			ug = fileFormatOption.createUGraphic(diagram.getSkinParam().getColorMapper(), dpiFactor, dim, diagram
 					.getSkinParam().getBackgroundColor(), diagram.isRotation());
 
-			if (flashcodes != null) {
-				((UGraphicG2d) ug).getGraphics2D().drawImage(flashcodes.get(0), null, 0, (int) imageHeight);
-			}
 			final AffineTransform scaleAt = ((UGraphicG2d) ug).getGraphics2D().getTransform();
 			scaleAt.scale(scale, scale);
 			((UGraphicG2d) ug).getGraphics2D().setTransform(scaleAt);

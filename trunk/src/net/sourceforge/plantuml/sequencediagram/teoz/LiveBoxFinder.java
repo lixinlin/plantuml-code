@@ -143,10 +143,6 @@ public class LiveBoxFinder implements UGraphic {
 	public void closeAction() {
 	}
 
-	public void writeImage(OutputStream os, String metadata, int dpi) throws IOException {
-		throw new UnsupportedOperationException();
-	}
-
 	public void flushUg() {
 	}
 

@@ -51,9 +51,9 @@ import net.sourceforge.plantuml.real.RealUtils;
 import net.sourceforge.plantuml.sequencediagram.Participant;
 import net.sourceforge.plantuml.sequencediagram.SequenceDiagram;
 import net.sourceforge.plantuml.sequencediagram.graphic.FileMaker;
-import net.sourceforge.plantuml.skin.ComponentType;
 import net.sourceforge.plantuml.skin.Skin;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
+import net.sourceforge.plantuml.ugraphic.UGraphic2;
 import net.sourceforge.plantuml.ugraphic.UTranslate;
 
 public class SequenceDiagramFileMakerTeoz implements FileMaker {
@@ -103,7 +103,7 @@ public class SequenceDiagramFileMakerTeoz implements FileMaker {
 		System.err.println("max1=" + max1.getCurrentValue());
 
 		final Dimension2D dim = new Dimension2DDouble(max1.getCurrentValue() - min1.getCurrentValue(), height);
-		final UGraphic ug = fileFormatOption.createUGraphic(dim).apply(new UTranslate(-min1.getCurrentValue(), 0));
+		final UGraphic2 ug = (UGraphic2) fileFormatOption.createUGraphic(dim).apply(new UTranslate(-min1.getCurrentValue(), 0));
 		stringBounder = ug.getStringBounder();
 
 		drawHeads(ug, livingSpaces);
@@ -112,7 +112,7 @@ public class SequenceDiagramFileMakerTeoz implements FileMaker {
 		drawLifeLines(ug.apply(new UTranslate(0, headHeight)), mainTile.getPreferredHeight(stringBounder), livingSpaces);
 		drawHeads(ug.apply(new UTranslate(0, mainTile.getPreferredHeight(stringBounder) + headHeight)), livingSpaces);
 
-		ug.writeImage(os, isWithMetadata ? diagram.getMetadata() : null, diagram.getDpi(fileFormatOption));
+		ug.writeImageTOBEMOVED(os, isWithMetadata ? diagram.getMetadata() : null, diagram.getDpi(fileFormatOption));
 		final Dimension2D info = new Dimension2DDouble(dim.getWidth(), dim.getHeight());
 
 		// if (fileFormatOption.getFileFormat() == FileFormat.PNG && ug instanceof UGraphicG2d) {

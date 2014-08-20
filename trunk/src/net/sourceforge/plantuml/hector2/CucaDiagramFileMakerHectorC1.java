@@ -52,7 +52,7 @@ import net.sourceforge.plantuml.hector2.layering.LayerFactory;
 import net.sourceforge.plantuml.hector2.mpos.Distribution;
 import net.sourceforge.plantuml.hector2.mpos.MutationLayer;
 import net.sourceforge.plantuml.svek.CucaDiagramFileMaker;
-import net.sourceforge.plantuml.ugraphic.UGraphic;
+import net.sourceforge.plantuml.ugraphic.UGraphic2;
 
 public class CucaDiagramFileMakerHectorC1 implements CucaDiagramFileMaker {
 
@@ -91,12 +91,13 @@ public class CucaDiagramFileMakerHectorC1 implements CucaDiagramFileMaker {
 
 		final Dimension2D dimTotal = foo2.calculateDimension(TextBlockUtils.getDummyStringBounder());
 
-		UGraphic ug = fileFormatOption.createUGraphic(diagram.getColorMapper(), diagram.getDpiFactor(fileFormatOption),
-				dimTotal, null, false);
+		UGraphic2 ug = null; //fileFormatOption.createUGraphic(diagram.getColorMapper(), diagram.getDpiFactor(fileFormatOption),
+				//dimTotal, null, false);
 		foo2.drawU(ug);
 
-		ug.writeImage(os, null, diagram.getDpi(fileFormatOption));
-		return new ImageDataSimple(dimTotal);
+//		ug.writeImageTOBEMOVED(os, null, diagram.getDpi(fileFormatOption));
+//		return new ImageDataSimple(dimTotal);
+		throw new UnsupportedOperationException();
 	}
 
 }

@@ -79,10 +79,6 @@ public abstract class UGraphicDelegator implements UGraphic {
 		ug.closeAction();
 	}
 
-	public void writeImage(OutputStream os, String metadata, int dpi) throws IOException {
-		ug.writeImage(os, metadata, dpi);
-	}
-
 	protected UGraphic getUg() {
 		return ug;
 	}

@@ -70,8 +70,4 @@ public abstract class AbstractUGraphicHorizontalLine extends UGraphicDelegator {
 		}
 	}
 
-	public void writeImage(OutputStream os, String metadata, int dpi) throws IOException {
-		throw new UnsupportedOperationException();
-	}
-
 }

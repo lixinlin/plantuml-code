@@ -34,48 +34,58 @@
 package net.sourceforge.plantuml.ugraphic;
 
 import java.awt.geom.Dimension2D;
-import java.io.IOException;
-import java.io.OutputStream;
 
 import net.sourceforge.plantuml.Url;
 import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.graphic.TextBlock;
+import net.sourceforge.plantuml.posimo.DotPath;
 
 public class LimitFinder implements UGraphic {
-	
+
 	public boolean isSpecialTxt() {
 		return false;
 	}
 
 	public UGraphic apply(UChange change) {
 		if (change instanceof UTranslate) {
-			return new LimitFinder(stringBounder, minmax, translate.compose((UTranslate) change));
+			return new LimitFinder(stringBounder, minmax, translate.compose((UTranslate) change), clip);
 		} else if (change instanceof UStroke) {
 			return new LimitFinder(this);
 		} else if (change instanceof UChangeBackColor) {
 			return new LimitFinder(this);
 		} else if (change instanceof UChangeColor) {
 			return new LimitFinder(this);
+		} else if (change instanceof UHidden) {
+			return new LimitFinder(this);
+		} else if (change instanceof UAntiAliasing) {
+			return new LimitFinder(this);
+		} else if (change instanceof UClip) {
+			final LimitFinder copy = new LimitFinder(this);
+			copy.clip = (UClip) change;
+			copy.clip = copy.clip.translate(translate);
+			return copy;
 		}
-		throw new UnsupportedOperationException();
+		throw new UnsupportedOperationException(change.getClass().toString());
 	}
 
 	private final StringBounder stringBounder;
 	private final UTranslate translate;
 	private final MinMaxMutable minmax;
+	private UClip clip;
 
 	public LimitFinder(StringBounder stringBounder, boolean initToZero) {
-		this(stringBounder, MinMaxMutable.getEmpty(initToZero), new UTranslate());
+		this(stringBounder, MinMaxMutable.getEmpty(initToZero), new UTranslate(), null);
 	}
 
-	private LimitFinder(StringBounder stringBounder, MinMaxMutable minmax, UTranslate translate) {
+	private LimitFinder(StringBounder stringBounder, MinMaxMutable minmax, UTranslate translate, UClip clip) {
 		this.stringBounder = stringBounder;
 		this.minmax = minmax;
 		this.translate = translate;
+		this.clip = clip;
 	}
 
 	private LimitFinder(LimitFinder other) {
-		this(other.stringBounder, other.minmax, other.translate);
+		this(other.stringBounder, other.minmax, other.translate, other.clip);
 	}
 
 	public StringBounder getStringBounder() {
@@ -84,6 +94,12 @@ public class LimitFinder implements UGraphic {
 
 	public UParam getParam() {
 		return new UParamNull();
+	}
+
+	private void addPoint(double x, double y) {
+		if (clip == null || clip.isInside(x, y)) {
+			minmax.addPoint(x, y);
+		}
 	}
 
 	public void draw(UShape shape) {
@@ -101,6 +117,8 @@ public class LimitFinder implements UGraphic {
 			drawUPath(x, y, (UPath) shape);
 		} else if (shape instanceof URectangle) {
 			drawRectangle(x, y, (URectangle) shape);
+		} else if (shape instanceof DotPath) {
+			drawDotPath(x, y, (DotPath) shape);
 		} else if (shape instanceof UImage) {
 			drawImage(x, y, (UImage) shape);
 		} else if (shape instanceof UEmpty) {
@@ -116,47 +134,56 @@ public class LimitFinder implements UGraphic {
 	}
 
 	private void drawEmpty(double x, double y, UEmpty shape) {
-		minmax.addPoint(x, y);
-		minmax.addPoint(x + shape.getWidth(), y + shape.getHeight());
+		addPoint(x, y);
+		addPoint(x + shape.getWidth(), y + shape.getHeight());
 	}
 
 	private void drawUPath(double x, double y, UPath shape) {
-		minmax.addPoint(x + shape.getMinX(), y + shape.getMinY());
-		minmax.addPoint(x + shape.getMaxX(), y + shape.getMaxY());
+		addPoint(x + shape.getMinX(), y + shape.getMinY());
+		addPoint(x + shape.getMaxX(), y + shape.getMaxY());
 	}
 
 	private void drawUPolygon(double x, double y, UPolygon shape) {
-		minmax.addPoint(x + shape.getMinX(), y + shape.getMinY());
-		minmax.addPoint(x + shape.getMaxX(), y + shape.getMaxY());
+		if (shape.getPoints().size() == 0) {
+			return;
+		}
+		addPoint(x + shape.getMinX(), y + shape.getMinY());
+		addPoint(x + shape.getMaxX(), y + shape.getMaxY());
 	}
 
 	private void drawULine(double x, double y, ULine shape) {
-		minmax.addPoint(x, y);
-		minmax.addPoint(x + shape.getDX(), y + shape.getDY());
+		addPoint(x, y);
+		addPoint(x + shape.getDX(), y + shape.getDY());
 	}
 
 	private void drawRectangle(double x, double y, URectangle shape) {
-		minmax.addPoint(x, y);
-		minmax.addPoint(x + shape.getWidth(), y + shape.getHeight());
+		addPoint(x, y);
+		addPoint(x + shape.getWidth(), y + shape.getHeight());
+	}
+
+	private void drawDotPath(double x, double y, DotPath shape) {
+		final MinMax shapeMinMax = shape.getMinMax();
+		addPoint(x + shapeMinMax.getMinX(), y + shapeMinMax.getMinY());
+		addPoint(x + shapeMinMax.getMaxX(), y + shapeMinMax.getMaxY());
 	}
 
 	private void drawImage(double x, double y, UImage shape) {
-		minmax.addPoint(x, y);
-		minmax.addPoint(x + shape.getWidth(), y + shape.getHeight());
+		addPoint(x, y);
+		addPoint(x + shape.getWidth(), y + shape.getHeight());
 	}
 
 	private void drawEllipse(double x, double y, UEllipse shape) {
-		minmax.addPoint(x, y);
-		minmax.addPoint(x + shape.getWidth(), y + shape.getHeight());
+		addPoint(x, y);
+		addPoint(x + shape.getWidth(), y + shape.getHeight());
 	}
 
 	private void drawText(double x, double y, UText text) {
 		final Dimension2D dim = stringBounder.calculateDimension(text.getFontConfiguration().getFont(), text.getText());
 		y -= dim.getHeight() - 1.5;
-		minmax.addPoint(x, y);
-		minmax.addPoint(x, y + dim.getHeight());
-		minmax.addPoint(x + dim.getWidth(), y);
-		minmax.addPoint(x + dim.getWidth(), y + dim.getHeight());
+		addPoint(x, y);
+		addPoint(x, y + dim.getHeight());
+		addPoint(x + dim.getWidth(), y);
+		addPoint(x + dim.getWidth(), y + dim.getHeight());
 	}
 
 	public ColorMapper getColorMapper() {
@@ -167,10 +194,6 @@ public class LimitFinder implements UGraphic {
 	}
 
 	public void closeAction() {
-	}
-
-	public void writeImage(OutputStream os, String metadata, int dpi) throws IOException {
-		throw new UnsupportedOperationException();
 	}
 
 	public double getMaxX() {

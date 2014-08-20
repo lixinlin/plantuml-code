@@ -54,7 +54,7 @@ import net.sourceforge.plantuml.core.ImageData;
 import net.sourceforge.plantuml.cucadiagram.Display;
 import net.sourceforge.plantuml.graphic.HtmlColor;
 import net.sourceforge.plantuml.sequencediagram.graphic.FileMaker;
-import net.sourceforge.plantuml.sequencediagram.graphic.SequenceDiagramFileMakerPuma;
+import net.sourceforge.plantuml.sequencediagram.graphic.SequenceDiagramFileMakerPuma2;
 import net.sourceforge.plantuml.sequencediagram.graphic.SequenceDiagramTxtMaker;
 import net.sourceforge.plantuml.sequencediagram.teoz.SequenceDiagramFileMakerTeoz;
 import net.sourceforge.plantuml.skin.ProtectedSkin;
@@ -200,7 +200,7 @@ public class SequenceDiagram extends UmlDiagram {
 			return new SequenceDiagramFileMakerTeoz(this, skin, fileFormatOption, flashcodes);
 		}
 
-		return new SequenceDiagramFileMakerPuma(this, skin, fileFormatOption, flashcodes);
+		return new SequenceDiagramFileMakerPuma2(this, skin, fileFormatOption, flashcodes);
 	}
 
 	@Override

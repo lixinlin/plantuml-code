@@ -103,10 +103,6 @@ public class TextLimitFinder implements UGraphic {
 	public void closeAction() {
 	}
 
-	public void writeImage(OutputStream os, String metadata, int dpi) throws IOException {
-		throw new UnsupportedOperationException();
-	}
-
 	private void drawText(double x, double y, UText text) {
 		final Dimension2D dim = stringBounder.calculateDimension(text.getFontConfiguration().getFont(), text.getText());
 		y -= dim.getHeight() - 1.5;

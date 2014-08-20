@@ -101,9 +101,21 @@ public class TikzGraphics {
 	}
 
 	public void rectangle(double x, double y, double width, double height) {
-		final String s = "\\draw[color=" + getColorName(color) + ",fill=" + getColorName(fillcolor) + ",line width="
-				+ thickness + "pt] " + couple(x, y) + " rectangle " + couple(x + width, y + height) + ";";
-		cmd.add(s);
+		final StringBuilder sb = new StringBuilder();
+		sb.append("\\draw[");
+		if (color != null) {
+			sb.append("color=" + getColorName(color) + ",");
+		}
+		if (fillcolor != null) {
+			sb.append("fill=" + getColorName(fillcolor) + ",");
+			if (color == null) {
+				sb.append("color=" + getColorName(fillcolor) + ",");
+			}
+		}
+		sb.append("line width=" + thickness + "pt] ");
+		sb.append(couple(x, y) + " rectangle " + couple(x + width, y + height));
+		sb.append(";");
+		cmd.add(sb.toString());
 	}
 
 	private String couple(double x, double y) {
@@ -126,8 +138,11 @@ public class TikzGraphics {
 
 	public void line(double x1, double y1, double x2, double y2) {
 		final StringBuilder sb = new StringBuilder();
-		sb.append("\\draw[color=" + getColorName(color));
-		sb.append(",line width=" + thickness + "pt");
+		sb.append("\\draw[");
+		if (color != null) {
+			sb.append("color=" + getColorName(color) + ",");
+		}
+		sb.append("line width=" + thickness + "pt");
 		if (dash != null) {
 			sb.append(",dash pattern=" + dash);
 		}
@@ -140,9 +155,14 @@ public class TikzGraphics {
 	}
 
 	public void polygon(double[] points) {
-		final StringBuilder sb = new StringBuilder("\\draw");
-		sb.append("[color=" + getColorName(color) + ",fill=" + getColorName(fillcolor) + ",line width=" + thickness
-				+ "pt]");
+		final StringBuilder sb = new StringBuilder("\\draw[");
+		if (color != null) {
+			sb.append("color=" + getColorName(color) + ",");
+		}
+		if (fillcolor != null) {
+			sb.append("fill=" + getColorName(fillcolor) + ",");
+		}
+		sb.append("line width=" + thickness + "pt]");
 		sb.append(" ");
 		for (int i = 0; i < points.length; i += 2) {
 			sb.append(couple(points[i], points[i + 1]));
@@ -184,10 +204,17 @@ public class TikzGraphics {
 	}
 
 	public void ellipse(double x, double y, double width, double height) {
-		final String s = "\\draw[color=" + getColorName(color) + ",fill=" + getColorName(fillcolor) + ",line width="
-				+ thickness + "pt] " + couple(x, y) + " ellipse (" + format(width) + "pt and " + format(height)
-				+ "pt);";
-		cmd.add(s);
+		final StringBuilder sb = new StringBuilder();
+		sb.append("\\draw[");
+		if (color != null) {
+			sb.append("color=" + getColorName(color) + ",");
+		}
+		if (fillcolor != null) {
+			sb.append("fill=" + getColorName(fillcolor) + ",");
+		}
+		sb.append("line width=" + thickness + "pt] " + couple(x, y) + " ellipse (" + format(width) + "pt and "
+				+ format(height) + "pt);");
+		cmd.add(sb.toString());
 	}
 
 	public void drawPathIterator(double x, double y, PathIterator path) {
@@ -230,22 +257,25 @@ public class TikzGraphics {
 	}
 
 	public void setFillColor(Color c) {
-		if (c == null) {
-			c = Color.WHITE;
-		}
+		// if (c == null) {
+		// c = Color.WHITE;
+		// }
 		this.fillcolor = c;
 		addColor(c);
 	}
 
 	public void setStrokeColor(Color c) {
-		if (c == null) {
-			throw new IllegalArgumentException();
-		}
+		// if (c == null) {
+		// throw new IllegalArgumentException();
+		// }
 		this.color = c;
 		addColor(c);
 	}
 
 	private void addColor(Color c) {
+		if (c == null) {
+			return;
+		}
 		if (colornames.containsKey(c)) {
 			return;
 		}

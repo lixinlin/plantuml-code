@@ -33,20 +33,17 @@
  */
 package net.sourceforge.plantuml.openiconic;
 
-import java.awt.geom.Dimension2D;
 import java.io.IOException;
 import java.io.OutputStream;
 
 import net.sourceforge.plantuml.AbstractPSystem;
-import net.sourceforge.plantuml.Dimension2DDouble;
 import net.sourceforge.plantuml.FileFormatOption;
-import net.sourceforge.plantuml.api.ImageDataSimple;
 import net.sourceforge.plantuml.core.DiagramDescription;
 import net.sourceforge.plantuml.core.DiagramDescriptionImpl;
 import net.sourceforge.plantuml.core.ImageData;
 import net.sourceforge.plantuml.graphic.HtmlColorUtils;
-import net.sourceforge.plantuml.ugraphic.UGraphic;
-import net.sourceforge.plantuml.ugraphic.UTranslate;
+import net.sourceforge.plantuml.ugraphic.ColorMapperIdentity;
+import net.sourceforge.plantuml.ugraphic.ImageBuilder;
 
 public class PSystemOpenIconic extends AbstractPSystem {
 
@@ -60,14 +57,20 @@ public class PSystemOpenIconic extends AbstractPSystem {
 
 	public ImageData exportDiagram(OutputStream os, int num, FileFormatOption fileFormat) throws IOException {
 		final OpenIcon icon = OpenIcon.retrieve(iconName);
-		final Dimension2D dim = new Dimension2DDouble(100, 100);
-		UGraphic ug = fileFormat.createUGraphic(dim);
-		ug = ug.apply(new UTranslate(10, 10));
-		// ug = ug.apply(new UChangeColor(HtmlColorUtils.BLACK));
-		// ug.draw(new URectangle(7, 6));
-		icon.asTextBlock(HtmlColorUtils.BLACK, factor).drawU(ug);
-		ug.writeImage(os, null, 96);
-		return new ImageDataSimple(dim);
+		// final Dimension2D dim = new Dimension2DDouble(100, 100);
+
+		final ImageBuilder imageBuilder = new ImageBuilder(fileFormat.getFileFormat(), new ColorMapperIdentity(), 1.0,
+				null, null, null, 5, 5);
+		imageBuilder.addUDrawable(icon.asTextBlock(HtmlColorUtils.BLACK, factor));
+		return imageBuilder.writeImageTOBEMOVED(os);
+
+//		UGraphic2 ug = fileFormat.createUGraphic(dim);
+//		ug = (UGraphic2) ug.apply(new UTranslate(10, 10));
+//		// ug = ug.apply(new UChangeColor(HtmlColorUtils.BLACK));
+//		// ug.draw(new URectangle(7, 6));
+//		icon.asTextBlock(HtmlColorUtils.BLACK, factor).drawU(ug);
+//		ug.writeImageTOBEMOVED(os, null, 96);
+//		return new ImageDataSimple(dim);
 	}
 
 	// private GraphicStrings getGraphicStrings() throws IOException {

@@ -38,9 +38,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
-import java.util.Set;
 
-import net.sourceforge.plantuml.CMapData;
 import net.sourceforge.plantuml.ColorParam;
 import net.sourceforge.plantuml.Dimension2DDouble;
 import net.sourceforge.plantuml.FileFormatOption;
@@ -53,8 +51,6 @@ import net.sourceforge.plantuml.Url;
 import net.sourceforge.plantuml.activitydiagram3.ftile.BoxStyle;
 import net.sourceforge.plantuml.activitydiagram3.ftile.EntityImageLegend;
 import net.sourceforge.plantuml.activitydiagram3.ftile.Swimlanes;
-import net.sourceforge.plantuml.api.ImageDataComplex;
-import net.sourceforge.plantuml.api.ImageDataSimple;
 import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.core.DiagramDescription;
 import net.sourceforge.plantuml.core.DiagramDescriptionImpl;
@@ -72,9 +68,8 @@ import net.sourceforge.plantuml.sequencediagram.NotePosition;
 import net.sourceforge.plantuml.skin.rose.Rose;
 import net.sourceforge.plantuml.svek.DecorateEntityImage;
 import net.sourceforge.plantuml.svek.DecorateTextBlock;
+import net.sourceforge.plantuml.ugraphic.ImageBuilder;
 import net.sourceforge.plantuml.ugraphic.UFont;
-import net.sourceforge.plantuml.ugraphic.UGraphic;
-import net.sourceforge.plantuml.ugraphic.g2d.UGraphicG2d;
 
 public class ActivityDiagram3 extends UmlDiagram {
 
@@ -171,21 +166,55 @@ public class ActivityDiagram3 extends UmlDiagram {
 		final double margin = 10;
 		final double dpiFactor = getDpiFactor(fileFormatOption, Dimension2DDouble.delta(dim, 2 * margin, 0));
 
-		final UGraphic ug = TextBlockUtils.getPrinted(result, fileFormatOption, skinParam.getColorMapper(), dpiFactor,
-				getSkinParam().getBackgroundColor(), margin);
+		final ImageBuilder imageBuilder = new ImageBuilder(fileFormatOption.getFileFormat(),
+				skinParam.getColorMapper(), dpiFactor, getSkinParam().getBackgroundColor(),
+				fileFormatOption.isWithMetadata() ? getMetadata() : null, getWarningOrError(), margin, margin);
+		imageBuilder.addUDrawable(result);
 
-		ug.writeImage(os, fileFormatOption.isWithMetadata() ? getMetadata() : null, getDpi(fileFormatOption));
+		return imageBuilder.writeImageTOBEMOVED(os);
 
-		if (ug instanceof UGraphicG2d) {
-			final Set<Url> urls = ((UGraphicG2d) ug).getAllUrlsEncountered();
-			if (urls.size() > 0) {
-				final CMapData cmap = CMapData.cmapString(urls, dpiFactor);
-				return new ImageDataComplex(dim, cmap, getWarningOrError());
-			}
-		}
-
-		return new ImageDataSimple(dim);
 	}
+
+	// protected ImageData exportDiagramInternalOld(OutputStream os, int index, FileFormatOption fileFormatOption,
+	// List<BufferedImage> flashcodes) throws IOException {
+	// // BUG42
+	// // TextBlock result = swinlanes;
+	// TextBlock result = new TextBlockCompressed(swinlanes);
+	// result = new TextBlockRecentred(result);
+	// result = addLegend(result);
+	// result = addTitle(result);
+	// result = addHeaderAndFooter(result);
+	// final ISkinParam skinParam = getSkinParam();
+	// final Dimension2D dim = TextBlockUtils.getMinMax(result).getDimension();
+	// final double margin = 10;
+	// final double dpiFactor = getDpiFactor(fileFormatOption, Dimension2DDouble.delta(dim, 2 * margin, 0));
+	//
+	// final UGraphic2 ug = getPrinted(result, fileFormatOption, skinParam.getColorMapper(), dpiFactor, getSkinParam()
+	// .getBackgroundColor(), margin);
+	//
+	// ug.writeImageTOBEMOVED(os, fileFormatOption.isWithMetadata() ? getMetadata() : null, getDpi(fileFormatOption));
+	//
+	// if (ug instanceof UGraphicG2d) {
+	// final Set<Url> urls = ((UGraphicG2d) ug).getAllUrlsEncountered();
+	// if (urls.size() > 0) {
+	// final CMapData cmap = CMapData.cmapString(urls, dpiFactor);
+	// return new ImageDataComplex(dim, cmap, getWarningOrError());
+	// }
+	// }
+	//
+	// return new ImageDataSimple(dim);
+	// }
+
+	// private UGraphic2 getPrinted(TextBlock tb, FileFormatOption fileFormatOption, ColorMapper colorMapper,
+	// double dpiFactor, HtmlColor mybackcolor, double margin) {
+	// final MinMax minmax = TextBlockUtils.getMinMax(tb, TextBlockUtils.getDummyStringBounder());
+	// final UGraphic2 ug = fileFormatOption.createUGraphic(colorMapper, dpiFactor,
+	// Dimension2DDouble.delta(minmax.getDimension(), 2 * margin), mybackcolor, false);
+	// final double dx = -minmax.getMinX() + margin;
+	// final double dy = -minmax.getMinY() + margin;
+	// tb.drawU(ug.apply(new UTranslate(dx, dy)));
+	// return ug;
+	// }
 
 	private final double getDpiFactor(FileFormatOption fileFormatOption, final Dimension2D dim) {
 		final double dpiFactor;

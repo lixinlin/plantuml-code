@@ -50,7 +50,7 @@ import net.sourceforge.plantuml.graphic.TextBlockUtils;
 import net.sourceforge.plantuml.svek.CucaDiagramFileMaker;
 import net.sourceforge.plantuml.svek.CucaDiagramFileMakerSvek2;
 import net.sourceforge.plantuml.svek.IEntityImage;
-import net.sourceforge.plantuml.ugraphic.UGraphic;
+import net.sourceforge.plantuml.ugraphic.UGraphic2;
 import net.sourceforge.plantuml.ugraphic.UTranslate;
 
 public class CucaDiagramFileMakerHector implements CucaDiagramFileMaker {
@@ -82,9 +82,9 @@ public class CucaDiagramFileMakerHector implements CucaDiagramFileMaker {
 		}
 		final double margin = 10;
 		final Dimension2D dim = new Dimension2DDouble(2 * margin + nb * singleWidth, singleHeight + 2 * margin);
-		UGraphic ug = fileFormatOption.createUGraphic(diagram.getColorMapper(), diagram.getDpiFactor(fileFormatOption),
-				dim, null, false);
-		ug = ug.apply(new UTranslate(margin, margin));
+		UGraphic2 ug = null;// fileFormatOption.createUGraphic(diagram.getColorMapper(), diagram.getDpiFactor(fileFormatOption),
+				// dim, null, false);
+		ug = (UGraphic2) ug.apply(new UTranslate(margin, margin));
 
 		double pos = 0;
 		for (IEntityImage im : images.values()) {
@@ -92,8 +92,9 @@ public class CucaDiagramFileMakerHector implements CucaDiagramFileMaker {
 			pos += singleWidth;
 		}
 
-		ug.writeImage(os, null, diagram.getDpi(fileFormatOption));
-		return new ImageDataSimple(dim);
+//		ug.writeImageTOBEMOVED(os, null, diagram.getDpi(fileFormatOption));
+//		return new ImageDataSimple(dim);
+		throw new UnsupportedOperationException();
 	}
 
 	private IEntityImage computeImage(final ILeaf leaf) {

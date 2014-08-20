@@ -196,10 +196,6 @@ public class CollisionDetector implements UGraphic {
 		context.rectangles.add(shape.getMinMax().translate(translate));
 	}
 
-	public void writeImage(OutputStream os, String metadata, int dpi) throws IOException {
-		throw new UnsupportedOperationException();
-	}
-
 	public ColorMapper getColorMapper() {
 		throw new UnsupportedOperationException();
 	}

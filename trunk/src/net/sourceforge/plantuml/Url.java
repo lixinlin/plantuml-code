@@ -35,6 +35,8 @@ package net.sourceforge.plantuml;
 
 import java.util.Comparator;
 
+import net.sourceforge.plantuml.cucadiagram.dot.DotMaker2;
+
 public class Url implements EnsureVisible {
 
 	private final String url;
@@ -81,6 +83,9 @@ public class Url implements EnsureVisible {
 	}
 
 	public String getCoords(double scale) {
+		if (DotMaker2.isJunit() && visible.getCoords(1.0).contains("0,0,0,0")) {
+			throw new IllegalStateException();
+		}
 		return visible.getCoords(scale);
 	}
 

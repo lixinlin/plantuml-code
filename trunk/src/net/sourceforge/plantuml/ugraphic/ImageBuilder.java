@@ -27,28 +27,36 @@
  * in the United States and other countries.]
  *
  * Original Author:  Arnaud Roques
- *
- * Revision $Revision: 5333 $
+ * 
+ * Revision $Revision: 13805 $
  *
  */
-package net.sourceforge.plantuml;
+package net.sourceforge.plantuml.ugraphic;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Dimension2D;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Set;
 
+import net.sourceforge.plantuml.CMapData;
+import net.sourceforge.plantuml.Dimension2DDouble;
+import net.sourceforge.plantuml.EmptyImageBuilder;
+import net.sourceforge.plantuml.FileFormat;
+import net.sourceforge.plantuml.StringUtils;
+import net.sourceforge.plantuml.Url;
+import net.sourceforge.plantuml.api.ImageDataComplex;
+import net.sourceforge.plantuml.api.ImageDataSimple;
+import net.sourceforge.plantuml.core.ImageData;
 import net.sourceforge.plantuml.eps.EpsStrategy;
 import net.sourceforge.plantuml.graphic.HtmlColor;
 import net.sourceforge.plantuml.graphic.HtmlColorGradient;
 import net.sourceforge.plantuml.graphic.HtmlColorSimple;
 import net.sourceforge.plantuml.graphic.HtmlColorTransparent;
-import net.sourceforge.plantuml.ugraphic.ColorMapper;
-import net.sourceforge.plantuml.ugraphic.ColorMapperIdentity;
-import net.sourceforge.plantuml.ugraphic.UChangeBackColor;
-import net.sourceforge.plantuml.ugraphic.UGraphic2;
-import net.sourceforge.plantuml.ugraphic.URectangle;
+import net.sourceforge.plantuml.graphic.TextBlockUtils;
+import net.sourceforge.plantuml.graphic.UDrawable;
 import net.sourceforge.plantuml.ugraphic.eps.UGraphicEps;
 import net.sourceforge.plantuml.ugraphic.g2d.UGraphicG2d;
 import net.sourceforge.plantuml.ugraphic.html5.UGraphicHtml5;
@@ -56,74 +64,67 @@ import net.sourceforge.plantuml.ugraphic.svg.UGraphicSvg;
 import net.sourceforge.plantuml.ugraphic.tikz.UGraphicTikz;
 import net.sourceforge.plantuml.ugraphic.visio.UGraphicVdx;
 
-/**
- * A FileFormat with some parameters.
- * 
- * 
- * @author Arnaud Roques
- * 
- */
-public class FileFormatOption {
+public class ImageBuilder {
 
 	private final FileFormat fileFormat;
-	private final AffineTransform affineTransform;
-	private final boolean withMetadata;
-	private final boolean useRedForError;
+	private final ColorMapper colorMapper;
+	private final double dpiFactor;
+	private final HtmlColor mybackcolor;
+	private final String metadata;
+	private final String warningOrError;
+	private final double margin1;
+	private final double margin2;
 
-	public FileFormatOption(FileFormat fileFormat) {
-		this(fileFormat, null, true, false);
-	}
+	// private final AffineTransform affineTransform;
+	// private final boolean withMetadata;
+	// private final boolean useRedForError;
 
-	public final boolean isWithMetadata() {
-		return withMetadata;
-	}
+	private UDrawable udrawable;
 
-	public FileFormatOption(FileFormat fileFormat, boolean withMetadata) {
-		this(fileFormat, null, false, false);
-	}
-
-	private FileFormatOption(FileFormat fileFormat, AffineTransform at, boolean withMetadata, boolean useRedForError) {
+	public ImageBuilder(FileFormat fileFormat, ColorMapper colorMapper, double dpiFactor, HtmlColor mybackcolor,
+			String metadata, String warningOrError, double margin1, double margin2) {
 		this.fileFormat = fileFormat;
-		this.affineTransform = at;
-		this.withMetadata = withMetadata;
-		this.useRedForError = useRedForError;
+		this.colorMapper = colorMapper;
+		this.dpiFactor = dpiFactor;
+		this.mybackcolor = mybackcolor;
+		this.metadata = metadata;
+		this.warningOrError = warningOrError;
+		this.margin1 = margin1;
+		this.margin2 = margin2;
 	}
 
-	public FileFormatOption withUseRedForError() {
-		return new FileFormatOption(fileFormat, affineTransform, withMetadata, true);
+	public void addUDrawable(UDrawable udrawable) {
+		this.udrawable = udrawable;
 	}
 
-	@Override
-	public String toString() {
-		return fileFormat.toString() + " " + affineTransform;
+	public ImageData writeImageTOBEMOVED(OutputStream os) throws IOException {
+
+		final LimitFinder limitFinder = new LimitFinder(TextBlockUtils.getDummyStringBounder(), true);
+		udrawable.drawU(limitFinder);
+		final Dimension2D dim = new Dimension2DDouble(limitFinder.getMaxX() + 1 + margin1 + margin2,
+				limitFinder.getMaxY() + 1 + margin1 + margin2);
+		final UGraphic2 ug = createUGraphic(dim);
+		udrawable.drawU(ug.apply(new UTranslate(margin1, margin1)));
+		ug.writeImageTOBEMOVED(os, metadata, 96);
+		os.flush();
+
+		if (ug instanceof UGraphicG2d) {
+			final Set<Url> urls = ((UGraphicG2d) ug).getAllUrlsEncountered();
+			if (urls.size() > 0) {
+				final CMapData cmap = CMapData.cmapString(urls, dpiFactor);
+				return new ImageDataComplex(dim, cmap, warningOrError);
+			}
+		}
+
+		return new ImageDataSimple(dim);
 	}
 
-	public final FileFormat getFileFormat() {
-		return fileFormat;
-	}
-
-	public AffineTransform getAffineTransform() {
-		return affineTransform;
-	}
-
-	/**
-	 * Create a UGraphic corresponding to this FileFormatOption
-	 * 
-	 * @param colorMapper
-	 * @param dpiFactor
-	 *            1.0 for a standard dot per inch
-	 * @param dim
-	 * @param mybackcolor
-	 * @param rotation
-	 * @return
-	 */
-	public UGraphic2 createUGraphic(ColorMapper colorMapper, double dpiFactor, final Dimension2D dim,
-			HtmlColor mybackcolor, boolean rotation) {
+	private UGraphic2 createUGraphic(final Dimension2D dim) {
 		switch (fileFormat) {
 		case PNG:
-			return createUGraphicPNG(colorMapper, dpiFactor, dim, mybackcolor, rotation);
+			return createUGraphicPNG(colorMapper, dpiFactor, dim, mybackcolor);
 		case SVG:
-			return createUGraphicSVG(colorMapper, dpiFactor, dim, mybackcolor, rotation);
+			return createUGraphicSVG(colorMapper, dpiFactor, dim, mybackcolor);
 		case EPS:
 			return new UGraphicEps(colorMapper, EpsStrategy.getDefault2());
 		case EPS_TEXT:
@@ -139,12 +140,7 @@ public class FileFormatOption {
 		}
 	}
 
-	public UGraphic2 createUGraphic(final Dimension2D dim) {
-		return createUGraphic(new ColorMapperIdentity(), 1.0, dim, null, false);
-	}
-
-	private UGraphic2 createUGraphicSVG(ColorMapper colorMapper, double scale, Dimension2D dim, HtmlColor mybackcolor,
-			boolean rotation) {
+	private UGraphic2 createUGraphicSVG(ColorMapper colorMapper, double scale, Dimension2D dim, HtmlColor mybackcolor) {
 		Color backColor = Color.WHITE;
 		if (mybackcolor instanceof HtmlColorSimple) {
 			backColor = colorMapper.getMappedColor(mybackcolor);
@@ -162,7 +158,7 @@ public class FileFormatOption {
 	}
 
 	private UGraphic2 createUGraphicPNG(ColorMapper colorMapper, double dpiFactor, final Dimension2D dim,
-			HtmlColor mybackcolor, boolean rotation) {
+			HtmlColor mybackcolor) {
 		Color backColor = Color.WHITE;
 		if (mybackcolor instanceof HtmlColorSimple) {
 			backColor = colorMapper.getMappedColor(mybackcolor);
@@ -170,20 +166,16 @@ public class FileFormatOption {
 			backColor = null;
 		}
 
-		final EmptyImageBuilder builder;
-		final Graphics2D graphics2D;
-		if (rotation) {
-			builder = new EmptyImageBuilder((int) (dim.getHeight() * dpiFactor), (int) (dim.getWidth() * dpiFactor),
-					backColor);
-			graphics2D = builder.getGraphics2D();
-			graphics2D.rotate(-Math.PI / 2);
-			graphics2D.translate(-builder.getBufferedImage().getHeight(), 0);
-		} else {
-			builder = new EmptyImageBuilder((int) (dim.getWidth() * dpiFactor), (int) (dim.getHeight() * dpiFactor),
-					backColor);
-			graphics2D = builder.getGraphics2D();
+		/*
+		 * if (rotation) { builder = new EmptyImageBuilder((int) (dim.getHeight() * dpiFactor), (int) (dim.getWidth() *
+		 * dpiFactor), backColor); graphics2D = builder.getGraphics2D(); graphics2D.rotate(-Math.PI / 2);
+		 * graphics2D.translate(-builder.getBufferedImage().getHeight(), 0); } else {
+		 */
+		final EmptyImageBuilder builder = new EmptyImageBuilder((int) (dim.getWidth() * dpiFactor),
+				(int) (dim.getHeight() * dpiFactor), backColor);
+		final Graphics2D graphics2D = builder.getGraphics2D();
 
-		}
+		// }
 		final UGraphicG2d ug = new UGraphicG2d(colorMapper, graphics2D, dpiFactor);
 		ug.setBufferedImage(builder.getBufferedImage());
 		final BufferedImage im = ((UGraphicG2d) ug).getBufferedImage();
@@ -192,10 +184,6 @@ public class FileFormatOption {
 		}
 
 		return ug;
-	}
-
-	public final boolean isUseRedForError() {
-		return useRedForError;
 	}
 
 }

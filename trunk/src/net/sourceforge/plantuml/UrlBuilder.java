@@ -41,7 +41,7 @@ import net.sourceforge.plantuml.command.regex.MyPattern;
 public class UrlBuilder {
 
 	public static enum ModeUrl {
-		STRICT, AT_START, ANYWHERE
+		STRICT, AT_START, ANYWHERE, AT_END
 	}
 
 	private static final String URL_PATTERN = "\\[\\[([%g][^%g]+[%g]|[^{}%s\\]\\[]*)(?:[%s]*\\{([^{}]+)\\})?(?:[%s]*([^\\]\\[]+))?\\]\\]";
@@ -60,6 +60,8 @@ public class UrlBuilder {
 			p = MyPattern.cmpile("(?i)^" + URL_PATTERN + "$");
 		} else if (mode == ModeUrl.AT_START) {
 			p = MyPattern.cmpile("(?i)^" + URL_PATTERN + ".*");
+		} else if (mode == ModeUrl.AT_END) {
+			p = MyPattern.cmpile("(?i).*" + URL_PATTERN + "$");
 		} else if (mode == ModeUrl.ANYWHERE) {
 			p = MyPattern.cmpile("(?i).*" + URL_PATTERN + ".*");
 		} else {
