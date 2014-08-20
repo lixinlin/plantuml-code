@@ -131,7 +131,7 @@ public class BodyEnhanced implements TextBlock {
 				title = getTitle(s, skinParam);
 				members = new ArrayList<Member>();
 			} else {
-				final Member m = new MemberImpl(s, StringUtils.isMethod(s), manageModifier);
+				final Member m = new Member(s, StringUtils.isMethod(s), manageModifier);
 				members.add(m);
 				if (m.getUrl() != null) {
 					urls.add(m.getUrl());

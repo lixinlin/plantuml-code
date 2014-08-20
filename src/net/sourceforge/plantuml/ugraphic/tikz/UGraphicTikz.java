@@ -46,6 +46,7 @@ import net.sourceforge.plantuml.ugraphic.ClipContainer;
 import net.sourceforge.plantuml.ugraphic.ColorMapper;
 import net.sourceforge.plantuml.ugraphic.UCenteredCharacter;
 import net.sourceforge.plantuml.ugraphic.UEllipse;
+import net.sourceforge.plantuml.ugraphic.UGraphic2;
 import net.sourceforge.plantuml.ugraphic.UImage;
 import net.sourceforge.plantuml.ugraphic.UImageSvg;
 import net.sourceforge.plantuml.ugraphic.ULine;
@@ -53,7 +54,7 @@ import net.sourceforge.plantuml.ugraphic.UPath;
 import net.sourceforge.plantuml.ugraphic.UPolygon;
 import net.sourceforge.plantuml.ugraphic.URectangle;
 
-public class UGraphicTikz extends AbstractUGraphic<TikzGraphics> implements ClipContainer {
+public class UGraphicTikz extends AbstractUGraphic<TikzGraphics> implements ClipContainer, UGraphic2 {
 
 	private final StringBounder stringBounder;
 
@@ -104,7 +105,7 @@ public class UGraphicTikz extends AbstractUGraphic<TikzGraphics> implements Clip
 	public void closeAction() {
 	}
 
-	public void writeImage(OutputStream os, String metadata, int dpi) throws IOException {
+	public void writeImageTOBEMOVED(OutputStream os, String metadata, int dpi) throws IOException {
 		createTikz(os);
 	}
 

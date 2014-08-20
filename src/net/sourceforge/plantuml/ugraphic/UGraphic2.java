@@ -28,31 +28,15 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 13811 $
+ * Revision $Revision: 13805 $
  *
  */
 package net.sourceforge.plantuml.ugraphic;
 
-import net.sourceforge.plantuml.Url;
-import net.sourceforge.plantuml.graphic.StringBounder;
+import java.io.IOException;
+import java.io.OutputStream;
 
-public interface UGraphic {
+public interface UGraphic2 extends UGraphic {
 
-	public StringBounder getStringBounder();
-
-	public UParam getParam();
-
-	public void draw(UShape shape);
-
-	public UGraphic apply(UChange change);
-
-	public ColorMapper getColorMapper();
-
-	public void startUrl(Url url);
-
-	public void closeAction();
-
-	public void flushUg();
-
-	public boolean isSpecialTxt();
+	public void writeImageTOBEMOVED(OutputStream os, String metadata, int dpi) throws IOException;
 }

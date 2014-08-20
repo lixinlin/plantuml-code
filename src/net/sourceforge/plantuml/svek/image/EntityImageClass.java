@@ -76,7 +76,7 @@ public class EntityImageClass extends AbstractEntityImage implements Stencil {
 		super(entity, skinParam);
 		this.lineConfig = entity;
 		this.roundCorner = skinParam.getRoundCorner();
-		this.shield = version.useShield() && entity.hasNearDecoration() ? 16 : 0;
+		this.shield = version != null && version.useShield() && entity.hasNearDecoration() ? 16 : 0;
 		this.body = entity.getBody(portionShower).asTextBlock(FontParam.CLASS_ATTRIBUTE, skinParam);
 
 		header = new EntityImageClassHeader2(entity, skinParam, portionShower);

@@ -37,15 +37,16 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.lang.management.ManagementFactory;
+import java.lang.management.OperatingSystemMXBean;
+import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import net.sourceforge.plantuml.Log;
 import net.sourceforge.plantuml.PSystemBuilder;
-
-import com.sun.management.OperatingSystemMXBean;
 
 public class Performance {
 
@@ -120,16 +121,25 @@ public class Performance {
 		//
 		// final int diagramPerHour = (int) diagramCountRate.perHour();
 
-		//final long dotTimeValue = dotDuration.get() / 1000L / 1000L;
+		// final long dotTimeValue = dotDuration.get() / 1000L / 1000L;
 		final INumberAnalyzed dotCopy = dotTime.getCopyImmutable();
 
-		final long jvmCpuTime;
-		if (ManagementFactory.getOperatingSystemMXBean() instanceof OperatingSystemMXBean) {
-			final OperatingSystemMXBean bean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
-			jvmCpuTime = bean.getProcessCpuTime() / 1000L / 1000L;
-		} else {
-			jvmCpuTime = -1;
+		long jvmCpuTimeTmp = 0;
+		try {
+			final Class<?> cl = Class.forName("com.sun.management.OperatingSystemMXBean");
+			final OperatingSystemMXBean bean = ManagementFactory.getOperatingSystemMXBean();
+			if (bean != null && cl.isAssignableFrom(bean.getClass()) ) {
+				final Method getProcessCpuTime = cl.getMethod("getProcessCpuTime");
+				final Long result = (Long) getProcessCpuTime.invoke(bean);
+				jvmCpuTimeTmp = result / 1000L / 1000L;
+			}
+		} catch (ClassNotFoundException e) {
+			Log.debug("Cannot load com.sun.management.OperatingSystemMXBean");
+		} catch (Exception e) {
+			Log.debug("Exception "+e);
 		}
+
+		final long jvmCpuTime = jvmCpuTimeTmp;
 
 		final String pid = ManagementFactory.getRuntimeMXBean().getName();
 
@@ -163,13 +173,13 @@ public class Performance {
 				return jvmCpuTime;
 			}
 
-//			public int dotCount() {
-//				return dotCountValue;
-//			}
-//
-//			public long totalDotTime() {
-//				return dotTimeValue;
-//			}
+			// public int dotCount() {
+			// return dotCountValue;
+			// }
+			//
+			// public long totalDotTime() {
+			// return dotTimeValue;
+			// }
 
 			public long timeStamp() {
 				return timeStamp;

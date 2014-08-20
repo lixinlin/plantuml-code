@@ -57,6 +57,7 @@ import net.sourceforge.plantuml.svek.IEntityImage;
 import net.sourceforge.plantuml.ugraphic.MinMax;
 import net.sourceforge.plantuml.ugraphic.UChangeColor;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
+import net.sourceforge.plantuml.ugraphic.UGraphic2;
 import net.sourceforge.plantuml.ugraphic.ULine;
 import net.sourceforge.plantuml.ugraphic.UStroke;
 import net.sourceforge.plantuml.ugraphic.UTranslate;
@@ -135,9 +136,9 @@ public class CucaDiagramFileMakerHector2 implements CucaDiagramFileMaker {
 
 		final Dimension2D dimTotal = new Dimension2DDouble(2 * borderMargin + minMax.getMaxX(), 2 * borderMargin
 				+ minMax.getMaxY());
-		UGraphic ug = fileFormatOption.createUGraphic(diagram.getColorMapper(), diagram.getDpiFactor(fileFormatOption),
-				dimTotal, null, false);
-		ug = ug.apply(new UTranslate(borderMargin, borderMargin));
+		UGraphic2 ug = null;//fileFormatOption.createUGraphic(diagram.getColorMapper(), diagram.getDpiFactor(fileFormatOption),
+				// dimTotal, null, false);
+		ug = (UGraphic2) ug.apply(new UTranslate(borderMargin, borderMargin));
 
 		for (PinLink pinLink : skeleton.getPinLinks()) {
 			drawPinLink(ug, pinLink);
@@ -153,8 +154,9 @@ public class CucaDiagramFileMakerHector2 implements CucaDiagramFileMaker {
 					+ (singleHeight - dimImage.getHeight()) / 2)));
 		}
 
-		ug.writeImage(os, null, diagram.getDpi(fileFormatOption));
-		return new ImageDataSimple(dimTotal);
+//		ug.writeImageTOBEMOVED(os, null, diagram.getDpi(fileFormatOption));
+//		return new ImageDataSimple(dimTotal);
+		throw new UnsupportedOperationException();
 	}
 
 	private void drawPinLink(UGraphic ug, PinLink pinLink) {

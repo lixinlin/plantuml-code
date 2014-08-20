@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 13688 $
+ * Revision $Revision: 13813 $
  *
  */
 package net.sourceforge.plantuml.graphic;
@@ -43,7 +43,6 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
 import net.sourceforge.plantuml.Dimension2DDouble;
-import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.ISkinSimple;
 import net.sourceforge.plantuml.SpriteContainer;
 import net.sourceforge.plantuml.creole.CreoleParser;
@@ -55,13 +54,11 @@ import net.sourceforge.plantuml.cucadiagram.Stereotype;
 import net.sourceforge.plantuml.posimo.Positionable;
 import net.sourceforge.plantuml.posimo.PositionableImpl;
 import net.sourceforge.plantuml.sequencediagram.MessageNumber;
-import net.sourceforge.plantuml.ugraphic.ColorMapper;
 import net.sourceforge.plantuml.ugraphic.LimitFinder;
 import net.sourceforge.plantuml.ugraphic.MinMax;
 import net.sourceforge.plantuml.ugraphic.UFont;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
 import net.sourceforge.plantuml.ugraphic.UStroke;
-import net.sourceforge.plantuml.ugraphic.UTranslate;
 
 public class TextBlockUtils {
 
@@ -192,17 +189,6 @@ public class TextBlockUtils {
 
 	public static FontRenderContext getFontRenderContext() {
 		return gg.getFontRenderContext();
-	}
-
-	public static UGraphic getPrinted(TextBlock tb, FileFormatOption fileFormatOption, ColorMapper colorMapper,
-			double dpiFactor, HtmlColor mybackcolor, double margin) {
-		final MinMax minmax = getMinMax(tb, dummyStringBounder);
-		final UGraphic ug = fileFormatOption.createUGraphic(colorMapper, dpiFactor,
-				Dimension2DDouble.delta(minmax.getDimension(), 2 * margin), mybackcolor, false);
-		final double dx = -minmax.getMinX() + margin;
-		final double dy = -minmax.getMinY() + margin;
-		tb.drawU(ug.apply(new UTranslate(dx, dy)));
-		return ug;
 	}
 
 	public static MinMax getMinMax(TextBlock tb) {

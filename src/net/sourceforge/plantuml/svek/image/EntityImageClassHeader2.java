@@ -98,7 +98,7 @@ public class EntityImageClassHeader2 extends AbstractEntityImage {
 			genericBlock = null;
 		} else {
 			genericBlock = TextBlockUtils.create(
-					Display.create(generic),
+					Display.getWithNewlines(generic),
 					new FontConfiguration(SkinParamUtils
 							.getFont(getSkinParam(), FontParam.CLASS_STEREOTYPE, stereotype), SkinParamUtils
 							.getFontColor(getSkinParam(), FontParam.CLASS_STEREOTYPE, stereotype)),

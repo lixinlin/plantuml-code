@@ -166,7 +166,7 @@ public class GraphvizSolverB {
 			final String points = s.substring(p2 + " d=\"".length(), p3);
 			final DotPath dotPath = new DotPath(points, height);
 			p.setDotPath(dotPath);
-			minMax.manage(dotPath.getMinMax());
+			minMax.manage(dotPath.getMinFinder());
 
 			// Log.println("pointsList=" + pointsList);
 			if (p.getLabel() != null) {

@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 12579 $
+ * Revision $Revision: 13815 $
  *
  */
 package net.sourceforge.plantuml;
@@ -265,14 +265,9 @@ public abstract class UmlDiagram extends AbstractPSystem implements Diagram {
 
 		}
 
-		final GraphicStrings graphicStrings;
-		// if (OptionFlags.CRASH_SPRITE) {
-		graphicStrings = new GraphicStrings(strings, font, HtmlColorUtils.BLACK, HtmlColorUtils.WHITE,
-				UAntiAliasing.ANTI_ALIASING_ON, IconLoader.getRandom(), GraphicPosition.BACKGROUND_CORNER_TOP_RIGHT);
-		// } else {
-		// graphicStrings = new GraphicStrings(strings, font, HtmlColorUtils.BLACK, HtmlColorUtils.WHITE,
-		// UAntiAliasing.ANTI_ALIASING_ON);
-		// }
+		final GraphicStrings graphicStrings = new GraphicStrings(strings, font, HtmlColorUtils.BLACK,
+				HtmlColorUtils.WHITE, UAntiAliasing.ANTI_ALIASING_ON, IconLoader.getRandom(),
+				GraphicPosition.BACKGROUND_CORNER_TOP_RIGHT);
 		graphicStrings.writeImage(os, fileFormat, svg);
 	}
 

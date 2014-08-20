@@ -42,7 +42,7 @@ import java.io.File;
  * 
  */
 public enum FileFormat {
-	PNG, SVG, EPS, EPS_TEXT, ATXT, UTXT, XMI_STANDARD, XMI_STAR, XMI_ARGO, PDF, MJPEG, HTML, HTML5, VDX, LATEX;
+	PNG, SVG, EPS, EPS_TEXT, ATXT, UTXT, XMI_STANDARD, XMI_STAR, XMI_ARGO, PDF, MJPEG, HTML, HTML5, VDX, LATEX, BASE64;
 
 	/**
 	 * Returns the file format to be used for that format.

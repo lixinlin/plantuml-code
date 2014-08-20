@@ -122,10 +122,6 @@ public class SlotFinder implements UGraphic {
 		yslot.addSlot(y, y + shape.getHeight());
 	}
 
-	public void writeImage(OutputStream os, String metadata, int dpi) throws IOException {
-		throw new UnsupportedOperationException();
-	}
-
 	public ColorMapper getColorMapper() {
 		return new ColorMapperIdentity();
 	}

@@ -51,6 +51,11 @@ public class MinMaxMutable {
 		return new MinMaxMutable(Double.MAX_VALUE, Double.MAX_VALUE, -Double.MAX_VALUE, -Double.MAX_VALUE);
 	}
 
+	@Override
+	public String toString() {
+		return "X=" + minX + " " + maxX + " Y=" + minY + " " + maxY;
+	}
+
 	private MinMaxMutable(double minX, double minY, double maxX, double maxY) {
 		this.minX = minX;
 		this.minY = minY;

@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 12235 $
+ * Revision $Revision: 13806 $
  *
  */
 package net.sourceforge.plantuml.ugraphic.g2d;
@@ -61,6 +61,7 @@ import net.sourceforge.plantuml.ugraphic.UChange;
 import net.sourceforge.plantuml.ugraphic.UClip;
 import net.sourceforge.plantuml.ugraphic.UEllipse;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
+import net.sourceforge.plantuml.ugraphic.UGraphic2;
 import net.sourceforge.plantuml.ugraphic.UImage;
 import net.sourceforge.plantuml.ugraphic.ULine;
 import net.sourceforge.plantuml.ugraphic.UPath;
@@ -69,7 +70,7 @@ import net.sourceforge.plantuml.ugraphic.UPolygon;
 import net.sourceforge.plantuml.ugraphic.URectangle;
 import net.sourceforge.plantuml.ugraphic.UText;
 
-public class UGraphicG2d extends AbstractUGraphic<Graphics2D> implements EnsureVisible {
+public class UGraphicG2d extends AbstractUGraphic<Graphics2D> implements EnsureVisible, UGraphic2 {
 
 	private BufferedImage bufferedImage;
 
@@ -132,7 +133,7 @@ public class UGraphicG2d extends AbstractUGraphic<Graphics2D> implements EnsureV
 		registerDriver(UPixel.class, new DriverPixelG2d());
 		registerDriver(UPolygon.class, new DriverPolygonG2d(dpiFactor, this));
 		registerDriver(UEllipse.class, new DriverEllipseG2d(dpiFactor, this));
-		registerDriver(UImage.class, new DriverImageG2d());
+		registerDriver(UImage.class, new DriverImageG2d(this));
 		registerDriver(DotPath.class, new DriverDotPathG2d(this));
 		registerDriver(UPath.class, new DriverPathG2d(dpiFactor));
 		registerDriver(UCenteredCharacter.class, new DriverCenteredCharacterG2d());
@@ -190,7 +191,7 @@ public class UGraphicG2d extends AbstractUGraphic<Graphics2D> implements EnsureV
 		return getGraphicObject();
 	}
 
-	public void writeImage(OutputStream os, String metadata, int dpi) throws IOException {
+	public void writeImageTOBEMOVED(OutputStream os, String metadata, int dpi) throws IOException {
 		final BufferedImage im = getBufferedImage();
 		PngIO.write(im, os, metadata, dpi);
 	}

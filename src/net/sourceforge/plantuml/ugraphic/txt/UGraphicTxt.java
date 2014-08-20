@@ -109,10 +109,6 @@ public class UGraphicTxt extends AbstractCommonUGraphic implements ClipContainer
 	public void closeAction() {
 	}
 
-	public void writeImage(OutputStream os, String metadata, int dpi) throws IOException {
-		throw new UnsupportedOperationException();
-	}
-
 	public Dimension2D getDimension() {
 		return new Dimension2DDouble(0, 0);
 	}

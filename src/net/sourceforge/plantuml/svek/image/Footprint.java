@@ -128,10 +128,6 @@ public class Footprint {
 		public void closeAction() {
 		}
 
-		public void writeImage(OutputStream os, String metadata, int dpi) throws IOException {
-			throw new UnsupportedOperationException();
-		}
-
 		private void addPoint(double x, double y) {
 			all.add(new Point2D.Double(x, y));
 		}
