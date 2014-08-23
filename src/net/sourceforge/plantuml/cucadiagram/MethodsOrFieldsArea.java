@@ -63,6 +63,7 @@ public class MethodsOrFieldsArea implements TextBlockWidth, TextBlock {
 	private final UFont font;
 	private final ISkinParam skinParam;
 	private final HtmlColor color;
+	private final HtmlColor hyperlinkColor;
 	private final Rose rose = new Rose();
 	private final List<Member> members = new ArrayList<Member>();
 	private final HorizontalAlignment align;
@@ -77,6 +78,7 @@ public class MethodsOrFieldsArea implements TextBlockWidth, TextBlock {
 		this.skinParam = skinParam;
 		this.font = skinParam.getFont(fontParam, null);
 		this.color = rose.getFontColor(skinParam, fontParam);
+		this.hyperlinkColor = skinParam.getHyperlinkColor();
 		this.members.addAll(members);
 	}
 
@@ -115,7 +117,7 @@ public class MethodsOrFieldsArea implements TextBlockWidth, TextBlock {
 		if (withVisibilityChar && s.startsWith("#")) {
 			s = "\\" + s;
 		}
-		FontConfiguration config = new FontConfiguration(font, color);
+		FontConfiguration config = new FontConfiguration(font, color, hyperlinkColor);
 		if (m.isAbstract()) {
 			config = config.italic();
 		}

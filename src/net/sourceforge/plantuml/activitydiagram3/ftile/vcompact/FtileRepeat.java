@@ -101,7 +101,7 @@ class FtileRepeat extends AbstractFtile {
 			HtmlColor borderColor, HtmlColor backColor, UFont fontTest, HtmlColor arrowColor,
 			HtmlColor endRepeatLinkColor, ConditionStyle conditionStyle, ISkinSimple spriteContainer) {
 
-		final FontConfiguration fc = new FontConfiguration(fontTest, HtmlColorUtils.BLACK);
+		final FontConfiguration fc = new FontConfiguration(fontTest, HtmlColorUtils.BLACK, HtmlColorUtils.BLUE);
 		final TextBlock tbTest = TextBlockUtils.create(test, fc, HorizontalAlignment.LEFT, spriteContainer);
 		final TextBlock yesTb = TextBlockUtils.create(yes, fc, HorizontalAlignment.LEFT, spriteContainer);
 		final TextBlock outTb = TextBlockUtils.create(out, fc, HorizontalAlignment.LEFT, spriteContainer);
@@ -242,10 +242,6 @@ class FtileRepeat extends AbstractFtile {
 	public FtileGeometry calculateDimension(StringBounder stringBounder) {
 		final Dimension2D dimTotal = calculateDimensionInternal(stringBounder);
 		return new FtileGeometry(dimTotal, getLeft(stringBounder), 0, dimTotal.getHeight());
-	}
-
-	public boolean isKilled() {
-		return false;
 	}
 
 	private Dimension2D calculateDimensionInternal(StringBounder stringBounder) {

@@ -75,6 +75,7 @@ public class AtomText implements Atom {
 	}
 
 	public static Atom createUrl(Url url, FontConfiguration fontConfiguration) {
+		fontConfiguration = fontConfiguration.hyperlink();
 		return new AtomText(url.getLabel(), fontConfiguration, url, ZERO, ZERO);
 	}
 

@@ -43,7 +43,7 @@ import net.sourceforge.plantuml.activitydiagram3.ftile.AbstractConnection;
 import net.sourceforge.plantuml.activitydiagram3.ftile.Arrows;
 import net.sourceforge.plantuml.activitydiagram3.ftile.Connection;
 import net.sourceforge.plantuml.activitydiagram3.ftile.Ftile;
-import net.sourceforge.plantuml.activitydiagram3.ftile.FtileAssemblyUtils;
+import net.sourceforge.plantuml.activitydiagram3.ftile.FtileAssemblySimple;
 import net.sourceforge.plantuml.activitydiagram3.ftile.FtileFactory;
 import net.sourceforge.plantuml.activitydiagram3.ftile.FtileFactoryDelegator;
 import net.sourceforge.plantuml.activitydiagram3.ftile.FtileGeometry;
@@ -97,7 +97,8 @@ public class FtileFactoryDelegatorCreateFork extends FtileFactoryDelegator {
 		inner = FtileUtils.addConnection(inner, conns);
 		final Ftile black = new FtileBlackBlock(shadowing(), inner.calculateDimension(getStringBounder()).getWidth(),
 				barHeight, colorBar, list.get(0).getSwimlaneIn());
-		return FtileAssemblyUtils.assembly(FtileAssemblyUtils.assembly(black, inner), black);
+		final Ftile tmp1 = new FtileAssemblySimple(black, inner);
+		return new FtileAssemblySimple(tmp1, black);
 	}
 
 	class ConnectionIn extends AbstractConnection {

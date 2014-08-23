@@ -44,8 +44,6 @@ public interface Ftile extends Swimable, TextBlock {
 
 	public boolean shadowing();
 
-	public boolean isKilled();
-
 	public LinkRendering getInLinkRendering();
 
 	public LinkRendering getOutLinkRendering();

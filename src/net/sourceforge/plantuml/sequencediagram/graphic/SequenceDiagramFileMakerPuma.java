@@ -344,10 +344,11 @@ public class SequenceDiagramFileMakerPuma implements FileMaker {
 
 	private void addFooter2(SequenceDiagramArea area) {
 		final HtmlColor titleColor = diagram.getSkinParam().getFontHtmlColor(FontParam.FOOTER, null);
+		final HtmlColor hyperlinkColor = diagram.getSkinParam().getHyperlinkColor();
 		final String fontFamily = diagram.getSkinParam().getFont(FontParam.FOOTER, null).getFamily(null);
 		final int fontSize = diagram.getSkinParam().getFont(FontParam.FOOTER, null).getSize();
 		final PngTitler pngTitler = new PngTitler(titleColor, diagram.getFooter(), fontSize, fontFamily,
-				diagram.getFooterAlignment());
+				diagram.getFooterAlignment(), hyperlinkColor);
 		final Dimension2D dim = pngTitler.getTextDimension(dummyStringBounder);
 		if (dim != null) {
 			area.setFooterArea(dim.getWidth(), dim.getHeight(), 3);
@@ -356,10 +357,11 @@ public class SequenceDiagramFileMakerPuma implements FileMaker {
 
 	private void addHeader2(SequenceDiagramArea area) {
 		final HtmlColor titleColor = diagram.getSkinParam().getFontHtmlColor(FontParam.HEADER, null);
+		final HtmlColor hyperlinkColor = diagram.getSkinParam().getHyperlinkColor();
 		final String fontFamily = diagram.getSkinParam().getFont(FontParam.HEADER, null).getFamily(null);
 		final int fontSize = diagram.getSkinParam().getFont(FontParam.HEADER, null).getSize();
 		final PngTitler pngTitler = new PngTitler(titleColor, diagram.getHeader(), fontSize, fontFamily,
-				diagram.getHeaderAlignment());
+				diagram.getHeaderAlignment(), hyperlinkColor);
 		final Dimension2D dim = pngTitler.getTextDimension(dummyStringBounder);
 		if (dim != null) {
 			area.setHeaderArea(dim.getWidth(), dim.getHeight(), 3);
@@ -368,10 +370,11 @@ public class SequenceDiagramFileMakerPuma implements FileMaker {
 
 	private void addFooter3(SequenceDiagramArea area, UGraphic ug) {
 		final HtmlColor titleColor = diagram.getSkinParam().getFontHtmlColor(FontParam.FOOTER, null);
+		final HtmlColor hyperlinkColor = diagram.getSkinParam().getHyperlinkColor();
 		final String fontFamily = diagram.getSkinParam().getFont(FontParam.FOOTER, null).getFamily(null);
 		final int fontSize = diagram.getSkinParam().getFont(FontParam.FOOTER, null).getSize();
 		final PngTitler pngTitler = new PngTitler(titleColor, diagram.getFooter(), fontSize, fontFamily,
-				diagram.getFooterAlignment());
+				diagram.getFooterAlignment(), hyperlinkColor);
 		final TextBlock text = pngTitler.getTextBlock();
 		if (text == null) {
 			return;
@@ -380,11 +383,12 @@ public class SequenceDiagramFileMakerPuma implements FileMaker {
 	}
 
 	private void addHeader3(SequenceDiagramArea area, UGraphic ug) {
+		final HtmlColor hyperlinkColor = diagram.getSkinParam().getHyperlinkColor();
 		final HtmlColor titleColor = diagram.getSkinParam().getFontHtmlColor(FontParam.HEADER, null);
 		final String fontFamily = diagram.getSkinParam().getFont(FontParam.HEADER, null).getFamily(null);
 		final int fontSize = diagram.getSkinParam().getFont(FontParam.HEADER, null).getSize();
 		final PngTitler pngTitler = new PngTitler(titleColor, diagram.getHeader(), fontSize, fontFamily,
-				diagram.getHeaderAlignment());
+				diagram.getHeaderAlignment(), hyperlinkColor);
 		final TextBlock text = pngTitler.getTextBlock();
 		if (text == null) {
 			return;

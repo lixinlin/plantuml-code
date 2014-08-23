@@ -66,7 +66,7 @@ public class AtomImg implements Atom {
 
 	public static Atom create(String src, final ImgValign valign, final int vspace) {
 		final UFont font = new UFont("Monospaced", Font.PLAIN, 14);
-		final FontConfiguration fc = new FontConfiguration(font, HtmlColorUtils.BLACK);
+		final FontConfiguration fc = new FontConfiguration(font, HtmlColorUtils.BLACK, HtmlColorUtils.BLUE);
 		try {
 			final File f = FileSystem.getInstance().getFile(src);
 			if (f.exists() == false) {

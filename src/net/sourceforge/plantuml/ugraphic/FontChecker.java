@@ -163,14 +163,16 @@ public class FontChecker {
 	}
 
 	public BufferedImage getBufferedImage(final char c) throws IOException {
-		final ImageBuilder imageBuilder = new ImageBuilder(FileFormat.PNG, new ColorMapperIdentity(), 1, null, null, null, 0, 0);
+		final ImageBuilder imageBuilder = new ImageBuilder(FileFormat.PNG, new ColorMapperIdentity(), 1, null, null,
+				null, 0, 0);
 		final double dim = 20;
 		imageBuilder.addUDrawable(new UDrawable() {
 			public void drawU(UGraphic ug) {
 				ug = ug.apply(new UChangeColor(HtmlColorUtils.BLACK));
 				ug.draw(new URectangle(dim - 1, dim - 1));
 				ug = (UGraphic2) ug.apply(new UTranslate(dim / 3, 2 * dim / 3));
-				final UText text = new UText("" + c, new FontConfiguration(font, HtmlColorUtils.BLACK));
+				final UText text = new UText("" + c, new FontConfiguration(font, HtmlColorUtils.BLACK,
+						HtmlColorUtils.BLUE));
 				ug.draw(text);
 			}
 		});
@@ -180,19 +182,19 @@ public class FontChecker {
 		return ImageIO.read(new ByteArrayInputStream(os.toByteArray()));
 	}
 
-//	public BufferedImage getBufferedImageOld(char c) throws IOException {
-//		final double dim = 20;
-//		UGraphic2 ug = new FileFormatOption(FileFormat.PNG).createUGraphic(new Dimension2DDouble(dim, dim));
-//		ug = (UGraphic2) ug.apply(new UChangeColor(HtmlColorUtils.BLACK));
-//		ug.draw(new URectangle(dim - 1, dim - 1));
-//		ug = (UGraphic2) ug.apply(new UTranslate(dim / 3, 2 * dim / 3));
-//		final UText text = new UText("" + c, new FontConfiguration(font, HtmlColorUtils.BLACK));
-//		ug.draw(text);
-//		final ByteArrayOutputStream os = new ByteArrayOutputStream();
-//		ug.writeImageTOBEMOVED(os, null, 96);
-//		os.close();
-//		return ImageIO.read(new ByteArrayInputStream(os.toByteArray()));
-//	}
+	// public BufferedImage getBufferedImageOld(char c) throws IOException {
+	// final double dim = 20;
+	// UGraphic2 ug = new FileFormatOption(FileFormat.PNG).createUGraphic(new Dimension2DDouble(dim, dim));
+	// ug = (UGraphic2) ug.apply(new UChangeColor(HtmlColorUtils.BLACK));
+	// ug.draw(new URectangle(dim - 1, dim - 1));
+	// ug = (UGraphic2) ug.apply(new UTranslate(dim / 3, 2 * dim / 3));
+	// final UText text = new UText("" + c, new FontConfiguration(font, HtmlColorUtils.BLACK));
+	// ug.draw(text);
+	// final ByteArrayOutputStream os = new ByteArrayOutputStream();
+	// ug.writeImageTOBEMOVED(os, null, 96);
+	// os.close();
+	// return ImageIO.read(new ByteArrayInputStream(os.toByteArray()));
+	// }
 
 	public static void main(String[] args) throws IOException, TransformerException {
 

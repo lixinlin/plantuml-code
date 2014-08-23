@@ -98,10 +98,6 @@ public class FtileCircleStop extends AbstractFtile {
 				.draw(circleSmall);
 	}
 
-	public boolean isKilled() {
-		return true;
-	}
-
 	public FtileGeometry calculateDimension(StringBounder stringBounder) {
 		return new FtileGeometry(SIZE, SIZE, SIZE / 2, 0);
 	}

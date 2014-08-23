@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 12444 $
+ * Revision $Revision: 13836 $
  *
  */
 package net.sourceforge.plantuml.skin.bluemodern;
@@ -57,9 +57,9 @@ import net.sourceforge.plantuml.ugraphic.UTranslate;
 
 public class ComponentBlueModernArrow extends AbstractComponentBlueModernArrow {
 
-	public ComponentBlueModernArrow(HtmlColor foregroundColor, HtmlColor fontColor, UFont font,
+	public ComponentBlueModernArrow(HtmlColor foregroundColor, HtmlColor fontColor, HtmlColor hyperlinkColor, UFont font,
 			Display stringsToDisplay, ArrowConfiguration arrowConfiguration, ISkinSimple spriteContainer) {
-		super(foregroundColor, fontColor, font, stringsToDisplay, arrowConfiguration, spriteContainer);
+		super(foregroundColor, fontColor, hyperlinkColor, font, stringsToDisplay, arrowConfiguration, spriteContainer);
 	}
 
 	@Override

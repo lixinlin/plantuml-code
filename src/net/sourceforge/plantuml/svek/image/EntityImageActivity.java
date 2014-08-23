@@ -76,8 +76,8 @@ public class EntityImageActivity extends AbstractEntityImage {
 		final Stereotype stereotype = entity.getStereotype();
 
 		this.desc = TextBlockUtils.create(entity.getDisplay(),
-				new FontConfiguration(SkinParamUtils.getFont(getSkinParam(), FontParam.ACTIVITY, stereotype),
-						SkinParamUtils.getFontColor(getSkinParam(), FontParam.ACTIVITY, stereotype)),
+				new FontConfiguration(SkinParamUtils.getFont(getSkinParam(), FontParam.ACTIVITY, stereotype), SkinParamUtils.getFontColor(getSkinParam(), FontParam.ACTIVITY, stereotype),
+						getSkinParam().getHyperlinkColor()),
 				HorizontalAlignment.CENTER, skinParam);
 		this.url = entity.getUrl99();
 	}

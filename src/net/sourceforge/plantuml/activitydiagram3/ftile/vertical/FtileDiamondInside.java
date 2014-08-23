@@ -138,10 +138,6 @@ public class FtileDiamondInside extends AbstractFtile {
 
 	}
 
-	public boolean isKilled() {
-		return false;
-	}
-
 	public FtileGeometry calculateDimension(StringBounder stringBounder) {
 		final Dimension2D dimLabel = label.calculateDimension(stringBounder);
 		final Dimension2D dim;

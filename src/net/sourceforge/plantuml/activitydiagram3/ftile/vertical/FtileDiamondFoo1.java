@@ -143,8 +143,4 @@ public class FtileDiamondFoo1 extends AbstractFtile {
 		return result;
 	}
 
-	public boolean isKilled() {
-		return false;
-	}
-
 }

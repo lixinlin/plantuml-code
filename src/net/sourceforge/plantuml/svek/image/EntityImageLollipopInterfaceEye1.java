@@ -72,10 +72,11 @@ public class EntityImageLollipopInterfaceEye1 extends AbstractEntityImage {
 		super(entity, skinParam);
 		this.bibliotekon = bibliotekon;
 		final Stereotype stereotype = entity.getStereotype();
-		this.desc = TextBlockUtils.create(entity.getDisplay(),
-				new FontConfiguration(SkinParamUtils.getFont(getSkinParam(), FontParam.CLASS, stereotype),
-						SkinParamUtils.getFontColor(getSkinParam(), FontParam.CLASS, stereotype)),
-				HorizontalAlignment.CENTER, skinParam);
+		this.desc = TextBlockUtils.create(
+				entity.getDisplay(),
+				new FontConfiguration(SkinParamUtils.getFont(getSkinParam(),
+						FontParam.CLASS, stereotype), SkinParamUtils.getFontColor(getSkinParam(), FontParam.CLASS,
+				stereotype), getSkinParam().getHyperlinkColor()), HorizontalAlignment.CENTER, skinParam);
 		this.url = entity.getUrl99();
 
 	}

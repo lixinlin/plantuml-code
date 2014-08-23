@@ -119,7 +119,7 @@ class FtileIfLong extends AbstractFtile {
 
 		final Ftile tile2 = new FtileMinWidth(branch2.getFtile(), 30);
 
-		final FontConfiguration fc = new FontConfiguration(font, HtmlColorUtils.BLACK);
+		final FontConfiguration fc = new FontConfiguration(font, HtmlColorUtils.BLACK, HtmlColorUtils.BLUE);
 
 		final List<Ftile> diamonds = new ArrayList<Ftile>();
 		final List<Connection> conns = new ArrayList<Connection>();
@@ -358,7 +358,7 @@ class FtileIfLong extends AbstractFtile {
 			double minX = Double.MAX_VALUE;
 			double maxX = 0;
 			for (Ftile tmp : all) {
-				if (tmp.isKilled()) {
+				if (tmp.calculateDimension(stringBounder).hasPointOut() == false) {
 					continue;
 				}
 				final UTranslate ut = getTranslateFor(tmp, stringBounder);
@@ -449,16 +449,16 @@ class FtileIfLong extends AbstractFtile {
 
 	public FtileGeometry calculateDimension(StringBounder stringBounder) {
 		final Dimension2D dimTotal = calculateDimensionInternal(stringBounder);
-		return new FtileGeometry(dimTotal, dimTotal.getWidth() / 2, 0, dimTotal.getHeight());
-	}
 
-	public boolean isKilled() {
-		for (Ftile tile : tiles) {
-			if (tile.isKilled() == false) {
-				return false;
+		final List<Ftile> all = new ArrayList<Ftile>(tiles);
+		all.add(tile2);
+		for (Ftile tmp : all) {
+			if (tmp.calculateDimension(stringBounder).hasPointOut()) {
+				return new FtileGeometry(dimTotal, dimTotal.getWidth() / 2, 0, dimTotal.getHeight());
 			}
 		}
-		return tile2.isKilled();
+		return new FtileGeometry(dimTotal, dimTotal.getWidth() / 2, 0);
+
 	}
 
 	private Dimension2D dimDiamondAndTile(StringBounder stringBounder, Ftile tileOrDiamond) {

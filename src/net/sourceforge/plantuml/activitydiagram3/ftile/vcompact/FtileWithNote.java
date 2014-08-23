@@ -93,7 +93,7 @@ public class FtileWithNote extends AbstractFtile implements Stencil {
 		final HtmlColor noteBackgroundColor = rose.getHtmlColor(skinParam, ColorParam.noteBackground);
 		final HtmlColor borderColor = rose.getHtmlColor(skinParam, ColorParam.noteBorder);
 
-		final FontConfiguration fc = new FontConfiguration(fontNote, fontColor);
+		final FontConfiguration fc = new FontConfiguration(fontNote, fontColor, skinParam.getHyperlinkColor());
 
 		final Sheet sheet = new CreoleParser(fc, HorizontalAlignment.LEFT, skinParam, false).createSheet(note);
 		this.text = new SheetBlock2(new SheetBlock1(sheet, 0), this, new UStroke(1));
@@ -158,10 +158,6 @@ public class FtileWithNote extends AbstractFtile implements Stencil {
 
 	public double getStartingX(StringBounder stringBounder, double y) {
 		return -FOO;
-	}
-
-	public boolean isKilled() {
-		return tile.isKilled();
 	}
 
 	private final int FOO = 6;

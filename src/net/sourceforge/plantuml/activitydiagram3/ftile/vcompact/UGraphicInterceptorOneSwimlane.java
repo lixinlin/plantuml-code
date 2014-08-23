@@ -38,9 +38,13 @@ import java.util.Set;
 import net.sourceforge.plantuml.activitydiagram3.ftile.Connection;
 import net.sourceforge.plantuml.activitydiagram3.ftile.Ftile;
 import net.sourceforge.plantuml.activitydiagram3.ftile.Swimlane;
+import net.sourceforge.plantuml.graphic.HtmlColorUtils;
 import net.sourceforge.plantuml.graphic.UGraphicDelegator;
 import net.sourceforge.plantuml.ugraphic.UChange;
+import net.sourceforge.plantuml.ugraphic.UChangeBackColor;
+import net.sourceforge.plantuml.ugraphic.UChangeColor;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
+import net.sourceforge.plantuml.ugraphic.ULine;
 import net.sourceforge.plantuml.ugraphic.UShape;
 
 public class UGraphicInterceptorOneSwimlane extends UGraphicDelegator {
@@ -60,6 +64,7 @@ public class UGraphicInterceptorOneSwimlane extends UGraphicDelegator {
 			final boolean contained = swinlanes.contains(swimlane);
 			if (contained) {
 				tile.drawU(this);
+				// drawGoto();
 			}
 		} else if (shape instanceof Connection) {
 			final Connection connection = (Connection) shape;
@@ -79,9 +84,14 @@ public class UGraphicInterceptorOneSwimlane extends UGraphicDelegator {
 
 	}
 
+	private void drawGoto() {
+		final UGraphic ugGoto = getUg().apply(new UChangeColor(HtmlColorUtils.GREEN)).apply(
+				new UChangeBackColor(HtmlColorUtils.GREEN));
+		ugGoto.draw(new ULine(100, 100));
+	}
+
 	public UGraphic apply(UChange change) {
 		return new UGraphicInterceptorOneSwimlane(getUg().apply(change), swimlane);
 	}
-
 
 }

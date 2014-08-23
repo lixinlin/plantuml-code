@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 12495 $
+ * Revision $Revision: 13841 $
  *
  */
 package net.sourceforge.plantuml.printskin;
@@ -142,7 +142,9 @@ class PrintSkin extends AbstractPSystem {
 		if (width == 0) {
 			width = 42;
 		}
-		ug.apply(new UChangeBackColor(HtmlColorUtils.LIGHT_GRAY)).apply(new UChangeColor(HtmlColorUtils.LIGHT_GRAY)).apply(new UTranslate((double) (xpos - 1), (double) (ypos - 1))).draw(new URectangle(width + 2, height + 2));
+		ug.apply(new UChangeBackColor(HtmlColorUtils.LIGHT_GRAY)).apply(new UChangeColor(HtmlColorUtils.LIGHT_GRAY))
+				.apply(new UTranslate((double) (xpos - 1), (double) (ypos - 1)))
+				.draw(new URectangle(width + 2, height + 2));
 
 		comp.drawU(ug.apply(new UTranslate(xpos, ypos)), new Area(new Dimension2DDouble(width, height)),
 				new SimpleContext2D(false));
@@ -152,7 +154,7 @@ class PrintSkin extends AbstractPSystem {
 
 	private void println(String s) {
 		final TextBlock textBlock = TextBlockUtils.create(Display.create(s), new FontConfiguration(FONT1,
-				HtmlColorUtils.BLACK), HorizontalAlignment.LEFT, new SpriteContainerEmpty());
+				HtmlColorUtils.BLACK, HtmlColorUtils.BLUE), HorizontalAlignment.LEFT, new SpriteContainerEmpty());
 		textBlock.drawU(ug.apply(new UTranslate(xpos, ypos)));
 		ypos += textBlock.calculateDimension(ug.getStringBounder()).getHeight();
 	}

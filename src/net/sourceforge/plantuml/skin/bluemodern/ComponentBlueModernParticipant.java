@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 12444 $
+ * Revision $Revision: 13836 $
  *
  */
 package net.sourceforge.plantuml.skin.bluemodern;
@@ -51,9 +51,9 @@ public class ComponentBlueModernParticipant extends AbstractTextualComponent {
 	private final HtmlColor blue1;
 	private final HtmlColor blue2;
 
-	public ComponentBlueModernParticipant(HtmlColor blue1, HtmlColor blue2, HtmlColor fontColor, UFont font,
+	public ComponentBlueModernParticipant(HtmlColor blue1, HtmlColor blue2, HtmlColor fontColor, HtmlColor hyperlinkColor, UFont font,
 			Display stringsToDisplay, ISkinSimple spriteContainer) {
-		super(stringsToDisplay, fontColor, font, HorizontalAlignment.CENTER, 7, 7, 7, spriteContainer, 0, false);
+		super(stringsToDisplay, fontColor, hyperlinkColor, font, HorizontalAlignment.CENTER, 7, 7, 7, spriteContainer, 0, false);
 		this.blue1 = blue1;
 		this.blue2 = blue2;
 	}

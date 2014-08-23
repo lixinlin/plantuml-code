@@ -116,7 +116,7 @@ public class FtileBox extends AbstractFtile {
 		this.swimlane = swimlane;
 		this.backColor = backColor;
 		this.inRenreding = new LinkRendering(arrowColor);
-		final FontConfiguration fc = new FontConfiguration(font, HtmlColorUtils.BLACK);
+		final FontConfiguration fc = new FontConfiguration(font, HtmlColorUtils.BLACK, HtmlColorUtils.BLUE);
 		final Sheet sheet = new CreoleParser(fc, HorizontalAlignment.LEFT, skinParam, false).createSheet(label);
 		this.tb = new SheetBlock2(new SheetBlock1(sheet, 0), new MyStencil(), new UStroke(1));
 		this.print = label.toString();
@@ -139,10 +139,6 @@ public class FtileBox extends AbstractFtile {
 		rect.drawU(ug);
 
 		tb.drawU(ug.apply(new UTranslate(MARGIN, MARGIN)));
-	}
-
-	public boolean isKilled() {
-		return false;
 	}
 
 	public FtileGeometry calculateDimension(StringBounder stringBounder) {

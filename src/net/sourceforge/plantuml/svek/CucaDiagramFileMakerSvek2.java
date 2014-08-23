@@ -169,8 +169,9 @@ public final class CucaDiagramFileMakerSvek2 {
 					lhead = getCluster2((IEntity) link.getEntity2()).getClusterId();
 				}
 				final ISkinParam skinParam = dotData.getSkinParam();
-				final FontConfiguration labelFont = new FontConfiguration(skinParam.getFont(FontParam.GENERIC_ARROW,
-						null), skinParam.getFontHtmlColor(FontParam.GENERIC_ARROW, null));
+				final FontConfiguration labelFont = new FontConfiguration(skinParam.getFont(FontParam.GENERIC_ARROW, null),
+						skinParam.getFontHtmlColor(
+								FontParam.GENERIC_ARROW, null), skinParam.getHyperlinkColor());
 
 				final Line line = new Line(shapeUid1, shapeUid2, link, colorSequence, ltail, lhead, skinParam,
 						stringBounder, labelFont, getBibliotekon(), dotStringFactory.getGraphvizVersion());
@@ -527,8 +528,10 @@ public final class CucaDiagramFileMakerSvek2 {
 		}
 
 		final FontParam fontParam = g.getGroupType() == GroupType.STATE ? FontParam.STATE : FontParam.PACKAGE;
-		return TextBlockUtils.create(label, new FontConfiguration(dotData.getSkinParam()
-				.getFont(fontParam, stereotype2), dotData.getSkinParam().getFontHtmlColor(fontParam, stereotype2)),
+		return TextBlockUtils.create(
+				label,
+				new FontConfiguration(dotData.getSkinParam().getFont(
+						fontParam, stereotype2), dotData.getSkinParam().getFontHtmlColor(fontParam, stereotype2), dotData.getSkinParam().getHyperlinkColor()),
 				HorizontalAlignment.CENTER, dotData.getSkinParam());
 	}
 
@@ -548,9 +551,9 @@ public final class CucaDiagramFileMakerSvek2 {
 		final Stereotype stereotype2 = g.getStereotype();
 
 		final FontParam fontParam = FontParam.COMPONENT_STEREOTYPE;
-		return TextBlockUtils.create(Display.create(stereos),
-				new FontConfiguration(dotData.getSkinParam().getFont(fontParam, stereotype2), dotData.getSkinParam()
-						.getFontHtmlColor(fontParam, stereotype2)), HorizontalAlignment.CENTER, dotData.getSkinParam());
+		return TextBlockUtils.create(Display.create(stereos), new FontConfiguration(dotData.getSkinParam().getFont(fontParam, stereotype2), dotData.getSkinParam()
+				.getFontHtmlColor(fontParam, stereotype2), dotData.getSkinParam()
+						.getHyperlinkColor()), HorizontalAlignment.CENTER, dotData.getSkinParam());
 	}
 
 }

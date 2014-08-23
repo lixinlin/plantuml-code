@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 13687 $
+ * Revision $Revision: 13841 $
  *
  */
 package net.sourceforge.plantuml.skin;
@@ -37,7 +37,6 @@ import java.awt.geom.Dimension2D;
 
 import net.sourceforge.plantuml.FontParam;
 import net.sourceforge.plantuml.ISkinSimple;
-import net.sourceforge.plantuml.SpriteContainer;
 import net.sourceforge.plantuml.cucadiagram.BodyEnhanced2;
 import net.sourceforge.plantuml.cucadiagram.Display;
 import net.sourceforge.plantuml.graphic.FontConfiguration;
@@ -62,14 +61,14 @@ public abstract class AbstractTextualComponent extends AbstractComponent {
 	private final UFont font;
 	private final HtmlColor fontColor;
 
-	public AbstractTextualComponent(CharSequence label, HtmlColor fontColor, UFont font,
+	public AbstractTextualComponent(CharSequence label, HtmlColor fontColor, HtmlColor hyperlinkColor, UFont font,
 			HorizontalAlignment horizontalAlignment, int marginX1, int marginX2, int marginY,
 			ISkinSimple spriteContainer, double maxMessageSize) {
-		this(Display.getWithNewlines(label == null ? "" : label.toString()), fontColor, font, horizontalAlignment,
+		this(Display.getWithNewlines(label == null ? "" : label.toString()), fontColor, hyperlinkColor, font, horizontalAlignment,
 				marginX1, marginX2, marginY, spriteContainer, maxMessageSize, false);
 	}
 
-	public AbstractTextualComponent(Display strings, HtmlColor fontColor, UFont font,
+	public AbstractTextualComponent(Display strings, HtmlColor fontColor, HtmlColor hyperlinkColor, UFont font,
 			HorizontalAlignment horizontalAlignment, int marginX1, int marginX2, int marginY,
 			ISkinSimple spriteContainer, double maxMessageSize, boolean enhanced) {
 		this.font = font;
@@ -83,9 +82,9 @@ public abstract class AbstractTextualComponent extends AbstractComponent {
 			textBlock = new TextBlockEmpty();
 		} else if (enhanced) {
 			textBlock = new BodyEnhanced2(strings, FontParam.NOTE, spriteContainer, HorizontalAlignment.LEFT, font,
-					fontColor);
+					fontColor, hyperlinkColor);
 		} else {
-			textBlock = TextBlockUtils.create(strings, new FontConfiguration(font, fontColor), horizontalAlignment,
+			textBlock = TextBlockUtils.create(strings, new FontConfiguration(font, fontColor, hyperlinkColor), horizontalAlignment,
 					spriteContainer, maxMessageSize, false);
 		}
 	}

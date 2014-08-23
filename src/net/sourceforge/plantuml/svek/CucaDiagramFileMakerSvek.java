@@ -139,7 +139,6 @@ public final class CucaDiagramFileMakerSvek implements CucaDiagramFileMaker {
 		result = addTitle(result);
 		result = addHeaderAndFooter(result);
 
-
 		final FileFormat fileFormat = fileFormatOption.getFileFormat();
 
 		final String widthwarning = diagram.getSkinParam().getValue("widthwarning");
@@ -259,12 +258,12 @@ public final class CucaDiagramFileMakerSvek implements CucaDiagramFileMaker {
 		if (footer == null && header == null) {
 			return original;
 		}
-		final TextBlock textFooter = footer == null ? null : TextBlockUtils.create(footer, new FontConfiguration(
-				getFont(FontParam.FOOTER), getFontColor(FontParam.FOOTER, null)), diagram.getFooterAlignment(), diagram
-				.getSkinParam());
-		final TextBlock textHeader = header == null ? null : TextBlockUtils.create(header, new FontConfiguration(
-				getFont(FontParam.HEADER), getFontColor(FontParam.HEADER, null)), diagram.getHeaderAlignment(), diagram
-				.getSkinParam());
+		final TextBlock textFooter = footer == null ? null : TextBlockUtils.create(footer,
+				new FontConfiguration(getFont(FontParam.FOOTER), getFontColor(FontParam.FOOTER, null),
+						diagram.getSkinParam().getHyperlinkColor()), diagram.getFooterAlignment(), diagram.getSkinParam());
+		final TextBlock textHeader = header == null ? null : TextBlockUtils.create(header,
+				new FontConfiguration(getFont(FontParam.HEADER), getFontColor(FontParam.HEADER, null),
+						diagram.getSkinParam().getHyperlinkColor()), diagram.getHeaderAlignment(), diagram.getSkinParam());
 
 		return new DecorateEntityImage(original, textHeader, diagram.getHeaderAlignment(), textFooter,
 				diagram.getFooterAlignment());
@@ -275,8 +274,9 @@ public final class CucaDiagramFileMakerSvek implements CucaDiagramFileMaker {
 		if (title == null) {
 			return original;
 		}
-		final TextBlock text = TextBlockUtils.create(title, new FontConfiguration(getFont(FontParam.TITLE),
-				getFontColor(FontParam.TITLE, null)), HorizontalAlignment.CENTER, diagram.getSkinParam());
+		final TextBlock text = TextBlockUtils.create(title, new FontConfiguration(getFont(FontParam.TITLE), getFontColor(FontParam.TITLE, null), diagram.getSkinParam()
+						.getHyperlinkColor()),
+				HorizontalAlignment.CENTER, diagram.getSkinParam());
 
 		return DecorateEntityImage.addTop(original, text, HorizontalAlignment.CENTER);
 	}

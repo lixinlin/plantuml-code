@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 13324 $
+ * Revision $Revision: 13834 $
  *
  */
 package net.sourceforge.plantuml.svg;
@@ -345,11 +345,11 @@ public class SvgGraphics {
 	}
 
 	private String getStyle() {
-		return getStyle(strokeWidth);
+		return getStyleInternal(stroke, strokeWidth, strokeDasharray);
 	}
 
-	private String getStyle(String strokeWidth) {
-		final StringBuilder style = new StringBuilder("stroke: " + stroke + "; stroke-width: " + strokeWidth + ";");
+	private static String getStyleInternal(String color, String strokeWidth, String strokeDasharray) {
+		final StringBuilder style = new StringBuilder("stroke: " + color + "; stroke-width: " + strokeWidth + ";");
 		if (strokeDasharray != null) {
 			style.append(" stroke-dasharray: " + strokeDasharray + ";");
 		}
@@ -410,6 +410,18 @@ public class SvgGraphics {
 			}
 			elt.setTextContent(text);
 			getG().appendChild(elt);
+
+			if (textDecoration != null && textDecoration.contains("underline")) {
+				final double delta = 2;
+				final Element elt2 = (Element) document.createElement("line");
+				elt2.setAttribute("x1", format(x));
+				elt2.setAttribute("y1", format(y + delta));
+				elt2.setAttribute("x2", format(x + textLength));
+				elt2.setAttribute("y2", format(y + delta));
+				elt2.setAttribute("style", getStyleInternal(fill, "1.0", null));
+				getG().appendChild(elt2);
+			}
+
 		}
 		ensureVisible(x, y);
 		ensureVisible(x + textLength, y);

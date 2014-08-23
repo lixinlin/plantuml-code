@@ -59,7 +59,7 @@ public class GanttDiagram2 {
 	}
 
 	private final UFont font = new UFont("Serif", Font.PLAIN, 9);
-	private final FontConfiguration fontConfig = new FontConfiguration(font, HtmlColorUtils.BLACK);
+	private final FontConfiguration fontConfig = new FontConfiguration(font, HtmlColorUtils.BLACK, HtmlColorUtils.BLUE);
 
 	public void draw(UGraphic ug, double x, double y) {
 

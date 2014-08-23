@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 12348 $
+ * Revision $Revision: 13835 $
  * 
  */
 package net.sourceforge.plantuml;
@@ -39,6 +39,7 @@ import net.sourceforge.plantuml.graphic.HtmlColorUtils;
 
 public enum ColorParam {
 	background(HtmlColorUtils.getColorIfValid("white")),
+	hyperlink(HtmlColorUtils.BLUE),
 	
 	activityBackground(HtmlColorUtils.MY_YELLOW),
 	activityBorder(HtmlColorUtils.MY_RED),

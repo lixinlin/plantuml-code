@@ -133,6 +133,7 @@ public class LanguageDescriptor {
 		keyword.add("endwhile");
 		keyword.add("fork");
 		keyword.add("again");
+		keyword.add("kill");
 
 		preproc.add("!include");
 		preproc.add("!define");

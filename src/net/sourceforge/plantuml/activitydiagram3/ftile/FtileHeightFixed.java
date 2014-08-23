@@ -79,8 +79,4 @@ public class FtileHeightFixed extends AbstractFtile {
 		ug.apply(getTranslate(ug.getStringBounder())).draw(tile);
 	}
 
-	public boolean isKilled() {
-		return tile.isKilled();
-	}
-
 }

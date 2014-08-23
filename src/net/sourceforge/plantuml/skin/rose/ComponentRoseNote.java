@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 12444 $
+ * Revision $Revision: 13836 $
  *
  */
 package net.sourceforge.plantuml.skin.rose;
@@ -61,10 +61,10 @@ final public class ComponentRoseNote extends AbstractTextualComponent implements
 	private final double deltaShadow;
 	private final UStroke stroke;
 
-	public ComponentRoseNote(HtmlColor back, HtmlColor foregroundColor, HtmlColor fontColor, UFont font,
+	public ComponentRoseNote(HtmlColor back, HtmlColor foregroundColor, HtmlColor fontColor, HtmlColor hyperlinkColor, UFont font,
 			Display strings, double paddingX, double paddingY, ISkinSimple spriteContainer, double deltaShadow,
 			UStroke stroke) {
-		super(strings, fontColor, font, HorizontalAlignment.LEFT, 6, 15, 5, spriteContainer, 0, true);
+		super(strings, fontColor, hyperlinkColor, font, HorizontalAlignment.LEFT, 6, 15, 5, spriteContainer, 0, true);
 		this.back = back;
 		this.foregroundColor = foregroundColor;
 		this.paddingX = paddingX;

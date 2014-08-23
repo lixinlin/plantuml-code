@@ -61,7 +61,7 @@ public class Tile implements TextBlock {
 	private final int num;
 
 	private final UFont numberFont = new UFont("Monospaced", Font.PLAIN, 11);
-	private final FontConfiguration fc = new FontConfiguration(numberFont, HtmlColorUtils.BLACK);
+	private final FontConfiguration fc = new FontConfiguration(numberFont, HtmlColorUtils.BLACK, HtmlColorUtils.BLUE);
 	private final Map<TileGeometry, TileArea> geometries;
 
 	Tile(int num) {

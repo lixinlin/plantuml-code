@@ -136,8 +136,4 @@ public class FtileDiamond extends AbstractFtile {
 		return new FtileGeometry(dim, dim.getWidth() / 2, 0, dim.getHeight());
 	}
 
-	public boolean isKilled() {
-		return false;
-	}
-
 }

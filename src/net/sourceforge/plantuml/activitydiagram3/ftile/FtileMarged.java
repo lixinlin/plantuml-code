@@ -72,8 +72,4 @@ public class FtileMarged extends AbstractFtile {
 		ug.apply(new UTranslate(margin, 0)).draw(tile);
 	}
 
-	public boolean isKilled() {
-		return tile.isKilled();
-	}
-
 }

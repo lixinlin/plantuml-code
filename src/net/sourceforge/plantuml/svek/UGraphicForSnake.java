@@ -48,6 +48,10 @@ public class UGraphicForSnake extends UGraphicDelegator {
 	private final double dx;
 	private final double dy;
 	private final List<PendingSnake> snakes;
+	
+	public UTranslate getTranslation() {
+		return new UTranslate(dx, dy);
+	}
 
 	static class PendingSnake {
 		private final Snake snake;
