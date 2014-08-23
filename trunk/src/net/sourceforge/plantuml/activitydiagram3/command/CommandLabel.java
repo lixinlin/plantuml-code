@@ -28,15 +28,38 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 8475 $
+ * Revision $Revision: 4762 $
  *
  */
-package net.sourceforge.plantuml.activitydiagram3.ftile;
+package net.sourceforge.plantuml.activitydiagram3.command;
 
-public class FtileAssemblyUtils {
+import net.sourceforge.plantuml.activitydiagram3.ActivityDiagram3;
+import net.sourceforge.plantuml.command.CommandExecutionResult;
+import net.sourceforge.plantuml.command.SingleLineCommand2;
+import net.sourceforge.plantuml.command.regex.RegexConcat;
+import net.sourceforge.plantuml.command.regex.RegexLeaf;
+import net.sourceforge.plantuml.command.regex.RegexResult;
 
-	static public Ftile assembly(Ftile tile1, Ftile tile2) {
-		return new FtileAssemblySimple4747bis(tile1, tile2);
+public class CommandLabel extends SingleLineCommand2<ActivityDiagram3> {
+
+	public CommandLabel() {
+		super(getRegexConcat());
+	}
+
+	static RegexConcat getRegexConcat() {
+		return new RegexConcat(new RegexLeaf("^"), //
+				new RegexLeaf("label"), //
+				new RegexLeaf("[%s]+"), //
+				new RegexLeaf("NAME", "([\\p{L}0-9_.]+)"), //
+				new RegexLeaf(";?"), //
+				new RegexLeaf("$"));
+	}
+
+	@Override
+	protected CommandExecutionResult executeArg(ActivityDiagram3 diagram, RegexResult arg) {
+
+		final String name = arg.get("NAME", 0);
+		return diagram.addLabel(name);
 	}
 
 }

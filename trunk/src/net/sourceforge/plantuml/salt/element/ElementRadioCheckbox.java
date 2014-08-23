@@ -67,7 +67,7 @@ public class ElementRadioCheckbox extends AbstractElement {
 
 	public ElementRadioCheckbox(List<String> text, UFont font, boolean radio, boolean checked,
 			ISkinSimple spriteContainer) {
-		final FontConfiguration config = new FontConfiguration(font, HtmlColorUtils.BLACK);
+		final FontConfiguration config = new FontConfiguration(font, HtmlColorUtils.BLACK, HtmlColorUtils.BLUE);
 		this.block = TextBlockUtils.create(Display.create(text), config, HorizontalAlignment.LEFT, spriteContainer);
 		this.radio = radio;
 		this.checked = checked;

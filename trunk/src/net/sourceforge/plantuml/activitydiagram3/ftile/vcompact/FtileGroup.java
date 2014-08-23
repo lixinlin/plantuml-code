@@ -75,7 +75,7 @@ public class FtileGroup extends AbstractFtile {
 		this.color = color;
 		this.titleColor = titleColor;
 		final UFont font = new UFont("Serif", Font.PLAIN, 14);
-		final FontConfiguration fc = new FontConfiguration(font, HtmlColorUtils.BLACK);
+		final FontConfiguration fc = new FontConfiguration(font, HtmlColorUtils.BLACK, HtmlColorUtils.BLUE);
 		if (title == null) {
 			this.name = TextBlockUtils.empty(0, 0);
 		} else {
@@ -135,10 +135,6 @@ public class FtileGroup extends AbstractFtile {
 
 		ug.apply(getTranslate(stringBounder)).draw(inner);
 
-	}
-
-	public boolean isKilled() {
-		return false;
 	}
 
 }

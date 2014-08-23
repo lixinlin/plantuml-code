@@ -72,7 +72,7 @@ public class FtileFactoryDelegatorIf extends FtileFactoryDelegator {
 					conditionStyle, thens, elseBranch);
 		}
 		return FtileIf.create(swimlane, borderColor, backColor, fontArrow, fontTest, arrowColor, getFactory(),
-				conditionStyle, thens.get(0), elseBranch, getSkinParam());
+				conditionStyle, thens.get(0), elseBranch, getSkinParam(), getStringBounder());
 	}
 
 }

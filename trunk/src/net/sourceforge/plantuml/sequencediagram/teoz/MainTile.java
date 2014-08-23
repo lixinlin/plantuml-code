@@ -40,7 +40,7 @@ import java.util.List;
 import net.sourceforge.plantuml.ISkinParam;
 import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.graphic.TextBlockUtils;
-import net.sourceforge.plantuml.graphic.UGraphicInterceptorTextBlockable;
+import net.sourceforge.plantuml.graphic.UGraphicInterceptorUDrawable;
 import net.sourceforge.plantuml.real.Real;
 import net.sourceforge.plantuml.real.RealMax;
 import net.sourceforge.plantuml.real.RealMin;
@@ -99,7 +99,7 @@ public class MainTile implements Tile {
 		final LiveBoxFinder liveBoxFinder = new LiveBoxFinder(stringBounder);
 
 		drawUInternal(liveBoxFinder);
-		drawUInternal(new UGraphicInterceptorTextBlockable(ug));
+		drawUInternal(new UGraphicInterceptorUDrawable(ug));
 	}
 
 	private void drawUInternal(UGraphic ug) {

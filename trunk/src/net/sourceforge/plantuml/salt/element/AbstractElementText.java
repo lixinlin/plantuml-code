@@ -55,7 +55,7 @@ abstract class AbstractElementText extends AbstractElement {
 	private final int charLength;
 
 	public AbstractElementText(String text, UFont font, boolean manageLength, ISkinSimple spriteContainer) {
-		config = new FontConfiguration(font, HtmlColorUtils.BLACK);
+		config = new FontConfiguration(font, HtmlColorUtils.BLACK, HtmlColorUtils.BLUE);
 		if (manageLength) {
 			this.charLength = getCharNumber(text);
 			text = text.trim();

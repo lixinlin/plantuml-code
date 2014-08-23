@@ -44,7 +44,6 @@ import java.util.Set;
 import net.sourceforge.plantuml.Dimension2DDouble;
 import net.sourceforge.plantuml.Direction;
 import net.sourceforge.plantuml.ISkinParam;
-import net.sourceforge.plantuml.OptionFlags;
 import net.sourceforge.plantuml.activitydiagram3.Branch;
 import net.sourceforge.plantuml.activitydiagram3.LinkRendering;
 import net.sourceforge.plantuml.activitydiagram3.ftile.AbstractConnection;
@@ -121,13 +120,15 @@ class FtileIf extends AbstractFtile {
 
 	static Ftile create(Swimlane swimlane, HtmlColor borderColor, HtmlColor backColor, UFont fontArrow, UFont fontTest,
 			HtmlColor arrowColor, FtileFactory ftileFactory, ConditionStyle conditionStyle, Branch branch1,
-			Branch branch2, ISkinParam skinParam) {
+			Branch branch2, ISkinParam skinParam, StringBounder stringBounder) {
 
 		final Ftile tile1 = new FtileMinWidth(branch1.getFtile(), 30);
 		final Ftile tile2 = new FtileMinWidth(branch2.getFtile(), 30);
 
-		final FontConfiguration fcArrow = new FontConfiguration(fontArrow, HtmlColorUtils.BLACK);
-		final FontConfiguration fcTest = new FontConfiguration(fontTest, HtmlColorUtils.BLACK);
+		final FontConfiguration fcArrow = new FontConfiguration(fontArrow, HtmlColorUtils.BLACK,
+				skinParam.getHyperlinkColor());
+		final FontConfiguration fcTest = new FontConfiguration(fontTest, HtmlColorUtils.BLACK,
+				skinParam.getHyperlinkColor());
 
 		final TextBlock tb1 = TextBlockUtils.create(branch1.getLabelPositive(), fcArrow, HorizontalAlignment.LEFT,
 				ftileFactory);
@@ -151,23 +152,27 @@ class FtileIf extends AbstractFtile {
 		}
 
 		final Ftile diamond2;
-		if (tile1.isKilled() || tile2.isKilled()) {
+		if (tile1.calculateDimension(stringBounder).hasPointOut()
+				&& tile2.calculateDimension(stringBounder).hasPointOut()) {
+			diamond2 = new FtileDiamond(tile1.shadowing(), backColor, borderColor, swimlane);
+		} else {
 			diamond2 = new FtileEmpty(tile1.shadowing(), Diamond.diamondHalfSize * 2, Diamond.diamondHalfSize * 2,
 					swimlane, swimlane);
-		} else {
-			diamond2 = new FtileDiamond(tile1.shadowing(), backColor, borderColor, swimlane);
 		}
 		final FtileIf result = new FtileIf(diamond1, tile1, tile2, diamond2, arrowColor);
 
 		final List<Connection> conns = new ArrayList<Connection>();
 		conns.add(result.new ConnectionHorizontalThenVertical(tile1));
 		conns.add(result.new ConnectionHorizontalThenVertical(tile2));
-		if (tile1.isKilled() == false && tile2.isKilled() == false) {
+		if (tile1.calculateDimension(stringBounder).hasPointOut()
+				&& tile2.calculateDimension(stringBounder).hasPointOut()) {
 			conns.add(result.new ConnectionVerticalThenHorizontal(tile1, branch1.getInlinkRenderingColor()));
 			conns.add(result.new ConnectionVerticalThenHorizontal(tile2, branch2.getInlinkRenderingColor()));
-		} else if (tile1.isKilled() == false && tile2.isKilled()) {
+		} else if (tile1.calculateDimension(stringBounder).hasPointOut()
+				&& tile2.calculateDimension(stringBounder).hasPointOut() == false) {
 			conns.add(result.new ConnectionVerticalThenHorizontalDirect(tile1, branch1.getInlinkRenderingColor()));
-		} else if (tile1.isKilled() && tile2.isKilled() == false) {
+		} else if (tile1.calculateDimension(stringBounder).hasPointOut() == false
+				&& tile2.calculateDimension(stringBounder).hasPointOut()) {
 			conns.add(result.new ConnectionVerticalThenHorizontalDirect(tile2, branch2.getInlinkRenderingColor()));
 		}
 		return FtileUtils.addConnection(result, conns);
@@ -504,11 +509,11 @@ class FtileIf extends AbstractFtile {
 
 	public FtileGeometry calculateDimension(StringBounder stringBounder) {
 		final Dimension2D dimTotal = calculateDimensionInternal(stringBounder);
-		return new FtileGeometry(dimTotal, getLeft(stringBounder), 0, dimTotal.getHeight());
-	}
-
-	public boolean isKilled() {
-		return tile1.isKilled() && tile2.isKilled();
+		if (tile1.calculateDimension(stringBounder).hasPointOut()
+				|| tile2.calculateDimension(stringBounder).hasPointOut()) {
+			return new FtileGeometry(dimTotal, getLeft(stringBounder), 0, dimTotal.getHeight());
+		}
+		return new FtileGeometry(dimTotal, getLeft(stringBounder), 0);
 	}
 
 	private Dimension2D calculateDimensionInternal;

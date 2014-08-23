@@ -72,8 +72,8 @@ public class EntityImageClassHeader2 extends AbstractEntityImage {
 		final HtmlColor color = SkinParamUtils.getFontColor(getSkinParam(), FontParam.CLASS, getStereo());
 		final Stereotype stereotype = entity.getStereotype();
 		final String generic = entity.getGeneric();
-		FontConfiguration fontConfigurationName = new FontConfiguration(SkinParamUtils.getFont(getSkinParam(),
-				FontParam.CLASS, stereotype), color);
+		FontConfiguration fontConfigurationName = new FontConfiguration(SkinParamUtils.getFont(getSkinParam(), FontParam.CLASS, stereotype),
+				color, getSkinParam().getHyperlinkColor());
 		if (italic) {
 			fontConfigurationName = fontConfigurationName.italic();
 		}
@@ -87,10 +87,9 @@ public class EntityImageClassHeader2 extends AbstractEntityImage {
 		} else {
 			stereo = TextBlockUtils.withMargin(TextBlockUtils.create(
 					Display.create(stereotype.getLabels()),
-					new FontConfiguration(SkinParamUtils
-							.getFont(getSkinParam(), FontParam.CLASS_STEREOTYPE, stereotype), SkinParamUtils
-							.getFontColor(getSkinParam(), FontParam.CLASS_STEREOTYPE, stereotype)),
-					HorizontalAlignment.CENTER, skinParam), 1, 0);
+					new FontConfiguration(SkinParamUtils.getFont(getSkinParam(),
+							FontParam.CLASS_STEREOTYPE, stereotype), SkinParamUtils.getFontColor(getSkinParam(),
+					FontParam.CLASS_STEREOTYPE, stereotype), getSkinParam().getHyperlinkColor()), HorizontalAlignment.CENTER, skinParam), 1, 0);
 		}
 
 		TextBlock genericBlock;
@@ -99,10 +98,9 @@ public class EntityImageClassHeader2 extends AbstractEntityImage {
 		} else {
 			genericBlock = TextBlockUtils.create(
 					Display.getWithNewlines(generic),
-					new FontConfiguration(SkinParamUtils
-							.getFont(getSkinParam(), FontParam.CLASS_STEREOTYPE, stereotype), SkinParamUtils
-							.getFontColor(getSkinParam(), FontParam.CLASS_STEREOTYPE, stereotype)),
-					HorizontalAlignment.CENTER, skinParam);
+					new FontConfiguration(SkinParamUtils.getFont(getSkinParam(),
+							FontParam.CLASS_STEREOTYPE, stereotype), SkinParamUtils.getFontColor(getSkinParam(),
+					FontParam.CLASS_STEREOTYPE, stereotype), skinParam.getHyperlinkColor()), HorizontalAlignment.CENTER, skinParam);
 			genericBlock = TextBlockUtils.withMargin(genericBlock, 1, 1);
 			final HtmlColor classBackground = SkinParamUtils
 					.getColor(getSkinParam(), ColorParam.background, stereotype);

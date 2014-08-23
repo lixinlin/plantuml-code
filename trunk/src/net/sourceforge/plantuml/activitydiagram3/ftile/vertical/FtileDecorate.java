@@ -58,10 +58,6 @@ public abstract class FtileDecorate implements Ftile {
 		return "" + getClass() + " " + ftile;
 	}
 
-	public boolean isKilled() {
-		return ftile.isKilled();
-	}
-
 	public LinkRendering getOutLinkRendering() {
 		return ftile.getOutLinkRendering();
 	}

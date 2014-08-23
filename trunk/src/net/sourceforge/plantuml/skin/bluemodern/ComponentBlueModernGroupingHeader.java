@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 12495 $
+ * Revision $Revision: 13841 $
  *
  */
 package net.sourceforge.plantuml.skin.bluemodern;
@@ -67,9 +67,10 @@ public class ComponentBlueModernGroupingHeader extends AbstractTextualComponent 
 	private final HtmlColor borderColor;
 
 	public ComponentBlueModernGroupingHeader(HtmlColor headerBackgroundColor, HtmlColor generalBackgroundColor,
-			HtmlColor borderColor, HtmlColor fontColor1, HtmlColor fontColor2, UFont bigFont, UFont smallFont,
-			Display strings, ISkinSimple spriteContainer) {
-		super(strings.get(0), fontColor1, bigFont, HorizontalAlignment.LEFT, 15, 30, 1, spriteContainer, 0);
+			HtmlColor borderColor, HtmlColor fontColor1, HtmlColor fontColor2, HtmlColor hyperlinkColor, UFont bigFont,
+			UFont smallFont, Display strings, ISkinSimple spriteContainer) {
+		super(strings.get(0), fontColor1, hyperlinkColor, bigFont, HorizontalAlignment.LEFT, 15, 30, 1,
+				spriteContainer, 0);
 		this.headerBackgroundColor = headerBackgroundColor;
 		this.generalBackgroundColor = generalBackgroundColor;
 		this.borderColor = borderColor;
@@ -77,7 +78,8 @@ public class ComponentBlueModernGroupingHeader extends AbstractTextualComponent 
 			this.commentTextBlock = null;
 		} else {
 			this.commentTextBlock = TextBlockUtils.create(Display.create("[" + strings.get(1) + "]"),
-					new FontConfiguration(smallFont, fontColor2), HorizontalAlignment.LEFT, spriteContainer);
+					new FontConfiguration(smallFont, fontColor2, hyperlinkColor), HorizontalAlignment.LEFT,
+					spriteContainer);
 		}
 	}
 
@@ -149,7 +151,8 @@ public class ComponentBlueModernGroupingHeader extends AbstractTextualComponent 
 			final int x1 = getMarginX1() + textWidth;
 			final int y2 = getMarginY() + 1;
 
-			commentTextBlock.drawU(ug.apply(new UChangeColor(generalBackgroundColor)).apply(new UTranslate(x1 + commentMargin, y2)));
+			commentTextBlock.drawU(ug.apply(new UChangeColor(generalBackgroundColor)).apply(
+					new UTranslate(x1 + commentMargin, y2)));
 		}
 	}
 

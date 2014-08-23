@@ -107,7 +107,7 @@ public class EntityImageNote extends AbstractEntityImage implements Stencil {
 			textBlock = new TextBlockEmpty();
 		} else {
 			textBlock = new BodyEnhanced2(strings, FontParam.NOTE, skinParam, HorizontalAlignment.LEFT, fontNote,
-					fontColor);
+					fontColor, skinParam.getHyperlinkColor());
 		}
 	}
 

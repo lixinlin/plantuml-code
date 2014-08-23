@@ -37,9 +37,9 @@ import net.sourceforge.plantuml.ugraphic.UChange;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
 import net.sourceforge.plantuml.ugraphic.UShape;
 
-public class UGraphicInterceptorTextBlockable extends UGraphicDelegator {
+public class UGraphicInterceptorUDrawable extends UGraphicDelegator {
 
-	public UGraphicInterceptorTextBlockable(UGraphic ug) {
+	public UGraphicInterceptorUDrawable(UGraphic ug) {
 		super(ug);
 	}
 
@@ -54,7 +54,7 @@ public class UGraphicInterceptorTextBlockable extends UGraphicDelegator {
 	}
 
 	public UGraphic apply(UChange change) {
-		return new UGraphicInterceptorTextBlockable(getUg().apply(change));
+		return new UGraphicInterceptorUDrawable(getUg().apply(change));
 	}
 
 }

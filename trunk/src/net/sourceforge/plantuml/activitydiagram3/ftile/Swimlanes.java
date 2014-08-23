@@ -60,7 +60,6 @@ import net.sourceforge.plantuml.graphic.HtmlColor;
 import net.sourceforge.plantuml.graphic.HtmlColorUtils;
 import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.graphic.TextBlock;
-import net.sourceforge.plantuml.graphic.TextBlockInterceptorTextBlockable;
 import net.sourceforge.plantuml.graphic.TextBlockUtils;
 import net.sourceforge.plantuml.graphic.UGraphicDelegator;
 import net.sourceforge.plantuml.svek.UGraphicForSnake;
@@ -93,7 +92,7 @@ public class Swimlanes implements TextBlock {
 	public Swimlanes(ISkinParam skinParam) {
 		this.skinParam = skinParam;
 		final UFont font = skinParam.getFont(FontParam.TITLE, null);
-		this.fontConfiguration = new FontConfiguration(font, HtmlColorUtils.BLACK);
+		this.fontConfiguration = new FontConfiguration(font, HtmlColorUtils.BLACK, skinParam.getHyperlinkColor());
 
 	}
 
@@ -173,7 +172,7 @@ public class Swimlanes implements TextBlock {
 		TextBlock full = root.createFtile(factory);
 		ug = new UGraphicForSnake(ug);
 		if (swinlanes.size() <= 1) {
-			full = new TextBlockInterceptorTextBlockable(full);
+			full = new TextBlockInterceptorUDrawable(full);
 			// BUG42
 			// full.drawU(ug);
 			full.drawU(ug);

@@ -194,7 +194,7 @@ class TurtleGraphicsPane {
 		}
 		drawTurtle(ug);
 		if (message != null) {
-			final FontConfiguration font = new FontConfiguration(new UFont("", Font.PLAIN, 14), HtmlColorUtils.BLACK);
+			final FontConfiguration font = new FontConfiguration(new UFont("", Font.PLAIN, 14), HtmlColorUtils.BLACK, HtmlColorUtils.BLUE);
 			final TextBlock text = TextBlockUtils.create(Display.create(message), font, HorizontalAlignment.LEFT,
 					new SpriteContainerEmpty());
 			final Dimension2D dim = text.calculateDimension(ug.getStringBounder());

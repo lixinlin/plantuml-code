@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 13759 $
+ * Revision $Revision: 13841 $
  *
  */
 package net.sourceforge.plantuml.cucadiagram;
@@ -345,8 +345,8 @@ public class Link implements Hideable, Removeable {
 	private double getQualifierMargin(StringBounder stringBounder, UFont fontQualif, String qualif,
 			ISkinSimple spriteContainer) {
 		if (qualif != null) {
-			final TextBlock b = TextBlockUtils.create(Display.create(qualif), new FontConfiguration(fontQualif,
-					HtmlColorUtils.BLACK), HorizontalAlignment.LEFT, spriteContainer);
+			final TextBlock b = TextBlockUtils.create(Display.create(qualif), new FontConfiguration(
+					fontQualif, HtmlColorUtils.BLACK, HtmlColorUtils.BLUE), HorizontalAlignment.LEFT, spriteContainer);
 			final Dimension2D dim = b.calculateDimension(stringBounder);
 			return Math.max(dim.getWidth(), dim.getHeight());
 		}

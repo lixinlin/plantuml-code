@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 13767 $
+ * Revision $Revision: 13835 $
  *
  */
 package net.sourceforge.plantuml;
@@ -101,6 +101,14 @@ public class SkinParam implements ISkinParam {
 			key += "<<" + s + ">>";
 		}
 		return key;
+	}
+
+	public HtmlColor getHyperlinkColor() {
+		final HtmlColor result = getHtmlColor(ColorParam.hyperlink, null, false);
+		if (result == null) {
+			return HtmlColorUtils.BLUE;
+		}
+		return result;
 	}
 
 	public HtmlColor getBackgroundColor() {

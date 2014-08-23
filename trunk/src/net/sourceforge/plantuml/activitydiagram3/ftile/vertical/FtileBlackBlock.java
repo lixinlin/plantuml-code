@@ -73,10 +73,6 @@ public class FtileBlackBlock extends AbstractFtile {
 		ug.apply(new UChangeColor(colorBar)).apply(new UChangeBackColor(colorBar)).draw(rect);
 	}
 
-	public boolean isKilled() {
-		return false;
-	}
-
 	public Set<Swimlane> getSwimlanes() {
 		return Collections.singleton(swimlane);
 	}

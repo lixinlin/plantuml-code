@@ -122,7 +122,7 @@ public class FtileFactoryDelegatorCreateSplit extends FtileFactoryDelegator {
 			double maxX = 0;
 			final StringBounder stringBounder = ug.getStringBounder();
 			for (Ftile tmp : list) {
-				if (y > 0 && tmp.isKilled()) {
+				if (y > 0 && tmp.calculateDimension(stringBounder).hasPointOut() == false) {
 					continue;
 				}
 				final UTranslate ut = inner.getTranslateFor(tmp, stringBounder);

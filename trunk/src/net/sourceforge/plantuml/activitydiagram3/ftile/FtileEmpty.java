@@ -79,10 +79,6 @@ public class FtileEmpty extends AbstractFtile {
 		return new FtileGeometry(width, height, width / 2, 0, height);
 	}
 
-	public boolean isKilled() {
-		return false;
-	}
-
 	public Swimlane getSwimlaneIn() {
 		return swimlaneIn;
 	}

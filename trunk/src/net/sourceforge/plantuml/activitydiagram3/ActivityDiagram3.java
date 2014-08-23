@@ -123,6 +123,20 @@ public class ActivityDiagram3 extends UmlDiagram {
 		}
 	}
 
+	public CommandExecutionResult addGoto(String name) {
+		final InstructionGoto ins = new InstructionGoto(swinlanes.getCurrentSwimlane(), name);
+		current().add(ins);
+		setNextLinkRendererInternal(null);
+		return CommandExecutionResult.ok();
+	}
+
+	public CommandExecutionResult addLabel(String name) {
+		final InstructionLabel ins = new InstructionLabel(swinlanes.getCurrentSwimlane(), name);
+		current().add(ins);
+		setNextLinkRendererInternal(null);
+		return CommandExecutionResult.ok();
+	}
+
 	public void start() {
 		manageSwimlaneStrategy();
 		current().add(new InstructionStart(swinlanes.getCurrentSwimlane()));
@@ -175,47 +189,6 @@ public class ActivityDiagram3 extends UmlDiagram {
 
 	}
 
-	// protected ImageData exportDiagramInternalOld(OutputStream os, int index, FileFormatOption fileFormatOption,
-	// List<BufferedImage> flashcodes) throws IOException {
-	// // BUG42
-	// // TextBlock result = swinlanes;
-	// TextBlock result = new TextBlockCompressed(swinlanes);
-	// result = new TextBlockRecentred(result);
-	// result = addLegend(result);
-	// result = addTitle(result);
-	// result = addHeaderAndFooter(result);
-	// final ISkinParam skinParam = getSkinParam();
-	// final Dimension2D dim = TextBlockUtils.getMinMax(result).getDimension();
-	// final double margin = 10;
-	// final double dpiFactor = getDpiFactor(fileFormatOption, Dimension2DDouble.delta(dim, 2 * margin, 0));
-	//
-	// final UGraphic2 ug = getPrinted(result, fileFormatOption, skinParam.getColorMapper(), dpiFactor, getSkinParam()
-	// .getBackgroundColor(), margin);
-	//
-	// ug.writeImageTOBEMOVED(os, fileFormatOption.isWithMetadata() ? getMetadata() : null, getDpi(fileFormatOption));
-	//
-	// if (ug instanceof UGraphicG2d) {
-	// final Set<Url> urls = ((UGraphicG2d) ug).getAllUrlsEncountered();
-	// if (urls.size() > 0) {
-	// final CMapData cmap = CMapData.cmapString(urls, dpiFactor);
-	// return new ImageDataComplex(dim, cmap, getWarningOrError());
-	// }
-	// }
-	//
-	// return new ImageDataSimple(dim);
-	// }
-
-	// private UGraphic2 getPrinted(TextBlock tb, FileFormatOption fileFormatOption, ColorMapper colorMapper,
-	// double dpiFactor, HtmlColor mybackcolor, double margin) {
-	// final MinMax minmax = TextBlockUtils.getMinMax(tb, TextBlockUtils.getDummyStringBounder());
-	// final UGraphic2 ug = fileFormatOption.createUGraphic(colorMapper, dpiFactor,
-	// Dimension2DDouble.delta(minmax.getDimension(), 2 * margin), mybackcolor, false);
-	// final double dx = -minmax.getMinX() + margin;
-	// final double dy = -minmax.getMinY() + margin;
-	// tb.drawU(ug.apply(new UTranslate(dx, dy)));
-	// return ug;
-	// }
-
 	private final double getDpiFactor(FileFormatOption fileFormatOption, final Dimension2D dim) {
 		final double dpiFactor;
 		final Scale scale = getScale();
@@ -233,7 +206,8 @@ public class ActivityDiagram3 extends UmlDiagram {
 			return original;
 		}
 		final TextBlock text = TextBlockUtils.create(title, new FontConfiguration(getFont(FontParam.TITLE),
-				getFontColor(FontParam.TITLE, null)), HorizontalAlignment.CENTER, getSkinParam());
+				getFontColor(FontParam.TITLE, null), getSkinParam().getHyperlinkColor()), HorizontalAlignment.CENTER,
+				getSkinParam());
 
 		return new DecorateTextBlock(original, text, HorizontalAlignment.CENTER);
 	}
@@ -245,9 +219,11 @@ public class ActivityDiagram3 extends UmlDiagram {
 			return original;
 		}
 		final TextBlock textFooter = footer == null ? null : TextBlockUtils.create(footer, new FontConfiguration(
-				getFont(FontParam.FOOTER), getFontColor(FontParam.FOOTER, null)), getFooterAlignment(), getSkinParam());
+				getFont(FontParam.FOOTER), getFontColor(FontParam.FOOTER, null), getSkinParam().getHyperlinkColor()),
+				getFooterAlignment(), getSkinParam());
 		final TextBlock textHeader = header == null ? null : TextBlockUtils.create(header, new FontConfiguration(
-				getFont(FontParam.HEADER), getFontColor(FontParam.HEADER, null)), getHeaderAlignment(), getSkinParam());
+				getFont(FontParam.HEADER), getFontColor(FontParam.HEADER, null), getSkinParam().getHyperlinkColor()),
+				getHeaderAlignment(), getSkinParam());
 
 		return new DecorateTextBlock(original, textHeader, getHeaderAlignment(), textFooter, getFooterAlignment());
 	}
@@ -406,18 +382,6 @@ public class ActivityDiagram3 extends UmlDiagram {
 		}
 		return CommandExecutionResult.error("Cannot find group");
 	}
-
-	// public CommandExecutionResult openPartition(String partitionTitle) {
-	// manageSwimlaneStrategy();
-	// final InstructionPartition instructionPartition = new InstructionPartition(current(), partitionTitle);
-	// current().add(instructionPartition);
-	// setCurrent(instructionPartition);
-	// return CommandExecutionResult.ok();
-	// }
-	//
-	// public CommandExecutionResult closePartition() {
-	// return CommandExecutionResult.ok();
-	// }
 
 	private void setNextLinkRendererInternal(LinkRendering link) {
 		swinlanes.setNextLinkRenderer(link);

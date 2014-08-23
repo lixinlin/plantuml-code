@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 13703 $
+ * Revision $Revision: 13841 $
  *
  */
 package net.sourceforge.plantuml.graphic;
@@ -75,6 +75,8 @@ public class GraphicStrings implements IEntityImage {
 	private final UFont font;
 
 	private final HtmlColor green;
+
+	private final HtmlColor hyperlinkColor = HtmlColorUtils.BLUE;
 
 	private final List<String> strings;
 
@@ -208,13 +210,13 @@ public class GraphicStrings implements IEntityImage {
 	private TextBlock getTextBlock() {
 		TextBlock result = null;
 		if (maxLine == 0) {
-			result = TextBlockUtils.create(Display.create(strings), new FontConfiguration(font, green),
+			result = TextBlockUtils.create(Display.create(strings), new FontConfiguration(font, green, hyperlinkColor),
 					HorizontalAlignment.LEFT, new SpriteContainerEmpty());
 		} else {
 			for (int i = 0; i < strings.size(); i += maxLine) {
 				final int n = Math.min(i + maxLine, strings.size());
 				final TextBlock textBlock1 = TextBlockUtils.create(Display.create(strings.subList(i, n)),
-						new FontConfiguration(font, green), HorizontalAlignment.LEFT, new SpriteContainerEmpty());
+						new FontConfiguration(font, green, hyperlinkColor), HorizontalAlignment.LEFT, new SpriteContainerEmpty());
 				if (result == null) {
 					result = textBlock1;
 				} else {

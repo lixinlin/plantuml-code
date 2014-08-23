@@ -51,11 +51,7 @@ public class FtileGeometry extends Dimension2D {
 	}
 
 	public FtileGeometry(double width, double height, double left, double inY) {
-		this.left = left;
-		this.inY = inY;
-		this.outY = Double.MIN_NORMAL;
-		this.width = width;
-		this.height = height;
+		this(width, height, left, inY, Double.MIN_NORMAL);
 	}
 
 	@Override
@@ -90,7 +86,7 @@ public class FtileGeometry extends Dimension2D {
 		return new Point2D.Double(left, outY);
 	}
 
-	private FtileGeometry withoutPointOut() {
+	public FtileGeometry withoutPointOut() {
 		return new FtileGeometry(width, height, left, inY);
 	}
 

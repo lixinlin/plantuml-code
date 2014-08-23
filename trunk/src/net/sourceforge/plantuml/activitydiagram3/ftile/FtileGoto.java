@@ -27,31 +27,29 @@
  * in the United States and other countries.]
  *
  * Original Author:  Arnaud Roques
- * 
- * Revision $Revision: 10266 $
+ *
+ * Revision $Revision: 8475 $
  *
  */
-package net.sourceforge.plantuml.graphic;
+package net.sourceforge.plantuml.activitydiagram3.ftile;
 
-import java.awt.geom.Dimension2D;
+import net.sourceforge.plantuml.graphic.StringBounder;
 
-import net.sourceforge.plantuml.ugraphic.UGraphic;
+public class FtileGoto extends FtileEmpty {
 
-public class TextBlockInterceptorTextBlockable implements TextBlock {
+	private final String name;
 
-	private final TextBlock textBlock;
-
-	public TextBlockInterceptorTextBlockable(TextBlock textBlock) {
-		this.textBlock = textBlock;
+	public FtileGoto(boolean shadowing, Swimlane swimlane, String name) {
+		super(shadowing, swimlane);
+		this.name = name;
 	}
 
-	public void drawU(UGraphic ug) {
-		textBlock.drawU(new UGraphicInterceptorTextBlockable(ug));
-		ug.flushUg();
+	public FtileGeometry calculateDimension(StringBounder stringBounder) {
+		return super.calculateDimension(stringBounder).withoutPointOut();
 	}
 
-	public Dimension2D calculateDimension(StringBounder stringBounder) {
-		return TextBlockUtils.getMinMax(this, stringBounder).getDimension();
+	public String getName() {
+		return name;
 	}
 
 }

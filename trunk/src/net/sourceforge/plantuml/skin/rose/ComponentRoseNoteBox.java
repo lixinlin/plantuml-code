@@ -55,9 +55,9 @@ final public class ComponentRoseNoteBox extends AbstractTextualComponent {
 	private final double deltaShadow;
 	private final UStroke stroke;
 
-	public ComponentRoseNoteBox(HtmlColor back, HtmlColor foregroundColor, HtmlColor fontColor, UFont font,
+	public ComponentRoseNoteBox(HtmlColor back, HtmlColor foregroundColor, HtmlColor fontColor, HtmlColor hyperlinkColor, UFont font,
 			Display strings, ISkinSimple spriteContainer, double deltaShadow, UStroke stroke) {
-		super(strings, fontColor, font, HorizontalAlignment.LEFT, 4, 4, 4, spriteContainer, 0, false);
+		super(strings, fontColor, hyperlinkColor, font, HorizontalAlignment.LEFT, 4, 4, 4, spriteContainer, 0, false);
 		this.back = back;
 		this.foregroundColor = foregroundColor;
 		this.deltaShadow = deltaShadow;

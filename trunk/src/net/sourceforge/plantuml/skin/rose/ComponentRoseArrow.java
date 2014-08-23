@@ -63,10 +63,10 @@ public class ComponentRoseArrow extends AbstractComponentRoseArrow {
 	private final HorizontalAlignment messagePosition;
 	private final boolean niceArrow;
 
-	public ComponentRoseArrow(HtmlColor foregroundColor, HtmlColor fontColor, UFont font, Display stringsToDisplay,
+	public ComponentRoseArrow(HtmlColor foregroundColor, HtmlColor fontColor, HtmlColor hyperlinkColor, UFont font, Display stringsToDisplay,
 			ArrowConfiguration arrowConfiguration, HorizontalAlignment messagePosition, ISkinSimple spriteContainer,
 			HorizontalAlignment textHorizontalAlignment, double maxMessageSize, boolean niceArrow) {
-		super(foregroundColor, fontColor, font, stringsToDisplay, arrowConfiguration, spriteContainer,
+		super(foregroundColor, fontColor, hyperlinkColor, font, stringsToDisplay, arrowConfiguration, spriteContainer,
 				textHorizontalAlignment, maxMessageSize);
 		this.messagePosition = messagePosition;
 		this.niceArrow = niceArrow;

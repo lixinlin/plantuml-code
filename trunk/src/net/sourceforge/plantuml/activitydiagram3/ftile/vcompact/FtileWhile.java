@@ -101,7 +101,7 @@ class FtileWhile extends AbstractFtile {
 	}
 
 	private static TextBlock createLabel1(Display test, Display yes, UFont font, ISkinSimple spriteContainer) {
-		final FontConfiguration fc = new FontConfiguration(font, HtmlColorUtils.BLACK);
+		final FontConfiguration fc = new FontConfiguration(font, HtmlColorUtils.BLACK, HtmlColorUtils.BLUE);
 		final TextBlock tmpb = TextBlockUtils.create(yes, fc, HorizontalAlignment.LEFT, spriteContainer);
 		if (test == null) {
 			return tmpb;
@@ -114,8 +114,8 @@ class FtileWhile extends AbstractFtile {
 			HtmlColor backColor, HtmlColor arrowColor, Display yes, Display out2, UFont fontArrow, HtmlColor endInlinkColor,
 			LinkRendering afterEndwhile, FtileFactory ftileFactory, ConditionStyle conditionStyle, UFont fontTest) {
 
-		final FontConfiguration fcArrow = new FontConfiguration(fontArrow, HtmlColorUtils.BLACK);
-		final FontConfiguration fcTest = new FontConfiguration(fontTest, HtmlColorUtils.BLACK);
+		final FontConfiguration fcArrow = new FontConfiguration(fontArrow, HtmlColorUtils.BLACK, HtmlColorUtils.BLUE);
+		final FontConfiguration fcTest = new FontConfiguration(fontTest, HtmlColorUtils.BLACK, HtmlColorUtils.BLUE);
 		final TextBlock yesTb = TextBlockUtils.create(yes, fcArrow, HorizontalAlignment.LEFT, ftileFactory);
 		final TextBlock testTb = TextBlockUtils.create(test, fcTest, HorizontalAlignment.LEFT, ftileFactory);
 		final TextBlock out = TextBlockUtils.create(out2, fcArrow, HorizontalAlignment.LEFT, ftileFactory);
@@ -381,10 +381,6 @@ class FtileWhile extends AbstractFtile {
 		final double y1 = 0;
 		final double x1 = dimTotal.getLeft() - dimDiamond1.getLeft();
 		return new UTranslate(x1, y1);
-	}
-
-	public boolean isKilled() {
-		return false;
 	}
 
 }

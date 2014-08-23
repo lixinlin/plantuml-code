@@ -54,6 +54,10 @@ public class SkinParamDelegator implements ISkinParam {
 		this.skinParam = skinParam;
 	}
 
+	public HtmlColor getHyperlinkColor() {
+		return skinParam.getHyperlinkColor();
+	}
+
 	public HtmlColor getBackgroundColor() {
 		return skinParam.getBackgroundColor();
 	}

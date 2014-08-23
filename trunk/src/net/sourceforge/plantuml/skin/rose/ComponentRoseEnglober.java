@@ -54,9 +54,9 @@ public class ComponentRoseEnglober extends AbstractTextualComponent {
 	private final HtmlColor borderColor;
 	private final HtmlColor backColor;
 
-	public ComponentRoseEnglober(HtmlColor borderColor, HtmlColor backColor, Display strings, HtmlColor fontColor,
+	public ComponentRoseEnglober(HtmlColor borderColor, HtmlColor backColor, Display strings, HtmlColor fontColor, HtmlColor hyperlinkColor,
 			UFont font, ISkinSimple spriteContainer) {
-		super(strings, fontColor, font, HorizontalAlignment.CENTER, 3, 3, 1, spriteContainer, 0, false);
+		super(strings, fontColor, hyperlinkColor, font, HorizontalAlignment.CENTER, 3, 3, 1, spriteContainer, 0, false);
 		this.borderColor = borderColor;
 		this.backColor = backColor;
 	}

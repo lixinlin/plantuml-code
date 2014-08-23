@@ -47,6 +47,8 @@ import net.sourceforge.plantuml.ugraphic.UStroke;
 
 public interface ISkinParam extends ISkinSimple {
 
+	public HtmlColor getHyperlinkColor();
+
 	public HtmlColor getBackgroundColor();
 
 	public HtmlColor getHtmlColor(ColorParam param, Stereotype stereotype, boolean clickable);

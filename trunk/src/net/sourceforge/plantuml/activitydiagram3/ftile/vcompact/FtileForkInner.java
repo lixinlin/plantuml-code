@@ -91,10 +91,6 @@ class FtileForkInner extends AbstractFtile {
 		}
 	}
 
-	public boolean isKilled() {
-		return false;
-	}
-
 	public FtileGeometry calculateDimension(StringBounder stringBounder) {
 		double height = 0;
 		double width = 0;

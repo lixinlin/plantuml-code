@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 12444 $
+ * Revision $Revision: 13836 $
  *
  */
 package net.sourceforge.plantuml.skin.rose;
@@ -57,10 +57,10 @@ public class ComponentRoseParticipant extends AbstractTextualComponent {
 	private final double roundCorner;
 	private final UStroke stroke;
 
-	public ComponentRoseParticipant(HtmlColor back, HtmlColor foregroundColor, HtmlColor fontColor, UFont font,
+	public ComponentRoseParticipant(HtmlColor back, HtmlColor foregroundColor, HtmlColor fontColor, HtmlColor hyperlinkColor, UFont font,
 			Display stringsToDisplay, ISkinSimple spriteContainer, double deltaShadow, double roundCorner,
 			UStroke stroke) {
-		super(stringsToDisplay, fontColor, font, HorizontalAlignment.CENTER, 7, 7, 7, spriteContainer, 0, false);
+		super(stringsToDisplay, fontColor, hyperlinkColor, font, HorizontalAlignment.CENTER, 7, 7, 7, spriteContainer, 0, false);
 		this.back = back;
 		this.roundCorner = roundCorner;
 		this.deltaShadow = deltaShadow;

@@ -68,8 +68,4 @@ public class FtileKilled extends AbstractFtile {
 		ug.draw(tile);
 	}
 
-	public boolean isKilled() {
-		return true;
-	}
-
 }

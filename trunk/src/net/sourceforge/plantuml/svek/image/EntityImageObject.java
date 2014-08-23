@@ -86,18 +86,19 @@ public class EntityImageObject extends AbstractEntityImage implements Stencil {
 		this.lineConfig = entity;
 		final Stereotype stereotype = entity.getStereotype();
 		this.roundCorner = skinParam.getRoundCorner();
-		this.name = TextBlockUtils.withMargin(TextBlockUtils.create(entity.getDisplay(),
-				new FontConfiguration(SkinParamUtils.getFont(getSkinParam(), FontParam.OBJECT, stereotype),
-						SkinParamUtils.getFontColor(getSkinParam(), FontParam.OBJECT, stereotype)),
-				HorizontalAlignment.CENTER, skinParam), 2, 2);
+		this.name = TextBlockUtils.withMargin(TextBlockUtils.create(
+				entity.getDisplay(),
+				new FontConfiguration(SkinParamUtils.getFont(getSkinParam(),
+						FontParam.OBJECT, stereotype), SkinParamUtils.getFontColor(getSkinParam(), FontParam.OBJECT,
+				stereotype), getSkinParam().getHyperlinkColor()), HorizontalAlignment.CENTER, skinParam), 2, 2);
 		if (stereotype == null || stereotype.getLabel() == null) {
 			this.stereo = null;
 		} else {
 			this.stereo = TextBlockUtils.create(
 					Display.getWithNewlines(stereotype.getLabel()),
-					new FontConfiguration(SkinParamUtils.getFont(getSkinParam(), FontParam.OBJECT_STEREOTYPE,
-							stereotype), SkinParamUtils.getFontColor(getSkinParam(), FontParam.OBJECT_STEREOTYPE,
-							stereotype)), HorizontalAlignment.CENTER, skinParam);
+					new FontConfiguration(SkinParamUtils.getFont(getSkinParam(),
+							FontParam.OBJECT_STEREOTYPE, stereotype), SkinParamUtils.getFontColor(getSkinParam(),
+					FontParam.OBJECT_STEREOTYPE, stereotype), getSkinParam().getHyperlinkColor()), HorizontalAlignment.CENTER, skinParam);
 		}
 
 		if (entity.getFieldsToDisplay().size() == 0) {

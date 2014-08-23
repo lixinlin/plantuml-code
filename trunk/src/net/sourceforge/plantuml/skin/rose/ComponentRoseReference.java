@@ -67,10 +67,10 @@ public class ComponentRoseReference extends AbstractTextualComponent {
 	private final double deltaShadow;
 	private final UStroke stroke;
 
-	public ComponentRoseReference(HtmlColor fontColor, HtmlColor fontHeaderColor, UFont font, HtmlColor borderColor,
+	public ComponentRoseReference(HtmlColor fontColor, HtmlColor hyperlinkColor, HtmlColor fontHeaderColor, UFont font, HtmlColor borderColor,
 			HtmlColor backgroundHeader, HtmlColor background, UFont header, Display stringsToDisplay,
 			HorizontalAlignment position, ISkinSimple spriteContainer, double deltaShadow, UStroke stroke) {
-		super(stringsToDisplay.subList(1, stringsToDisplay.size()), fontColor, font, HorizontalAlignment.LEFT, 4, 4,
+		super(stringsToDisplay.subList(1, stringsToDisplay.size()), fontColor, hyperlinkColor, font, HorizontalAlignment.LEFT, 4, 4,
 				4, spriteContainer, 0, false);
 		this.position = position;
 		this.backgroundHeader = backgroundHeader;
@@ -79,8 +79,8 @@ public class ComponentRoseReference extends AbstractTextualComponent {
 		this.deltaShadow = deltaShadow;
 		this.stroke = stroke;
 
-		textHeader = TextBlockUtils.create(stringsToDisplay.subList(0, 1), new FontConfiguration(header,
-				fontHeaderColor), HorizontalAlignment.LEFT, spriteContainer);
+		textHeader = TextBlockUtils.create(stringsToDisplay.subList(0, 1), new FontConfiguration(header, fontHeaderColor,
+				hyperlinkColor), HorizontalAlignment.LEFT, spriteContainer);
 
 	}
 

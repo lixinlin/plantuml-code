@@ -93,9 +93,9 @@ public class EntityImageComponent extends AbstractEntityImage {
 				&& portionShower.showPortion(EntityPortion.STEREOTYPE, entity)) {
 			stereo = TextBlockUtils.create(
 					Display.getWithNewlines(stereotype.getLabel()),
-					new FontConfiguration(SkinParamUtils.getFont(getSkinParam(), symbol.getFontParamStereotype(),
-							stereotype), SkinParamUtils.getFontColor(getSkinParam(), symbol.getFontParamStereotype(),
-							null)), HorizontalAlignment.CENTER, skinParam);
+					new FontConfiguration(SkinParamUtils.getFont(getSkinParam(),
+							symbol.getFontParamStereotype(), stereotype), SkinParamUtils.getFontColor(getSkinParam(),
+					symbol.getFontParamStereotype(), null), getSkinParam().getHyperlinkColor()), HorizontalAlignment.CENTER, skinParam);
 		}
 
 		asSmall = symbol.asSmall(desc, stereo, ctx);

@@ -84,8 +84,8 @@ public class EntityImageStateBorder extends AbstractEntityImage {
 		final Stereotype stereotype = leaf.getStereotype();
 
 		this.desc = TextBlockUtils.create(leaf.getDisplay(),
-				new FontConfiguration(SkinParamUtils.getFont(getSkinParam(), FontParam.STATE, stereotype),
-						SkinParamUtils.getFontColor(getSkinParam(), FontParam.STATE, stereotype)),
+				new FontConfiguration(SkinParamUtils.getFont(getSkinParam(), FontParam.STATE, stereotype), SkinParamUtils.getFontColor(getSkinParam(), FontParam.STATE, stereotype),
+						getSkinParam().getHyperlinkColor()),
 				HorizontalAlignment.CENTER, skinParam);
 	}
 

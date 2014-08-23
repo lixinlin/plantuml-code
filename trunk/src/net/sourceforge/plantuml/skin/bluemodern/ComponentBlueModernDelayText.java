@@ -49,9 +49,9 @@ import net.sourceforge.plantuml.ugraphic.UTranslate;
 
 public class ComponentBlueModernDelayText extends AbstractTextualComponent {
 
-	public ComponentBlueModernDelayText(HtmlColor fontColor, UFont font, Display stringsToDisplay,
+	public ComponentBlueModernDelayText(HtmlColor fontColor, HtmlColor hyperlinkColor, UFont font, Display stringsToDisplay,
 			ISkinSimple spriteContainer) {
-		super(stringsToDisplay, fontColor, font, HorizontalAlignment.CENTER, 4, 4, 4, spriteContainer, 0, false);
+		super(stringsToDisplay, fontColor, hyperlinkColor, font, HorizontalAlignment.CENTER, 4, 4, 4, spriteContainer, 0, false);
 	}
 
 	@Override

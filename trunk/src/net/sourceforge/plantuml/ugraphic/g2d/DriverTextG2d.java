@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 12791 $
+ * Revision $Revision: 13834 $
  *
  */
 package net.sourceforge.plantuml.ugraphic.g2d;
@@ -102,7 +102,7 @@ public class DriverTextG2d implements UDriver<Graphics2D> {
 			}
 			final Dimension2D dim = calculateDimension(StringBounderUtils.asStringBounder(g2d), font, shape.getText());
 			final int ypos = (int) (y + 2.5);
-			g2d.setStroke(new BasicStroke((float) 1.3));
+			g2d.setStroke(new BasicStroke((float) 1));
 			g2d.drawLine((int) x, ypos, (int) (x + dim.getWidth()), ypos);
 			g2d.setStroke(new BasicStroke());
 		}

@@ -44,7 +44,7 @@ import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
 import net.sourceforge.plantuml.ugraphic.UTranslate;
 
-public class FtileAssemblySimple4747bis implements Ftile {
+public class FtileAssemblySimple implements Ftile {
 
 	private final Ftile tile1;
 	private final Ftile tile2;
@@ -54,7 +54,7 @@ public class FtileAssemblySimple4747bis implements Ftile {
 		return "FtileAssemblySimple " + tile1 + " && " + tile2;
 	}
 
-	public FtileAssemblySimple4747bis(Ftile tile1, Ftile tile2) {
+	public FtileAssemblySimple(Ftile tile1, Ftile tile2) {
 		this.tile1 = tile1;
 		this.tile2 = tile2;
 	}
@@ -91,45 +91,6 @@ public class FtileAssemblySimple4747bis implements Ftile {
 		ug.apply(getTranslated2(stringBounder)).draw(tile2);
 	}
 
-	// private double left1 = Double.MIN_VALUE;
-	// private double right1 = Double.MIN_VALUE;
-	// private double left2 = Double.MIN_VALUE;
-	// private double right2 = Double.MIN_VALUE;
-	//
-	// private double getLeft1(StringBounder stringBounder) {
-	// if (left1 == Double.MIN_VALUE) {
-	// final FtileGeometry geo = tile1.calculateDimension(stringBounder);
-	// left1 = geo.getLeft();
-	// }
-	// return left1;
-	// }
-	//
-	// private double getRight1(StringBounder stringBounder) {
-	// if (right1 == Double.MIN_VALUE) {
-	// final Dimension2D dim = tile1.calculateDimension(stringBounder);
-	// right1 = dim.getWidth() - getLeft1(stringBounder);
-	// }
-	// return right1;
-	// }
-	//
-	// private double getLeft2(StringBounder stringBounder) {
-	// if (left2 == Double.MIN_VALUE) {
-	// left2 = tile2.calculateDimension(stringBounder).getLeft();
-	// }
-	// return left2;
-	// }
-	//
-	// private double getRight2(StringBounder stringBounder) {
-	// if (right2 == Double.MIN_VALUE) {
-	// final Dimension2D dim = tile2.calculateDimension(stringBounder);
-	// right2 = dim.getWidth() - getLeft2(stringBounder);
-	// }
-	// return right2;
-	// }
-
-	public boolean isKilled() {
-		return tile1.isKilled() || tile2.isKilled();
-	}
 
 	public LinkRendering getInLinkRendering() {
 		return tile1.getInLinkRendering();

@@ -67,10 +67,11 @@ public class EntityImageEmptyPackage2 extends AbstractEntityImage {
 		this.skinParam = skinParam;
 		this.specificBackColor = entity.getSpecificBackColor();
 		this.stereotype = entity.getStereotype();
-		this.desc = TextBlockUtils.create(entity.getDisplay(),
-				new FontConfiguration(SkinParamUtils.getFont(getSkinParam(), FontParam.PACKAGE, stereotype),
-						SkinParamUtils.getFontColor(getSkinParam(), FontParam.PACKAGE, stereotype)),
-				HorizontalAlignment.CENTER, skinParam);
+		this.desc = TextBlockUtils.create(
+				entity.getDisplay(),
+				new FontConfiguration(SkinParamUtils.getFont(getSkinParam(),
+						FontParam.PACKAGE, stereotype), SkinParamUtils.getFontColor(getSkinParam(), FontParam.PACKAGE,
+				stereotype), getSkinParam().getHyperlinkColor()), HorizontalAlignment.CENTER, skinParam);
 	}
 
 	public Dimension2D calculateDimension(StringBounder stringBounder) {

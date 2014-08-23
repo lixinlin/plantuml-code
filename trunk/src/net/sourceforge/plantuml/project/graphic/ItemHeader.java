@@ -57,7 +57,7 @@ class ItemHeader {
 
 	private final UFont font = new UFont("Serif", Font.PLAIN, 9);
 	private final Project project;
-	private final FontConfiguration fontConfig = new FontConfiguration(font, HtmlColorUtils.BLACK);
+	private final FontConfiguration fontConfig = new FontConfiguration(font, HtmlColorUtils.BLACK, HtmlColorUtils.BLUE);
 
 	public ItemHeader(Project project) {
 		this.project = project;
