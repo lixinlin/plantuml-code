@@ -127,7 +127,7 @@ public final class GroupPngMakerState {
 		final DotData dotData = new DotData(group, links, group.getLeafsDirect(), diagram.getUmlDiagramType(),
 				skinParam, group.getRankdir(), new InnerGroupHierarchy(), diagram.getColorMapper(),
 				diagram.getEntityFactory(), diagram.isHideEmptyDescriptionForState(), DotMode.NORMAL,
-				diagram.getNamespaceSeparator());
+				diagram.getNamespaceSeparator(), diagram.getPragma());
 
 		final CucaDiagramFileMakerSvek2 svek2 = new CucaDiagramFileMakerSvek2(dotData, diagram.getEntityFactory(),
 				hasVerticalLine, diagram.getSource(), diagram.getPragma());

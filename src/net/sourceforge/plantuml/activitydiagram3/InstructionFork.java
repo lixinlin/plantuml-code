@@ -67,7 +67,7 @@ public class InstructionFork implements Instruction {
 		for (InstructionList list : forks) {
 			all.add(list.createFtile(factory));
 		}
-		return factory.createFork(all);
+		return factory.createFork(getSwimlaneIn(), all);
 	}
 
 	public Instruction getParent() {

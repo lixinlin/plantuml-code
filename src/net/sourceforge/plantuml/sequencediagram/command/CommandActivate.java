@@ -28,20 +28,19 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 12235 $
+ * Revision $Revision: 13992 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.command;
 
 import java.util.List;
 
-import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.command.SingleLineCommand;
-import net.sourceforge.plantuml.graphic.HtmlColorUtils;
 import net.sourceforge.plantuml.sequencediagram.LifeEventType;
 import net.sourceforge.plantuml.sequencediagram.Participant;
 import net.sourceforge.plantuml.sequencediagram.SequenceDiagram;
+import net.sourceforge.plantuml.utils.StringUtils;
 
 public class CommandActivate extends SingleLineCommand<SequenceDiagram> {
 
@@ -50,11 +49,12 @@ public class CommandActivate extends SingleLineCommand<SequenceDiagram> {
 	}
 
 	@Override
-	protected CommandExecutionResult executeArg(SequenceDiagram sequenceDiagram, List<String> arg) {
+	protected CommandExecutionResult executeArg(SequenceDiagram diagram, List<String> arg) {
 		final LifeEventType type = LifeEventType.valueOf(arg.get(0).toUpperCase());
-		final Participant p = sequenceDiagram.getOrCreateParticipant(StringUtils
+		final Participant p = diagram.getOrCreateParticipant(StringUtils
 				.eventuallyRemoveStartingAndEndingDoubleQuote(arg.get(1)));
-		final String error = sequenceDiagram.activate(p, type, HtmlColorUtils.getColorIfValid(arg.get(2)));
+		final String error = diagram.activate(p, type,
+				diagram.getSkinParam().getIHtmlColorSet().getColorIfValid(arg.get(2)));
 		if (error == null) {
 			return CommandExecutionResult.ok();
 		}

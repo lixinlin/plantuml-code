@@ -27,30 +27,28 @@
  * in the United States and other countries.]
  *
  * Original Author:  Arnaud Roques
- * 
- * Revision $Revision: 12235 $
- * 
+ *
+ * Revision $Revision: 8475 $
+ *
  */
-package net.sourceforge.plantuml;
+package net.sourceforge.plantuml.jungle;
 
-import java.util.concurrent.atomic.AtomicInteger;
+public class GNodeUtils {
 
-import net.sourceforge.plantuml.cucadiagram.Code;
-
-public class UniqueSequence {
-
-	private static final AtomicInteger cpt = new AtomicInteger(1);
-
-	public static void reset() {
-		cpt.set(0);
-	}
-
-	public static int getValue() {
-		return cpt.addAndGet(1);
-	}
-
-	public static Code getCode(String prefix) {
-		return Code.of(prefix + getValue());
+	public static GNode getIndirectChild(GNode root, String id) {
+		if (root.getId().equals(id)) {
+			return root;
+		}
+		for (GNode n : root.getChildren()) {
+			if (n.getId().equals(id)) {
+				return n;
+			}
+			final GNode result = getIndirectChild(n, id);
+			if (result != null) {
+				return result;
+			}
+		}
+		return null;
 	}
 
 }

@@ -39,7 +39,7 @@ import java.util.regex.Pattern;
 import net.sourceforge.plantuml.command.regex.MyPattern;
 import net.sourceforge.plantuml.graphic.FontConfiguration;
 import net.sourceforge.plantuml.graphic.HtmlColor;
-import net.sourceforge.plantuml.graphic.HtmlColorUtils;
+import net.sourceforge.plantuml.graphic.HtmlColorSet;
 
 public class CommandCreoleColorAndSizeChange implements Command {
 
@@ -83,7 +83,7 @@ public class CommandCreoleColorAndSizeChange implements Command {
 			fc2 = fc2.changeSize(Integer.parseInt(m.group(2)));
 		}
 		if (m.group(3) != null) {
-			final HtmlColor color = HtmlColorUtils.getColorIfValid(m.group(3));
+			final HtmlColor color = HtmlColorSet.getInstance().getColorIfValid(m.group(3));
 			fc2 = fc2.changeColor(color);
 		}
 

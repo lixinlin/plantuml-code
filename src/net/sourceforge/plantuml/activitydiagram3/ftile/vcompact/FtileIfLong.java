@@ -261,7 +261,11 @@ class FtileIfLong extends AbstractFtile {
 		public void drawU(UGraphic ug) {
 			final StringBounder stringBounder = ug.getStringBounder();
 			final UTranslate tr1 = getTranslate2(stringBounder);
-			final Point2D p1 = tr1.getTranslated(getFtile1().calculateDimension(stringBounder).getPointOut());
+			final FtileGeometry dim = getFtile1().calculateDimension(stringBounder);
+			if (dim.hasPointOut() == false) {
+				return;
+			}
+			final Point2D p1 = tr1.getTranslated(dim.getPointOut());
 			final double totalHeight = calculateDimensionInternal(stringBounder).getHeight();
 			final Point2D p2 = new Point2D.Double(p1.getX(), totalHeight);
 

@@ -42,7 +42,7 @@ import java.util.Set;
 import net.sourceforge.plantuml.Url;
 import net.sourceforge.plantuml.cucadiagram.Display;
 import net.sourceforge.plantuml.graphic.HtmlColor;
-import net.sourceforge.plantuml.graphic.HtmlColorUtils;
+import net.sourceforge.plantuml.graphic.HtmlColorSet;
 import net.sourceforge.plantuml.skin.ArrowConfiguration;
 
 public abstract class AbstractMessage implements Event {
@@ -146,7 +146,7 @@ public abstract class AbstractMessage implements Event {
 		this.notes = strings;
 		this.urlNote = url;
 		this.notePosition = overideNotePosition(notePosition);
-		this.noteBackColor = HtmlColorUtils.getColorIfValid(backcolor);
+		this.noteBackColor = HtmlColorSet.getInstance().getColorIfValid(backcolor);
 	}
 
 	protected NotePosition overideNotePosition(NotePosition notePosition) {

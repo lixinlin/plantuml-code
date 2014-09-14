@@ -123,7 +123,7 @@ public class VCompactFactory implements FtileFactory {
 		return new FtileForkInner(ftiles);
 	}
 
-	public Ftile createFork(List<Ftile> all) {
+	public Ftile createFork(Swimlane swimlane, List<Ftile> all) {
 		return new FtileForkInner(all);
 	}
 
@@ -131,7 +131,7 @@ public class VCompactFactory implements FtileFactory {
 		return new FtileForkInner(all);
 	}
 
-	public Ftile createGroup(Ftile list, Display name, HtmlColor backColor, HtmlColor titleColor) {
+	public Ftile createGroup(Ftile list, Display name, HtmlColor backColor, HtmlColor titleColor, Display headerNote) {
 		return list;
 	}
 

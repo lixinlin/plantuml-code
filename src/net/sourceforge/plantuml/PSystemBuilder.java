@@ -60,6 +60,7 @@ import net.sourceforge.plantuml.eggs.PSystemRIPFactory;
 import net.sourceforge.plantuml.flowdiagram.FlowDiagramFactory;
 import net.sourceforge.plantuml.font.PSystemListFontsFactory;
 import net.sourceforge.plantuml.jcckit.PSystemJcckitFactory;
+import net.sourceforge.plantuml.jungle.PSystemTreeFactory;
 import net.sourceforge.plantuml.logo.PSystemLogoFactory;
 import net.sourceforge.plantuml.objectdiagram.ObjectDiagramFactory;
 import net.sourceforge.plantuml.openiconic.PSystemListOpenIconicFactory;
@@ -156,6 +157,7 @@ public class PSystemBuilder {
 		}
 		factories.add(new PSystemProjectFactory2());
 		factories.add(new FlowDiagramFactory());
+		factories.add(new PSystemTreeFactory(DiagramType.JUNGLE));
 		return factories;
 	}
 

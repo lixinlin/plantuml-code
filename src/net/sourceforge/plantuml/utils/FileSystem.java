@@ -28,16 +28,18 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 12235 $
+ * Revision $Revision: 13946 $
  *
  */
-package net.sourceforge.plantuml;
+package net.sourceforge.plantuml.utils;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+
+import net.sourceforge.plantuml.Log;
 
 public class FileSystem {
 

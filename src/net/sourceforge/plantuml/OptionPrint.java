@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 12858 $
+ * Revision $Revision: 14028 $
  *
  */
 package net.sourceforge.plantuml;
@@ -134,7 +134,7 @@ public class OptionPrint {
 
 	public static void printVersion() throws InterruptedException {
 		System.out
-				.println("PlantUML version " + Version.versionString() + " (" + new Date(Version.compileTime()) + ")");
+				.println("PlantUML version " + Version.versionString() + " (" + Version.compileTimeString() + ")");
 		System.out.println("(" + License.getCurrent() + " source distribution)");
 		final Properties p = System.getProperties();
 		System.out.println(p.getProperty("java.runtime.name"));
@@ -150,7 +150,7 @@ public class OptionPrint {
 
 	public static void checkVersion() throws InterruptedException {
 		System.out
-				.println("PlantUML version " + Version.versionString() + " (" + new Date(Version.compileTime()) + ")");
+				.println("PlantUML version " + Version.versionString() + " (" + Version.compileTimeString() + ")");
 		System.out.println();
 		final int lastversion = PSystemVersion.extractDownloadableVersion(null, null);
 		if (lastversion == -1) {
@@ -176,7 +176,7 @@ public class OptionPrint {
 	public static void printAbout() throws InterruptedException {
 		// Duplicate in PSystemVersion
 		System.out
-				.println("PlantUML version " + Version.versionString() + " (" + new Date(Version.compileTime()) + ")");
+				.println("PlantUML version " + Version.versionString() + " (" + Version.compileTimeString() + ")");
 		System.out.println();
 		System.out.println("Original idea: Arnaud Roques");
 		System.out.println("Word Macro: Alain Bertucat & Matthieu Sabatier");

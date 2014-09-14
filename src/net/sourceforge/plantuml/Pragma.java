@@ -36,6 +36,8 @@ package net.sourceforge.plantuml;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import net.sourceforge.plantuml.utils.StringUtils;
+
 public class Pragma {
 
 	private final Map<String, String> values = new LinkedHashMap<String, String>();
@@ -57,6 +59,10 @@ public class Pragma {
 
 	public String getValue(String name) {
 		return values.get(name);
+	}
+
+	public boolean horizontalLineBetweenDifferentPackageAllowed() {
+		return isDefine("horizontallinebetweendifferentpackageallowed");
 	}
 
 }

@@ -49,6 +49,7 @@ import net.sourceforge.plantuml.code.Transcoder;
 import net.sourceforge.plantuml.code.TranscoderUtil;
 import net.sourceforge.plantuml.core.Diagram;
 import net.sourceforge.plantuml.preproc.Defines;
+import net.sourceforge.plantuml.utils.FileSystem;
 
 public class SourceFileReader2 implements ISourceFileReader {
 

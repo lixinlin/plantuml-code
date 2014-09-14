@@ -39,13 +39,13 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import net.sourceforge.plantuml.FileSystem;
 import net.sourceforge.plantuml.Log;
 import net.sourceforge.plantuml.UmlDiagram;
 import net.sourceforge.plantuml.command.regex.RegexConcat;
 import net.sourceforge.plantuml.command.regex.RegexLeaf;
 import net.sourceforge.plantuml.command.regex.RegexResult;
 import net.sourceforge.plantuml.ugraphic.SpriteImage;
+import net.sourceforge.plantuml.utils.FileSystem;
 
 public class CommandSpriteFile extends SingleLineCommand2<UmlDiagram> {
 

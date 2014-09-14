@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 12235 $
+ * Revision $Revision: 13990 $
  *
  */
 package net.sourceforge.plantuml.graph;
@@ -39,6 +39,7 @@ import java.awt.geom.Dimension2D;
 
 import net.sourceforge.plantuml.cucadiagram.IEntity;
 import net.sourceforge.plantuml.graphic.HtmlColor;
+import net.sourceforge.plantuml.graphic.HtmlColorSet;
 import net.sourceforge.plantuml.graphic.HtmlColorUtils;
 import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.ugraphic.ColorMapper;
@@ -51,14 +52,14 @@ abstract class AbstractEntityImage {
 	final private HtmlColor red = HtmlColorUtils.MY_RED;
 	
 	final private HtmlColor yellow = HtmlColorUtils.MY_YELLOW;
-	private final HtmlColor yellowNote = HtmlColorUtils.getColorIfValid("#FBFB77");
+	private final HtmlColor yellowNote = HtmlColorUtils.COL_FBFB77;
 
 	final private UFont font14 = new UFont("SansSerif", Font.PLAIN, 14);
 	final private UFont font17 = new UFont("Courier", Font.BOLD, 17);
-	final private HtmlColor green = HtmlColorUtils.getColorIfValid("#ADD1B2");
-	final private HtmlColor violet = HtmlColorUtils.getColorIfValid("#B4A7E5");
-	final private HtmlColor blue = HtmlColorUtils.getColorIfValid("#A9DCDF");
-	final private HtmlColor rose = HtmlColorUtils.getColorIfValid("#EB937F");
+	final private HtmlColor green = HtmlColorUtils.COL_ADD1B2;
+	final private HtmlColor violet = HtmlColorUtils.COL_B4A7E5;
+	final private HtmlColor blue = HtmlColorUtils.COL_A9DCDF;
+	final private HtmlColor rose = HtmlColorUtils.COL_EB937F;
 
 	public AbstractEntityImage(IEntity entity) {
 		if (entity == null) {

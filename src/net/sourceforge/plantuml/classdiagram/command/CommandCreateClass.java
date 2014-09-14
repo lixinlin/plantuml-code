@@ -109,7 +109,8 @@ public class CommandCreateClass extends SingleLineCommand2<ClassDiagram> {
 		}
 		if (stereotype != null) {
 			entity.setStereotype(new Stereotype(stereotype, diagram.getSkinParam().getCircledCharacterRadius(), diagram
-					.getSkinParam().getFont(FontParam.CIRCLED_CHARACTER, null)));
+					.getSkinParam().getFont(FontParam.CIRCLED_CHARACTER, null), diagram.getSkinParam()
+					.getIHtmlColorSet()));
 		}
 		if (generic != null) {
 			entity.setGeneric(generic);
@@ -122,8 +123,8 @@ public class CommandCreateClass extends SingleLineCommand2<ClassDiagram> {
 			entity.addUrl(url);
 		}
 
-		entity.setSpecificBackcolor(HtmlColorUtils.getColorIfValid(arg.get("COLOR", 0)));
-		entity.setSpecificLineColor(HtmlColorUtils.getColorIfValid(arg.get("LINECOLOR", 1)));
+		entity.setSpecificBackcolor(diagram.getSkinParam().getIHtmlColorSet().getColorIfValid(arg.get("COLOR", 0)));
+		entity.setSpecificLineColor(diagram.getSkinParam().getIHtmlColorSet().getColorIfValid(arg.get("LINECOLOR", 1)));
 		CommandCreateClassMultilines.applyStroke(entity, arg.get("LINECOLOR", 0));
 
 		// manageExtends(diagram, arg, entity);

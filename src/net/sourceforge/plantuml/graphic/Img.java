@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 12235 $
+ * Revision $Revision: 13946 $
  *
  */
 package net.sourceforge.plantuml.graphic;
@@ -46,8 +46,8 @@ import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 
-import net.sourceforge.plantuml.FileSystem;
 import net.sourceforge.plantuml.command.regex.MyPattern;
+import net.sourceforge.plantuml.utils.FileSystem;
 
 public class Img implements HtmlCommand {
 

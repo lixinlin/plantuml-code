@@ -28,12 +28,14 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 12235 $
+ * Revision $Revision: 13946 $
  *
  */
 package net.sourceforge.plantuml;
 
 import java.awt.geom.Dimension2D;
+
+import net.sourceforge.plantuml.utils.MathUtils;
 
 public class Dimension2DDouble extends Dimension2D {
 

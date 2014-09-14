@@ -36,7 +36,6 @@ package net.sourceforge.plantuml.sequencediagram.graphic;
 import java.awt.Color;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Dimension2D;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -50,7 +49,6 @@ import net.sourceforge.plantuml.Dimension2DDouble;
 import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.FontParam;
-import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.Url;
 import net.sourceforge.plantuml.activitydiagram3.ftile.EntityImageLegend;
 import net.sourceforge.plantuml.api.ImageDataComplex;
@@ -89,6 +87,7 @@ import net.sourceforge.plantuml.ugraphic.html5.UGraphicHtml5;
 import net.sourceforge.plantuml.ugraphic.svg.UGraphicSvg;
 import net.sourceforge.plantuml.ugraphic.tikz.UGraphicTikz;
 import net.sourceforge.plantuml.ugraphic.visio.UGraphicVdx;
+import net.sourceforge.plantuml.utils.StringUtils;
 
 public class SequenceDiagramFileMakerPuma2 implements FileMaker {
 
@@ -102,8 +101,7 @@ public class SequenceDiagramFileMakerPuma2 implements FileMaker {
 
 	private double scale;
 
-	public SequenceDiagramFileMakerPuma2(SequenceDiagram sequenceDiagram, Skin skin, FileFormatOption fileFormatOption,
-			List<BufferedImage> flashcodes) {
+	public SequenceDiagramFileMakerPuma2(SequenceDiagram sequenceDiagram, Skin skin, FileFormatOption fileFormatOption) {
 		this.diagram = sequenceDiagram;
 		this.fileFormatOption = fileFormatOption;
 		final DrawableSetInitializer initializer = new DrawableSetInitializer(skin, sequenceDiagram.getSkinParam(),
@@ -195,9 +193,8 @@ public class SequenceDiagramFileMakerPuma2 implements FileMaker {
 		// System.err.println("dpiFactor=" + dpiFactor);
 		// System.err.println("scale=" + scale);
 
-		final ImageBuilder imageBuilder = new ImageBuilder(fileFormatOption.getFileFormat(), diagram.getSkinParam()
-				.getColorMapper(), oneOf(scale, dpiFactor), diagram.getSkinParam().getBackgroundColor(), null, null, 3,
-				10);
+		final ImageBuilder imageBuilder = new ImageBuilder(diagram.getSkinParam().getColorMapper(), oneOf(scale,
+				dpiFactor), diagram.getSkinParam().getBackgroundColor(), null, null, 3, 10, diagram.getAnimation());
 
 		imageBuilder.addUDrawable(new UDrawable() {
 			public void drawU(UGraphic ug) {
@@ -243,7 +240,7 @@ public class SequenceDiagramFileMakerPuma2 implements FileMaker {
 
 			}
 		});
-		return imageBuilder.writeImageTOBEMOVED(os);
+		return imageBuilder.writeImageTOBEMOVED(fileFormatOption.getFileFormat(), os);
 	}
 
 	private double oneOf(double a, double b) {
@@ -251,25 +248,6 @@ public class SequenceDiagramFileMakerPuma2 implements FileMaker {
 			return b;
 		}
 		return a;
-	}
-
-	public ImageData createOneOld(OutputStream os, int index, boolean isWithMetadata) throws IOException {
-		final UGraphic2 ug = createImage((int) fullDimension.getWidth(), pages.get(index), index);
-
-		ug.writeImageTOBEMOVED(os, isWithMetadata ? diagram.getMetadata() : null, diagram.getDpi(fileFormatOption));
-		final Dimension2D info = new Dimension2DDouble(fullDimension.getWidth(), fullDimension.getHeight());
-
-		if (fileFormatOption.getFileFormat() == FileFormat.PNG && ug instanceof UGraphicG2d) {
-			final Set<Url> urls = ((UGraphicG2d) ug).getAllUrlsEncountered();
-			if (urls.size() > 0) {
-				if (scale == 0) {
-					throw new IllegalStateException();
-				}
-				final CMapData cmap = CMapData.cmapString(urls, scale);
-				return new ImageDataComplex(info, cmap, null);
-			}
-		}
-		return new ImageDataSimple(info);
 	}
 
 	private double getImageWidth(SequenceDiagramArea area, double dpiFactor, double legendWidth) {

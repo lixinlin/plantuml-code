@@ -28,12 +28,12 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 12382 $
+ * Revision $Revision: 13946 $
  *
  */
 package net.sourceforge.plantuml.cucadiagram;
 
-import net.sourceforge.plantuml.StringUtils;
+import net.sourceforge.plantuml.utils.StringUtils;
 
 public enum LeafType {
 
