@@ -28,16 +28,16 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 12495 $
+ * Revision $Revision: 14015 $
  *
  */
 package net.sourceforge.plantuml.command;
 
 import java.util.List;
 
-import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.UmlDiagram;
 import net.sourceforge.plantuml.cucadiagram.Display;
+import net.sourceforge.plantuml.utils.StringUtils;
 
 public class CommandMultilinesTitle extends CommandMultilines<UmlDiagram> {
 
@@ -53,7 +53,7 @@ public class CommandMultilinesTitle extends CommandMultilines<UmlDiagram> {
 	public CommandExecutionResult execute(final UmlDiagram diagram, List<String> lines) {
 		final Display strings = Display.create(lines.subList(1, lines.size() - 1)).removeEmptyColumns();
 		if (strings.size() > 0) {
-			diagram.setTitle(StringUtils.manageEmbededDiagrams(strings));
+			diagram.setTitle(strings);
 			return CommandExecutionResult.ok();
 		}
 		return CommandExecutionResult.error("No title defined");

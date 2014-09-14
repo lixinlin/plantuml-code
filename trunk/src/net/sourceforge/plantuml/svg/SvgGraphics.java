@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 13834 $
+ * Revision $Revision: 13946 $
  *
  */
 package net.sourceforge.plantuml.svg;
@@ -55,7 +55,6 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import net.sourceforge.plantuml.Log;
-import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.code.Base64Coder;
 import net.sourceforge.plantuml.eps.EpsGraphics;
 import net.sourceforge.plantuml.graphic.HtmlColorGradient;
@@ -63,6 +62,7 @@ import net.sourceforge.plantuml.ugraphic.ColorMapper;
 import net.sourceforge.plantuml.ugraphic.UPath;
 import net.sourceforge.plantuml.ugraphic.USegment;
 import net.sourceforge.plantuml.ugraphic.USegmentType;
+import net.sourceforge.plantuml.utils.StringUtils;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

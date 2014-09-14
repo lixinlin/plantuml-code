@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 12371 $
+ * Revision $Revision: 13946 $
  *
  */
 package net.sourceforge.plantuml.classdiagram.command;
@@ -37,7 +37,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import net.sourceforge.plantuml.FileSystem;
 import net.sourceforge.plantuml.classdiagram.ClassDiagram;
 import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.command.SingleLineCommand;
@@ -46,6 +45,7 @@ import net.sourceforge.plantuml.cucadiagram.IEntity;
 import net.sourceforge.plantuml.cucadiagram.Link;
 import net.sourceforge.plantuml.cucadiagram.LinkDecor;
 import net.sourceforge.plantuml.cucadiagram.LinkType;
+import net.sourceforge.plantuml.utils.FileSystem;
 
 public class CommandImport extends SingleLineCommand<ClassDiagram> {
 

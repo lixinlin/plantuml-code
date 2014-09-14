@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 12235 $
+ * Revision $Revision: 13946 $
  *
  */
 package net.sourceforge.plantuml.command;
@@ -37,9 +37,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.command.regex.MyPattern;
 import net.sourceforge.plantuml.core.Diagram;
+import net.sourceforge.plantuml.utils.StringUtils;
 
 public abstract class SingleLineCommand<S extends Diagram> implements Command<S> {
 

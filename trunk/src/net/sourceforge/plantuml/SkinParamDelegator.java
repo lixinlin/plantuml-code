@@ -39,6 +39,7 @@ import net.sourceforge.plantuml.cucadiagram.dot.DotSplines;
 import net.sourceforge.plantuml.cucadiagram.dot.GraphvizLayoutStrategy;
 import net.sourceforge.plantuml.graphic.HorizontalAlignment;
 import net.sourceforge.plantuml.graphic.HtmlColor;
+import net.sourceforge.plantuml.graphic.IHtmlColorSet;
 import net.sourceforge.plantuml.svek.ConditionStyle;
 import net.sourceforge.plantuml.svek.PackageStyle;
 import net.sourceforge.plantuml.ugraphic.ColorMapper;
@@ -176,6 +177,10 @@ public class SkinParamDelegator implements ISkinParam {
 	
 	public boolean useOctagonForActivity() {
 		return skinParam.useOctagonForActivity();
+	}
+
+	public IHtmlColorSet getIHtmlColorSet() {
+		return skinParam.getIHtmlColorSet();
 	}
 
 

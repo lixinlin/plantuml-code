@@ -39,6 +39,7 @@ import net.sourceforge.plantuml.cucadiagram.dot.DotSplines;
 import net.sourceforge.plantuml.cucadiagram.dot.GraphvizLayoutStrategy;
 import net.sourceforge.plantuml.graphic.HorizontalAlignment;
 import net.sourceforge.plantuml.graphic.HtmlColor;
+import net.sourceforge.plantuml.graphic.IHtmlColorSet;
 import net.sourceforge.plantuml.svek.ConditionStyle;
 import net.sourceforge.plantuml.svek.PackageStyle;
 import net.sourceforge.plantuml.ugraphic.ColorMapper;
@@ -104,6 +105,8 @@ public interface ISkinParam extends ISkinSimple {
 	public Rankdir getRankdir();
 	
 	public boolean useOctagonForActivity();
+	
+	public IHtmlColorSet getIHtmlColorSet();
 
 
 }

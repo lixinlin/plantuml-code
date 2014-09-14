@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 12495 $
+ * Revision $Revision: 13946 $
  *
  */
 package net.sourceforge.plantuml.command;
@@ -36,10 +36,10 @@ package net.sourceforge.plantuml.command;
 import java.util.List;
 import java.util.regex.Matcher;
 
-import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.UmlDiagram;
 import net.sourceforge.plantuml.cucadiagram.Display;
 import net.sourceforge.plantuml.graphic.HorizontalAlignment;
+import net.sourceforge.plantuml.utils.StringUtils;
 
 public class CommandMultilinesHeader extends CommandMultilines<UmlDiagram> {
 

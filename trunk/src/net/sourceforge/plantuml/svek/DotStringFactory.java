@@ -45,7 +45,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import net.sourceforge.plantuml.Log;
-import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.UmlDiagramType;
 import net.sourceforge.plantuml.cucadiagram.IGroup;
 import net.sourceforge.plantuml.cucadiagram.Rankdir;
@@ -58,6 +57,7 @@ import net.sourceforge.plantuml.cucadiagram.dot.ProcessState;
 import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.graphic.TextBlock;
 import net.sourceforge.plantuml.posimo.Moveable;
+import net.sourceforge.plantuml.utils.StringUtils;
 
 public class DotStringFactory implements Moveable {
 
@@ -154,6 +154,8 @@ public class DotStringFactory implements Moveable {
 			}
 			SvekUtils.println(sb);
 		}
+//		sb.append("newrank=true;");
+//		SvekUtils.println(sb);
 		sb.append("remincross=true;");
 		SvekUtils.println(sb);
 		sb.append("searchsize=500;");

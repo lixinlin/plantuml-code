@@ -27,47 +27,20 @@
  * in the United States and other countries.]
  *
  * Original Author:  Arnaud Roques
- *
- * Revision $Revision: 6110 $
+ * 
+ * Revision $Revision: 7946 $
  *
  */
-package net.sourceforge.plantuml;
+package net.sourceforge.plantuml.graphic;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Collection;
 
-import net.sourceforge.plantuml.command.regex.MyPattern;
+public interface IHtmlColorSet {
 
-public class StartUtils {
+	public Collection<String> names();
 
-	public static boolean isArobaseStartDiagram(String s) {
-		s = s.trim();
-		return s.startsWith("@start");
-	}
+	public HtmlColor getColorIfValid(String s);
 
-	public static boolean isArobaseEndDiagram(String s) {
-		s = s.trim();
-		return s.startsWith("@end");
-	}
-
-	public static boolean isArobasePauseDiagram(String s) {
-		s = s.trim();
-		return s.startsWith("@pause");
-	}
-
-	public static boolean isArobaseUnpauseDiagram(String s) {
-		s = s.trim();
-		return s.startsWith("@unpause");
-	}
-
-	private static final Pattern append = MyPattern.cmpile("^\\W*@append");
-
-	public static String getPossibleAppend(String s) {
-		final Matcher m = append.matcher(s);
-		if (m.find()) {
-			return s.substring(m.group(0).length()).trim();
-		}
-		return null;
-	}
+	public HtmlColor getColorIfValid(String s, boolean acceptTransparent);
 
 }

@@ -166,8 +166,8 @@ public class ActivityDiagram3 extends UmlDiagram {
 		return DecorateEntityImage.addBottom(original, text, getLegendAlignment());
 	}
 
-	protected ImageData exportDiagramInternal(OutputStream os, int index, FileFormatOption fileFormatOption,
-			List<BufferedImage> flashcodes) throws IOException {
+	@Override
+	protected ImageData exportDiagramInternal(OutputStream os, int index, FileFormatOption fileFormatOption) throws IOException {
 		// BUG42
 		// TextBlock result = swinlanes;
 		TextBlock result = new TextBlockCompressed(swinlanes);
@@ -180,12 +180,12 @@ public class ActivityDiagram3 extends UmlDiagram {
 		final double margin = 10;
 		final double dpiFactor = getDpiFactor(fileFormatOption, Dimension2DDouble.delta(dim, 2 * margin, 0));
 
-		final ImageBuilder imageBuilder = new ImageBuilder(fileFormatOption.getFileFormat(),
-				skinParam.getColorMapper(), dpiFactor, getSkinParam().getBackgroundColor(),
-				fileFormatOption.isWithMetadata() ? getMetadata() : null, getWarningOrError(), margin, margin);
+		final ImageBuilder imageBuilder = new ImageBuilder(skinParam.getColorMapper(), dpiFactor, getSkinParam()
+				.getBackgroundColor(), fileFormatOption.isWithMetadata() ? getMetadata() : null, getWarningOrError(),
+				margin, margin, getAnimation());
 		imageBuilder.addUDrawable(result);
 
-		return imageBuilder.writeImageTOBEMOVED(os);
+		return imageBuilder.writeImageTOBEMOVED(fileFormatOption.getFileFormat(), os);
 
 	}
 

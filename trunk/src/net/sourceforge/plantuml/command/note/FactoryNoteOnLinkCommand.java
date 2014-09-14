@@ -35,7 +35,6 @@ package net.sourceforge.plantuml.command.note;
 
 import java.util.List;
 
-import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.Url;
 import net.sourceforge.plantuml.UrlBuilder;
 import net.sourceforge.plantuml.UrlBuilder.ModeUrl;
@@ -52,6 +51,7 @@ import net.sourceforge.plantuml.cucadiagram.CucaDiagram;
 import net.sourceforge.plantuml.cucadiagram.Display;
 import net.sourceforge.plantuml.cucadiagram.Link;
 import net.sourceforge.plantuml.graphic.HtmlColorUtils;
+import net.sourceforge.plantuml.utils.StringUtils;
 
 public final class FactoryNoteOnLinkCommand implements SingleMultiFactoryCommand<CucaDiagram> {
 
@@ -84,9 +84,8 @@ public final class FactoryNoteOnLinkCommand implements SingleMultiFactoryCommand
 			public CommandExecutionResult executeNow(final CucaDiagram system, List<String> lines) {
 				final List<String> strings = StringUtils.removeEmptyColumns(lines.subList(1, lines.size() - 1));
 				if (strings.size() > 0) {
-					final List<CharSequence> note = StringUtils.manageEmbededDiagrams2(strings);
 					final RegexResult arg = getStartingPattern().matcher(lines.get(0));
-					return executeInternal(system, note, arg);
+					return executeInternal(system, strings, arg);
 				}
 				return CommandExecutionResult.error("No note defined");
 			}
@@ -105,9 +104,9 @@ public final class FactoryNoteOnLinkCommand implements SingleMultiFactoryCommand
 		};
 	}
 
-	private CommandExecutionResult executeInternal(CucaDiagram system, List<? extends CharSequence> note,
+	private CommandExecutionResult executeInternal(CucaDiagram diagram, List<? extends CharSequence> note,
 			final RegexResult arg) {
-		final Link link = system.getLastLink();
+		final Link link = diagram.getLastLink();
 		if (link == null) {
 			return CommandExecutionResult.error("No link defined");
 		}
@@ -117,13 +116,14 @@ public final class FactoryNoteOnLinkCommand implements SingleMultiFactoryCommand
 		}
 		Url url = null;
 		if (note.size() > 0) {
-			final UrlBuilder urlBuilder = new UrlBuilder(system.getSkinParam().getValue("topurl"), ModeUrl.STRICT);
+			final UrlBuilder urlBuilder = new UrlBuilder(diagram.getSkinParam().getValue("topurl"), ModeUrl.STRICT);
 			url = urlBuilder.getUrl(note.get(0).toString());
 		}
 		if (url != null) {
 			note = note.subList(1, note.size());
 		}
-		link.addNote(Display.create(note), position, HtmlColorUtils.getColorIfValid(arg.get("COLOR", 0)));
+		link.addNote(Display.create(note), position,
+				diagram.getSkinParam().getIHtmlColorSet().getColorIfValid(arg.get("COLOR", 0)));
 		return CommandExecutionResult.ok();
 	}
 

@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 12235 $
+ * Revision $Revision: 13970 $
  *
  */
 package net.sourceforge.plantuml.graphic;
@@ -50,7 +50,7 @@ class ColorAndSizeChange implements FontChange {
 	ColorAndSizeChange(String s) {
 		final Matcher matcherColor = colorPattern.matcher(s);
 		if (matcherColor.find()) {
-			color = HtmlColorUtils.getColorIfValid(matcherColor.group(1));
+			color = HtmlColorSet.getInstance().getColorIfValid(matcherColor.group(1));
 		} else {
 			color = null;
 		}

@@ -53,11 +53,11 @@ import java.util.regex.Pattern;
 import net.sourceforge.plantuml.Dimension2DDouble;
 import net.sourceforge.plantuml.Log;
 import net.sourceforge.plantuml.OptionFlags;
-import net.sourceforge.plantuml.UniqueSequence;
 import net.sourceforge.plantuml.cucadiagram.dot.Graphviz;
 import net.sourceforge.plantuml.cucadiagram.dot.GraphvizUtils;
 import net.sourceforge.plantuml.cucadiagram.dot.ProcessState;
 import net.sourceforge.plantuml.svek.MinFinder;
+import net.sourceforge.plantuml.utils.UniqueSequence;
 
 public class GraphvizSolverB {
 

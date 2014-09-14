@@ -50,7 +50,7 @@ import java.util.Collection;
 import java.util.StringTokenizer;
 
 import net.sourceforge.plantuml.FileFormat;
-import net.sourceforge.plantuml.FileUtils;
+import net.sourceforge.plantuml.utils.FileUtils;
 
 class FtpLoop implements Runnable {
 	enum Mode {

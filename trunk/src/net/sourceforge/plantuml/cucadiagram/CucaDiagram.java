@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 13737 $
+ * Revision $Revision: 13936 $
  *
  */
 package net.sourceforge.plantuml.cucadiagram;
@@ -290,8 +290,8 @@ public abstract class CucaDiagram extends UmlDiagram implements GroupHierarchy, 
 	}
 
 	@Override
-	final protected ImageData exportDiagramInternal(OutputStream os, int index, FileFormatOption fileFormatOption,
-			List<BufferedImage> flashcodes) throws IOException {
+	final protected ImageData exportDiagramInternal(OutputStream os, int index, FileFormatOption fileFormatOption)
+			throws IOException {
 		final FileFormat fileFormat = fileFormatOption.getFileFormat();
 
 		if (fileFormat == FileFormat.ATXT || fileFormat == FileFormat.UTXT) {
@@ -313,7 +313,7 @@ public abstract class CucaDiagram extends UmlDiagram implements GroupHierarchy, 
 		}
 
 		final CucaDiagramFileMaker maker = OptionFlags.USE_HECTOR ? new CucaDiagramFileMakerHectorC1(this)
-				: new CucaDiagramFileMakerSvek(this, flashcodes);
+				: new CucaDiagramFileMakerSvek(this);
 		final ImageData result = maker.createFile(os, getDotStrings(), fileFormatOption);
 
 		if (result == null) {

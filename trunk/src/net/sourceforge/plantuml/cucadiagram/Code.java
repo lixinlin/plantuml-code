@@ -35,7 +35,7 @@ package net.sourceforge.plantuml.cucadiagram;
 
 import java.util.Map;
 
-import net.sourceforge.plantuml.StringUtils;
+import net.sourceforge.plantuml.utils.StringUtils;
 
 public class Code implements Comparable<Code> {
 

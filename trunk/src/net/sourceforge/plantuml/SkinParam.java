@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 13835 $
+ * Revision $Revision: 13991 $
  *
  */
 package net.sourceforge.plantuml;
@@ -51,7 +51,9 @@ import net.sourceforge.plantuml.cucadiagram.dot.DotSplines;
 import net.sourceforge.plantuml.cucadiagram.dot.GraphvizLayoutStrategy;
 import net.sourceforge.plantuml.graphic.HorizontalAlignment;
 import net.sourceforge.plantuml.graphic.HtmlColor;
+import net.sourceforge.plantuml.graphic.HtmlColorSetSimple;
 import net.sourceforge.plantuml.graphic.HtmlColorUtils;
+import net.sourceforge.plantuml.graphic.IHtmlColorSet;
 import net.sourceforge.plantuml.svek.ConditionStyle;
 import net.sourceforge.plantuml.svek.PackageStyle;
 import net.sourceforge.plantuml.ugraphic.ColorMapper;
@@ -60,6 +62,7 @@ import net.sourceforge.plantuml.ugraphic.ColorMapperMonochrome;
 import net.sourceforge.plantuml.ugraphic.Sprite;
 import net.sourceforge.plantuml.ugraphic.UFont;
 import net.sourceforge.plantuml.ugraphic.UStroke;
+import net.sourceforge.plantuml.utils.StringUtils;
 
 public class SkinParam implements ISkinParam {
 
@@ -142,8 +145,8 @@ public class SkinParam implements ISkinParam {
 		if (stereotype != null) {
 			checkStereotype(stereotype);
 			final String value2 = getValue(param.name() + "color" + stereotype.getLabel());
-			if (value2 != null && HtmlColorUtils.getColorIfValid(value2) != null) {
-				return HtmlColorUtils.getColorIfValid(value2);
+			if (value2 != null && getIHtmlColorSet().getColorIfValid(value2) != null) {
+				return getIHtmlColorSet().getColorIfValid(value2);
 			}
 		}
 		final String value = getValue(getParamName(param, clickable));
@@ -151,7 +154,7 @@ public class SkinParam implements ISkinParam {
 		if (value == null) {
 			return null;
 		}
-		return HtmlColorUtils.getColorIfValid(value, acceptTransparent);
+		return getIHtmlColorSet().getColorIfValid(value, acceptTransparent);
 	}
 
 	private String getParamName(ColorParam param, boolean clickable) {
@@ -165,9 +168,9 @@ public class SkinParam implements ISkinParam {
 	}
 
 	private void checkStereotype(Stereotype stereotype) {
-//		if (stereotype.startsWith("<<") == false || stereotype.endsWith(">>") == false) {
-//			throw new IllegalArgumentException();
-//		}
+		// if (stereotype.startsWith("<<") == false || stereotype.endsWith(">>") == false) {
+		// throw new IllegalArgumentException();
+		// }
 	}
 
 	private int getFontSize(FontParam param, Stereotype stereotype) {
@@ -216,16 +219,16 @@ public class SkinParam implements ISkinParam {
 			checkStereotype(stereotype);
 			value = getValue(param.name() + "fontcolor" + stereotype.getLabel());
 		}
-		if (value == null || HtmlColorUtils.getColorIfValid(value) == null) {
+		if (value == null || getIHtmlColorSet().getColorIfValid(value) == null) {
 			value = getValue(param.name() + "fontcolor");
 		}
-		if (value == null || HtmlColorUtils.getColorIfValid(value) == null) {
+		if (value == null || getIHtmlColorSet().getColorIfValid(value) == null) {
 			value = getValue("defaultfontcolor");
 		}
-		if (value == null || HtmlColorUtils.getColorIfValid(value) == null) {
+		if (value == null || getIHtmlColorSet().getColorIfValid(value) == null) {
 			value = param.getDefaultColor();
 		}
-		return HtmlColorUtils.getColorIfValid(value);
+		return getIHtmlColorSet().getColorIfValid(value);
 	}
 
 	private int getFontStyle(FontParam param, Stereotype stereotype) {
@@ -532,7 +535,7 @@ public class SkinParam implements ISkinParam {
 	public boolean sameClassWidth() {
 		return "true".equals(getValue("sameclasswidth"));
 	}
-	
+
 	public final Rankdir getRankdir() {
 		return rankdir;
 	}
@@ -540,7 +543,7 @@ public class SkinParam implements ISkinParam {
 	public final void setRankdir(Rankdir rankdir) {
 		this.rankdir = rankdir;
 	}
-	
+
 	public boolean useOctagonForActivity() {
 		final String value = getValue("activityshape");
 		if ("roundedbox".equalsIgnoreCase(value)) {
@@ -552,6 +555,10 @@ public class SkinParam implements ISkinParam {
 		return false;
 	}
 
+	private final IHtmlColorSet htmlColorSet = new HtmlColorSetSimple();
 
+	public IHtmlColorSet getIHtmlColorSet() {
+		return htmlColorSet;
+	}
 
 }

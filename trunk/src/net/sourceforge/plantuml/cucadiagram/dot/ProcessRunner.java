@@ -69,9 +69,6 @@ public class ProcessRunner {
 		if (this.state != ProcessState.INIT) {
 			throw new IllegalStateException();
 		}
-		if (OptionFlags.CRASH_SPRITE) {
-			throw new UnsupportedOperationException();
-		}
 		this.state = ProcessState.RUNNING;
 		final MainThread mainThread = new MainThread(cmd, dir, redirection, in);
 		try {

@@ -163,8 +163,7 @@ public class FontChecker {
 	}
 
 	public BufferedImage getBufferedImage(final char c) throws IOException {
-		final ImageBuilder imageBuilder = new ImageBuilder(FileFormat.PNG, new ColorMapperIdentity(), 1, null, null,
-				null, 0, 0);
+		final ImageBuilder imageBuilder = new ImageBuilder(new ColorMapperIdentity(), 1, null, null, null, 0, 0, null);
 		final double dim = 20;
 		imageBuilder.addUDrawable(new UDrawable() {
 			public void drawU(UGraphic ug) {
@@ -177,7 +176,7 @@ public class FontChecker {
 			}
 		});
 		final ByteArrayOutputStream os = new ByteArrayOutputStream();
-		imageBuilder.writeImageTOBEMOVED(os);
+		imageBuilder.writeImageTOBEMOVED(FileFormat.PNG, os);
 		os.close();
 		return ImageIO.read(new ByteArrayInputStream(os.toByteArray()));
 	}

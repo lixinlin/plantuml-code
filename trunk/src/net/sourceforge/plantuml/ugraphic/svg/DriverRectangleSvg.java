@@ -33,7 +33,6 @@ package net.sourceforge.plantuml.ugraphic.svg;
 
 import java.awt.geom.Rectangle2D;
 
-import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.graphic.HtmlColor;
 import net.sourceforge.plantuml.graphic.HtmlColorGradient;
 import net.sourceforge.plantuml.svg.SvgGraphics;
@@ -44,6 +43,7 @@ import net.sourceforge.plantuml.ugraphic.UDriver;
 import net.sourceforge.plantuml.ugraphic.UParam;
 import net.sourceforge.plantuml.ugraphic.URectangle;
 import net.sourceforge.plantuml.ugraphic.UShape;
+import net.sourceforge.plantuml.utils.StringUtils;
 
 public class DriverRectangleSvg implements UDriver<SvgGraphics> {
 

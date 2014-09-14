@@ -36,9 +36,7 @@ package net.sourceforge.plantuml.classdiagram.command;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.UmlDiagramType;
-import net.sourceforge.plantuml.UniqueSequence;
 import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.command.SingleLineCommand2;
 import net.sourceforge.plantuml.command.regex.MyPattern;
@@ -54,6 +52,8 @@ import net.sourceforge.plantuml.cucadiagram.Link;
 import net.sourceforge.plantuml.cucadiagram.LinkDecor;
 import net.sourceforge.plantuml.cucadiagram.LinkType;
 import net.sourceforge.plantuml.objectdiagram.AbstractClassOrObjectDiagram;
+import net.sourceforge.plantuml.utils.StringUtils;
+import net.sourceforge.plantuml.utils.UniqueSequence;
 
 final public class CommandLinkLollipop extends SingleLineCommand2<AbstractClassOrObjectDiagram> {
 

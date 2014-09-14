@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 12853 $
+ * Revision $Revision: 13946 $
  *
  */
 package net.sourceforge.plantuml.activitydiagram;
@@ -38,7 +38,6 @@ import java.util.List;
 
 import net.sourceforge.plantuml.Direction;
 import net.sourceforge.plantuml.UmlDiagramType;
-import net.sourceforge.plantuml.UniqueSequence;
 import net.sourceforge.plantuml.core.DiagramDescription;
 import net.sourceforge.plantuml.core.DiagramDescriptionImpl;
 import net.sourceforge.plantuml.cucadiagram.Code;
@@ -49,6 +48,7 @@ import net.sourceforge.plantuml.cucadiagram.IEntity;
 import net.sourceforge.plantuml.cucadiagram.ILeaf;
 import net.sourceforge.plantuml.cucadiagram.LeafType;
 import net.sourceforge.plantuml.graphic.USymbol;
+import net.sourceforge.plantuml.utils.UniqueSequence;
 
 public class ActivityDiagram extends CucaDiagram {
 

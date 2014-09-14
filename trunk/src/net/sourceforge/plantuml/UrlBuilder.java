@@ -37,6 +37,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import net.sourceforge.plantuml.command.regex.MyPattern;
+import net.sourceforge.plantuml.utils.StringUtils;
 
 public class UrlBuilder {
 

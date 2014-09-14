@@ -28,34 +28,34 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 6719 $
- *
  */
-package net.sourceforge.plantuml;
+package net.sourceforge.plantuml.jungle;
 
-public class MathUtils {
+import java.util.ArrayList;
+import java.util.List;
 
-	public static double max(double a, double b) {
-		return Math.max(a, b);
+import net.sourceforge.plantuml.command.Command;
+import net.sourceforge.plantuml.command.UmlDiagramFactory;
+import net.sourceforge.plantuml.core.DiagramType;
+
+public class PSystemTreeFactory extends UmlDiagramFactory {
+
+	public PSystemTreeFactory(DiagramType type) {
+		super(type);
 	}
 
-	public static double max(double a, double b, double c) {
-		return Math.max(Math.max(a, b), c);
+	@Override
+	protected List<Command> createCommands() {
+		final List<Command> cmds = new ArrayList<Command>();
+		cmds.add(new CommandEmpty());
+		cmds.add(new CommandCreateNode());
+		cmds.add(new CommandCreateSubnode());
+		return cmds;
 	}
 
-	public static double limitation(double v, double min, double max) {
-		if (min >= max) {
-			assert false : "min="+min+" max="+max+" v="+v;
-			return v;
-			// throw new IllegalArgumentException("min="+min+" max="+max+" v="+v);
-		}
-		if (v < min) {
-			return min;
-		}
-		if (v > max) {
-			return max;
-		}
-		return v;
+	@Override
+	public PSystemTree createEmptyDiagram() {
+		return new PSystemTree();
 	}
 
 }

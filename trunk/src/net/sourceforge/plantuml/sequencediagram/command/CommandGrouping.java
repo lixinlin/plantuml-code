@@ -28,20 +28,19 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 12235 $
+ * Revision $Revision: 13992 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.command;
 
 import java.util.List;
 
-import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.command.SingleLineCommand;
 import net.sourceforge.plantuml.graphic.HtmlColor;
-import net.sourceforge.plantuml.graphic.HtmlColorUtils;
 import net.sourceforge.plantuml.sequencediagram.GroupingType;
 import net.sourceforge.plantuml.sequencediagram.SequenceDiagram;
+import net.sourceforge.plantuml.utils.StringUtils;
 
 public class CommandGrouping extends SingleLineCommand<SequenceDiagram> {
 
@@ -51,15 +50,15 @@ public class CommandGrouping extends SingleLineCommand<SequenceDiagram> {
 	}
 
 	@Override
-	protected CommandExecutionResult executeArg(SequenceDiagram sequenceDiagram, List<String> arg) {
+	protected CommandExecutionResult executeArg(SequenceDiagram diagram, List<String> arg) {
 		final String type = arg.get(0).toLowerCase();
-		final HtmlColor backColorElement = HtmlColorUtils.getColorIfValid(arg.get(1));
-		final HtmlColor backColorGeneral = HtmlColorUtils.getColorIfValid(arg.get(2));
+		final HtmlColor backColorElement = diagram.getSkinParam().getIHtmlColorSet().getColorIfValid(arg.get(1));
+		final HtmlColor backColorGeneral = diagram.getSkinParam().getIHtmlColorSet().getColorIfValid(arg.get(2));
 		String comment = arg.get(3);
 		if ("group".equals(type) && StringUtils.isEmpty(comment)) {
 			comment = "group";
 		}
-		final boolean result = sequenceDiagram.grouping(type, comment, GroupingType.getType(type), backColorGeneral,
+		final boolean result = diagram.grouping(type, comment, GroupingType.getType(type), backColorGeneral,
 				backColorElement);
 		if (result == false) {
 			return CommandExecutionResult.error("Cannot create group");

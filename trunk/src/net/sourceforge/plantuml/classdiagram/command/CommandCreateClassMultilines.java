@@ -36,7 +36,6 @@ package net.sourceforge.plantuml.classdiagram.command;
 import java.util.List;
 
 import net.sourceforge.plantuml.FontParam;
-import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.Url;
 import net.sourceforge.plantuml.UrlBuilder;
 import net.sourceforge.plantuml.UrlBuilder.ModeUrl;
@@ -58,9 +57,11 @@ import net.sourceforge.plantuml.cucadiagram.LinkDecor;
 import net.sourceforge.plantuml.cucadiagram.LinkStyle;
 import net.sourceforge.plantuml.cucadiagram.LinkType;
 import net.sourceforge.plantuml.cucadiagram.Stereotype;
+import net.sourceforge.plantuml.graphic.HtmlColorSet;
 import net.sourceforge.plantuml.graphic.HtmlColorUtils;
 import net.sourceforge.plantuml.skin.VisibilityModifier;
 import net.sourceforge.plantuml.ugraphic.UStroke;
+import net.sourceforge.plantuml.utils.StringUtils;
 
 public class CommandCreateClassMultilines extends CommandMultilines2<ClassDiagram> {
 
@@ -186,7 +187,8 @@ public class CommandCreateClassMultilines extends CommandMultilines2<ClassDiagra
 		}
 		if (stereotype != null) {
 			result.setStereotype(new Stereotype(stereotype, diagram.getSkinParam().getCircledCharacterRadius(), diagram
-					.getSkinParam().getFont(FontParam.CIRCLED_CHARACTER, null)));
+					.getSkinParam().getFont(FontParam.CIRCLED_CHARACTER, null), diagram.getSkinParam()
+					.getIHtmlColorSet()));
 		}
 
 		final String urlString = arg.get("URL", 0);
@@ -196,8 +198,8 @@ public class CommandCreateClassMultilines extends CommandMultilines2<ClassDiagra
 			result.addUrl(url);
 		}
 
-		result.setSpecificBackcolor(HtmlColorUtils.getColorIfValid(arg.get("COLOR", 0)));
-		result.setSpecificLineColor(HtmlColorUtils.getColorIfValid(arg.get("LINECOLOR", 1)));
+		result.setSpecificBackcolor(diagram.getSkinParam().getIHtmlColorSet().getColorIfValid(arg.get("COLOR", 0)));
+		result.setSpecificLineColor(diagram.getSkinParam().getIHtmlColorSet().getColorIfValid(arg.get("LINECOLOR", 1)));
 		applyStroke(result, arg.get("LINECOLOR", 0));
 
 		if (generic != null) {
