@@ -28,10 +28,10 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 13946 $
+ * Revision $Revision: 14056 $
  *
  */
-package net.sourceforge.plantuml.utils;
+package net.sourceforge.plantuml;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,7 +39,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import net.sourceforge.plantuml.Log;
 
 public class FileSystem {
 

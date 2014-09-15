@@ -31,7 +31,7 @@
  * Revision $Revision: 5749 $
  *
  */
-package net.sourceforge.plantuml.utils;
+package net.sourceforge.plantuml;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -43,9 +43,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import net.sourceforge.plantuml.Log;
-import net.sourceforge.plantuml.OptionFlags;
-
+// Used by the Eclipse Plugin, so do not change package location.
 public class FileUtils {
 
 	private static AtomicInteger counter;

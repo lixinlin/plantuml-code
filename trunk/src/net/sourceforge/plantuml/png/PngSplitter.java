@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 13946 $
+ * Revision $Revision: 14052 $
  *
  */
 package net.sourceforge.plantuml.png;
@@ -43,8 +43,8 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import net.sourceforge.plantuml.FileFormat;
+import net.sourceforge.plantuml.FileUtils;
 import net.sourceforge.plantuml.Log;
-import net.sourceforge.plantuml.utils.FileUtils;
 
 public class PngSplitter {
 

@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 13988 $
+ * Revision $Revision: 14052 $
  *
  */
 package net.sourceforge.plantuml;
@@ -81,7 +81,6 @@ import net.sourceforge.plantuml.ugraphic.UFont;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
 import net.sourceforge.plantuml.ugraphic.UImage;
 import net.sourceforge.plantuml.ugraphic.UTranslate;
-import net.sourceforge.plantuml.utils.FileUtils;
 import net.sourceforge.plantuml.version.Version;
 
 public abstract class UmlDiagram extends AbstractPSystem implements Diagram {

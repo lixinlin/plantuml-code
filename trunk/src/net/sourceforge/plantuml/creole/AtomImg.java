@@ -47,6 +47,7 @@ import java.net.URLConnection;
 import javax.imageio.ImageIO;
 
 import net.sourceforge.plantuml.Dimension2DDouble;
+import net.sourceforge.plantuml.FileSystem;
 import net.sourceforge.plantuml.graphic.FontConfiguration;
 import net.sourceforge.plantuml.graphic.HtmlColorUtils;
 import net.sourceforge.plantuml.graphic.ImgValign;
@@ -54,7 +55,6 @@ import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.ugraphic.UFont;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
 import net.sourceforge.plantuml.ugraphic.UImage;
-import net.sourceforge.plantuml.utils.FileSystem;
 
 public class AtomImg implements Atom {
 
