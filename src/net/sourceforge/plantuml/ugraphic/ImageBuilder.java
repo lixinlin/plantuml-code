@@ -54,6 +54,7 @@ import net.sourceforge.plantuml.CMapData;
 import net.sourceforge.plantuml.Dimension2DDouble;
 import net.sourceforge.plantuml.EmptyImageBuilder;
 import net.sourceforge.plantuml.FileFormat;
+import net.sourceforge.plantuml.FileUtils;
 import net.sourceforge.plantuml.Url;
 import net.sourceforge.plantuml.anim.AffineTransformation;
 import net.sourceforge.plantuml.anim.Animation;
@@ -74,7 +75,6 @@ import net.sourceforge.plantuml.ugraphic.html5.UGraphicHtml5;
 import net.sourceforge.plantuml.ugraphic.svg.UGraphicSvg;
 import net.sourceforge.plantuml.ugraphic.tikz.UGraphicTikz;
 import net.sourceforge.plantuml.ugraphic.visio.UGraphicVdx;
-import net.sourceforge.plantuml.utils.FileUtils;
 import net.sourceforge.plantuml.utils.StringUtils;
 
 public class ImageBuilder {
