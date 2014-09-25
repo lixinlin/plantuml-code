@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 12360 $
+ * Revision $Revision: 14065 $
  *
  */
 package net.sourceforge.plantuml;
@@ -125,8 +125,11 @@ public enum FontParam {
 		return defaultSize;
 	}
 
-	public final int getDefaultFontStyle(ISkinParam skinParam) {
-		if (this == PACKAGE) {
+	public final int getDefaultFontStyle(ISkinParam skinParam, boolean inPackageTitle) {
+		if (this == STATE) {
+			return fontStyle;
+		}
+		if (inPackageTitle || this == PACKAGE) {
 			return Font.BOLD;
 		}
 		return fontStyle;

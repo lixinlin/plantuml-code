@@ -168,7 +168,7 @@ public final class GroupPngMakerState {
 
 	private UFont getFont(FontParam fontParam) {
 		final ISkinParam skinParam = diagram.getSkinParam();
-		return skinParam.getFont(fontParam, null);
+		return skinParam.getFont(fontParam, null, false);
 	}
 
 	private final Rose rose = new Rose();

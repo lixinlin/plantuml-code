@@ -27,44 +27,14 @@
  * in the United States and other countries.]
  *
  * Original Author:  Arnaud Roques
- * 
- * Revision $Revision: 5424 $
+ *
+ * Revision $Revision: 8475 $
  *
  */
 package net.sourceforge.plantuml.jungle;
 
-import net.sourceforge.plantuml.command.CommandExecutionResult;
-import net.sourceforge.plantuml.command.SingleLineCommand2;
-import net.sourceforge.plantuml.command.regex.RegexConcat;
-import net.sourceforge.plantuml.command.regex.RegexLeaf;
-import net.sourceforge.plantuml.command.regex.RegexResult;
-import net.sourceforge.plantuml.cucadiagram.Display;
+public enum Rendering {
 
-public class CommandCreateSubnode extends SingleLineCommand2<PSystemTree> {
-
-	public CommandCreateSubnode() {
-		super(getRegexConcat());
-	}
-
-	static RegexConcat getRegexConcat() {
-		return new RegexConcat(new RegexLeaf("^"), //
-				new RegexLeaf("subnode"), //
-				new RegexLeaf("[%s]+"), //
-				new RegexLeaf("CHILD", "([\\p{L}0-9_.@]+)"), //
-				new RegexLeaf("[%s]+"), //
-				new RegexLeaf("of"), //
-				new RegexLeaf("[%s]+"), //
-				new RegexLeaf("PARENT", "([\\p{L}0-9_.@]+)"), //
-				new RegexLeaf("$"));
-	}
-
-	@Override
-	protected CommandExecutionResult executeArg(PSystemTree diagram, RegexResult arg) {
-		final String child = arg.get("CHILD", 0);
-		final String parent = arg.get("PARENT", 0);
-		final GNode parentNode = diagram.getNode(parent);
-		parentNode.addChild(child, Display.create(child));
-		return CommandExecutionResult.ok();
-	}
+	BASIC, NEEDLE
 
 }

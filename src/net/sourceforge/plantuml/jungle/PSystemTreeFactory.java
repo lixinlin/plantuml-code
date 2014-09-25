@@ -48,8 +48,7 @@ public class PSystemTreeFactory extends UmlDiagramFactory {
 	protected List<Command> createCommands() {
 		final List<Command> cmds = new ArrayList<Command>();
 		cmds.add(new CommandEmpty());
-		cmds.add(new CommandCreateNode());
-		cmds.add(new CommandCreateSubnode());
+		cmds.add(new CommandAddLevel());
 		return cmds;
 	}
 

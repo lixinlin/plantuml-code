@@ -27,16 +27,23 @@
  * in the United States and other countries.]
  *
  * Original Author:  Arnaud Roques
- *
- * Revision $Revision: 8475 $
+ * 
+ * Revision $Revision: 6577 $
  *
  */
-package net.sourceforge.plantuml.jungle;
+package net.sourceforge.plantuml.graphic;
 
-import net.sourceforge.plantuml.graphic.StringBounder;
-import net.sourceforge.plantuml.graphic.TextBlock;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
+import net.sourceforge.plantuml.ugraphic.UTranslate;
 
-public interface GTile extends TextBlock {
+public class UDrawableUtils {
 
-	public GTileGeometry calculateDimension(StringBounder stringBounder);
+	public static UDrawable move(final UDrawable orig, final double dx, final double dy) {
+		return new UDrawable() {
+			public void drawU(UGraphic ug) {
+				orig.drawU(ug.apply(new UTranslate(dx, dy)));
+			}
+		};
+	}
+
 }

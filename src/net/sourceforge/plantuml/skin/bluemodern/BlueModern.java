@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 13990 $
+ * Revision $Revision: 14065 $
  *
  */
 package net.sourceforge.plantuml.skin.bluemodern;
@@ -127,7 +127,7 @@ public class BlueModern implements Skin {
 		}
 		if (type == ComponentType.DELAY_TEXT) {
 			return new ComponentBlueModernDelayText(HtmlColorUtils.BLACK, hyperlinkColor, param.getFont(
-					FontParam.SEQUENCE_DELAY, null), stringsToDisplay, param);
+					FontParam.SEQUENCE_DELAY, null, false), stringsToDisplay, param);
 		}
 		if (type == ComponentType.DESTROY) {
 			return new ComponentRoseDestroy(red);
@@ -164,7 +164,7 @@ public class BlueModern implements Skin {
 		}
 		if (type == ComponentType.ENGLOBER) {
 			return new ComponentBlueModernEnglober(blue1, blue3, stringsToDisplay, HtmlColorUtils.BLACK,
-					hyperlinkColor, param.getFont(FontParam.SEQUENCE_BOX, null), param);
+					hyperlinkColor, param.getFont(FontParam.SEQUENCE_BOX, null, false), param);
 		}
 
 		return null;

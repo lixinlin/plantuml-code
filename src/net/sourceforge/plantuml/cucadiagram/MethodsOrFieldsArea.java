@@ -77,7 +77,7 @@ public class MethodsOrFieldsArea implements TextBlockWidth, TextBlock {
 			HorizontalAlignment align) {
 		this.align = align;
 		this.skinParam = skinParam;
-		this.font = skinParam.getFont(fontParam, null);
+		this.font = skinParam.getFont(fontParam, null, false);
 		this.color = rose.getFontColor(skinParam, fontParam);
 		this.hyperlinkColor = skinParam.getHyperlinkColor();
 		this.members.addAll(members);

@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 14052 $
+ * Revision $Revision: 14086 $
  *
  */
 package net.sourceforge.plantuml;
@@ -245,6 +245,15 @@ public abstract class UmlDiagram extends AbstractPSystem implements Diagram {
 		final String flash = getFlashData();
 		for (StackTraceElement ste : exception.getStackTrace()) {
 			strings.add("  " + ste.toString());
+		}
+		if (exception.getCause() != null) {
+			final Throwable cause = exception.getCause();
+			strings.add("  ");
+			strings.add("Caused by " + cause.toString());
+			for (StackTraceElement ste : cause.getStackTrace()) {
+				strings.add("  " + ste.toString());
+			}
+
 		}
 
 		final ImageBuilder imageBuilder = new ImageBuilder(new ColorMapperIdentity(), 1.0, HtmlColorUtils.WHITE,

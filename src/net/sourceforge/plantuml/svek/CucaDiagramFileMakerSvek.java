@@ -290,7 +290,7 @@ public final class CucaDiagramFileMakerSvek implements CucaDiagramFileMaker {
 
 	private final UFont getFont(FontParam fontParam) {
 		final ISkinParam skinParam = diagram.getSkinParam();
-		return skinParam.getFont(fontParam, null);
+		return skinParam.getFont(fontParam, null, false);
 	}
 
 	private final HtmlColor getFontColor(FontParam fontParam, Stereotype stereo) {

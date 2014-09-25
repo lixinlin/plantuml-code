@@ -35,20 +35,20 @@ package net.sourceforge.plantuml.jungle;
 
 public class GNodeUtils {
 
-	public static GNode getIndirectChild(GNode root, String id) {
-		if (root.getId().equals(id)) {
-			return root;
-		}
-		for (GNode n : root.getChildren()) {
-			if (n.getId().equals(id)) {
-				return n;
-			}
-			final GNode result = getIndirectChild(n, id);
-			if (result != null) {
-				return result;
-			}
-		}
-		return null;
-	}
+//	public static GNode getIndirectChild(GNode root, String id) {
+//		if (root.getId().equals(id)) {
+//			return root;
+//		}
+//		for (GNode n : root.getChildren()) {
+//			if (n.getId().equals(id)) {
+//				return n;
+//			}
+//			final GNode result = getIndirectChild(n, id);
+//			if (result != null) {
+//				return result;
+//			}
+//		}
+//		return null;
+//	}
 
 }

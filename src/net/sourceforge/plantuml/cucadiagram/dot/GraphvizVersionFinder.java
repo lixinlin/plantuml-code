@@ -83,7 +83,7 @@ public class GraphvizVersionFinder {
 
 		final ProcessRunner p = new ProcessRunner(cmd);
 		final ProcessState state = p.run(null, null);
-		if (state != ProcessState.TERMINATED_OK) {
+		if (state.differs(ProcessState.TERMINATED_OK())) {
 			return "?";
 		}
 		final StringBuilder sb = new StringBuilder();

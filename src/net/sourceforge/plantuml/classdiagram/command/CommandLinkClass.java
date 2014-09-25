@@ -160,12 +160,12 @@ final public class CommandLinkClass extends SingleLineCommand2<AbstractClassOrOb
 		}
 		if (arg.get("ENT1", 2) != null) {
 			cl1.setStereotype(new Stereotype(arg.get("ENT1", 2), diagram.getSkinParam().getCircledCharacterRadius(),
-					diagram.getSkinParam().getFont(FontParam.CIRCLED_CHARACTER, null), diagram.getSkinParam()
+					diagram.getSkinParam().getFont(FontParam.CIRCLED_CHARACTER, null, false), diagram.getSkinParam()
 							.getIHtmlColorSet()));
 		}
 		if (arg.get("ENT2", 2) != null) {
 			cl2.setStereotype(new Stereotype(arg.get("ENT2", 2), diagram.getSkinParam().getCircledCharacterRadius(),
-					diagram.getSkinParam().getFont(FontParam.CIRCLED_CHARACTER, null), diagram.getSkinParam()
+					diagram.getSkinParam().getFont(FontParam.CIRCLED_CHARACTER, null, false), diagram.getSkinParam()
 							.getIHtmlColorSet()));
 		}
 

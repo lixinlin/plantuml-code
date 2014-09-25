@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 13946 $
+ * Revision $Revision: 14080 $
  *
  */
 package net.sourceforge.plantuml.cucadiagram.dot;
@@ -141,7 +141,7 @@ abstract class AbstractGraphviz implements Graphviz {
 	private String executeCmd(final String cmd[]) {
 		final ProcessRunner p = new ProcessRunner(cmd);
 		final ProcessState state = p.run(null, null);
-		if (state != ProcessState.TERMINATED_OK) {
+		if (state.differs(ProcessState.TERMINATED_OK())) {
 			return "?";
 		}
 		final StringBuilder sb = new StringBuilder();

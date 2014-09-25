@@ -203,7 +203,7 @@ public class CommandCreateElementFull extends SingleLineCommand2<DescriptionDiag
 		entity.setUSymbol(usymbol);
 		if (stereotype != null) {
 			entity.setStereotype(new Stereotype(stereotype, diagram.getSkinParam().getCircledCharacterRadius(), diagram
-					.getSkinParam().getFont(FontParam.CIRCLED_CHARACTER, null), diagram.getSkinParam()
+					.getSkinParam().getFont(FontParam.CIRCLED_CHARACTER, null, false), diagram.getSkinParam()
 					.getIHtmlColorSet()));
 		}
 
