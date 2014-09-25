@@ -116,7 +116,7 @@ public class CommandCreateElementMultilines extends CommandMultilines2<Descripti
 		result.setUSymbol(usymbol);
 		if (stereotype != null) {
 			result.setStereotype(new Stereotype(stereotype, diagram.getSkinParam().getCircledCharacterRadius(), diagram
-					.getSkinParam().getFont(FontParam.CIRCLED_CHARACTER, null), diagram.getSkinParam()
+					.getSkinParam().getFont(FontParam.CIRCLED_CHARACTER, null, false), diagram.getSkinParam()
 					.getIHtmlColorSet()));
 		}
 

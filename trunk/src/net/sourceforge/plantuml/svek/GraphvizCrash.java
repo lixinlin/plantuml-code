@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sourceforge.plantuml.Dimension2DDouble;
+import net.sourceforge.plantuml.cucadiagram.dot.GraphvizUtils;
 import net.sourceforge.plantuml.flashcode.FlashCodeFactory;
 import net.sourceforge.plantuml.flashcode.FlashCodeUtils;
 import net.sourceforge.plantuml.fun.IconLoader;
@@ -76,10 +77,17 @@ public class GraphvizCrash implements IEntityImage {
 		final String quote = QuoteUtils.getSomeQuote();
 		strings.add("<i>" + quote);
 		strings.add(" ");
-		addProperties(strings);
-		strings.add(" ");
 		strings.add("For some reason, dot/Graphviz has crashed.");
 		strings.add("This has been generated with PlantUML (" + Version.versionString() + ").");
+		strings.add(" ");
+		addProperties(strings);
+		strings.add(" ");
+		try {
+			final String dotVersion = GraphvizUtils.dotVersion();
+			strings.add("Default dot version: " + dotVersion);
+		} catch (Throwable e) {
+			strings.add("Cannot determine dot version: " + e.toString());
+		}
 		strings.add(" ");
 		strings.add("You should send this diagram and this image to <b>plantuml@gmail.com</b> to solve this issue.");
 		strings.add("You can try to turn arround this issue by simplifing your diagram.");

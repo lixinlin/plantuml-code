@@ -61,19 +61,24 @@ public class GTileNode implements GTile {
 	private final TextBlock tb;
 
 	public GTileNode(GNode node) {
-		final Rose rose = new Rose();
-		final SkinParam skinParam = new SkinParam(UmlDiagramType.CLASS);
-		final HtmlColor fontColor = rose.getFontColor(skinParam, FontParam.NOTE);
-		final UFont fontNote = skinParam.getFont(FontParam.NOTE, null);
-
-		final FontConfiguration fc = new FontConfiguration(fontNote, fontColor, skinParam.getHyperlinkColor());
-
-		final Sheet sheet9 = new CreoleParser(fc, HorizontalAlignment.LEFT, skinParam, false).createSheet(node
-				.getDisplay());
-		final SheetBlock1 sheetBlock1 = new SheetBlock1(sheet9, 0);
+		final Display display = node.getDisplay();
+		final SheetBlock1 sheetBlock1 = getTextBlock(display);
 
 		final SymbolContext symbolContext = new SymbolContext(HtmlColorUtils.MY_YELLOW, HtmlColorUtils.BLACK);
 		tb = USymbol.RECTANGLE.asSmall(sheetBlock1, TextBlockUtils.empty(0, 0), symbolContext);
+	}
+
+	public static SheetBlock1 getTextBlock(final Display display) {
+		final Rose rose = new Rose();
+		final SkinParam skinParam = new SkinParam(UmlDiagramType.CLASS);
+		final HtmlColor fontColor = rose.getFontColor(skinParam, FontParam.NOTE);
+		final UFont fontNote = skinParam.getFont(FontParam.NOTE, null, false);
+
+		final FontConfiguration fc = new FontConfiguration(fontNote, fontColor, skinParam.getHyperlinkColor());
+
+		final Sheet sheet9 = new CreoleParser(fc, HorizontalAlignment.LEFT, skinParam, false).createSheet(display);
+		final SheetBlock1 sheetBlock1 = new SheetBlock1(sheet9, 0);
+		return sheetBlock1;
 	}
 
 	public void drawU(UGraphic ug) {

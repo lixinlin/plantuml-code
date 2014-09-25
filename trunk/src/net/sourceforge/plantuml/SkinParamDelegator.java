@@ -67,8 +67,8 @@ public class SkinParamDelegator implements ISkinParam {
 		return skinParam.getCircledCharacterRadius();
 	}
 
-	public UFont getFont(FontParam fontParam, Stereotype stereotype) {
-		return skinParam.getFont(fontParam, stereotype);
+	public UFont getFont(FontParam fontParam, Stereotype stereotype, boolean inPackageTitle) {
+		return skinParam.getFont(fontParam, stereotype, false);
 	}
 
 	public HtmlColor getFontHtmlColor(FontParam param, Stereotype stereotype) {

@@ -35,6 +35,7 @@ package net.sourceforge.plantuml.cucadiagram;
 
 import java.util.Collection;
 
+import net.sourceforge.plantuml.FontParam;
 import net.sourceforge.plantuml.svek.IEntityImage;
 import net.sourceforge.plantuml.svek.PackageStyle;
 import net.sourceforge.plantuml.svek.SingleStrategy;
@@ -68,4 +69,6 @@ public interface IGroup extends IEntity {
 	public void overideImage(IEntityImage img, LeafType state);
 
 	public SingleStrategy getSingleStrategy();
+
+	public FontParam getTitleFontParam();
 }

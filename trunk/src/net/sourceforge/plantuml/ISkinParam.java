@@ -58,7 +58,7 @@ public interface ISkinParam extends ISkinSimple {
 
 	public UStroke getThickness(LineParam param, Stereotype stereotype);
 
-	public UFont getFont(FontParam fontParam, Stereotype stereotype);
+	public UFont getFont(FontParam fontParam, Stereotype stereotype, boolean inPackageTitle);
 
 	public HorizontalAlignment getHorizontalAlignment(AlignParam param);
 

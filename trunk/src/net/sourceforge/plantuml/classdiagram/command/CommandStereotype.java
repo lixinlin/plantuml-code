@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 13993 $
+ * Revision $Revision: 14065 $
  *
  */
 package net.sourceforge.plantuml.classdiagram.command;
@@ -55,7 +55,7 @@ public class CommandStereotype extends SingleLineCommand<ClassDiagram> {
 		final String stereotype = arg.get(1);
 		final IEntity entity = diagram.getOrCreateLeaf(code, null, null);
 		entity.setStereotype(new Stereotype(stereotype, diagram.getSkinParam().getCircledCharacterRadius(), diagram
-				.getSkinParam().getFont(FontParam.CIRCLED_CHARACTER, null), diagram.getSkinParam().getIHtmlColorSet()));
+				.getSkinParam().getFont(FontParam.CIRCLED_CHARACTER, null, false), diagram.getSkinParam().getIHtmlColorSet()));
 		return CommandExecutionResult.ok();
 	}
 

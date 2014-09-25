@@ -359,16 +359,16 @@ class FtileIfLong extends AbstractFtile {
 
 			final List<Ftile> all = new ArrayList<Ftile>(tiles);
 			all.add(tile2);
-			double minX = Double.MAX_VALUE;
-			double maxX = 0;
+			double minX = totalDim.getWidth() / 2;
+			double maxX = totalDim.getWidth() / 2;
 			for (Ftile tmp : all) {
 				if (tmp.calculateDimension(stringBounder).hasPointOut() == false) {
 					continue;
 				}
 				final UTranslate ut = getTranslateFor(tmp, stringBounder);
-				final double middle = tmp.calculateDimension(stringBounder).translate(ut).getLeft();
-				minX = Math.min(minX, middle);
-				maxX = Math.max(maxX, middle);
+				final double out = tmp.calculateDimension(stringBounder).translate(ut).getLeft();
+				minX = Math.min(minX, out);
+				maxX = Math.max(maxX, out);
 			}
 
 			final Snake s = new Snake(arrowColor);

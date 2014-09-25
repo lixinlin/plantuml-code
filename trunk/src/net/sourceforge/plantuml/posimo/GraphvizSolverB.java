@@ -106,7 +106,7 @@ public class GraphvizSolverB {
 		final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		final ProcessState state = graphviz.createFile3(baos);
 		baos.close();
-		if (state != ProcessState.TERMINATED_OK) {
+		if (state.differs(ProcessState.TERMINATED_OK())) {
 			throw new IllegalStateException("Timeout2 " + state);
 		}
 		final byte[] result = baos.toByteArray();
@@ -247,7 +247,7 @@ public class GraphvizSolverB {
 		final OutputStream os = new BufferedOutputStream(new FileOutputStream(f));
 		final ProcessState state = graphviz.createFile3(os);
 		os.close();
-		if (state != ProcessState.TERMINATED_OK) {
+		if (state.differs(ProcessState.TERMINATED_OK())) {
 			throw new IllegalStateException("Timeout3 " + state);
 		}
 	}

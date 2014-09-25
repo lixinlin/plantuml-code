@@ -109,7 +109,7 @@ public class CommandCreateClass extends SingleLineCommand2<ClassDiagram> {
 		}
 		if (stereotype != null) {
 			entity.setStereotype(new Stereotype(stereotype, diagram.getSkinParam().getCircledCharacterRadius(), diagram
-					.getSkinParam().getFont(FontParam.CIRCLED_CHARACTER, null), diagram.getSkinParam()
+					.getSkinParam().getFont(FontParam.CIRCLED_CHARACTER, null, false), diagram.getSkinParam()
 					.getIHtmlColorSet()));
 		}
 		if (generic != null) {

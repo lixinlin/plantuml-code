@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 13991 $
+ * Revision $Revision: 14086 $
  *
  */
 package net.sourceforge.plantuml;
@@ -88,15 +88,19 @@ public class SkinParam implements ISkinParam {
 	static String cleanForKey(String key) {
 		key = key.toLowerCase().trim();
 		key = key.replaceAll("_|\\.|\\s", "");
-		key = key.replaceAll("partition", "package");
-		key = key.replaceAll("sequenceparticipant", "participant");
-		key = key.replaceAll("sequenceactor", "actor");
-		key = key.replaceAll("activityarrow", "genericarrow");
-		key = key.replaceAll("objectarrow", "genericarrow");
-		key = key.replaceAll("classarrow", "genericarrow");
-		key = key.replaceAll("componentarrow", "genericarrow");
-		key = key.replaceAll("statearrow", "genericarrow");
-		key = key.replaceAll("usecasearrow", "genericarrow");
+		key = replaceSmart(key, "partition", "package");
+		key = replaceSmart(key, "sequenceparticipant", "participant");
+		key = replaceSmart(key, "sequenceactor", "actor");
+		if (key.contains("arrow")) {
+			key = key.replaceAll("activityarrow|objectarrow|classarrow|componentarrow|statearrow|usecasearrow",
+					"genericarrow");
+		}
+		// // key = key.replaceAll("activityarrow", "genericarrow");
+		// // key = key.replaceAll("objectarrow", "genericarrow");
+		// // key = key.replaceAll("classarrow", "genericarrow");
+		// // key = key.replaceAll("componentarrow", "genericarrow");
+		// // key = key.replaceAll("statearrow", "genericarrow");
+		// // key = key.replaceAll("usecasearrow", "genericarrow");
 		final Matcher m = stereoPattern.matcher(key);
 		if (m.find()) {
 			final String s = m.group(1);
@@ -104,6 +108,13 @@ public class SkinParam implements ISkinParam {
 			key += "<<" + s + ">>";
 		}
 		return key;
+	}
+
+	private static String replaceSmart(String s, String src, String target) {
+		if (s.contains(src) == false) {
+			return s;
+		}
+		return s.replaceAll(src, target);
 	}
 
 	public HtmlColor getHyperlinkColor() {
@@ -231,7 +242,7 @@ public class SkinParam implements ISkinParam {
 		return getIHtmlColorSet().getColorIfValid(value);
 	}
 
-	private int getFontStyle(FontParam param, Stereotype stereotype) {
+	private int getFontStyle(FontParam param, Stereotype stereotype, boolean inPackageTitle) {
 		String value = null;
 		if (stereotype != null) {
 			checkStereotype(stereotype);
@@ -244,7 +255,7 @@ public class SkinParam implements ISkinParam {
 			value = getValue("defaultfontstyle");
 		}
 		if (value == null) {
-			return param.getDefaultFontStyle(this);
+			return param.getDefaultFontStyle(this, inPackageTitle);
 		}
 		int result = Font.PLAIN;
 		if (value.toLowerCase().contains("bold")) {
@@ -256,13 +267,14 @@ public class SkinParam implements ISkinParam {
 		return result;
 	}
 
-	public UFont getFont(FontParam fontParam, Stereotype stereotype) {
+	public UFont getFont(FontParam fontParam, Stereotype stereotype, boolean inPackageTitle) {
 		if (stereotype != null) {
 			checkStereotype(stereotype);
 		}
 		final String fontFamily = getFontFamily(fontParam, stereotype);
-		final int fontStyle = getFontStyle(fontParam, stereotype);
-		return new UFont(fontFamily, fontStyle, getFontSize(fontParam, stereotype));
+		final int fontStyle = getFontStyle(fontParam, stereotype, inPackageTitle);
+		final int fontSize = getFontSize(fontParam, stereotype);
+		return new UFont(fontFamily, fontStyle, fontSize);
 	}
 
 	public int getCircledCharacterRadius() {

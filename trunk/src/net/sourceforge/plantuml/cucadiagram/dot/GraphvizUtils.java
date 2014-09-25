@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 13946 $
+ * Revision $Revision: 14080 $
  *
  */
 package net.sourceforge.plantuml.cucadiagram.dot;
@@ -195,7 +195,7 @@ public class GraphvizUtils {
 		final Graphviz graphviz2 = GraphvizUtils.create("digraph foo { test; }", "svg");
 		final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		final ProcessState state = graphviz2.createFile3(baos);
-		if (state != ProcessState.TERMINATED_OK) {
+		if (state.differs(ProcessState.TERMINATED_OK())) {
 			return "Error: timeout " + state;
 		}
 
@@ -211,11 +211,11 @@ public class GraphvizUtils {
 		return null;
 	}
 
-//	public static OS getOS() {
-//		if (isWindows()) {
-//			return new OSWindows();
-//		}
-//		return new OSLinux();
-//	}
+	// public static OS getOS() {
+	// if (isWindows()) {
+	// return new OSWindows();
+	// }
+	// return new OSLinux();
+	// }
 
 }

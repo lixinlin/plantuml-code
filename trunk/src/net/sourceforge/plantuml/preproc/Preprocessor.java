@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 14000 $
+ * Revision $Revision: 14067 $
  *
  */
 package net.sourceforge.plantuml.preproc;
@@ -90,12 +90,20 @@ public class Preprocessor implements ReadLine {
 			return manageUndef(m);
 		}
 
+		if (ignoreDefineDuringSeveralLines > 0) {
+			ignoreDefineDuringSeveralLines--;
+			return s;
+		}
+
 		final List<String> result = defines.applyDefines(s);
 		if (result.size() > 1) {
+			ignoreDefineDuringSeveralLines = result.size() - 2;
 			source.insert(result.subList(1, result.size() - 1));
 		}
 		return result.get(0);
 	}
+
+	private int ignoreDefineDuringSeveralLines = 0;
 
 	private String manageUndef(Matcher m) throws IOException {
 		defines.undefine(m.group(1));

@@ -39,25 +39,25 @@ import net.sourceforge.plantuml.command.regex.RegexConcat;
 import net.sourceforge.plantuml.command.regex.RegexLeaf;
 import net.sourceforge.plantuml.command.regex.RegexResult;
 
-public class CommandCreateNode extends SingleLineCommand2<PSystemTree> {
+public class CommandAddLevel extends SingleLineCommand2<PSystemTree> {
 
-	public CommandCreateNode() {
+	public CommandAddLevel() {
 		super(getRegexConcat());
 	}
 
 	static RegexConcat getRegexConcat() {
 		return new RegexConcat(new RegexLeaf("^"), //
-				new RegexLeaf("node"), //
+				new RegexLeaf("LEVEL", "(=+)"), //
 				new RegexLeaf("[%s]+"), //
-				new RegexLeaf("ID", "([\\p{L}0-9_.@]+)"), //
+				new RegexLeaf("LABEL", "(.+)"), //
 				new RegexLeaf("$"));
 	}
 
 	@Override
 	protected CommandExecutionResult executeArg(PSystemTree diagram, RegexResult arg) {
-		final String id = arg.get("ID", 0);
-		diagram.createRoot(id);
-		return CommandExecutionResult.ok();
+		final String level = arg.get("LEVEL", 0);
+		final String label = arg.get("LABEL", 0);
+		return diagram.addParagraph(level.length(), label);
 	}
 
 }

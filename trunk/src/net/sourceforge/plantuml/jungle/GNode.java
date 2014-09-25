@@ -41,17 +41,11 @@ import net.sourceforge.plantuml.cucadiagram.Display;
 
 public class GNode {
 
-	private final String id;
 	private final Display display;
 	private final List<GNode> children = new ArrayList<GNode>();
 
-	public GNode(String id, Display display) {
-		this.id = id;
+	public GNode(Display display) {
 		this.display = display;
-	}
-
-	public String getId() {
-		return id;
 	}
 
 	public Display getDisplay() {
@@ -62,18 +56,10 @@ public class GNode {
 		return Collections.unmodifiableList(children);
 	}
 
-	public GNode addChild(String id, Display display) {
-		final GNode child = new GNode(id, display);
+	public GNode addChild(Display display) {
+		final GNode child = new GNode(display);
 		children.add(child);
 		return child;
 	}
 
-	public GNode getDirectChild(String id) {
-		for (final GNode node : children) {
-			if (node.id.equals(id)) {
-				return node;
-			}
-		}
-		return null;
-	}
 }

@@ -71,7 +71,7 @@ public class BodyEnhanced implements TextBlock {
 		this.fontParam = fontParam;
 		this.skinParam = skinParam;
 
-		this.titleConfig = new FontConfiguration(skinParam.getFont(fontParam, null), new Rose().getFontColor(skinParam,
+		this.titleConfig = new FontConfiguration(skinParam.getFont(fontParam, null, false), new Rose().getFontColor(skinParam,
 				fontParam), skinParam.getHyperlinkColor());
 		this.lineFirst = true;
 		this.align = HorizontalAlignment.LEFT;

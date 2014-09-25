@@ -154,8 +154,8 @@ public class DotStringFactory implements Moveable {
 			}
 			SvekUtils.println(sb);
 		}
-//		sb.append("newrank=true;");
-//		SvekUtils.println(sb);
+		// sb.append("newrank=true;");
+		// SvekUtils.println(sb);
 		sb.append("remincross=true;");
 		SvekUtils.println(sb);
 		sb.append("searchsize=500;");
@@ -256,8 +256,8 @@ public class DotStringFactory implements Moveable {
 		final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		final ProcessState state = graphviz.createFile3(baos);
 		baos.close();
-		if (state != ProcessState.TERMINATED_OK) {
-			throw new IllegalStateException("Timeout4 " + state);
+		if (state.differs(ProcessState.TERMINATED_OK())) {
+			throw new IllegalStateException("Timeout4 " + state, state.getCause());
 		}
 		final byte[] result = baos.toByteArray();
 		final String s = new String(result, "UTF-8");

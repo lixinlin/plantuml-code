@@ -230,7 +230,7 @@ public class ActivityDiagram3 extends UmlDiagram {
 
 	private final UFont getFont(FontParam fontParam) {
 		final ISkinParam skinParam = getSkinParam();
-		return skinParam.getFont(fontParam, null);
+		return skinParam.getFont(fontParam, null, false);
 	}
 
 	private final HtmlColor getFontColor(FontParam fontParam, Stereotype stereotype2) {
