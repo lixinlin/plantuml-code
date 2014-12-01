@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 13993 $
+ * Revision $Revision: 14321 $
  *
  */
 package net.sourceforge.plantuml.cucadiagram;
@@ -47,7 +47,7 @@ import net.sourceforge.plantuml.graphic.HtmlColorUtils;
 import net.sourceforge.plantuml.graphic.IHtmlColorSet;
 import net.sourceforge.plantuml.svek.PackageStyle;
 import net.sourceforge.plantuml.ugraphic.UFont;
-import net.sourceforge.plantuml.utils.StringUtils;
+import net.sourceforge.plantuml.StringUtils;
 
 public class Stereotype implements CharSequence, Hideable {
 	private final static Pattern circleChar = MyPattern

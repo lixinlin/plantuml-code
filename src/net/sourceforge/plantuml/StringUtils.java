@@ -53,21 +53,17 @@ import net.sourceforge.plantuml.preproc.ReadLineReader;
 import net.sourceforge.plantuml.preproc.UncommentReadLine;
 import net.sourceforge.plantuml.ugraphic.ColorMapper;
 
-// Class moved to net.sourceforge.plantuml.utils
-@Deprecated
+// Do not move
 public class StringUtils {
 
-	@Deprecated
 	public static String getPlateformDependentAbsolutePath(File file) {
 		return file.getAbsolutePath();
 	}
 
-	@Deprecated
 	public static List<String> getWithNewlines2(Code s) {
 		return getWithNewlines2(s.getFullName());
 	}
 
-	@Deprecated
 	public static List<String> getWithNewlines2(String s) {
 		if (s == null) {
 			return null;
@@ -95,7 +91,6 @@ public class StringUtils {
 		return Collections.unmodifiableList(result);
 	}
 
-	@Deprecated
 	public static String getMergedLines(List<? extends CharSequence> strings) {
 		final StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < strings.size(); i++) {
@@ -107,7 +102,6 @@ public class StringUtils {
 		return sb.toString();
 	}
 
-	@Deprecated
 	final static public List<String> getSplit(Pattern pattern, String line) {
 		final Matcher m = pattern.matcher(line);
 		if (m.find() == false) {
@@ -121,29 +115,24 @@ public class StringUtils {
 
 	}
 
-	@Deprecated
 	public static boolean isNotEmpty(String input) {
 		return input != null && input.trim().length() > 0;
 	}
 
-	@Deprecated
 	public static boolean isNotEmpty(List<? extends CharSequence> input) {
 		return input != null && input.size() > 0;
 	}
 
-	@Deprecated
 	public static boolean isEmpty(String input) {
 		return input == null || input.trim().length() == 0;
 	}
 
-	@Deprecated
 	public static String manageHtml(String s) {
 		s = s.replace("<", "&lt;");
 		s = s.replace(">", "&gt;");
 		return s;
 	}
 
-	@Deprecated
 	public static String unicode(String s) {
 		final StringBuilder result = new StringBuilder();
 		for (char c : s.toCharArray()) {
@@ -157,7 +146,6 @@ public class StringUtils {
 		return result.toString();
 	}
 
-	@Deprecated
 	public static String unicodeForHtml(String s) {
 		final StringBuilder result = new StringBuilder();
 		for (char c : s.toCharArray()) {
@@ -171,7 +159,6 @@ public class StringUtils {
 		return result.toString();
 	}
 
-	@Deprecated
 	public static String unicodeForHtml(Display display) {
 		final StringBuilder result = new StringBuilder();
 		for (int i = 0; i < display.size(); i++) {
@@ -183,18 +170,15 @@ public class StringUtils {
 		return result.toString();
 	}
 
-	@Deprecated
 	public static String manageArrowForSequence(String s) {
 		s = s.replace('=', '-').toLowerCase();
 		return s;
 	}
 
-	@Deprecated
 	public static String capitalize(String s) {
 		return s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
 	}
 
-	@Deprecated
 	public static String manageArrowForCuca(String s) {
 		final Direction dir = getArrowDirection(s);
 		s = s.replace('=', '-');
@@ -208,7 +192,6 @@ public class StringUtils {
 		return s;
 	}
 
-	@Deprecated
 	public static String manageQueueForCuca(String s) {
 		final Direction dir = getQueueDirection(s);
 		s = s.replace('=', '-');
@@ -222,7 +205,6 @@ public class StringUtils {
 		return s;
 	}
 
-	@Deprecated
 	public static Direction getArrowDirection(String s) {
 		if (s.endsWith(">")) {
 			return getQueueDirection(s.substring(0, s.length() - 1));
@@ -236,7 +218,6 @@ public class StringUtils {
 		throw new IllegalArgumentException(s);
 	}
 
-	@Deprecated
 	public static Direction getQueueDirection(String s) {
 		if (s.indexOf('<') != -1 || s.indexOf('>') != -1) {
 			throw new IllegalArgumentException(s);
@@ -276,60 +257,57 @@ public class StringUtils {
 	// return Code.of(eventuallyRemoveStartingAndEndingDoubleQuote(s.getCode()));
 	// }
 
-	@Deprecated
-	public static String eventuallyRemoveStartingAndEndingDoubleQuote(String s) {
-		if (s.length() > 1 && isDoubleQuote(s.charAt(0)) && isDoubleQuote(s.charAt(s.length() - 1))) {
+	public static String eventuallyRemoveStartingAndEndingDoubleQuote(String s, String format) {
+		if (format.contains("\"") && s.length() > 1 && isDoubleQuote(s.charAt(0))
+				&& isDoubleQuote(s.charAt(s.length() - 1))) {
 			return s.substring(1, s.length() - 1);
 		}
-		if (s.startsWith("(") && s.endsWith(")")) {
+		if (format.contains("(") && s.startsWith("(") && s.endsWith(")")) {
 			return s.substring(1, s.length() - 1);
 		}
-		if (s.startsWith("[") && s.endsWith("]")) {
+		if (format.contains("[") && s.startsWith("[") && s.endsWith("]")) {
 			return s.substring(1, s.length() - 1);
 		}
-		if (s.startsWith(":") && s.endsWith(":")) {
+		if (format.contains(":") && s.startsWith(":") && s.endsWith(":")) {
 			return s.substring(1, s.length() - 1);
 		}
 		return s;
 	}
 
-	@Deprecated
+	public static String eventuallyRemoveStartingAndEndingDoubleQuote(String s) {
+		return eventuallyRemoveStartingAndEndingDoubleQuote(s, "\"([:");
+	}
+
 	private static boolean isDoubleQuote(char c) {
 		return c == '\"' || c == '\u201c' || c == '\u201d' || c == '\u00ab' || c == '\u00bb';
 	}
 
-	@Deprecated
 	public static boolean isCJK(char c) {
 		final Character.UnicodeBlock block = Character.UnicodeBlock.of(c);
 		Log.println("block=" + block);
 		return false;
 	}
 
-	@Deprecated
 	public static char hiddenLesserThan() {
 		return '\u0005';
 	}
 
-	@Deprecated
 	public static char hiddenBiggerThan() {
 		return '\u0006';
 	}
 
-	@Deprecated
 	public static String hideComparatorCharacters(String s) {
 		s = s.replace('<', hiddenLesserThan());
 		s = s.replace('>', hiddenBiggerThan());
 		return s;
 	}
 
-	@Deprecated
 	public static String showComparatorCharacters(String s) {
 		s = s.replace(hiddenLesserThan(), '<');
 		s = s.replace(hiddenBiggerThan(), '>');
 		return s;
 	}
 
-	@Deprecated
 	public static int getWidth(List<? extends CharSequence> stringsToDisplay) {
 		int result = 1;
 		for (CharSequence s : stringsToDisplay) {
@@ -340,7 +318,6 @@ public class StringUtils {
 		return result;
 	}
 
-	@Deprecated
 	public static int getWidth(Display stringsToDisplay) {
 		int result = 1;
 		for (CharSequence s : stringsToDisplay) {
@@ -351,17 +328,14 @@ public class StringUtils {
 		return result;
 	}
 
-	@Deprecated
 	public static int getHeight(List<? extends CharSequence> stringsToDisplay) {
 		return stringsToDisplay.size();
 	}
 
-	@Deprecated
 	public static int getHeight(Display stringsToDisplay) {
 		return stringsToDisplay.size();
 	}
 
-	@Deprecated
 	private static void removeFirstColumn(List<String> data) {
 		for (int i = 0; i < data.size(); i++) {
 			final String s = data.get(i);
@@ -371,7 +345,6 @@ public class StringUtils {
 		}
 	}
 
-	@Deprecated
 	private static boolean firstColumnRemovable(List<String> data) {
 		boolean allEmpty = true;
 		for (String s : data) {
@@ -387,7 +360,6 @@ public class StringUtils {
 		return allEmpty == false;
 	}
 
-	@Deprecated
 	public static List<String> removeEmptyColumns(List<String> data) {
 		if (firstColumnRemovable(data) == false) {
 			return data;
@@ -399,7 +371,6 @@ public class StringUtils {
 		return result;
 	}
 
-	@Deprecated
 	public static void trim(List<String> data, boolean removeEmptyLines) {
 		for (int i = 0; i < data.size(); i++) {
 			final String s = data.get(i);
@@ -414,7 +385,6 @@ public class StringUtils {
 		}
 	}
 
-	@Deprecated
 	public static String uncommentSource(String source) {
 		final StringReader sr = new StringReader(source);
 		final UncommentReadLine un = new UncommentReadLine(new ReadLineReader(sr));
@@ -434,7 +404,6 @@ public class StringUtils {
 		return sb.toString();
 	}
 
-	@Deprecated
 	public static boolean isDiagramCacheable(String uml) {
 		uml = uml.toLowerCase();
 		if (uml.startsWith("@startuml\nversion\n")) {
@@ -452,7 +421,6 @@ public class StringUtils {
 		return true;
 	}
 
-	@Deprecated
 	public static List<String> splitComma(String s) {
 		s = s.trim();
 		// if (s.matches("([\\p{L}0-9_.]+|[%g][^%g]+[%g])(\\s*,\\s*([\\p{L}0-9_.]+|[%g][^%g]+[%g]))*") == false) {
@@ -467,7 +435,6 @@ public class StringUtils {
 		return Collections.unmodifiableList(result);
 	}
 
-	@Deprecated
 	public static String getAsHtml(Color color) {
 		if (color == null) {
 			return null;
@@ -475,7 +442,6 @@ public class StringUtils {
 		return getAsHtml(color.getRGB());
 	}
 
-	@Deprecated
 	public static String getAsSvg(ColorMapper mapper, HtmlColor color) {
 		if (color == null) {
 			return "none";
@@ -486,7 +452,6 @@ public class StringUtils {
 		return getAsHtml(mapper.getMappedColor(color));
 	}
 
-	@Deprecated
 	public static String getAsHtml(int color) {
 		final int v = 0xFFFFFF & color;
 		String s = "000000" + Integer.toHexString(v).toUpperCase();
@@ -494,28 +459,23 @@ public class StringUtils {
 		return "#" + s;
 	}
 
-	@Deprecated
 	public static String getUid(String uid1, int uid2) {
 		return uid1 + String.format("%04d", uid2);
 	}
 
-
-	@Deprecated
 	public static boolean isMethod(String s) {
 		return s.contains("(") || s.contains(")");
 	}
 
-	@Deprecated
 	public static <O> List<O> merge(List<O> l1, List<O> l2) {
 		final List<O> result = new ArrayList<O>(l1);
 		result.addAll(l2);
 		return Collections.unmodifiableList(result);
 	}
 
-	@Deprecated
 	public static boolean endsWithBackslash(final String s) {
 		return s.endsWith("\\") && s.endsWith("\\\\") == false;
 	}
 
-
+	// http://docs.oracle.com/javase/tutorial/i18n/format/dateFormat.html
 }

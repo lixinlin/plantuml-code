@@ -58,7 +58,7 @@ import net.sourceforge.plantuml.version.PSystemVersion;
 
 public class PSystemDonors extends AbstractPSystem {
 
-	public static final String DONORS = "UDfTKS5kWp0ClVihEESl44n8hEkcijDkRd5BLh1H4j3Ww-TA2sHzfppPVdxFoNlp1tBmGO5SbdCGjdY1Jp8xP823xDHvoECedg5oUuaMQEYCFbZax2WTGywjkAmI2YizdjUhTiHsP3XWieW3b3OIsqE-IyiCpRHRMA2ovZzOe8uk9mzDeB4ZpWgHKVELSGzvU1sUHiL18Rtbx2IJ9wYdfxhv5WqIoMZXBN6DGqfrLTxJ3tAhvomwgwetT8icFMsn-GR7r7rOuRstimwKzd9Nvrl5ChpuJPeJ4uPcADV11hTa1-oaHQWVH__gKEMJFaFz_bsA-w9dOWpQf_xKro-CX8Mp";
+	public static final String DONORS = "UDfTaS5kWp0CXkz-2iwy1O89YR5kAZtjvXQtP0KRXO06JpzNMqZM_nJBzk_FJjQdVo8B7-J89XaxOOCNE54Q90FK4a8xGUPRyGob3IbQeQ4pJiuW9mVf639knIQbaDleyRnUjSAN8qEDqI1sK1WVc1woO2qBD7D0MA4qwN-nGEKfvmaQHsD7dEGYe-vN-3aqmUlmr2eMSkaD9qUP9u9gVigdNwAB-60qy1PHun27EYhhwHkvrNFcdL7N6zfLDptkQ_CD3Z6zs-2zDuis5EPoL_8zOnXUfjsQ8uYK5YYsmJYx9ZLsqY9KZwD_TgZsKLrAVVWkrNtLCp4whLC-vQf-uUaEFzCLY0e0";
 
 //	public ImageData exportDiagram(OutputStream os, int num, FileFormatOption fileFormat) throws IOException {
 //		return getGraphicStrings().exportDiagram(os, fileFormat);

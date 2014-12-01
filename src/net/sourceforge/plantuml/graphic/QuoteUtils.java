@@ -106,7 +106,14 @@ public class QuoteUtils {
 			"The spirit of learning is a lasting frontier.",
 			"It is curious for sailors this need for making sentences.",
 			"Hoping for the best, but expecting the worst",
-			"The will to go on when I'm hurt deep inside."
+			"The will to go on when I'm hurt deep inside.",
+			"If it bleeds, we can kill it.",
+			"Houston, I have a bad feeling about this mission.",
+			"Mama always said life was like a box of chocolates. You never know what you're gonna get.",
+			"By the way, is there anyone on board who knows how to fly a plane?", 
+			"Dave, this conversation can serve no purpose anymore. Goodbye.", 
+			"It can only be attributable to human error.", 
+			"Looks like I picked the wrong week to quit smoking."
 			);
 	
 

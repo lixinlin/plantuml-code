@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 12235 $
+ * Revision $Revision: 14581 $
  *
  */
 package net.sourceforge.plantuml.geom;
@@ -200,7 +200,7 @@ public class ClosedArea extends AbstractFigure {
 	}
 
 	@Override
-	protected void addSegment(LineSegmentInt seg) {
+	public void addSegment(LineSegmentInt seg) {
 		super.addSegment(seg);
 		minY = Math.min(minY, seg.getMinY());
 		maxY = Math.max(maxY, seg.getMaxY());

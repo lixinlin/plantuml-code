@@ -39,11 +39,15 @@ import java.util.List;
 import net.sourceforge.plantuml.AbstractPSystem;
 import net.sourceforge.plantuml.UmlDiagramType;
 import net.sourceforge.plantuml.classdiagram.command.CommandAddMethod;
+import net.sourceforge.plantuml.classdiagram.command.CommandAllowMixing;
 import net.sourceforge.plantuml.classdiagram.command.CommandCreateClass;
 import net.sourceforge.plantuml.classdiagram.command.CommandCreateClassMultilines;
+import net.sourceforge.plantuml.classdiagram.command.CommandCreateElementFull2;
+import net.sourceforge.plantuml.classdiagram.command.CommandCreateElementFull2.Mode;
 import net.sourceforge.plantuml.classdiagram.command.CommandDiamondAssociation;
 import net.sourceforge.plantuml.classdiagram.command.CommandHideShowSpecificClass;
 import net.sourceforge.plantuml.classdiagram.command.CommandImport;
+import net.sourceforge.plantuml.classdiagram.command.CommandLayoutNewLine;
 import net.sourceforge.plantuml.classdiagram.command.CommandLinkClass;
 import net.sourceforge.plantuml.classdiagram.command.CommandLinkLollipop;
 import net.sourceforge.plantuml.classdiagram.command.CommandMouseOver;
@@ -84,6 +88,11 @@ public class ClassDiagramFactory extends UmlDiagramFactory {
 		cmds.add(new CommandAddMethod());
 
 		cmds.add(new CommandCreateClass());
+		cmds.add(new CommandAllowMixing());
+		cmds.add(new CommandLayoutNewLine());
+
+		cmds.add(new CommandCreateElementFull2(Mode.NORMAL_KEYWORD));
+		cmds.add(new CommandCreateElementFull2(Mode.WITH_MIX_PREFIX));
 		final FactoryNoteCommand factoryNoteCommand = new FactoryNoteCommand();
 		cmds.add(factoryNoteCommand.createSingleLine());
 
@@ -138,19 +147,19 @@ public class ClassDiagramFactory extends UmlDiagramFactory {
 
 		system.applySingleStrategy();
 
-//		for (IGroup g : system.getGroups(true)) {
-//			final List<ILeaf> standalones = new ArrayList<ILeaf>();
-//			for (ILeaf ent : g.getLeafsDirect()) {
-//				if (system.isStandalone(ent)) {
-//					standalones.add(ent);
-//				}
-//			}
-//			if (standalones.size() < 3) {
-//				continue;
-//			}
-//			final Magma magma = new Magma(system, standalones);
-//			magma.putInSquare();
-//		}
+		// for (IGroup g : system.getGroups(true)) {
+		// final List<ILeaf> standalones = new ArrayList<ILeaf>();
+		// for (ILeaf ent : g.getLeafsDirect()) {
+		// if (system.isStandalone(ent)) {
+		// standalones.add(ent);
+		// }
+		// }
+		// if (standalones.size() < 3) {
+		// continue;
+		// }
+		// final Magma magma = new Magma(system, standalones);
+		// magma.putInSquare();
+		// }
 		return super.checkFinalError(system);
 	}
 

@@ -31,12 +31,13 @@
  * Revision $Revision: 7715 $
  *
  */
-package net.sourceforge.plantuml.descdiagram.command;
+package net.sourceforge.plantuml.classdiagram.command;
 
 import net.sourceforge.plantuml.FontParam;
 import net.sourceforge.plantuml.Url;
 import net.sourceforge.plantuml.UrlBuilder;
 import net.sourceforge.plantuml.UrlBuilder.ModeUrl;
+import net.sourceforge.plantuml.classdiagram.ClassDiagram;
 import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.command.SingleLineCommand2;
 import net.sourceforge.plantuml.command.regex.RegexConcat;
@@ -48,40 +49,37 @@ import net.sourceforge.plantuml.cucadiagram.Display;
 import net.sourceforge.plantuml.cucadiagram.IEntity;
 import net.sourceforge.plantuml.cucadiagram.LeafType;
 import net.sourceforge.plantuml.cucadiagram.Stereotype;
-import net.sourceforge.plantuml.descdiagram.DescriptionDiagram;
 import net.sourceforge.plantuml.graphic.HtmlColorUtils;
 import net.sourceforge.plantuml.graphic.USymbol;
 import net.sourceforge.plantuml.StringUtils;
 
-public class CommandCreateElementFull extends SingleLineCommand2<DescriptionDiagram> {
+public class CommandCreateElementFull2 extends SingleLineCommand2<ClassDiagram> {
 
-	public CommandCreateElementFull() {
-		super(getRegexConcat());
+	private final Mode mode;
+
+	public static enum Mode {
+		NORMAL_KEYWORD, WITH_MIX_PREFIX
 	}
 
-	private static RegexConcat getRegexConcat() {
+	public CommandCreateElementFull2(Mode mode) {
+		super(getRegexConcat(mode));
+		this.mode = mode;
+	}
+
+	private static RegexConcat getRegexConcat(Mode mode) {
+
+		String regex = "(?:(actor|usecase)[%s]+)";
+		if (mode == Mode.WITH_MIX_PREFIX) {
+			regex = "mix_" + regex;
+		}
 		return new RegexConcat(new RegexLeaf("^"), //
-				new RegexLeaf(
-						"SYMBOL",
-						"(?:(artifact|actor|folder|package|rectangle|node|frame|cloud|database|storage|agent|usecase|component|boundary|control|entity|interface|\\(\\))[%s]+)?"), //
+				new RegexLeaf("SYMBOL",
+				// "(?:(artifact|actor|folder|package|rectangle|node|frame|cloud|database|storage|agent|usecase|component|boundary|control|entity|interface|\\(\\))[%s]+)?"),
+				// //
+						regex), //
 				new RegexLeaf("[%s]*"), //
 				new RegexOr(//
-						new RegexLeaf("CODE1", CODE_WITH_QUOTE), //
-						new RegexConcat(//
-								new RegexLeaf("DISPLAY2", DISPLAY), //
-								new RegexLeaf("STEREOTYPE2", "(?:[%s]+(\\<\\<.+\\>\\>))?"), //
-								new RegexLeaf("[%s]*as[%s]+"), //
-								new RegexLeaf("CODE2", CODE)), //
-						new RegexConcat(//
-								new RegexLeaf("CODE3", CODE), //
-								new RegexLeaf("STEREOTYPE3", "(?:[%s]+(\\<\\<.+\\>\\>))?"), //
-								new RegexLeaf("[%s]+as[%s]*"), //
-								new RegexLeaf("DISPLAY3", DISPLAY)), //
-						new RegexConcat(//
-								new RegexLeaf("DISPLAY4", DISPLAY_WITHOUT_QUOTE), //
-								new RegexLeaf("STEREOTYPE4", "(?:[%s]+(\\<\\<.+\\>\\>))?"), //
-								new RegexLeaf("[%s]*as[%s]+"), //
-								new RegexLeaf("CODE4", CODE)) //
+						new RegexLeaf("CODE1", CODE_WITH_QUOTE) //
 				), //
 				new RegexLeaf("STEREOTYPE", "(?:[%s]*(\\<\\<.+\\>\\>))?"), //
 				new RegexLeaf("[%s]*"), //
@@ -108,7 +106,11 @@ public class CommandCreateElementFull extends SingleLineCommand2<DescriptionDiag
 	}
 
 	@Override
-	protected CommandExecutionResult executeArg(DescriptionDiagram diagram, RegexResult arg) {
+	protected CommandExecutionResult executeArg(ClassDiagram diagram, RegexResult arg) {
+		if (mode == Mode.NORMAL_KEYWORD && diagram.isAllowMixing() == false) {
+			return CommandExecutionResult
+					.error("Use 'allow_mixing' if you want to mix classes and other UML elements.");
+		}
 		String codeRaw = arg.getLazzy("CODE", 0);
 		final String displayRaw = arg.getLazzy("DISPLAY", 0);
 		final char codeChar = getCharEncoding(codeRaw);

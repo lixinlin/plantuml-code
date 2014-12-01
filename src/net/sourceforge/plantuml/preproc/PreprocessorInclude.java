@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 14056 $
+ * Revision $Revision: 14321 $
  *
  */
 package net.sourceforge.plantuml.preproc;
@@ -46,7 +46,7 @@ import net.sourceforge.plantuml.FileSystem;
 import net.sourceforge.plantuml.Log;
 import net.sourceforge.plantuml.OptionFlags;
 import net.sourceforge.plantuml.command.regex.MyPattern;
-import net.sourceforge.plantuml.utils.StringUtils;
+import net.sourceforge.plantuml.StringUtils;
 
 class PreprocessorInclude implements ReadLine {
 

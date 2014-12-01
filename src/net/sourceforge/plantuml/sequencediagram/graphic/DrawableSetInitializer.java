@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 12495 $
+ * Revision $Revision: 14626 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.graphic;
@@ -93,6 +93,9 @@ class DrawableSetInitializer {
 		final String strategy = drawableSet.getSkinParam().getValue("lifelineStrategy");
 		if ("nosolid".equalsIgnoreCase(strategy)) {
 			return false;
+		}
+		if ("solid".equalsIgnoreCase(strategy)) {
+			return true;
 		}
 		for (Event ev : drawableSet.getAllEvents()) {
 			if (ev instanceof Delay) {

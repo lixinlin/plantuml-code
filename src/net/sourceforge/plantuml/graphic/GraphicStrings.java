@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 13970 $
+ * Revision $Revision: 14227 $
  *
  */
 package net.sourceforge.plantuml.graphic;
@@ -77,8 +77,8 @@ public class GraphicStrings implements IEntityImage {
 			return new GraphicStrings(strings, new UFont("SansSerif", Font.BOLD, 14), HtmlColorUtils.BLACK,
 					HtmlColorUtils.RED_LIGHT, UAntiAliasing.ANTI_ALIASING_ON);
 		}
-		return new GraphicStrings(strings, new UFont("SansSerif", Font.BOLD, 14),
-				HtmlColorSet.getInstance().getColorIfValid("#33FF02"), HtmlColorUtils.BLACK, UAntiAliasing.ANTI_ALIASING_ON);
+		return new GraphicStrings(strings, new UFont("SansSerif", Font.BOLD, 14), HtmlColorSet.getInstance()
+				.getColorIfValid("#33FF02"), HtmlColorUtils.BLACK, UAntiAliasing.ANTI_ALIASING_ON);
 	}
 
 	public GraphicStrings(List<String> strings, UFont font, HtmlColor green, HtmlColor background,
@@ -96,74 +96,6 @@ public class GraphicStrings implements IEntityImage {
 		this.position = position;
 		this.antiAliasing = antiAliasing;
 	}
-
-	// public void writeImage(OutputStream os, FileFormatOption fileFormatOption, String debugData) throws IOException {
-	// final FileFormat fileFormat = fileFormatOption.getFileFormat();
-	// if (fileFormat == FileFormat.PNG) {
-	// final BufferedImage im = createImage();
-	// PngIO.write(im, os, null, 96, debugData);
-	// } else if (fileFormat == FileFormat.SVG) {
-	// final UGraphicSvg svg = new UGraphicSvg(colorMapper, StringUtils.getAsHtml(colorMapper
-	// .getMappedColor(background)), false, 1.0);
-	// drawAndGetSize(svg);
-	// svg.createXml(os);
-	// } else if (fileFormat == FileFormat.ATXT || fileFormat == FileFormat.UTXT) {
-	// final UGraphicTxt txt = new UGraphicTxt();
-	// drawAndGetSize(txt);
-	// txt.getCharArea().print(new PrintStream(os));
-	// } else if (fileFormat == FileFormat.EPS) {
-	// final UGraphicEps ug = new UGraphicEps(colorMapper, EpsStrategy.getDefault2());
-	// drawAndGetSize(ug);
-	// os.write(ug.getEPSCode().getBytes());
-	// } else if (fileFormat == FileFormat.LATEX) {
-	// } else {
-	// throw new UnsupportedOperationException();
-	// }
-	// }
-
-	// private ImageData exportDiagram(OutputStream os, FileFormatOption fileFormatOption) throws IOException {
-	// return exportDiagram(os, null, fileFormatOption);
-	// }
-	//
-	// private ImageData exportDiagram(OutputStream os, String metadata, FileFormatOption fileFormatOption)
-	// throws IOException {
-	// final FileFormat fileFormat = fileFormatOption.getFileFormat();
-	// if (fileFormat == FileFormat.PNG) {
-	// final BufferedImage im = createImage();
-	// PngIO.write(im, os, fileFormatOption.isWithMetadata() ? metadata : null, 96);
-	// } else if (fileFormat == FileFormat.SVG) {
-	// final UGraphicSvg svg = new UGraphicSvg(colorMapper, StringUtils.getAsHtml(colorMapper
-	// .getMappedColor(background)), false, 1.0);
-	// drawAndGetSize(svg);
-	// svg.createXml(os);
-	// } else if (fileFormat == FileFormat.ATXT || fileFormat == FileFormat.UTXT) {
-	// final UGraphicTxt txt = new UGraphicTxt();
-	// drawAndGetSize(txt);
-	// txt.getCharArea().print(new PrintStream(os));
-	// } else if (fileFormat == FileFormat.EPS) {
-	// final UGraphicEps ug = new UGraphicEps(colorMapper, EpsStrategy.getDefault2());
-	// drawAndGetSize(ug);
-	// os.write(ug.getEPSCode().getBytes());
-	// } else {
-	// throw new UnsupportedOperationException();
-	// }
-	// return new ImageDataSimple();
-	// }
-
-	// private BufferedImage createImage() {
-	// EmptyImageBuilder builder = new EmptyImageBuilder(10, 10, colorMapper.getMappedColor(background));
-	// Graphics2D g2d = builder.getGraphics2D();
-	//
-	// final Dimension2D size = drawAndGetSize(new UGraphicG2d(colorMapper, g2d, 1.0));
-	// g2d.dispose();
-	//
-	// builder = new EmptyImageBuilder(size.getWidth(), size.getHeight(), colorMapper.getMappedColor(background));
-	// final BufferedImage im = builder.getBufferedImage();
-	// g2d = builder.getGraphics2D();
-	// drawAndGetSize(new UGraphicG2d(colorMapper, g2d, 1.0).apply(antiAliasing));
-	// g2d.dispose();
-	// return im;
-	// }
 
 	private double minWidth;
 

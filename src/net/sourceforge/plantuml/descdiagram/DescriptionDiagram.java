@@ -39,7 +39,7 @@ import net.sourceforge.plantuml.cucadiagram.Code;
 import net.sourceforge.plantuml.cucadiagram.ILeaf;
 import net.sourceforge.plantuml.cucadiagram.LeafType;
 import net.sourceforge.plantuml.graphic.USymbol;
-import net.sourceforge.plantuml.utils.StringUtils;
+import net.sourceforge.plantuml.StringUtils;
 
 public class DescriptionDiagram extends AbstractEntityDiagram {
 
@@ -60,11 +60,11 @@ public class DescriptionDiagram extends AbstractEntityDiagram {
 			String code2 = code.getFullName();
 			if (code2.startsWith("[") && code2.endsWith("]")) {
 				final USymbol sym = getSkinParam().useUml2ForComponent() ? USymbol.COMPONENT2 : USymbol.COMPONENT1;
-				return getOrCreateLeafDefault(code.eventuallyRemoveStartingAndEndingDoubleQuote(),
+				return getOrCreateLeafDefault(code.eventuallyRemoveStartingAndEndingDoubleQuote("\"([:"),
 						LeafType.DESCRIPTION, sym);
 			}
 			if (code2.startsWith(":") && code2.endsWith(":")) {
-				return getOrCreateLeafDefault(code.eventuallyRemoveStartingAndEndingDoubleQuote(),
+				return getOrCreateLeafDefault(code.eventuallyRemoveStartingAndEndingDoubleQuote("\"([:"),
 						LeafType.DESCRIPTION, USymbol.ACTOR);
 			}
 			if (code2.startsWith("()")) {
@@ -72,7 +72,7 @@ public class DescriptionDiagram extends AbstractEntityDiagram {
 				code2 = StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(code2);
 				return getOrCreateLeafDefault(Code.of(code2), LeafType.DESCRIPTION, USymbol.INTERFACE);
 			}
-			code = code.eventuallyRemoveStartingAndEndingDoubleQuote();
+			code = code.eventuallyRemoveStartingAndEndingDoubleQuote("\"([:");
 			return getOrCreateLeafDefault(code, LeafType.STILL_UNKNOWN, symbol);
 		}
 		return getOrCreateLeafDefault(code, type, symbol);

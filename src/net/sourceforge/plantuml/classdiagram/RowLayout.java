@@ -27,48 +27,44 @@
  * in the United States and other countries.]
  *
  * Original Author:  Arnaud Roques
- * 
- * Revision $Revision: 14321 $
+ *
+ * Revision $Revision: 14203 $
  *
  */
-package net.sourceforge.plantuml.command;
+package net.sourceforge.plantuml.classdiagram;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
 
-import net.sourceforge.plantuml.UmlDiagram;
-import net.sourceforge.plantuml.cucadiagram.Display;
-import net.sourceforge.plantuml.graphic.HorizontalAlignment;
-import net.sourceforge.plantuml.StringUtils;
+import net.sourceforge.plantuml.graphic.StringBounder;
+import net.sourceforge.plantuml.graphic.TextBlock;
+import net.sourceforge.plantuml.graphic.UDrawable;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
+import net.sourceforge.plantuml.ugraphic.UTranslate;
 
-public class CommandMultilinesHeader extends CommandMultilines<UmlDiagram> {
+public class RowLayout implements UDrawable {
 
-	public CommandMultilinesHeader() {
-		super("(?i)^(?:(left|right|center)?[%s]*)header$");
-	}
-	
-	@Override
-	public String getPatternEnd() {
-		return "(?i)^end[%s]?header$";
+	private final List<TextBlock> all = new ArrayList<TextBlock>();
+
+	public void addLeaf(TextBlock entityImageClass) {
+		this.all.add(entityImageClass);
 	}
 
+	public double getHeight(StringBounder stringBounder) {
+		double y = 0;
+		for (TextBlock leaf : all) {
+			y = Math.max(y, leaf.calculateDimension(stringBounder).getHeight());
+		}
+		return y;
+	}
 
-	public CommandExecutionResult execute(final UmlDiagram diagram, List<String> lines) {
-		StringUtils.trim(lines, false);
-		final Matcher m = getStartingPattern().matcher(lines.get(0).trim());
-		if (m.find() == false) {
-			throw new IllegalStateException();
+	public void drawU(UGraphic ug) {
+		double x = 0;
+		for (TextBlock leaf : all) {
+			leaf.drawU(ug.apply(new UTranslate(x, 0)));
+			x += leaf.calculateDimension(ug.getStringBounder()).getWidth() + 20;
 		}
-		final String align = m.group(1);
-		if (align != null) {
-			diagram.setHeaderAlignment(HorizontalAlignment.valueOf(align.toUpperCase()));
-		}
-		final Display strings = Display.create(lines.subList(1, lines.size() - 1));
-		if (strings.size() > 0) {
-			diagram.setHeader(strings);
-			return CommandExecutionResult.ok();
-		}
-		return CommandExecutionResult.error("Empty header");
+
 	}
 
 }

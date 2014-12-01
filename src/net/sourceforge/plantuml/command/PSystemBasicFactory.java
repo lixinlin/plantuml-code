@@ -68,7 +68,6 @@ public abstract class PSystemBasicFactory<P extends AbstractPSystem> extends PSy
 			final String s = it.next();
 			if (StartUtils.isArobaseEndDiagram(s)) {
 				if (source.getTotalLineCount() == 2) {
-					assert false;
 					return buildEmptyError(source);
 				}
 				if (system != null) {

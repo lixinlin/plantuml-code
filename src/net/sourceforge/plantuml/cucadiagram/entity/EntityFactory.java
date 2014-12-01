@@ -59,6 +59,7 @@ public class EntityFactory {
 	private final Map<Code, ILeaf> leafs = new Protect<ILeaf>(new LinkedHashMap<Code, ILeaf>());
 	private final List<Link> links = new ArrayList<Link>();
 	private final Map<Code, IGroup> groups = new Protect<IGroup>(new LinkedHashMap<Code, IGroup>());
+	private int rawLayout;
 
 	private final IGroup rootGroup = new GroupRoot(this);
 	private final Set<LeafType> hiddenTypes;
@@ -79,7 +80,7 @@ public class EntityFactory {
 		final Bodier bodier = new Bodier(entityType, hides);
 		final LongCode longCode = getLongCode(code, namespaceSeparator);
 		final EntityImpl result = new EntityImpl(this, code, bodier, parentContainer, entityType, longCode,
-				namespaceSeparator);
+				namespaceSeparator, rawLayout);
 		result.setDisplay(display);
 		return result;
 	}
@@ -102,7 +103,7 @@ public class EntityFactory {
 		final Bodier bodier = new Bodier(null, hides);
 		final LongCode longCode = getLongCode(code, namespaceSeparator);
 		final EntityImpl result = new EntityImpl(this, code, bodier, parentContainer, groupType, namespace2, longCode,
-				namespaceSeparator);
+				namespaceSeparator, rawLayout);
 		if (display != null) {
 			result.setDisplay(display);
 		}
@@ -119,6 +120,10 @@ public class EntityFactory {
 
 	public void addLeaf(ILeaf entity) {
 		leafs.put(entity.getCode(), entity);
+	}
+
+	public void incRawLayout() {
+		rawLayout++;
 	}
 
 	void removeLeaf(Code code) {

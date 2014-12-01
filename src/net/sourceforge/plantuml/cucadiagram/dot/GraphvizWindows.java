@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 12235 $
+ * Revision $Revision: 14616 $
  *
  */
 package net.sourceforge.plantuml.cucadiagram.dot;
@@ -51,6 +51,10 @@ class GraphvizWindows extends AbstractGraphviz {
 		if (result86 != null) {
 			return result86;
 		}
+		final File resultEclipse = searchInDir(new File("c:/eclipse/graphviz"));
+		if (resultEclipse != null) {
+			return resultEclipse;
+		}
 		return null;
 	}
 
@@ -61,7 +65,7 @@ class GraphvizWindows extends AbstractGraphviz {
 		final List<File> dots = new ArrayList<File>();
 		for (File f : programFile.listFiles(new FileFilter() {
 			public boolean accept(File pathname) {
-				return pathname.isDirectory() && pathname.getName().startsWith("Graphviz");
+				return pathname.isDirectory() && pathname.getName().toLowerCase().startsWith("graphviz");
 			}
 		})) {
 			final File result = new File(new File(f, "bin"), "dot.exe");

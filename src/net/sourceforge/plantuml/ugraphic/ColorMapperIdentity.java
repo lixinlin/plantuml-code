@@ -50,7 +50,8 @@ public class ColorMapperIdentity implements ColorMapper {
 			throw new UnsupportedOperationException();
 		}
 		if (color instanceof HtmlColorUserDef) {
-			return Color.RED;
+			// Impact on JCCKIT
+			return Color.WHITE;
 		}
 		return ((HtmlColorSimple) color).getColor999();
 	}

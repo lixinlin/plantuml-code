@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 13989 $
+ * Revision $Revision: 14432 $
  *
  */
 package net.sourceforge.plantuml.ugraphic.g2d;
@@ -137,7 +137,7 @@ public class UGraphicG2d extends AbstractUGraphic<Graphics2D> implements EnsureV
 
 	private void register(double dpiFactor) {
 		registerDriver(URectangle.class, new DriverRectangleG2d(dpiFactor, this));
-		if (this.hasAffineTransform) {
+		if (this.hasAffineTransform || dpiFactor != 1.0) {
 			registerDriver(UText.class, new DriverTextAsPathG2d(this, TextBlockUtils.getFontRenderContext()));
 		} else {
 			registerDriver(UText.class, new DriverTextG2d(this));

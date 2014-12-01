@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 14086 $
+ * Revision $Revision: 14321 $
  *
  */
 package net.sourceforge.plantuml;
@@ -62,7 +62,7 @@ import net.sourceforge.plantuml.ugraphic.ColorMapperMonochrome;
 import net.sourceforge.plantuml.ugraphic.Sprite;
 import net.sourceforge.plantuml.ugraphic.UFont;
 import net.sourceforge.plantuml.ugraphic.UStroke;
-import net.sourceforge.plantuml.utils.StringUtils;
+import net.sourceforge.plantuml.StringUtils;
 
 public class SkinParam implements ISkinParam {
 

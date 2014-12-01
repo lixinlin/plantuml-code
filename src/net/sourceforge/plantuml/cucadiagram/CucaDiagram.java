@@ -28,12 +28,11 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 13936 $
+ * Revision $Revision: 14207 $
  *
  */
 package net.sourceforge.plantuml.cucadiagram;
 
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -290,7 +289,7 @@ public abstract class CucaDiagram extends UmlDiagram implements GroupHierarchy, 
 	}
 
 	@Override
-	final protected ImageData exportDiagramInternal(OutputStream os, int index, FileFormatOption fileFormatOption)
+	protected ImageData exportDiagramInternal(OutputStream os, int index, FileFormatOption fileFormatOption)
 			throws IOException {
 		final FileFormat fileFormat = fileFormatOption.getFileFormat();
 
@@ -583,6 +582,10 @@ public abstract class CucaDiagram extends UmlDiagram implements GroupHierarchy, 
 
 	public boolean isHideEmptyDescriptionForState() {
 		return false;
+	}
+
+	protected void incRawLayout() {
+		entityFactory.incRawLayout();
 	}
 
 }
