@@ -38,12 +38,9 @@ import java.awt.geom.Dimension2D;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import net.sourceforge.plantuml.CMapData;
-import net.sourceforge.plantuml.Dimension2DDouble;
 import net.sourceforge.plantuml.EmptyImageBuilder;
 import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
@@ -53,7 +50,6 @@ import net.sourceforge.plantuml.Scale;
 import net.sourceforge.plantuml.UmlDiagramType;
 import net.sourceforge.plantuml.Url;
 import net.sourceforge.plantuml.activitydiagram3.ftile.EntityImageLegend;
-import net.sourceforge.plantuml.api.ImageDataComplex;
 import net.sourceforge.plantuml.core.ImageData;
 import net.sourceforge.plantuml.cucadiagram.CucaDiagram;
 import net.sourceforge.plantuml.cucadiagram.Display;
@@ -80,7 +76,7 @@ import net.sourceforge.plantuml.ugraphic.g2d.UGraphicG2d;
 import net.sourceforge.plantuml.ugraphic.svg.UGraphicSvg;
 import net.sourceforge.plantuml.ugraphic.tikz.UGraphicTikz;
 import net.sourceforge.plantuml.ugraphic.visio.UGraphicVdx;
-import net.sourceforge.plantuml.utils.StringUtils;
+import net.sourceforge.plantuml.StringUtils;
 
 public final class CucaDiagramFileMakerSvek implements CucaDiagramFileMaker {
 
@@ -155,68 +151,6 @@ public final class CucaDiagramFileMakerSvek implements CucaDiagramFileMaker {
 
 	}
 
-	private ImageData createFileInternalOld(OutputStream os, List<String> dotStrings, FileFormatOption fileFormatOption)
-			throws IOException, InterruptedException {
-		if (diagram.getUmlDiagramType() == UmlDiagramType.ACTIVITY) {
-			new CucaDiagramSimplifierActivity(diagram, dotStrings);
-		} else if (diagram.getUmlDiagramType() == UmlDiagramType.STATE) {
-			new CucaDiagramSimplifierState(diagram, dotStrings);
-		}
-
-		CucaDiagramFileMakerSvek2 svek2 = buildCucaDiagramFileMakerSvek2(DotMode.NORMAL);
-		TextBlockBackcolored result = svek2.createFile(diagram.getDotStringSkek());
-		if (result instanceof GraphvizCrash) {
-			svek2 = buildCucaDiagramFileMakerSvek2(DotMode.NO_LEFT_RIGHT);
-			result = svek2.createFile(diagram.getDotStringSkek());
-		}
-		result = addLegend(result);
-		result = addTitle(result);
-		result = addHeaderAndFooter(result);
-
-		final Dimension2D dim = result.calculateDimension(stringBounder);
-
-		final FileFormat fileFormat = fileFormatOption.getFileFormat();
-		Set<Url> allUrlEncountered = null;
-		double scale = 0;
-		if (fileFormat == FileFormat.PNG) {
-			allUrlEncountered = new HashSet<Url>();
-			scale = createPng(os, fileFormatOption, result, dim, allUrlEncountered, fileFormatOption.isWithMetadata());
-		} else if (fileFormat == FileFormat.SVG) {
-			createSvg(os, fileFormatOption, result, dim);
-		} else if (fileFormat == FileFormat.VDX) {
-			createVdx(os, fileFormatOption, result, dim);
-		} else if (fileFormat == FileFormat.LATEX) {
-			createTikz(os, fileFormatOption, result, dim);
-		} else if (fileFormat == FileFormat.EPS) {
-			createEps(os, fileFormatOption, result, dim);
-		} else {
-			throw new UnsupportedOperationException(fileFormat.toString());
-		}
-
-		double deltaX = 0;
-		double deltaY = 0;
-		if (result instanceof DecorateEntityImage) {
-			deltaX += ((DecorateEntityImage) result).getDeltaX();
-			deltaY += ((DecorateEntityImage) result).getDeltaY();
-		}
-
-		final Dimension2D finalDimension = Dimension2DDouble.delta(dim, deltaX, deltaY);
-
-		CMapData cmap = null;
-		if (diagram.hasUrl() && fileFormatOption.getFileFormat() == FileFormat.PNG) {
-			cmap = CMapData.cmapString(allUrlEncountered, scale);
-		}
-
-		final String widthwarning = diagram.getSkinParam().getValue("widthwarning");
-		if (widthwarning != null && widthwarning.matches("\\d+")) {
-			this.warningOrError = svek2.getBibliotekon().getWarningOrError(Integer.parseInt(widthwarning));
-		} else {
-			this.warningOrError = null;
-		}
-
-		return new ImageDataComplex(finalDimension, cmap, getWarningOrError());
-	}
-
 	private List<Link> getOrderedLinks() {
 		final List<Link> result = new ArrayList<Link>();
 		for (Link l : diagram.getLinks()) {
@@ -255,12 +189,12 @@ public final class CucaDiagramFileMakerSvek implements CucaDiagramFileMaker {
 		if (footer == null && header == null) {
 			return original;
 		}
-		final TextBlock textFooter = footer == null ? null : TextBlockUtils.create(footer,
-				new FontConfiguration(getFont(FontParam.FOOTER), getFontColor(FontParam.FOOTER, null),
-						diagram.getSkinParam().getHyperlinkColor()), diagram.getFooterAlignment(), diagram.getSkinParam());
-		final TextBlock textHeader = header == null ? null : TextBlockUtils.create(header,
-				new FontConfiguration(getFont(FontParam.HEADER), getFontColor(FontParam.HEADER, null),
-						diagram.getSkinParam().getHyperlinkColor()), diagram.getHeaderAlignment(), diagram.getSkinParam());
+		final TextBlock textFooter = footer == null ? null : TextBlockUtils.create(footer, new FontConfiguration(
+				getFont(FontParam.FOOTER), getFontColor(FontParam.FOOTER, null), diagram.getSkinParam()
+						.getHyperlinkColor()), diagram.getFooterAlignment(), diagram.getSkinParam());
+		final TextBlock textHeader = header == null ? null : TextBlockUtils.create(header, new FontConfiguration(
+				getFont(FontParam.HEADER), getFontColor(FontParam.HEADER, null), diagram.getSkinParam()
+						.getHyperlinkColor()), diagram.getHeaderAlignment(), diagram.getSkinParam());
 
 		return new DecorateEntityImage(original, textHeader, diagram.getHeaderAlignment(), textFooter,
 				diagram.getFooterAlignment());
@@ -271,8 +205,8 @@ public final class CucaDiagramFileMakerSvek implements CucaDiagramFileMaker {
 		if (title == null) {
 			return original;
 		}
-		final TextBlock text = TextBlockUtils.create(title, new FontConfiguration(getFont(FontParam.TITLE), getFontColor(FontParam.TITLE, null), diagram.getSkinParam()
-						.getHyperlinkColor()),
+		final TextBlock text = TextBlockUtils.create(title, new FontConfiguration(getFont(FontParam.TITLE),
+				getFontColor(FontParam.TITLE, null), diagram.getSkinParam().getHyperlinkColor()),
 				HorizontalAlignment.CENTER, diagram.getSkinParam());
 
 		return DecorateEntityImage.addTop(original, text, HorizontalAlignment.CENTER);

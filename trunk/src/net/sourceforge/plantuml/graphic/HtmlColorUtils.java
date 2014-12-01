@@ -33,9 +33,6 @@
  */
 package net.sourceforge.plantuml.graphic;
 
-import java.awt.Font;
-
-import net.sourceforge.plantuml.ugraphic.UFont;
 
 public class HtmlColorUtils {
 

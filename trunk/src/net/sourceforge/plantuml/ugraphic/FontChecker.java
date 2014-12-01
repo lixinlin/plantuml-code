@@ -163,16 +163,19 @@ public class FontChecker {
 	}
 
 	public BufferedImage getBufferedImage(final char c) throws IOException {
+		assert c != '\t';
 		final ImageBuilder imageBuilder = new ImageBuilder(new ColorMapperIdentity(), 1, null, null, null, 0, 0, null);
 		final double dim = 20;
 		imageBuilder.addUDrawable(new UDrawable() {
 			public void drawU(UGraphic ug) {
 				ug = ug.apply(new UChangeColor(HtmlColorUtils.BLACK));
 				ug.draw(new URectangle(dim - 1, dim - 1));
-				ug = (UGraphic2) ug.apply(new UTranslate(dim / 3, 2 * dim / 3));
-				final UText text = new UText("" + c, new FontConfiguration(font, HtmlColorUtils.BLACK,
-						HtmlColorUtils.BLUE));
-				ug.draw(text);
+				if (ug instanceof UGraphic2) {
+					ug = (UGraphic2) ug.apply(new UTranslate(dim / 3, 2 * dim / 3));
+					final UText text = new UText("" + c, new FontConfiguration(font, HtmlColorUtils.BLACK,
+							HtmlColorUtils.BLUE));
+					ug.draw(text);
+				}
 			}
 		});
 		final ByteArrayOutputStream os = new ByteArrayOutputStream();

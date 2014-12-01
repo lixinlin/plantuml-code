@@ -57,7 +57,7 @@ import net.sourceforge.plantuml.posimo.GraphvizSolverB;
 import net.sourceforge.plantuml.posimo.Path;
 import net.sourceforge.plantuml.ugraphic.UTranslate;
 import net.sourceforge.plantuml.ugraphic.txt.UGraphicTxt;
-import net.sourceforge.plantuml.utils.StringUtils;
+import net.sourceforge.plantuml.StringUtils;
 
 public final class CucaDiagramTxtMaker {
 

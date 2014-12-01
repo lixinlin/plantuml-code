@@ -128,6 +128,8 @@ public class LimitFinder implements UGraphic {
 			tb.drawU(this);
 		} else if (shape instanceof UCenteredCharacter) {
 			// To be done
+		} else if (shape instanceof UPixel) {
+			addPoint(x, y);
 		} else {
 			throw new UnsupportedOperationException(shape.getClass().getName());
 		}

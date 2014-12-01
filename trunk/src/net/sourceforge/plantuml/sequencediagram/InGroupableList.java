@@ -166,7 +166,7 @@ public class InGroupableList implements InGroupable {
 	public double getMinX(StringBounder stringBounder) {
 		final InGroupable min = getMin(stringBounder);
 		if (min == null) {
-			return MARGIN10 + MARGIN5 + veryfirst.getStartingX();
+			return MARGIN10 + MARGIN5 + (veryfirst == null ? 0 : veryfirst.getStartingX());
 			// return MARGIN10 + MARGIN5;
 		}
 		double m = min.getMinX(stringBounder);

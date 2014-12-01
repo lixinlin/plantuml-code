@@ -46,7 +46,7 @@ public class PinFactory {
 		return create(Integer.MAX_VALUE, userData);
 	}
 
-	Pin create(int row, Object userData) {
+	public Pin create(int row, Object userData) {
 		if (userData == null) {
 			return new Pin(row, userData);
 		}

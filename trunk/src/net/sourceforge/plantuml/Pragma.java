@@ -36,7 +36,7 @@ package net.sourceforge.plantuml;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import net.sourceforge.plantuml.utils.StringUtils;
+import net.sourceforge.plantuml.StringUtils;
 
 public class Pragma {
 

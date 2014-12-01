@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 13970 $
+ * Revision $Revision: 14439 $
  *
  */
 package net.sourceforge.plantuml.cucadiagram;
@@ -111,9 +111,11 @@ public class Link implements Hideable, Removeable {
 		this.type = type;
 		if (label == null) {
 			this.label = null;
-		} else {
+		} else if (doWeHaveToRemoveUrlAtStart(label)) {
 			this.url = label.initUrl();
 			this.label = label.removeUrl(url);
+		} else {
+			this.label = label;
 		}
 		this.length = length;
 		this.qualifier1 = qualifier1;
@@ -127,6 +129,17 @@ public class Link implements Hideable, Removeable {
 		if (qualifier2 != null) {
 			((ILeaf) cl2).setNearDecoration(true);
 		}
+	}
+
+	private static boolean doWeHaveToRemoveUrlAtStart(Display label) {
+		if (label.size() == 0) {
+			return false;
+		}
+		final String s = label.get(0).toString();
+		if (s.matches("^\\[\\[\\S+\\]\\].+$")) {
+			return true;
+		}
+		return false;
 	}
 
 	public Link getInv() {
@@ -346,8 +359,8 @@ public class Link implements Hideable, Removeable {
 	private double getQualifierMargin(StringBounder stringBounder, UFont fontQualif, String qualif,
 			ISkinSimple spriteContainer) {
 		if (qualif != null) {
-			final TextBlock b = TextBlockUtils.create(Display.create(qualif), new FontConfiguration(
-					fontQualif, HtmlColorUtils.BLACK, HtmlColorUtils.BLUE), HorizontalAlignment.LEFT, spriteContainer);
+			final TextBlock b = TextBlockUtils.create(Display.create(qualif), new FontConfiguration(fontQualif,
+					HtmlColorUtils.BLACK, HtmlColorUtils.BLUE), HorizontalAlignment.LEFT, spriteContainer);
 			final Dimension2D dim = b.calculateDimension(stringBounder);
 			return Math.max(dim.getWidth(), dim.getHeight());
 		}

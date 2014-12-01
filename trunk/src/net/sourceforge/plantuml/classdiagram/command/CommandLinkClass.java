@@ -58,7 +58,7 @@ import net.sourceforge.plantuml.cucadiagram.LinkDecor;
 import net.sourceforge.plantuml.cucadiagram.LinkType;
 import net.sourceforge.plantuml.cucadiagram.Stereotype;
 import net.sourceforge.plantuml.objectdiagram.AbstractClassOrObjectDiagram;
-import net.sourceforge.plantuml.utils.StringUtils;
+import net.sourceforge.plantuml.StringUtils;
 
 final public class CommandLinkClass extends SingleLineCommand2<AbstractClassOrObjectDiagram> {
 
@@ -133,18 +133,18 @@ final public class CommandLinkClass extends SingleLineCommand2<AbstractClassOrOb
 		if (ent2 == null) {
 			return executeArgSpecial2(diagram, arg);
 		}
-		ent1 = ent1.eventuallyRemoveStartingAndEndingDoubleQuote();
-		ent2 = ent2.eventuallyRemoveStartingAndEndingDoubleQuote();
+		ent1 = ent1.eventuallyRemoveStartingAndEndingDoubleQuote("\"");
+		ent2 = ent2.eventuallyRemoveStartingAndEndingDoubleQuote("\"");
 		if (diagram.isGroup(ent1) && diagram.isGroup(ent2)) {
 			return executePackageLink(diagram, arg);
 		}
 
 		final IEntity cl1 = diagram.isGroup(ent1) ? diagram.getGroup(Code.of(StringUtils
-				.eventuallyRemoveStartingAndEndingDoubleQuote(arg.get("ENT1", 1)))) : diagram.getOrCreateLeaf(ent1,
-				null, null);
+				.eventuallyRemoveStartingAndEndingDoubleQuote(arg.get("ENT1", 1), "\""))) : diagram.getOrCreateLeaf(
+				ent1, null, null);
 		final IEntity cl2 = diagram.isGroup(ent2) ? diagram.getGroup(Code.of(StringUtils
-				.eventuallyRemoveStartingAndEndingDoubleQuote(arg.get("ENT2", 1)))) : diagram.getOrCreateLeaf(ent2,
-				null, null);
+				.eventuallyRemoveStartingAndEndingDoubleQuote(arg.get("ENT2", 1), "\""))) : diagram.getOrCreateLeaf(
+				ent2, null, null);
 
 		if (arg.get("ENT1", 0) != null) {
 			final LeafType type = LeafType.getLeafType(arg.get("ENT1", 0));
@@ -190,28 +190,30 @@ final public class CommandLinkClass extends SingleLineCommand2<AbstractClassOrOb
 				final Matcher m1 = p1.matcher(labelLink);
 				if (m1.matches()) {
 					firstLabel = m1.group(1);
-					labelLink = StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(m1.group(2).trim()).trim();
+					labelLink = StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(m1.group(2).trim(), "\"")
+							.trim();
 					secondLabel = m1.group(3);
 				} else {
 					final Pattern p2 = MyPattern.cmpile("^[%g]([^%g]+)[%g]([^%g]+)$");
 					final Matcher m2 = p2.matcher(labelLink);
 					if (m2.matches()) {
 						firstLabel = m2.group(1);
-						labelLink = StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(m2.group(2).trim()).trim();
+						labelLink = StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(m2.group(2).trim(), "\"")
+								.trim();
 						secondLabel = null;
 					} else {
 						final Pattern p3 = MyPattern.cmpile("^([^%g]+)[%g]([^%g]+)[%g]$");
 						final Matcher m3 = p3.matcher(labelLink);
 						if (m3.matches()) {
 							firstLabel = null;
-							labelLink = StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(m3.group(1).trim())
-									.trim();
+							labelLink = StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(m3.group(1).trim(),
+									"\"").trim();
 							secondLabel = m3.group(2);
 						}
 					}
 				}
 			}
-			labelLink = StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(labelLink);
+			labelLink = StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(labelLink, "\"");
 		}
 
 		LinkArrow linkArrow = LinkArrow.NONE;
@@ -272,10 +274,10 @@ final public class CommandLinkClass extends SingleLineCommand2<AbstractClassOrOb
 	}
 
 	private CommandExecutionResult executePackageLink(AbstractClassOrObjectDiagram diagram, RegexResult arg) {
-		final IEntity cl1 = diagram.getGroup(Code.of(StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(arg.get(
-				"ENT1", 1))));
-		final IEntity cl2 = diagram.getGroup(Code.of(StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(arg.get(
-				"ENT2", 1))));
+		final IEntity cl1 = diagram.getGroup(Code.of(StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(
+				arg.get("ENT1", 1), "\"")));
+		final IEntity cl2 = diagram.getGroup(Code.of(StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(
+				arg.get("ENT2", 1), "\"")));
 
 		final LinkType linkType = getLinkType(arg);
 		final Direction dir = getDirection(arg);
@@ -307,7 +309,7 @@ final public class CommandLinkClass extends SingleLineCommand2<AbstractClassOrOb
 			return CommandExecutionResult.error("No class " + clName2);
 		}
 
-		final Code ent2 = Code.of(StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(arg.get("ENT2", 1)));
+		final Code ent2 = Code.of(StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(arg.get("ENT2", 1), "\""));
 		final IEntity cl2 = diagram.getOrCreateLeaf(ent2, null, null);
 
 		final LinkType linkType = getLinkType(arg);
@@ -333,7 +335,7 @@ final public class CommandLinkClass extends SingleLineCommand2<AbstractClassOrOb
 			return CommandExecutionResult.error("No class " + clName2);
 		}
 
-		final Code ent1 = Code.of(StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(arg.get("ENT1", 1)));
+		final Code ent1 = Code.of(StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(arg.get("ENT1", 1), "\""));
 		final IEntity cl1 = diagram.getOrCreateLeaf(ent1, null, null);
 
 		final LinkType linkType = getLinkType(arg);

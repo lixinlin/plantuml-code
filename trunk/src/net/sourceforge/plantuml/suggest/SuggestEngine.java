@@ -100,11 +100,11 @@ final public class SuggestEngine {
 					return SuggestEngineResult.CANNOT_CORRECT;
 				}
 			} else if (commandControl == CommandControl.OK) {
-				final Command cmd = new ProtectedCommand(systemFactory.createCommand(Arrays.asList(s)));
-				final CommandExecutionResult result = cmd.execute(system, Arrays.asList(s));
-				if (result.isOk() == false) {
-					return SuggestEngineResult.CANNOT_CORRECT;
-				}
+//				final Command cmd = new ProtectedCommand(systemFactory.createCommand(Arrays.asList(s)));
+//				final CommandExecutionResult result = cmd.execute(system, Arrays.asList(s));
+//				if (result.isOk() == false) {
+//					return SuggestEngineResult.CANNOT_CORRECT;
+//				}
 			} else {
 				assert false;
 			}

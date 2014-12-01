@@ -35,7 +35,6 @@ package net.sourceforge.plantuml;
 
 import net.sourceforge.plantuml.suggest.SuggestEngineResult;
 import net.sourceforge.plantuml.suggest.SuggestEngineStatus;
-import net.sourceforge.plantuml.utils.StringUtils;
 
 public class ErrorUml {
 

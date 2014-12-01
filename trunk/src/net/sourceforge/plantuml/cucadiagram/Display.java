@@ -43,7 +43,7 @@ import net.sourceforge.plantuml.EmbededDiagram;
 import net.sourceforge.plantuml.Url;
 import net.sourceforge.plantuml.UrlBuilder;
 import net.sourceforge.plantuml.UrlBuilder.ModeUrl;
-import net.sourceforge.plantuml.utils.StringUtils;
+import net.sourceforge.plantuml.StringUtils;
 
 public class Display implements Iterable<CharSequence> {
 

@@ -102,7 +102,7 @@ public class Performance {
 		// diagramCountRate.tick();
 	}
 
-	public static HealthCheck getHealthCheck() {
+	private static HealthCheck getHealthCheck() {
 		final long timeStamp = System.currentTimeMillis();
 		final long startTime = PSystemBuilder.startTime;
 		// final long runningTime = timeStamp - PSystemBuilder.startTime;

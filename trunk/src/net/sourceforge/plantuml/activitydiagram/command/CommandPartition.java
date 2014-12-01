@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 13992 $
+ * Revision $Revision: 14321 $
  *
  */
 package net.sourceforge.plantuml.activitydiagram.command;
@@ -44,7 +44,7 @@ import net.sourceforge.plantuml.cucadiagram.GroupType;
 import net.sourceforge.plantuml.cucadiagram.IEntity;
 import net.sourceforge.plantuml.cucadiagram.IGroup;
 import net.sourceforge.plantuml.graphic.HtmlColorSet;
-import net.sourceforge.plantuml.utils.StringUtils;
+import net.sourceforge.plantuml.StringUtils;
 
 public class CommandPartition extends SingleLineCommand<ActivityDiagram> {
 

@@ -34,6 +34,7 @@
 package net.sourceforge.plantuml.activitydiagram.command;
 
 import net.sourceforge.plantuml.Direction;
+import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.Url;
 import net.sourceforge.plantuml.UrlBuilder;
 import net.sourceforge.plantuml.UrlBuilder.ModeUrl;
@@ -56,7 +57,6 @@ import net.sourceforge.plantuml.cucadiagram.LinkDecor;
 import net.sourceforge.plantuml.cucadiagram.LinkType;
 import net.sourceforge.plantuml.cucadiagram.Stereotype;
 import net.sourceforge.plantuml.graphic.HtmlColorUtils;
-import net.sourceforge.plantuml.utils.StringUtils;
 
 public class CommandLinkActivity extends SingleLineCommand2<ActivityDiagram> {
 

@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 14080 $
+ * Revision $Revision: 14590 $
  *
  */
 package net.sourceforge.plantuml.cucadiagram.dot;
@@ -42,7 +42,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.sourceforge.plantuml.utils.StringUtils;
+import net.sourceforge.plantuml.StringUtils;
 
 public class GraphvizUtils {
 
@@ -114,7 +114,7 @@ public class GraphvizUtils {
 		return dotVersion;
 	}
 
-	static int retrieveVersion(String s) {
+	public static int retrieveVersion(String s) {
 		if (s == null) {
 			return -1;
 		}

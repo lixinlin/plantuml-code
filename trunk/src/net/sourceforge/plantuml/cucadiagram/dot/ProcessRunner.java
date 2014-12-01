@@ -218,11 +218,14 @@ public class ProcessRunner {
 		}
 
 		public String getString() {
+			if (sb==null) {
+				return "";
+			}
 			return sb.toString();
 		}
 
 		public void cancel() {
-			assert state.equals(ProcessState.TIMEOUT());
+			assert state.equals(ProcessState.TIMEOUT()) || state.equals(ProcessState.RUNNING()) : state;
 			this.interrupt();
 			sb = null;
 			streamToRead = null;

@@ -45,7 +45,7 @@ import net.sourceforge.plantuml.posimo.Positionable;
 import net.sourceforge.plantuml.svek.image.EntityImageStateBorder;
 import net.sourceforge.plantuml.ugraphic.Shadowable;
 import net.sourceforge.plantuml.ugraphic.UPolygon;
-import net.sourceforge.plantuml.utils.StringUtils;
+import net.sourceforge.plantuml.StringUtils;
 
 public class Shape implements Positionable, IShapePseudo, Hideable {
 

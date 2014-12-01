@@ -275,4 +275,8 @@ public class GroupRoot implements IGroup {
 		throw new UnsupportedOperationException();
 	}
 
+	public int getRawLayout() {
+		throw new UnsupportedOperationException();
+	}
+
 }

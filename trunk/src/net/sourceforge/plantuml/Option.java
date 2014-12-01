@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 13946 $
+ * Revision $Revision: 14321 $
  *
  */
 package net.sourceforge.plantuml;
@@ -48,7 +48,6 @@ import java.util.regex.Pattern;
 
 import net.sourceforge.plantuml.command.regex.MyPattern;
 import net.sourceforge.plantuml.preproc.Defines;
-import net.sourceforge.plantuml.utils.StringUtils;
 
 public class Option {
 

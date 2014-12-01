@@ -35,7 +35,7 @@ package net.sourceforge.plantuml.cucadiagram;
 
 import java.util.Map;
 
-import net.sourceforge.plantuml.utils.StringUtils;
+import net.sourceforge.plantuml.StringUtils;
 
 public class Code implements Comparable<Code> {
 
@@ -103,8 +103,8 @@ public class Code implements Comparable<Code> {
 		return this.fullName.compareTo(other.fullName);
 	}
 
-	public Code eventuallyRemoveStartingAndEndingDoubleQuote() {
-		return Code.of(StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(fullName), separator);
+	public Code eventuallyRemoveStartingAndEndingDoubleQuote(String format) {
+		return Code.of(StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(fullName, format), separator);
 	}
 
 	private final String getNamespace(Map<Code, ILeaf> leafs) {

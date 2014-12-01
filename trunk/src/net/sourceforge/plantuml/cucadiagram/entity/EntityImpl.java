@@ -69,7 +69,7 @@ import net.sourceforge.plantuml.svek.IEntityImage;
 import net.sourceforge.plantuml.svek.PackageStyle;
 import net.sourceforge.plantuml.svek.SingleStrategy;
 import net.sourceforge.plantuml.ugraphic.UStroke;
-import net.sourceforge.plantuml.utils.StringUtils;
+import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.utils.UniqueSequence;
 
 final class EntityImpl implements ILeaf, IGroup {
@@ -114,6 +114,7 @@ final class EntityImpl implements ILeaf, IGroup {
 	private HtmlColor specificLineColor;
 	private UStroke specificStroke;
 	private USymbol symbol;
+	private final int rawLayout;
 
 	// Back to Entity
 	public final boolean isTop() {
@@ -127,7 +128,7 @@ final class EntityImpl implements ILeaf, IGroup {
 	}
 
 	private EntityImpl(EntityFactory entityFactory, Code code, Bodier bodier, IGroup parentContainer,
-			LongCode longCode, String namespaceSeparator) {
+			LongCode longCode, String namespaceSeparator, int rawLayout) {
 		if (code == null) {
 			throw new IllegalArgumentException();
 		}
@@ -136,17 +137,18 @@ final class EntityImpl implements ILeaf, IGroup {
 		this.code = code;
 		this.parentContainer = parentContainer;
 		this.longCode = longCode;
+		this.rawLayout = rawLayout;
 	}
 
 	EntityImpl(EntityFactory entityFactory, Code code, Bodier bodier, IGroup parentContainer, LeafType leafType,
-			LongCode longCode, String namespaceSeparator) {
-		this(entityFactory, code, bodier, parentContainer, longCode, namespaceSeparator);
+			LongCode longCode, String namespaceSeparator, int rawLayout) {
+		this(entityFactory, code, bodier, parentContainer, longCode, namespaceSeparator, rawLayout);
 		this.leafType = leafType;
 	}
 
 	EntityImpl(EntityFactory entityFactory, Code code, Bodier bodier, IGroup parentContainer, GroupType groupType,
-			Code namespace2, LongCode longCode, String namespaceSeparator) {
-		this(entityFactory, code, bodier, parentContainer, longCode, namespaceSeparator);
+			Code namespace2, LongCode longCode, String namespaceSeparator, int rawLayout) {
+		this(entityFactory, code, bodier, parentContainer, longCode, namespaceSeparator, rawLayout);
 		this.groupType = groupType;
 		this.namespace2 = namespace2;
 	}
@@ -628,6 +630,10 @@ final class EntityImpl implements ILeaf, IGroup {
 			return symbol.getFontParam();
 		}
 		return getGroupType() == GroupType.STATE ? FontParam.STATE : FontParam.PACKAGE;
+	}
+
+	public final int getRawLayout() {
+		return rawLayout;
 	}
 
 }

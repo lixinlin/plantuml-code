@@ -38,6 +38,7 @@ import java.util.Collections;
 import java.util.Set;
 
 import net.sourceforge.plantuml.Dimension2DDouble;
+import net.sourceforge.plantuml.FontParam;
 import net.sourceforge.plantuml.ISkinParam;
 import net.sourceforge.plantuml.activitydiagram3.LinkRendering;
 import net.sourceforge.plantuml.activitydiagram3.ftile.AbstractFtile;
@@ -50,10 +51,10 @@ import net.sourceforge.plantuml.creole.SheetBlock1;
 import net.sourceforge.plantuml.creole.SheetBlock2;
 import net.sourceforge.plantuml.creole.Stencil;
 import net.sourceforge.plantuml.cucadiagram.Display;
+import net.sourceforge.plantuml.cucadiagram.Stereotype;
 import net.sourceforge.plantuml.graphic.FontConfiguration;
 import net.sourceforge.plantuml.graphic.HorizontalAlignment;
 import net.sourceforge.plantuml.graphic.HtmlColor;
-import net.sourceforge.plantuml.graphic.HtmlColorUtils;
 import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.graphic.TextBlock;
 import net.sourceforge.plantuml.graphic.UDrawable;
@@ -70,7 +71,7 @@ public class FtileBox extends AbstractFtile {
 
 	private final TextBlock tb;
 
-	private final HtmlColor color;
+	private final HtmlColor borderColor;
 	private final HtmlColor backColor;
 	private final LinkRendering inRenreding;
 	private final Swimlane swimlane;
@@ -112,11 +113,13 @@ public class FtileBox extends AbstractFtile {
 			HtmlColor arrowColor, Swimlane swimlane, BoxStyle style, ISkinParam skinParam) {
 		super(shadowing);
 		this.style = style;
-		this.color = color;
+		this.borderColor = color;
 		this.swimlane = swimlane;
 		this.backColor = backColor;
 		this.inRenreding = new LinkRendering(arrowColor);
-		final FontConfiguration fc = new FontConfiguration(font, HtmlColorUtils.BLACK, HtmlColorUtils.BLUE);
+		final HtmlColor fontColor = skinParam.getFontHtmlColor(FontParam.ACTIVITY, null);
+		final FontConfiguration fc = new FontConfiguration(font, fontColor, skinParam.getHyperlinkColor());
+
 		final Sheet sheet = new CreoleParser(fc, HorizontalAlignment.LEFT, skinParam, false).createSheet(label);
 		this.tb = new SheetBlock2(new SheetBlock1(sheet, 0), new MyStencil(), new UStroke(1));
 		this.print = label.toString();
@@ -135,7 +138,7 @@ public class FtileBox extends AbstractFtile {
 		final double heightTotal = dimTotal.getHeight();
 		final UDrawable rect = style.getUDrawable(widthTotal, heightTotal, shadowing());
 
-		ug = ug.apply(new UChangeColor(color)).apply(new UChangeBackColor(backColor)).apply(new UStroke(1.5));
+		ug = ug.apply(new UChangeColor(borderColor)).apply(new UChangeBackColor(backColor)).apply(new UStroke(1.5));
 		rect.drawU(ug);
 
 		tb.drawU(ug.apply(new UTranslate(MARGIN, MARGIN)));

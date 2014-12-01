@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 12235 $
+ * Revision $Revision: 14586 $
  *
  */
 package net.sourceforge.plantuml;
@@ -162,7 +162,7 @@ public class FileGroup {
 		return Collections.unmodifiableList(result);
 	}
 
-	static String toRegexp(String pattern) {
+	public static String toRegexp(String pattern) {
 		pattern = pattern.replace("\\", "/");
 		pattern = pattern.replace(".", "\\.");
 		pattern = pattern.replace("?", "[^/]");

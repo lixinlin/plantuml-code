@@ -28,12 +28,17 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 13483 $
+ * Revision $Revision: 14438 $
  *
  */
 package net.sourceforge.plantuml.classdiagram;
 
+import java.io.IOException;
+import java.io.OutputStream;
+
+import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.UmlDiagramType;
+import net.sourceforge.plantuml.core.ImageData;
 import net.sourceforge.plantuml.cucadiagram.Code;
 import net.sourceforge.plantuml.cucadiagram.Display;
 import net.sourceforge.plantuml.cucadiagram.EntityUtils;
@@ -41,8 +46,12 @@ import net.sourceforge.plantuml.cucadiagram.GroupType;
 import net.sourceforge.plantuml.cucadiagram.IGroup;
 import net.sourceforge.plantuml.cucadiagram.ILeaf;
 import net.sourceforge.plantuml.cucadiagram.LeafType;
+import net.sourceforge.plantuml.graphic.HtmlColorUtils;
+import net.sourceforge.plantuml.graphic.TextBlock;
 import net.sourceforge.plantuml.graphic.USymbol;
 import net.sourceforge.plantuml.objectdiagram.AbstractClassOrObjectDiagram;
+import net.sourceforge.plantuml.svek.image.EntityImageClass;
+import net.sourceforge.plantuml.ugraphic.ImageBuilder;
 
 public class ClassDiagram extends AbstractClassOrObjectDiagram {
 
@@ -54,7 +63,7 @@ public class ClassDiagram extends AbstractClassOrObjectDiagram {
 			code = code.withSeparator(namespaceSeparator);
 		}
 		if (type == null) {
-			code = code.eventuallyRemoveStartingAndEndingDoubleQuote();
+			code = code.eventuallyRemoveStartingAndEndingDoubleQuote("\"([:");
 			if (namespaceSeparator == null) {
 				return getOrCreateLeafDefault(code, LeafType.CLASS, symbol);
 			}
@@ -141,6 +150,59 @@ public class ClassDiagram extends AbstractClassOrObjectDiagram {
 
 	public String getNamespaceSeparator() {
 		return namespaceSeparator;
+	}
+
+	private boolean allowMixing;
+
+	public void setAllowMixing(boolean allowMixing) {
+		this.allowMixing = allowMixing;
+	}
+
+	public boolean isAllowMixing() {
+		return allowMixing;
+	}
+
+	private int useLayoutExplicit = 0;
+
+	public void layoutNewLine() {
+		useLayoutExplicit++;
+		incRawLayout();
+	}
+
+	@Override
+	final protected ImageData exportDiagramInternal(OutputStream os, int index, FileFormatOption fileFormatOption)
+			throws IOException {
+		if (useLayoutExplicit != 0) {
+			return exportLayoutExplicit(os, index, fileFormatOption);
+		}
+		return super.exportDiagramInternal(os, index, fileFormatOption);
+	}
+
+	final protected ImageData exportLayoutExplicit(OutputStream os, int index, FileFormatOption fileFormatOption)
+			throws IOException {
+		final FullLayout fullLayout = new FullLayout();
+		for (int i = 0; i <= useLayoutExplicit; i++) {
+			final RowLayout rawLayout = getRawLayout(i);
+			fullLayout.addRowLayout(rawLayout);
+		}
+		final ImageBuilder imageBuilder = new ImageBuilder(getSkinParam().getColorMapper(), 1, HtmlColorUtils.WHITE,
+				null, null, 0, 10, null);
+		imageBuilder.addUDrawable(fullLayout);
+		return imageBuilder.writeImageTOBEMOVED(fileFormatOption.getFileFormat(), os);
+	}
+
+	private RowLayout getRawLayout(int raw) {
+		final RowLayout rawLayout = new RowLayout();
+		for (ILeaf leaf : getLeafs().values()) {
+			if (leaf.getRawLayout() == raw) {
+				rawLayout.addLeaf(getEntityImageClass(leaf));
+			}
+		}
+		return rawLayout;
+	}
+
+	private TextBlock getEntityImageClass(ILeaf entity) {
+		return new EntityImageClass(null, entity, getSkinParam(), this);
 	}
 
 }

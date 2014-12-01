@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 13992 $
+ * Revision $Revision: 14321 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.command;
@@ -40,7 +40,7 @@ import net.sourceforge.plantuml.command.SingleLineCommand;
 import net.sourceforge.plantuml.sequencediagram.LifeEventType;
 import net.sourceforge.plantuml.sequencediagram.Participant;
 import net.sourceforge.plantuml.sequencediagram.SequenceDiagram;
-import net.sourceforge.plantuml.utils.StringUtils;
+import net.sourceforge.plantuml.StringUtils;
 
 public class CommandActivate extends SingleLineCommand<SequenceDiagram> {
 

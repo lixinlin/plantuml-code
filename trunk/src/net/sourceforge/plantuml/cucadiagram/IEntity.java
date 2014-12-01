@@ -90,4 +90,6 @@ public interface IEntity extends SpecificBackcolorable, Hideable, Removeable, Li
 
 	public void setHectorLayer(int layer);
 
+	public int getRawLayout();
+
 }

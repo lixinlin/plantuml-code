@@ -27,56 +27,35 @@
  * in the United States and other countries.]
  *
  * Original Author:  Arnaud Roques
- *
- * Revision $Revision: 4762 $
+ * 
+ * Revision $Revision: 7715 $
  *
  */
-package net.sourceforge.plantuml.activitydiagram3.command;
+package net.sourceforge.plantuml.classdiagram.command;
 
-import java.util.List;
-
-import net.sourceforge.plantuml.activitydiagram3.ActivityDiagram3;
+import net.sourceforge.plantuml.classdiagram.ClassDiagram;
 import net.sourceforge.plantuml.command.CommandExecutionResult;
-import net.sourceforge.plantuml.command.CommandMultilines2;
-import net.sourceforge.plantuml.command.MultilinesStrategy;
+import net.sourceforge.plantuml.command.SingleLineCommand2;
 import net.sourceforge.plantuml.command.regex.RegexConcat;
 import net.sourceforge.plantuml.command.regex.RegexLeaf;
 import net.sourceforge.plantuml.command.regex.RegexResult;
-import net.sourceforge.plantuml.cucadiagram.Display;
-import net.sourceforge.plantuml.sequencediagram.NotePosition;
-import net.sourceforge.plantuml.StringUtils;
 
-public class CommandNoteLong3 extends CommandMultilines2<ActivityDiagram3> {
+public class CommandLayoutNewLine extends SingleLineCommand2<ClassDiagram> {
 
-	public CommandNoteLong3() {
-		super(getRegexConcat(), MultilinesStrategy.REMOVE_STARTING_QUOTE);
+	public CommandLayoutNewLine() {
+		super(getRegexConcat());
 	}
 
-	public String getPatternEnd() {
-		return "(?i)^end[%s]?note$";
-	}
+	private static RegexConcat getRegexConcat() {
 
-	public CommandExecutionResult executeNow(final ActivityDiagram3 diagram, List<String> lines) {
-		// final RegexResult line0 = getStartingPattern().matcher(lines.get(0).trim());
-		final List<String> in = StringUtils.removeEmptyColumns(lines.subList(1, lines.size() - 1));
-		final RegexResult line0 = getStartingPattern().matcher(lines.get(0).trim());
-		final NotePosition position = getPosition(line0.get("POSITION", 0));
-		final Display note = Display.create(in);
-		return diagram.addNote(note, position);
-	}
-
-	private NotePosition getPosition(String s) {
-		if (s == null) {
-			return NotePosition.LEFT;
-		}
-		return NotePosition.valueOf(s.toUpperCase());
-	}
-
-	static RegexConcat getRegexConcat() {
 		return new RegexConcat(new RegexLeaf("^"), //
-				new RegexLeaf("note"), //
-				new RegexLeaf("POSITION", "[%s]*(left|right)?"), //
+				new RegexLeaf("layout_new_line"), //
 				new RegexLeaf("$"));
 	}
 
+	@Override
+	protected CommandExecutionResult executeArg(ClassDiagram diagram, RegexResult arg) {
+		diagram.layoutNewLine();
+		return CommandExecutionResult.ok();
+	}
 }
