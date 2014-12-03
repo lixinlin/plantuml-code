@@ -43,6 +43,7 @@ import java.util.Set;
 
 import net.sourceforge.plantuml.Dimension2DDouble;
 import net.sourceforge.plantuml.Direction;
+import net.sourceforge.plantuml.FontParam;
 import net.sourceforge.plantuml.ISkinParam;
 import net.sourceforge.plantuml.activitydiagram3.Branch;
 import net.sourceforge.plantuml.activitydiagram3.LinkRendering;
@@ -125,10 +126,10 @@ class FtileIf extends AbstractFtile {
 		final Ftile tile1 = new FtileMinWidth(branch1.getFtile(), 30);
 		final Ftile tile2 = new FtileMinWidth(branch2.getFtile(), 30);
 
-		final FontConfiguration fcArrow = new FontConfiguration(fontArrow, HtmlColorUtils.BLACK,
-				skinParam.getHyperlinkColor());
-		final FontConfiguration fcTest = new FontConfiguration(fontTest, HtmlColorUtils.BLACK,
-				skinParam.getHyperlinkColor());
+		final HtmlColor fontColor = skinParam.getFontHtmlColor(FontParam.ACTIVITY_DIAMOND, null);
+
+		final FontConfiguration fcArrow = new FontConfiguration(fontArrow, fontColor, skinParam.getHyperlinkColor());
+		final FontConfiguration fcTest = new FontConfiguration(fontTest, fontColor, skinParam.getHyperlinkColor());
 
 		final TextBlock tb1 = TextBlockUtils.create(branch1.getLabelPositive(), fcArrow, HorizontalAlignment.LEFT,
 				ftileFactory);

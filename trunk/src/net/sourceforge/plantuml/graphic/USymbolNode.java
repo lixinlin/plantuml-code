@@ -110,11 +110,6 @@ class USymbolNode extends USymbol {
 				final double posTitle = (width - dimTitle.getWidth()) / 2;
 				title.drawU(ug.apply(new UTranslate(posTitle, 2 + dimStereo.getHeight())));
 
-//				title.drawU(ug.apply(new UTranslate(3, 13)));
-//				final Dimension2D dimStereo = stereotype.calculateDimension(ug.getStringBounder());
-//				final double posStereo = (width - dimStereo.getWidth()) / 2;
-//				final Dimension2D dimTitle = title.calculateDimension(ug.getStringBounder());
-//				stereotype.drawU(ug.apply(new UTranslate(posStereo, dimTitle.getHeight() + 13)));
 			}
 
 			public Dimension2D calculateDimension(StringBounder stringBounder) {
@@ -122,5 +117,16 @@ class USymbolNode extends USymbol {
 			}
 		};
 	}
+	
+	@Override
+	public int suppHeightBecauseOfShape() {
+		return 5;
+	}
+
+	@Override
+	public int suppWidthBecauseOfShape() {
+		return 60;
+	}
+
 
 }

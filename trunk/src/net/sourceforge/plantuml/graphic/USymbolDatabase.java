@@ -160,4 +160,9 @@ class USymbolDatabase extends USymbol {
 		return true;
 	}
 
+	@Override
+	public int suppHeightBecauseOfShape() {
+		return 15;
+	}
+
 }

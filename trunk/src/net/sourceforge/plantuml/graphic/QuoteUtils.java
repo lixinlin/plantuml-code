@@ -100,20 +100,37 @@ public class QuoteUtils {
 			"Blood, Sweat and Tears", //
 			"Houston, we have a problem.", //
 			"Boot failure, press any key to continue", //
-			"Big mistake!",
-			"How many UML designers does it take to change a lightbulb ?",
-			"Do you like movies about gladiators ?",
-			"The spirit of learning is a lasting frontier.",
-			"It is curious for sailors this need for making sentences.",
-			"Hoping for the best, but expecting the worst",
-			"The will to go on when I'm hurt deep inside.",
-			"If it bleeds, we can kill it.",
-			"Houston, I have a bad feeling about this mission.",
-			"Mama always said life was like a box of chocolates. You never know what you're gonna get.",
-			"By the way, is there anyone on board who knows how to fly a plane?", 
-			"Dave, this conversation can serve no purpose anymore. Goodbye.", 
-			"It can only be attributable to human error.", 
-			"Looks like I picked the wrong week to quit smoking."
+			"Big mistake!", //
+			"How many UML designers does it take to change a lightbulb ?", //
+			"Do you like movies about gladiators ?", //
+			"The spirit of learning is a lasting frontier.", //
+			"It is curious for sailors this need for making sentences.", //
+			"Hoping for the best, but expecting the worst", //
+			"The will to go on when I'm hurt deep inside.", //
+			"If it bleeds, we can kill it.", //
+			"Houston, I have a bad feeling about this mission.", //
+			"Mama always said life was like a box of chocolates. You never know what you're gonna get.", //
+			"By the way, is there anyone on board who knows how to fly a plane?", //
+			"Dave, this conversation can serve no purpose anymore. Goodbye.", //
+			"It can only be attributable to human error.", //
+			"Looks like I picked the wrong week to quit smoking.", //
+			"You humans act so strange. Everything you create is used to destroy.", //
+			"Where did you learn how to negotiate like that?", //
+			"Sir, are you classified as human?", //
+			"We're not gonna make it, are we?", //
+			"It's in your nature to destroy yourselves.", //
+			"The more contact I have with humans, the more I learn.", //
+			"Would it save you a lot of time if I just gave up and went mad now?", //
+			"Reality is frequently inaccurate.", //
+			"Don't believe anything you read on the net. Except this. Well, including this, I suppose.", //
+			"A cup of tea would restore my normality.", //
+			"Anything that thinks logically can be fooled by something else that thinks at least as logically as it does.", //
+			"In an infinite Universe anything can happen.", //
+			"Sometimes if you received an answer, the question might be taken away.", //
+			"Please call me Eddie if it will help you to relax.", //
+			"I don't believe it. Prove it to me and I still won't believe it.", //
+			"Totally mad, utter nonsense. But we'll do it because it's brilliant nonsense.", //
+			"This sentence is not true."
 			);
 	
 
