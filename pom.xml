@@ -92,6 +92,9 @@
             <email>plantuml@gmail.com</email>
         </developer>
     </developers>
+	<properties>
+		<maven.javadoc.skip>true</maven.javadoc.skip>
+	</properties>
 
     <build>
         <sourceDirectory>${project.basedir}/src</sourceDirectory>
