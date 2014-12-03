@@ -95,7 +95,8 @@ public class InstructionFork implements Instruction {
 	}
 
 	public Swimlane getSwimlaneIn() {
-		return parent.getSwimlaneOut();
+		// return parent.getSwimlaneOut();
+		return forks.get(0).getSwimlaneIn();
 	}
 
 	public Swimlane getSwimlaneOut() {

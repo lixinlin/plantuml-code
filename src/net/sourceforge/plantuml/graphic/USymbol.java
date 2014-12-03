@@ -159,5 +159,13 @@ public abstract class USymbol {
 	public boolean manageHorizontalLine() {
 		return false;
 	}
+	
+	public int suppHeightBecauseOfShape() {
+		return 0;
+	}
+
+	public int suppWidthBecauseOfShape() {
+		return 0;
+	}
 
 }

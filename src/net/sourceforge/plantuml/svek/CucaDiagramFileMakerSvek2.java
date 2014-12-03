@@ -169,7 +169,8 @@ public final class CucaDiagramFileMakerSvek2 {
 				}
 				final ISkinParam skinParam = dotData.getSkinParam();
 				final FontConfiguration labelFont = new FontConfiguration(skinParam.getFont(FontParam.GENERIC_ARROW,
-						null, false), skinParam.getFontHtmlColor(FontParam.GENERIC_ARROW, null), skinParam.getHyperlinkColor());
+						null, false), skinParam.getFontHtmlColor(FontParam.GENERIC_ARROW, null),
+						skinParam.getHyperlinkColor());
 
 				final Line line = new Line(shapeUid1, shapeUid2, link, colorSequence, ltail, lhead, skinParam,
 						stringBounder, labelFont, getBibliotekon(), dotStringFactory.getGraphvizVersion(),
@@ -251,14 +252,14 @@ public final class CucaDiagramFileMakerSvek2 {
 		return nb == 1;
 	}
 
-//	private Cluster getCluster(IEntity g) {
-//		for (Cluster cl : getBibliotekon().allCluster()) {
-//			if (cl.getGroup() == g) {
-//				return cl;
-//			}
-//		}
-//		throw new IllegalArgumentException(g.toString());
-//	}
+	// private Cluster getCluster(IEntity g) {
+	// for (Cluster cl : getBibliotekon().allCluster()) {
+	// if (cl.getGroup() == g) {
+	// return cl;
+	// }
+	// }
+	// throw new IllegalArgumentException(g.toString());
+	// }
 
 	private Cluster getCluster2(IEntity entityMutable) {
 		for (Cluster cl : getBibliotekon().allCluster()) {
@@ -503,9 +504,12 @@ public final class CucaDiagramFileMakerSvek2 {
 			final double attributeHeight = dimAttribute.getHeight();
 			final double attributeWidth = dimAttribute.getWidth();
 			final double marginForFields = attributeHeight > 0 ? IEntityImage.MARGIN : 0;
+			final USymbol uSymbol = g.getUSymbol();
+			final int suppHeightBecauseOfShape = uSymbol == null ? 0 : uSymbol.suppHeightBecauseOfShape();
+			final int suppWidthBecauseOfShape = uSymbol == null ? 0 : uSymbol.suppWidthBecauseOfShape();
 
-			titleAndAttributeWidth = (int) Math.max(dimLabel.getWidth(), attributeWidth);
-			titleAndAttributeHeight = (int) (dimLabel.getHeight() + attributeHeight + marginForFields);
+			titleAndAttributeWidth = (int) Math.max(dimLabel.getWidth(), attributeWidth) + suppWidthBecauseOfShape;
+			titleAndAttributeHeight = (int) (dimLabel.getHeight() + attributeHeight + marginForFields + suppHeightBecauseOfShape);
 		}
 
 		dotStringFactory.openCluster(g, titleAndAttributeWidth, titleAndAttributeHeight, title, stereo);
@@ -525,9 +529,10 @@ public final class CucaDiagramFileMakerSvek2 {
 		}
 
 		final FontParam fontParam = g.getTitleFontParam();
-		return TextBlockUtils.create(label, new FontConfiguration(dotData.getSkinParam()
-				.getFont(fontParam, stereotype2, true), dotData.getSkinParam().getFontHtmlColor(fontParam, stereotype2),
-				dotData.getSkinParam().getHyperlinkColor()), HorizontalAlignment.CENTER, dotData.getSkinParam());
+		return TextBlockUtils.create(label,
+				new FontConfiguration(dotData.getSkinParam().getFont(fontParam, stereotype2, true), dotData
+						.getSkinParam().getFontHtmlColor(fontParam, stereotype2), dotData.getSkinParam()
+						.getHyperlinkColor()), HorizontalAlignment.CENTER, dotData.getSkinParam());
 	}
 
 	private TextBlock getStereoBlock(IGroup g) {
@@ -547,9 +552,9 @@ public final class CucaDiagramFileMakerSvek2 {
 
 		final FontParam fontParam = FontParam.COMPONENT_STEREOTYPE;
 		return TextBlockUtils.create(Display.create(stereos),
-				new FontConfiguration(dotData.getSkinParam().getFont(fontParam, stereotype2, false), dotData.getSkinParam()
-						.getFontHtmlColor(fontParam, stereotype2), dotData.getSkinParam().getHyperlinkColor()),
-				HorizontalAlignment.CENTER, dotData.getSkinParam());
+				new FontConfiguration(dotData.getSkinParam().getFont(fontParam, stereotype2, false), dotData
+						.getSkinParam().getFontHtmlColor(fontParam, stereotype2), dotData.getSkinParam()
+						.getHyperlinkColor()), HorizontalAlignment.CENTER, dotData.getSkinParam());
 	}
 
 }
