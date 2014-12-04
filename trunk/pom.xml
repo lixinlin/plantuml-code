@@ -92,9 +92,6 @@
             <email>plantuml@gmail.com</email>
         </developer>
     </developers>
-	<properties>
-		<maven.javadoc.skip>true</maven.javadoc.skip>
-	</properties>
 
     <build>
         <sourceDirectory>${project.basedir}/src</sourceDirectory>
@@ -132,6 +129,17 @@
             </plugin>
             <plugin>
                 <artifactId>maven-javadoc-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+						<configuration>
+							<additionalparam>-Xdoclint:none</additionalparam>
+						</configuration>
+			</execution>
+                </executions>
             </plugin>
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
