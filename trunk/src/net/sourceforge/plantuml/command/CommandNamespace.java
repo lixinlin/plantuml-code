@@ -33,7 +33,7 @@
  */
 package net.sourceforge.plantuml.command;
 
-import net.sourceforge.plantuml.classdiagram.AbstractEntityDiagram;
+import net.sourceforge.plantuml.classdiagram.ClassDiagram;
 import net.sourceforge.plantuml.command.regex.RegexConcat;
 import net.sourceforge.plantuml.command.regex.RegexLeaf;
 import net.sourceforge.plantuml.command.regex.RegexResult;
@@ -45,7 +45,7 @@ import net.sourceforge.plantuml.cucadiagram.IGroup;
 import net.sourceforge.plantuml.cucadiagram.Stereotype;
 import net.sourceforge.plantuml.graphic.HtmlColorUtils;
 
-public class CommandNamespace extends SingleLineCommand2<AbstractEntityDiagram> {
+public class CommandNamespace extends SingleLineCommand2<ClassDiagram> {
 
 	public CommandNamespace() {
 		super(getRegexConcat());
@@ -62,10 +62,10 @@ public class CommandNamespace extends SingleLineCommand2<AbstractEntityDiagram> 
 	}
 
 	@Override
-	protected CommandExecutionResult executeArg(AbstractEntityDiagram diagram, RegexResult arg) {
+	protected CommandExecutionResult executeArg(ClassDiagram diagram, RegexResult arg) {
 		final Code code = Code.of(arg.get("NAME", 0));
 		final IGroup currentPackage = diagram.getCurrentGroup();
-		final IEntity p = diagram.getOrCreateGroup(code, Display.getWithNewlines(code), code, GroupType.PACKAGE,
+		final IEntity p = diagram.getOrCreateNamespace(code, Display.getWithNewlines(code), GroupType.PACKAGE,
 				currentPackage);
 		final String stereotype = arg.get("STEREOTYPE", 0);
 		if (stereotype != null) {

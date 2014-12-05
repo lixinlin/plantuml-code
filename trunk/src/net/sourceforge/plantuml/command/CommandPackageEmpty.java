@@ -68,7 +68,7 @@ public class CommandPackageEmpty extends SingleLineCommand<AbstractEntityDiagram
 			code = Code.of(arg.get(1));
 		}
 		final IGroup currentPackage = diagram.getCurrentGroup();
-		final IEntity p = diagram.getOrCreateGroup(code, Display.getWithNewlines(display), null, GroupType.PACKAGE,
+		final IEntity p = diagram.getOrCreateGroup(code, Display.getWithNewlines(display), GroupType.PACKAGE,
 				currentPackage);
 		final String color = arg.get(2);
 		if (color != null) {

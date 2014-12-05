@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 14438 $
+ * Revision $Revision: 14664 $
  *
  */
 package net.sourceforge.plantuml.classdiagram;
@@ -84,6 +84,31 @@ public class ClassDiagram extends AbstractClassOrObjectDiagram {
 		return createEntityWithNamespace(code, Display.getWithNewlines(code.getShortName(getLeafs())), type, symbol);
 	}
 
+	public IGroup getOrCreateNamespace(Code namespace, Display display, GroupType type, IGroup parent) {
+		if (namespaceSeparator != null) {
+			namespace = namespace.withSeparator(namespaceSeparator).getFullyQualifiedCode(getCurrentGroup());
+		}
+		final IGroup g = getOrCreateNamespaceInternal(namespace, display, type, parent);
+		currentGroup = g;
+		return g;
+	}
+
+	private IGroup getOrCreateNamespaceInternal(Code namespace, Display display, GroupType type, IGroup parent) {
+		IGroup result = entityFactory.getGroups().get(namespace);
+		if (result != null) {
+			return result;
+		}
+		if (entityFactory.getLeafs().containsKey(namespace)) {
+			result = entityFactory.muteToGroup(namespace, namespace, type, parent);
+			result.setDisplay(display);
+		} else {
+			result = entityFactory.createGroup(namespace, display, namespace, type, parent, getHides(),
+					getNamespaceSeparator());
+		}
+		entityFactory.addGroup(result);
+		return result;
+	}
+
 	@Override
 	public ILeaf createLeaf(Code code, Display display, LeafType type, USymbol symbol) {
 		if (namespaceSeparator != null) {
@@ -110,8 +135,8 @@ public class ClassDiagram extends AbstractClassOrObjectDiagram {
 		if (namespace != null
 				&& (EntityUtils.groupRoot(group) || group.getCode().getFullName().equals(namespace) == false)) {
 			final Code namespace2 = Code.of(namespace);
-			group = getOrCreateGroupInternal(namespace2, Display.getWithNewlines(namespace), namespace2,
-					GroupType.PACKAGE, getRootGroup());
+			group = getOrCreateNamespaceInternal(namespace2, Display.getWithNewlines(namespace), GroupType.PACKAGE,
+					getRootGroup());
 		}
 		return createLeafInternal(fullyCode,
 				display == null ? Display.getWithNewlines(fullyCode.getShortName(getLeafs())) : display, type, group,

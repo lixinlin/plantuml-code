@@ -192,7 +192,7 @@ public class CommandLinkActivity2 extends SingleLineCommand2<ActivityDiagram> {
 		final Code code = Code.of(arg.get("CODE" + suf, 0));
 		if (code != null) {
 			if (partition != null) {
-				system.getOrCreateGroup(Code.of(partition), Display.getWithNewlines(partition), null,
+				system.getOrCreateGroup(Code.of(partition), Display.getWithNewlines(partition),
 						GroupType.PACKAGE, system.getRootGroup());
 			}
 			final IEntity result = system.getOrCreate(code, Display.getWithNewlines(code),
@@ -210,7 +210,7 @@ public class CommandLinkActivity2 extends SingleLineCommand2<ActivityDiagram> {
 		if (quoted.get(0) != null) {
 			final Code quotedCode = Code.of(quoted.get(1) == null ? quoted.get(0) : quoted.get(1));
 			if (partition != null) {
-				system.getOrCreateGroup(Code.of(partition), Display.getWithNewlines(partition), null,
+				system.getOrCreateGroup(Code.of(partition), Display.getWithNewlines(partition),
 						GroupType.PACKAGE, system.getRootGroup());
 			}
 			final IEntity result = system.getOrCreate(quotedCode, Display.getWithNewlines(quoted.get(0)),
@@ -223,7 +223,7 @@ public class CommandLinkActivity2 extends SingleLineCommand2<ActivityDiagram> {
 		final Code quotedInvisible = Code.of(arg.get("QUOTED_INVISIBLE" + suf, 0));
 		if (quotedInvisible != null) {
 			if (partition != null) {
-				system.getOrCreateGroup(Code.of(partition), Display.getWithNewlines(partition), null,
+				system.getOrCreateGroup(Code.of(partition), Display.getWithNewlines(partition),
 						GroupType.PACKAGE, system.getRootGroup());
 			}
 			final IEntity result = system.getOrCreate(quotedInvisible, Display.getWithNewlines(quotedInvisible),

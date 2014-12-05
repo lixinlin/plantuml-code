@@ -51,7 +51,7 @@ public class DescriptionDiagram extends AbstractEntityDiagram {
 			code = code.withSeparator(namespaceSeparator);
 		}
 		if (namespaceSeparator != null && code.getFullName().contains(namespaceSeparator)) {
-			System.err.println("code=" + code);
+			// System.err.println("code=" + code);
 			final Code fullyCode = code;
 			// final String namespace = fullyCode.getNamespace(getLeafs());
 			// System.err.println("namespace=" + namespace);

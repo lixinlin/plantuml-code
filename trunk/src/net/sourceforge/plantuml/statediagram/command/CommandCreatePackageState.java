@@ -93,7 +93,7 @@ public class CommandCreatePackageState extends SingleLineCommand2<StateDiagram> 
 		if (display == null) {
 			display = code.getFullName();
 		}
-		final IEntity p = diagram.getOrCreateGroup(code, Display.getWithNewlines(display), null, GroupType.STATE,
+		final IEntity p = diagram.getOrCreateGroup(code, Display.getWithNewlines(display), GroupType.STATE,
 				currentPackage);
 		final String stereotype = arg.get("STEREOTYPE", 0);
 		if (stereotype != null) {
