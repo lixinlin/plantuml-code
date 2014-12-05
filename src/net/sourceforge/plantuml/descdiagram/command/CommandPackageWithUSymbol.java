@@ -90,7 +90,7 @@ public class CommandPackageWithUSymbol extends SingleLineCommand2<AbstractEntity
 			code = Code.of(arg.get("AS", 0));
 		}
 		final IGroup currentPackage = diagram.getCurrentGroup();
-		final IEntity p = diagram.getOrCreateGroup(code, Display.getWithNewlines(display), null,
+		final IEntity p = diagram.getOrCreateGroup(code, Display.getWithNewlines(display),
 				GroupType.PACKAGE, currentPackage);
 		p.setUSymbol(USymbol.getFromString(arg.get("SYMBOL", 0)));
 		final String stereotype = arg.get("STEREOTYPE", 0);

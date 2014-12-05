@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 13946 $
+ * Revision $Revision: 14661 $
  *
  */
 package net.sourceforge.plantuml.activitydiagram;
@@ -152,7 +152,7 @@ public class ActivityDiagram extends CucaDiagram {
 	public IEntity createInnerActivity() {
 		// Log.println("createInnerActivity A");
 		final Code code = Code.of("##" + UniqueSequence.getValue());
-		final IEntity g = getOrCreateGroup(code, Display.getWithNewlines(code), null, GroupType.INNER_ACTIVITY,
+		final IEntity g = getOrCreateGroup(code, Display.getWithNewlines(code), GroupType.INNER_ACTIVITY,
 				getCurrentGroup());
 		// g.setRankdir(Rankdir.LEFT_TO_RIGHT);
 		lastEntityConsulted = null;
@@ -173,7 +173,7 @@ public class ActivityDiagram extends CucaDiagram {
 		if (getCurrentGroup().getGroupType() != GroupType.INNER_ACTIVITY) {
 			throw new IllegalStateException("type=" + getCurrentGroup().getGroupType());
 		}
-		getOrCreateGroup(code, Display.getWithNewlines("code"), null, GroupType.CONCURRENT_ACTIVITY,
+		getOrCreateGroup(code, Display.getWithNewlines("code"), GroupType.CONCURRENT_ACTIVITY,
 				getCurrentGroup());
 		lastEntityConsulted = null;
 		lastEntityBrancheConsulted = null;

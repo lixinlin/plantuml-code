@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 13946 $
+ * Revision $Revision: 14661 $
  *
  */
 package net.sourceforge.plantuml.statediagram;
@@ -105,7 +105,7 @@ public class StateDiagram extends AbstractEntityDiagram {
 	}
 
 	public IEntity getHistorical(Code codeGroup) {
-		final IEntity g = getOrCreateGroup(codeGroup, Display.getWithNewlines(codeGroup), null, GroupType.STATE,
+		final IEntity g = getOrCreateGroup(codeGroup, Display.getWithNewlines(codeGroup), GroupType.STATE,
 				getRootGroup());
 		final IEntity result = getOrCreateLeaf(Code.of("*historical*" + g.getCode().getFullName()), LeafType.PSEUDO_STATE, null);
 		endGroup();
@@ -118,12 +118,12 @@ public class StateDiagram extends AbstractEntityDiagram {
 		if (EntityUtils.groupRoot(cur) == false && cur.getGroupType() == GroupType.CONCURRENT_STATE) {
 			super.endGroup();
 		}
-		final IGroup conc1 = getOrCreateGroup(UniqueSequence.getCode("CONC"), Display.create(""), null,
+		final IGroup conc1 = getOrCreateGroup(UniqueSequence.getCode("CONC"), Display.create(""),
 				GroupType.CONCURRENT_STATE, getCurrentGroup());
 		if (EntityUtils.groupRoot(cur) == false && cur.getGroupType() == GroupType.STATE) {
 			cur.moveEntitiesTo(conc1);
 			super.endGroup();
-			getOrCreateGroup(UniqueSequence.getCode("CONC"), Display.create(""), null, GroupType.CONCURRENT_STATE,
+			getOrCreateGroup(UniqueSequence.getCode("CONC"), Display.create(""), GroupType.CONCURRENT_STATE,
 					getCurrentGroup());
 		}
 		// printlink("AFTER");

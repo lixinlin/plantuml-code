@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 14321 $
+ * Revision $Revision: 14661 $
  *
  */
 package net.sourceforge.plantuml.activitydiagram.command;
@@ -56,7 +56,7 @@ public class CommandPartition extends SingleLineCommand<ActivityDiagram> {
 	protected CommandExecutionResult executeArg(ActivityDiagram diagram, List<String> arg) {
 		final Code code = Code.of(StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(arg.get(0)));
 		final IGroup currentPackage = diagram.getCurrentGroup();
-		final IEntity p = diagram.getOrCreateGroup(code, Display.getWithNewlines(code), null, GroupType.PACKAGE,
+		final IEntity p = diagram.getOrCreateGroup(code, Display.getWithNewlines(code), GroupType.PACKAGE,
 				currentPackage);
 		final String color = arg.get(1);
 		if (color != null) {
