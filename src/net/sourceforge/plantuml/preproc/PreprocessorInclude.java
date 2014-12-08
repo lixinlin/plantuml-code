@@ -27,8 +27,9 @@
  * in the United States and other countries.]
  *
  * Original Author:  Arnaud Roques
+ * Modified by: Nicolas Jouanin
  * 
- * Revision $Revision: 14321 $
+ * Revision $Revision: 14672 $
  *
  */
 package net.sourceforge.plantuml.preproc;
@@ -37,7 +38,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -45,12 +49,13 @@ import java.util.regex.Pattern;
 import net.sourceforge.plantuml.FileSystem;
 import net.sourceforge.plantuml.Log;
 import net.sourceforge.plantuml.OptionFlags;
-import net.sourceforge.plantuml.command.regex.MyPattern;
 import net.sourceforge.plantuml.StringUtils;
+import net.sourceforge.plantuml.command.regex.MyPattern;
 
 class PreprocessorInclude implements ReadLine {
 
 	private static final Pattern includePattern = MyPattern.cmpile("^[%s]*!include[%s]+[%g]?([^%g]+)[%g]?$");
+	private static final Pattern includeURLPattern = MyPattern.cmpile("^[%s]*!includeurl[%s]+[%g]?([^%g]+)[%g]?$");
 
 	private final ReadLine reader2;
 	private final String charset;
@@ -101,15 +106,38 @@ class PreprocessorInclude implements ReadLine {
 			final Matcher m = includePattern.matcher(s);
 			assert included == null;
 			if (m.find()) {
-				return manageInclude(m);
+				return manageFileInclude(m);
 			}
+		}
+		final Matcher mUrl = includeURLPattern.matcher(s);
+		if (mUrl.find()) {
+			return manageUrlInclude(mUrl);
 		}
 
 		return s;
 
 	}
 
-	private String manageInclude(Matcher m) throws IOException {
+	private String manageUrlInclude(Matcher m) throws IOException {
+		String urlString = m.group(1);
+		urlString = defines.applyDefines(urlString).get(0);
+		//
+		final int idx = urlString.lastIndexOf('!');
+		String suf = null;
+		if (idx != -1) {
+			suf = urlString.substring(idx + 1);
+			urlString = urlString.substring(0, idx);
+		}
+		try {
+			final URL url = new URL(urlString);
+			included = new PreprocessorInclude(getReaderInclude(url, suf), defines, charset, filesUsed, null);
+		} catch (MalformedURLException e) {
+			return "Cannot include url " + urlString;
+		}
+		return this.readLine();
+	}
+
+	private String manageFileInclude(Matcher m) throws IOException {
 		String fileName = m.group(1);
 		fileName = defines.applyDefines(fileName).get(0);
 		final int idx = fileName.lastIndexOf('!');
@@ -165,16 +193,6 @@ class PreprocessorInclude implements ReadLine {
 			}
 			return new StartDiagramExtractReader(f, bloc, charset);
 		}
-		// if (f != null) {
-		// final Throwable t = new Throwable();
-		// t.fillInStackTrace();
-		// final List<String> li = new ArrayList<String>();
-		// li.add("charset=" + charset);
-		// for (StackTraceElement e : t.getStackTrace()) {
-		// li.add(e.toString());
-		// }
-		// return new StackReadLine(li);
-		// }
 		if (charset == null) {
 			Log.info("Using default charset");
 			return new ReadLineReader(new FileReader(f));
@@ -182,6 +200,25 @@ class PreprocessorInclude implements ReadLine {
 		Log.info("Using charset " + charset);
 		return new ReadLineReader(new InputStreamReader(new FileInputStream(f), charset));
 	}
+	
+	private ReadLine getReaderInclude(final URL url, String suf) throws IOException {
+		if (StartDiagramExtractReader.containsStartDiagram(url, charset)) {
+			int bloc = 0;
+			if (suf != null && suf.matches("\\d+")) {
+				bloc = Integer.parseInt(suf);
+			}
+			return new StartDiagramExtractReader(url, bloc, charset);
+		}
+		final InputStream is = url.openStream();
+		if (charset == null) {
+			Log.info("Using default charset");
+			return new ReadLineReader(new InputStreamReader(is));
+		}
+		Log.info("Using charset " + charset);
+		return new ReadLineReader(new InputStreamReader(is, charset));
+	}
+
+
 
 	public int getLineNumber() {
 		return numLine;
