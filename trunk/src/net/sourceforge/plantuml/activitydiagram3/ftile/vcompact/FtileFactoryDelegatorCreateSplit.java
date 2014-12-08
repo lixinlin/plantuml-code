@@ -47,6 +47,7 @@ import net.sourceforge.plantuml.activitydiagram3.ftile.FtileFactory;
 import net.sourceforge.plantuml.activitydiagram3.ftile.FtileFactoryDelegator;
 import net.sourceforge.plantuml.activitydiagram3.ftile.FtileGeometry;
 import net.sourceforge.plantuml.activitydiagram3.ftile.FtileHeightFixed;
+import net.sourceforge.plantuml.activitydiagram3.ftile.FtileKilled;
 import net.sourceforge.plantuml.activitydiagram3.ftile.FtileMarged;
 import net.sourceforge.plantuml.activitydiagram3.ftile.FtileUtils;
 import net.sourceforge.plantuml.activitydiagram3.ftile.Snake;
@@ -86,17 +87,27 @@ public class FtileFactoryDelegatorCreateSplit extends FtileFactoryDelegator {
 		final List<Connection> conns = new ArrayList<Connection>();
 
 		double x = 0;
+		boolean hasOut = false;
 		for (Ftile tmp : list) {
 			final Dimension2D dim = tmp.calculateDimension(getStringBounder());
 			conns.add(new ConnectionIn(tmp, x, arrowColor));
-			conns.add(new ConnectionOut(tmp, x, arrowColor, height1));
+			final boolean hasOutTmp = tmp.calculateDimension(getStringBounder()).hasPointOut();
+			if (hasOutTmp) {
+				conns.add(new ConnectionOut(tmp, x, arrowColor, height1));
+				hasOut = true;
+			}
 			x += dim.getWidth();
 		}
 		final double totalWidth = inner.calculateDimension(getStringBounder()).getWidth();
 		conns.add(new ConnectionHline2(inner, arrowColor, 0, list, totalWidth));
-		conns.add(new ConnectionHline2(inner, arrowColor, height1, list, totalWidth));
+		if (hasOut) {
+			conns.add(new ConnectionHline2(inner, arrowColor, height1, list, totalWidth));
+		}
 
 		inner = FtileUtils.addConnection(inner, conns);
+		if (hasOut == false) {
+			inner = new FtileKilled(inner);
+		}
 		return inner;
 	}
 
@@ -184,6 +195,7 @@ public class FtileFactoryDelegatorCreateSplit extends FtileFactoryDelegator {
 			ug = ug.apply(new UTranslate(x, 0));
 			final FtileGeometry geo = getFtile1().calculateDimension(ug.getStringBounder());
 			if (geo.hasPointOut() == false) {
+				assert false;
 				return;
 			}
 			final Snake s = new Snake(arrowColor, Arrows.asToDown());
