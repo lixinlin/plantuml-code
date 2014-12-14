@@ -66,7 +66,7 @@ public class Member {
 			url.setMember(true);
 			display = /* mstart.group(1).trim() + */mstart.group(mstart.groupCount()).trim();
 		} else {
-			final Pattern pend = MyPattern.cmpile("^([^\\[\\]]+)(" + UrlBuilder.getRegexp() + ")$");
+			final Pattern pend = MyPattern.cmpile("^((?:[^\\[\\]]|\\[[^\\[\\]]*\\])+)(" + UrlBuilder.getRegexp() + ")$");
 			final Matcher mend = pend.matcher(display);
 
 			if (mend.matches()) {

@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009-2014, Arnaud Roques
+ * (C) Copyright 2009-2013, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -27,41 +27,38 @@
  * in the United States and other countries.]
  *
  * Original Author:  Arnaud Roques
- * 
- * Revision $Revision: 14701 $
+ *
+ * Revision $Revision: 4762 $
  *
  */
-package net.sourceforge.plantuml.version;
+package net.sourceforge.plantuml.activitydiagram3.command;
 
-import java.util.Date;
+import net.sourceforge.plantuml.activitydiagram3.ActivityDiagram3;
+import net.sourceforge.plantuml.command.CommandExecutionResult;
+import net.sourceforge.plantuml.command.SingleLineCommand2;
+import net.sourceforge.plantuml.command.regex.RegexConcat;
+import net.sourceforge.plantuml.command.regex.RegexLeaf;
+import net.sourceforge.plantuml.command.regex.RegexResult;
+import net.sourceforge.plantuml.cucadiagram.Display;
 
-public class Version {
+public class CommandGroup3 extends SingleLineCommand2<ActivityDiagram3> {
 
-	public static int version() {
-		return 8015;
+	public CommandGroup3() {
+		super(getRegexConcat());
 	}
 
-	public static String versionString() {
-		if (beta() != 0) {
-			return "" + (version() + 1) + "beta" + beta();
-		}
-		return "" + version();
+	static RegexConcat getRegexConcat() {
+		return new RegexConcat(new RegexLeaf("^"), //
+				new RegexLeaf("group"), //
+				new RegexLeaf("\\s*"), //
+				new RegexLeaf("NAME", "(.*)"), //
+				new RegexLeaf(";?$"));
 	}
 
-	private static int beta() {
-		final int beta = 0;
-		return beta;
-	}
-
-	private static long compileTime() {
-		return 1418571712195L;
-	}
-
-	public static String compileTimeString() {
-		if (beta() != 0) {
-			return versionString();
-		}
-		return new Date(Version.compileTime()).toString();
+	@Override
+	protected CommandExecutionResult executeArg(ActivityDiagram3 diagram, RegexResult arg) {
+		diagram.startGroup(Display.getWithNewlines(arg.get("NAME", 0)), null, null);
+		return CommandExecutionResult.ok();
 	}
 
 }
