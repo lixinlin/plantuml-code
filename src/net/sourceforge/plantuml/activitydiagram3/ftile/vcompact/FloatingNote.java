@@ -68,7 +68,7 @@ public class FloatingNote implements Stencil, TextBlock {
 		final HtmlColor noteBackgroundColor = rose.getHtmlColor(skinParam, ColorParam.noteBackground);
 		final HtmlColor borderColor = rose.getHtmlColor(skinParam, ColorParam.noteBorder);
 
-		final FontConfiguration fc = new FontConfiguration(fontNote, fontColor, skinParam.getHyperlinkColor());
+		final FontConfiguration fc = new FontConfiguration(fontNote, fontColor, skinParam.getHyperlinkColor(), skinParam.useUnderlineForHyperlink());
 
 		final Sheet sheet = new CreoleParser(fc, HorizontalAlignment.LEFT, skinParam, false).createSheet(note);
 		final SheetBlock2 sheetBlock2 = new SheetBlock2(new SheetBlock1(sheet, 0), this, new UStroke(1));

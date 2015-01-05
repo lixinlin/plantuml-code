@@ -56,9 +56,9 @@ final public class ComponentRoseNoteHexagonal extends AbstractTextualComponent {
 	private final double deltaShadow;
 	private final UStroke stroke;
 
-	public ComponentRoseNoteHexagonal(HtmlColor back, HtmlColor foregroundColor, HtmlColor fontColor, HtmlColor hyperlinkColor, UFont font,
+	public ComponentRoseNoteHexagonal(HtmlColor back, HtmlColor foregroundColor, HtmlColor fontColor, HtmlColor hyperlinkColor, boolean useUnderlineForHyperlink, UFont font,
 			Display strings, ISkinSimple spriteContainer, double deltaShadow, UStroke stroke) {
-		super(strings, fontColor, hyperlinkColor, font, HorizontalAlignment.LEFT, 12, 12, 4, spriteContainer, 0, false);
+		super(strings, fontColor, hyperlinkColor, useUnderlineForHyperlink, font, HorizontalAlignment.LEFT, 12, 12, 4, spriteContainer, 0, false);
 		this.back = back;
 		this.foregroundColor = foregroundColor;
 		this.deltaShadow = deltaShadow;

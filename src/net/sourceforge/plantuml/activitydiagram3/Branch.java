@@ -53,6 +53,10 @@ public class Branch {
 
 	private Ftile ftile;
 
+	public boolean isOnlySingleStop() {
+		return list.isOnlySingleStop();
+	}
+
 	public Branch(Swimlane swimlane, Display labelPositive, Display labelTest, HtmlColor color) {
 		this.list = new InstructionList(swimlane);
 		this.labelTest = labelTest;
@@ -107,7 +111,7 @@ public class Branch {
 	public final HtmlColor getColor() {
 		return color;
 	}
-	
+
 	public boolean isEmpty() {
 		return list.isEmpty();
 	}

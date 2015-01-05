@@ -77,7 +77,7 @@ public class EntityImageActivity extends AbstractEntityImage {
 
 		this.desc = TextBlockUtils.create(entity.getDisplay(),
 				new FontConfiguration(SkinParamUtils.getFont(getSkinParam(), FontParam.ACTIVITY, stereotype), SkinParamUtils.getFontColor(getSkinParam(), FontParam.ACTIVITY, stereotype),
-						getSkinParam().getHyperlinkColor()),
+						getSkinParam().getHyperlinkColor(), getSkinParam().useUnderlineForHyperlink()),
 				HorizontalAlignment.CENTER, skinParam);
 		this.url = entity.getUrl99();
 	}
@@ -145,7 +145,8 @@ public class EntityImageActivity extends AbstractEntityImage {
 	}
 
 	public ShapeType getShapeType() {
-		if (getSkinParam().useOctagonForActivity()) {
+		final Stereotype stereotype = getStereo();
+		if (getSkinParam().useOctagonForActivity(stereotype)) {
 			return ShapeType.OCTAGON;
 		}
 		return ShapeType.ROUND_RECTANGLE;

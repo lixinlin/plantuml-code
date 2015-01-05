@@ -385,7 +385,7 @@ public class SequenceDiagramFileMakerPuma2 implements FileMaker {
 		final String fontFamily = diagram.getSkinParam().getFont(FontParam.FOOTER, null, false).getFamily(null);
 		final int fontSize = diagram.getSkinParam().getFont(FontParam.FOOTER, null, false).getSize();
 		final PngTitler pngTitler = new PngTitler(titleColor, diagram.getFooter(), fontSize, fontFamily,
-				diagram.getFooterAlignment(), hyperlinkColor);
+				diagram.getFooterAlignment(), hyperlinkColor, diagram.getSkinParam().useUnderlineForHyperlink());
 		final Dimension2D dim = pngTitler.getTextDimension(dummyStringBounder);
 		if (dim != null) {
 			area.setFooterArea(dim.getWidth(), dim.getHeight(), 3);
@@ -398,7 +398,7 @@ public class SequenceDiagramFileMakerPuma2 implements FileMaker {
 		final String fontFamily = diagram.getSkinParam().getFont(FontParam.HEADER, null, false).getFamily(null);
 		final int fontSize = diagram.getSkinParam().getFont(FontParam.HEADER, null, false).getSize();
 		final PngTitler pngTitler = new PngTitler(titleColor, diagram.getHeader(), fontSize, fontFamily,
-				diagram.getHeaderAlignment(), hyperlinkColor);
+				diagram.getHeaderAlignment(), hyperlinkColor, diagram.getSkinParam().useUnderlineForHyperlink());
 		final Dimension2D dim = pngTitler.getTextDimension(dummyStringBounder);
 		if (dim != null) {
 			area.setHeaderArea(dim.getWidth(), dim.getHeight(), 3);
@@ -411,7 +411,7 @@ public class SequenceDiagramFileMakerPuma2 implements FileMaker {
 		final String fontFamily = diagram.getSkinParam().getFont(FontParam.FOOTER, null, false).getFamily(null);
 		final int fontSize = diagram.getSkinParam().getFont(FontParam.FOOTER, null, false).getSize();
 		final PngTitler pngTitler = new PngTitler(titleColor, diagram.getFooter(), fontSize, fontFamily,
-				diagram.getFooterAlignment(), hyperlinkColor);
+				diagram.getFooterAlignment(), hyperlinkColor, diagram.getSkinParam().useUnderlineForHyperlink());
 		final TextBlock text = pngTitler.getTextBlock();
 		if (text == null) {
 			return;
@@ -425,7 +425,7 @@ public class SequenceDiagramFileMakerPuma2 implements FileMaker {
 		final String fontFamily = diagram.getSkinParam().getFont(FontParam.HEADER, null, false).getFamily(null);
 		final int fontSize = diagram.getSkinParam().getFont(FontParam.HEADER, null, false).getSize();
 		final PngTitler pngTitler = new PngTitler(titleColor, diagram.getHeader(), fontSize, fontFamily,
-				diagram.getHeaderAlignment(), hyperlinkColor);
+				diagram.getHeaderAlignment(), hyperlinkColor, diagram.getSkinParam().useUnderlineForHyperlink());
 		final TextBlock text = pngTitler.getTextBlock();
 		if (text == null) {
 			return;

@@ -60,7 +60,7 @@ public class TimeHeaderDay implements TextBlock {
 	private final double dayWidth;
 
 	private final UFont font = new UFont("Serif", Font.PLAIN, 9);
-	private final FontConfiguration fontConfig = new FontConfiguration(font, HtmlColorUtils.BLACK, HtmlColorUtils.BLUE);
+	private final FontConfiguration fontConfig = new FontConfiguration(font, HtmlColorUtils.BLACK, HtmlColorUtils.BLUE, true);
 
 	public TimeHeaderDay(Day start, Day end, TimeLine timeline, double dayWidth) {
 		this.start = start;

@@ -100,7 +100,7 @@ public class FtileWithNoteOpale extends AbstractFtile implements Stencil {
 		final HtmlColor noteBackgroundColor = rose.getHtmlColor(skinParam, ColorParam.noteBackground);
 		final HtmlColor borderColor = rose.getHtmlColor(skinParam, ColorParam.noteBorder);
 
-		final FontConfiguration fc = new FontConfiguration(fontNote, fontColor, skinParam.getHyperlinkColor());
+		final FontConfiguration fc = new FontConfiguration(fontNote, fontColor, skinParam.getHyperlinkColor(), skinParam.useUnderlineForHyperlink());
 
 		final Sheet sheet = new CreoleParser(fc, HorizontalAlignment.LEFT, skinParam, false).createSheet(note);
 		final TextBlock text = new SheetBlock2(new SheetBlock1(sheet, 0), this, new UStroke(1));

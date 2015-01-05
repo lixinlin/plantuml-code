@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 12235 $
+ * Revision $Revision: 14727 $
  *
  */
 package net.sourceforge.plantuml.skin;
@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sourceforge.plantuml.Log;
+import net.sourceforge.plantuml.StringUtils;
 
 public class SkinUtils {
 
@@ -50,7 +51,7 @@ public class SkinUtils {
 		if (result != null) {
 			return result;
 		}
-		final String packageName = className.toLowerCase();
+		final String packageName = StringUtils.goLowerCase(className);
 		result = tryLoading(packageName + "." + className, errors);
 		if (result != null) {
 			return result;

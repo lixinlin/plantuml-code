@@ -170,7 +170,7 @@ public final class CucaDiagramFileMakerSvek2 {
 				final ISkinParam skinParam = dotData.getSkinParam();
 				final FontConfiguration labelFont = new FontConfiguration(skinParam.getFont(FontParam.GENERIC_ARROW,
 						null, false), skinParam.getFontHtmlColor(FontParam.GENERIC_ARROW, null),
-						skinParam.getHyperlinkColor());
+						skinParam.getHyperlinkColor(), skinParam.useUnderlineForHyperlink());
 
 				final Line line = new Line(shapeUid1, shapeUid2, link, colorSequence, ltail, lhead, skinParam,
 						stringBounder, labelFont, getBibliotekon(), dotStringFactory.getGraphvizVersion(),
@@ -532,7 +532,7 @@ public final class CucaDiagramFileMakerSvek2 {
 		return TextBlockUtils.create(label,
 				new FontConfiguration(dotData.getSkinParam().getFont(fontParam, stereotype2, true), dotData
 						.getSkinParam().getFontHtmlColor(fontParam, stereotype2), dotData.getSkinParam()
-						.getHyperlinkColor()), HorizontalAlignment.CENTER, dotData.getSkinParam());
+						.getHyperlinkColor(), dotData.getSkinParam().useUnderlineForHyperlink()), HorizontalAlignment.CENTER, dotData.getSkinParam());
 	}
 
 	private TextBlock getStereoBlock(IGroup g) {
@@ -554,7 +554,7 @@ public final class CucaDiagramFileMakerSvek2 {
 		return TextBlockUtils.create(Display.create(stereos),
 				new FontConfiguration(dotData.getSkinParam().getFont(fontParam, stereotype2, false), dotData
 						.getSkinParam().getFontHtmlColor(fontParam, stereotype2), dotData.getSkinParam()
-						.getHyperlinkColor()), HorizontalAlignment.CENTER, dotData.getSkinParam());
+						.getHyperlinkColor(), dotData.getSkinParam().useUnderlineForHyperlink()), HorizontalAlignment.CENTER, dotData.getSkinParam());
 	}
 
 }

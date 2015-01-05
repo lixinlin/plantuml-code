@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 13836 $
+ * Revision $Revision: 14712 $
  *
  */
 package net.sourceforge.plantuml.skin.bluemodern;
@@ -56,9 +56,9 @@ public class ComponentBlueModernSelfArrow extends AbstractComponentBlueModernArr
 
 	private final double arrowWidth = 45;
 
-	public ComponentBlueModernSelfArrow(HtmlColor foregroundColor, HtmlColor colorFont, HtmlColor hyperlinkColor, UFont font,
+	public ComponentBlueModernSelfArrow(HtmlColor foregroundColor, HtmlColor colorFont, HtmlColor hyperlinkColor, boolean useUnderlineForHyperlink, UFont font,
 			Display stringsToDisplay, ArrowConfiguration arrowConfiguration, ISkinSimple spriteContainer) {
-		super(foregroundColor, colorFont, hyperlinkColor, font, stringsToDisplay, arrowConfiguration, spriteContainer);
+		super(foregroundColor, colorFont, hyperlinkColor, useUnderlineForHyperlink, font, stringsToDisplay, arrowConfiguration, spriteContainer);
 	}
 
 	@Override

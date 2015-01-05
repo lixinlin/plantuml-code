@@ -35,6 +35,7 @@ package net.sourceforge.plantuml.sequencediagram.command;
 
 import java.util.StringTokenizer;
 
+import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.classdiagram.command.CommandLinkClass;
 import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.command.SingleLineCommand2;
@@ -134,8 +135,8 @@ public class CommandArrow extends SingleLineCommand2<SequenceDiagram> {
 		Participant p1;
 		Participant p2;
 
-		final String dressing1 = CommandLinkClass.notNull(arg.get("ARROW_DRESSING1", 0)).toLowerCase();
-		final String dressing2 = CommandLinkClass.notNull(arg.get("ARROW_DRESSING2", 0)).toLowerCase();
+		final String dressing1 = StringUtils.goLowerCase(CommandLinkClass.notNull(arg.get("ARROW_DRESSING1", 0)));
+		final String dressing2 = StringUtils.goLowerCase(CommandLinkClass.notNull(arg.get("ARROW_DRESSING2", 0)));
 
 		final boolean circleAtStart;
 		final boolean circleAtEnd;

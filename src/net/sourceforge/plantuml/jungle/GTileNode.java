@@ -74,7 +74,7 @@ public class GTileNode implements GTile {
 		final HtmlColor fontColor = rose.getFontColor(skinParam, FontParam.NOTE);
 		final UFont fontNote = skinParam.getFont(FontParam.NOTE, null, false);
 
-		final FontConfiguration fc = new FontConfiguration(fontNote, fontColor, skinParam.getHyperlinkColor());
+		final FontConfiguration fc = new FontConfiguration(fontNote, fontColor, skinParam.getHyperlinkColor(), skinParam.useUnderlineForHyperlink());
 
 		final Sheet sheet9 = new CreoleParser(fc, HorizontalAlignment.LEFT, skinParam, false).createSheet(display);
 		final SheetBlock1 sheetBlock1 = new SheetBlock1(sheet9, 0);

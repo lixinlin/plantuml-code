@@ -135,7 +135,7 @@ public final class FactoryNoteActivityCommand implements SingleMultiFactoryComma
 
 		final Link link;
 
-		final Position position = Position.valueOf(arg.get("POSITION", 0).toUpperCase()).withRankdir(
+		final Position position = Position.valueOf(StringUtils.goUpperCase(arg.get("POSITION", 0))).withRankdir(
 				diagram.getSkinParam().getRankdir());
 
 		final LinkType type = new LinkType(LinkDecor.NONE, LinkDecor.NONE).getDashed();

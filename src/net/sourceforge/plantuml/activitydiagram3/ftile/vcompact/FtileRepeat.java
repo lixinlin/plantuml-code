@@ -99,9 +99,9 @@ class FtileRepeat extends AbstractFtile {
 
 	public static Ftile create(Swimlane swimlane, Ftile repeat, Display test, Display yes, Display out,
 			HtmlColor borderColor, HtmlColor backColor, UFont fontTest, HtmlColor arrowColor,
-			HtmlColor endRepeatLinkColor, ConditionStyle conditionStyle, ISkinSimple spriteContainer) {
+			HtmlColor endRepeatLinkColor, ConditionStyle conditionStyle, ISkinSimple spriteContainer, HtmlColor hyperlinkColor, boolean useUnderlineForHyperlink) {
 
-		final FontConfiguration fc = new FontConfiguration(fontTest, HtmlColorUtils.BLACK, HtmlColorUtils.BLUE);
+		final FontConfiguration fc = new FontConfiguration(fontTest, HtmlColorUtils.BLACK, hyperlinkColor, useUnderlineForHyperlink);
 		final TextBlock tbTest = TextBlockUtils.create(test, fc, HorizontalAlignment.LEFT, spriteContainer);
 		final TextBlock yesTb = TextBlockUtils.create(yes, fc, HorizontalAlignment.LEFT, spriteContainer);
 		final TextBlock outTb = TextBlockUtils.create(out, fc, HorizontalAlignment.LEFT, spriteContainer);

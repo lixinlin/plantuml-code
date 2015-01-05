@@ -92,7 +92,7 @@ public class Swimlanes implements TextBlock {
 	public Swimlanes(ISkinParam skinParam) {
 		this.skinParam = skinParam;
 		final UFont font = skinParam.getFont(FontParam.TITLE, null, false);
-		this.fontConfiguration = new FontConfiguration(font, HtmlColorUtils.BLACK, skinParam.getHyperlinkColor());
+		this.fontConfiguration = new FontConfiguration(font, HtmlColorUtils.BLACK, skinParam.getHyperlinkColor(), skinParam.useUnderlineForHyperlink());
 
 	}
 

@@ -100,8 +100,8 @@ class FtileWhile extends AbstractFtile {
 		this.supplementarySouthText = supplementarySouthText;
 	}
 
-	private static TextBlock createLabel1(Display test, Display yes, UFont font, ISkinSimple spriteContainer) {
-		final FontConfiguration fc = new FontConfiguration(font, HtmlColorUtils.BLACK, HtmlColorUtils.BLUE);
+	private static TextBlock createLabel1(Display test, Display yes, UFont font, ISkinSimple spriteContainer, HtmlColor hyperlinkColor, boolean useUnderlineForHyperlink) {
+		final FontConfiguration fc = new FontConfiguration(font, HtmlColorUtils.BLACK, hyperlinkColor, useUnderlineForHyperlink);
 		final TextBlock tmpb = TextBlockUtils.create(yes, fc, HorizontalAlignment.LEFT, spriteContainer);
 		if (test == null) {
 			return tmpb;
@@ -112,10 +112,10 @@ class FtileWhile extends AbstractFtile {
 
 	public static Ftile create(Swimlane swimlane, Ftile whileBlock, Display test, HtmlColor borderColor,
 			HtmlColor backColor, HtmlColor arrowColor, Display yes, Display out2, UFont fontArrow, HtmlColor endInlinkColor,
-			LinkRendering afterEndwhile, FtileFactory ftileFactory, ConditionStyle conditionStyle, UFont fontTest) {
+			LinkRendering afterEndwhile, FtileFactory ftileFactory, ConditionStyle conditionStyle, UFont fontTest, HtmlColor hyperlinkColor, boolean useUnderlineForHyperlink) {
 
-		final FontConfiguration fcArrow = new FontConfiguration(fontArrow, HtmlColorUtils.BLACK, HtmlColorUtils.BLUE);
-		final FontConfiguration fcTest = new FontConfiguration(fontTest, HtmlColorUtils.BLACK, HtmlColorUtils.BLUE);
+		final FontConfiguration fcArrow = new FontConfiguration(fontArrow, HtmlColorUtils.BLACK, hyperlinkColor, useUnderlineForHyperlink);
+		final FontConfiguration fcTest = new FontConfiguration(fontTest, HtmlColorUtils.BLACK, hyperlinkColor, useUnderlineForHyperlink);
 		final TextBlock yesTb = TextBlockUtils.create(yes, fcArrow, HorizontalAlignment.LEFT, ftileFactory);
 		final TextBlock testTb = TextBlockUtils.create(test, fcTest, HorizontalAlignment.LEFT, ftileFactory);
 		final TextBlock out = TextBlockUtils.create(out2, fcArrow, HorizontalAlignment.LEFT, ftileFactory);
@@ -131,7 +131,7 @@ class FtileWhile extends AbstractFtile {
 			diamond1 = new FtileDiamondFoo1(whileBlock.shadowing(), backColor, borderColor, swimlane, testTb)
 					.withNorth(yesTb).withWest(out);
 		} else if (conditionStyle == ConditionStyle.DIAMOND) {
-			supplementarySouthText = createLabel1(test, yes, fontArrow, ftileFactory);
+			supplementarySouthText = createLabel1(test, yes, fontArrow, ftileFactory, hyperlinkColor, useUnderlineForHyperlink);
 			diamond1 = new FtileDiamond(whileBlock.shadowing(), backColor, borderColor, swimlane).withWest(out)
 					.withSouth(supplementarySouthText);
 		} else {

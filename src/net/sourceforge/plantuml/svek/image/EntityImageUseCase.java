@@ -85,7 +85,7 @@ public class EntityImageUseCase extends AbstractEntityImage {
 					Display.getWithNewlines(stereotype.getLabel()),
 					new FontConfiguration(SkinParamUtils.getFont(getSkinParam(),
 							FontParam.ACTOR_STEREOTYPE, stereotype), SkinParamUtils.getFontColor(getSkinParam(),
-					FontParam.ACTOR_STEREOTYPE, null), getSkinParam().getHyperlinkColor()), HorizontalAlignment.CENTER, skinParam);
+					FontParam.ACTOR_STEREOTYPE, null), getSkinParam().getHyperlinkColor(), getSkinParam().useUnderlineForHyperlink()), HorizontalAlignment.CENTER, skinParam);
 			this.desc = TextBlockUtils.mergeTB(stereo, tmp, HorizontalAlignment.CENTER);
 		}
 		this.url = entity.getUrl99();

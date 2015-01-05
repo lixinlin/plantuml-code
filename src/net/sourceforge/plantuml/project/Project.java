@@ -39,6 +39,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import net.sourceforge.plantuml.StringUtils;
+
 public class Project {
 
 	private final Map<String, FreeVariable> variables = new TreeMap<String, FreeVariable>();
@@ -121,7 +123,7 @@ public class Project {
 			if (item == null) {
 				throw new IllegalArgumentException("No such variable: " + desc);
 			}
-			return new Constant(ItemCaract.valueOf(desc.substring(idx + 1).toUpperCase()).getData(item));
+			return new Constant(ItemCaract.valueOf(StringUtils.goUpperCase(desc.substring(idx + 1))).getData(item));
 		}
 		if (desc.startsWith("^")) {
 			final Item item = items.get(desc.substring(1));

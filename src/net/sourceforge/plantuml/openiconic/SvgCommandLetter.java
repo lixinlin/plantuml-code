@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
 import net.sourceforge.plantuml.ugraphic.UTranslate;
 
@@ -61,7 +62,7 @@ public class SvgCommandLetter implements SvgCommand {
 	}
 
 	public int argumentNumber() {
-		switch (Character.toLowerCase(letter)) {
+		switch (StringUtils.goLowerCase(letter)) {
 		case 'm':
 		case 'M':
 		case 'l':

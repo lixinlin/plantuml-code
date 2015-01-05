@@ -34,6 +34,7 @@ package net.sourceforge.plantuml.command;
 import java.util.List;
 
 import net.sourceforge.plantuml.SkinParam;
+import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.cucadiagram.CucaDiagram;
 import net.sourceforge.plantuml.cucadiagram.Rankdir;
 
@@ -45,7 +46,7 @@ public class CommandRankDir extends SingleLineCommand<CucaDiagram> {
 
 	@Override
 	protected CommandExecutionResult executeArg(CucaDiagram diagram, List<String> arg) {
-		final String s = arg.get(0).toUpperCase().replace(' ', '_');
+		final String s = StringUtils.goUpperCase(arg.get(0)).replace(' ', '_');
 		((SkinParam) diagram.getSkinParam()).setRankdir(Rankdir.valueOf(s));
 		// diagram.setRankdir(Rankdir.valueOf(s));
 		return CommandExecutionResult.ok();

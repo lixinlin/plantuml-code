@@ -40,6 +40,7 @@ import java.util.Map;
 import net.sourceforge.plantuml.ColorParam;
 import net.sourceforge.plantuml.Dimension2DDouble;
 import net.sourceforge.plantuml.FontParam;
+import net.sourceforge.plantuml.StringUtils;
 
 public abstract class USymbol {
 
@@ -102,7 +103,7 @@ public abstract class USymbol {
 	}
 
 	public static USymbol getFromString(String s) {
-		final USymbol result = all.get(s.toUpperCase());
+		final USymbol result = all.get(StringUtils.goUpperCase(s));
 		if (result == null) {
 			if (s.equalsIgnoreCase("component")) {
 				return COMPONENT2;
@@ -113,7 +114,7 @@ public abstract class USymbol {
 	}
 
 	private static USymbol record(String code, USymbol symbol) {
-		all.put(code.toUpperCase(), symbol);
+		all.put(StringUtils.goUpperCase(code), symbol);
 		return symbol;
 	}
 

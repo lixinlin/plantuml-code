@@ -517,22 +517,22 @@ public class Line implements Moveable, Hideable {
 	}
 
 	private int getIndexFromColor(String svg, int color) {
-		String s = "stroke=\"" + StringUtils.getAsHtml(color).toLowerCase() + "\"";
+		String s = "stroke=\"" + StringUtils.goLowerCase(StringUtils.getAsHtml(color)) + "\"";
 		int idx = svg.indexOf(s);
 		if (idx != -1) {
 			return idx;
 		}
-		s = ";stroke:" + StringUtils.getAsHtml(color).toLowerCase() + ";";
+		s = ";stroke:" + StringUtils.goLowerCase(StringUtils.getAsHtml(color)) + ";";
 		idx = svg.indexOf(s);
 		if (idx != -1) {
 			return idx;
 		}
-		s = "fill=\"" + StringUtils.getAsHtml(color).toLowerCase() + "\"";
+		s = "fill=\"" + StringUtils.goLowerCase(StringUtils.getAsHtml(color)) + "\"";
 		idx = svg.indexOf(s);
 		if (idx != -1) {
 			return idx;
 		}
-		Log.info("Cannot find color=" + color + " " + StringUtils.getAsHtml(color).toLowerCase());
+		Log.info("Cannot find color=" + color + " " + StringUtils.goLowerCase(StringUtils.getAsHtml(color)));
 		return -1;
 
 	}

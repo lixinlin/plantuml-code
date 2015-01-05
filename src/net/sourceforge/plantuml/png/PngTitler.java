@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 13841 $
+ * Revision $Revision: 14708 $
  *
  */
 package net.sourceforge.plantuml.png;
@@ -54,15 +54,17 @@ public class PngTitler {
 	private final int fontSize;
 	private final String fontFamily;
 	private final HorizontalAlignment horizontalAlignment;
+	private final boolean useUnderlineForHyperlink;
 
 	public PngTitler(HtmlColor textColor, Display text, int fontSize, String fontFamily,
-			HorizontalAlignment horizontalAlignment, HtmlColor hyperlinkColor) {
+			HorizontalAlignment horizontalAlignment, HtmlColor hyperlinkColor, boolean useUnderlineForHyperlink) {
 		this.textColor = textColor;
 		this.text = text;
 		this.fontSize = fontSize;
 		this.fontFamily = fontFamily;
 		this.horizontalAlignment = horizontalAlignment;
 		this.hyperlinkColor = hyperlinkColor;
+		this.useUnderlineForHyperlink = useUnderlineForHyperlink;
 
 	}
 
@@ -79,7 +81,7 @@ public class PngTitler {
 			return null;
 		}
 		final UFont normalFont = new UFont(fontFamily, Font.PLAIN, fontSize);
-		return TextBlockUtils.create(text, new FontConfiguration(normalFont, textColor, hyperlinkColor), horizontalAlignment,
+		return TextBlockUtils.create(text, new FontConfiguration(normalFont, textColor, hyperlinkColor, useUnderlineForHyperlink), horizontalAlignment,
 				new SpriteContainerEmpty());
 	}
 

@@ -40,7 +40,7 @@ import net.sourceforge.plantuml.activitydiagram.command.CommandElse;
 import net.sourceforge.plantuml.activitydiagram.command.CommandEndPartition;
 import net.sourceforge.plantuml.activitydiagram.command.CommandEndif;
 import net.sourceforge.plantuml.activitydiagram.command.CommandIf;
-import net.sourceforge.plantuml.activitydiagram.command.CommandLinkActivity2;
+import net.sourceforge.plantuml.activitydiagram.command.CommandLinkActivity;
 import net.sourceforge.plantuml.activitydiagram.command.CommandLinkLongActivity2;
 import net.sourceforge.plantuml.activitydiagram.command.CommandPartition;
 import net.sourceforge.plantuml.command.Command;
@@ -80,7 +80,7 @@ public class ActivityDiagramFactory extends UmlDiagramFactory {
 		cmds.add(new CommandElse());
 		cmds.add(new CommandEndif());
 
-		cmds.add(new CommandLinkActivity2());
+		cmds.add(new CommandLinkActivity());
 		// addCommand(new CommandInnerConcurrent(system));
 
 		return cmds;

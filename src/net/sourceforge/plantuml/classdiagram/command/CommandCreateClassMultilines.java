@@ -170,7 +170,7 @@ public class CommandCreateClassMultilines extends CommandMultilines2<ClassDiagra
 
 	private IEntity executeArg0(ClassDiagram diagram, RegexResult arg) {
 
-		final LeafType type = LeafType.getLeafType(arg.get("TYPE", 0).toUpperCase());
+		final LeafType type = LeafType.getLeafType(StringUtils.goUpperCase(arg.get("TYPE", 0)));
 
 		final Code code = Code.of(arg.getLazzy("CODE", 0)).eventuallyRemoveStartingAndEndingDoubleQuote("\"([:");
 		final String display = arg.getLazzy("DISPLAY", 0);
@@ -225,7 +225,7 @@ public class CommandCreateClassMultilines extends CommandMultilines2<ClassDiagra
 		if (s == null) {
 			return;
 		}
-		final LinkStyle style = LinkStyle.valueOf(s.toUpperCase());
+		final LinkStyle style = LinkStyle.valueOf(StringUtils.goUpperCase(s));
 		entity.setSpecificLineStroke(getStroke(style));
 
 	}

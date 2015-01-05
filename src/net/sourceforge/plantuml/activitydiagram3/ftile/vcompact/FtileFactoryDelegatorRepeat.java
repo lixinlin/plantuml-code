@@ -67,7 +67,7 @@ public class FtileFactoryDelegatorRepeat extends FtileFactoryDelegator {
 		final HtmlColor endRepeatLinkColor = endRepeatLinkRendering == null ? null : endRepeatLinkRendering.getColor();
 
 		return FtileRepeat.create(swimlane, repeat, test, yes, out, borderColor, backColor, font, arrowColor,
-				endRepeatLinkColor, conditionStyle, this);
+				endRepeatLinkColor, conditionStyle, this, getSkinParam().getHyperlinkColor(), getSkinParam().useUnderlineForHyperlink());
 	}
 
 }

@@ -68,7 +68,7 @@ public class EntityImagePseudoState extends AbstractEntityImage {
 		this.desc = TextBlockUtils.create(Display.create("H"),
 				new FontConfiguration(SkinParamUtils.getFont(getSkinParam(),
 						FontParam.STATE, stereotype), SkinParamUtils.getFontColor(getSkinParam(), FontParam.STATE,
-				stereotype), getSkinParam().getHyperlinkColor()),
+				stereotype), getSkinParam().getHyperlinkColor(), getSkinParam().useUnderlineForHyperlink()),
 				HorizontalAlignment.CENTER, skinParam);
 
 	}

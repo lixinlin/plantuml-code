@@ -173,7 +173,7 @@ public class FontChecker {
 				if (ug instanceof UGraphic2) {
 					ug = (UGraphic2) ug.apply(new UTranslate(dim / 3, 2 * dim / 3));
 					final UText text = new UText("" + c, new FontConfiguration(font, HtmlColorUtils.BLACK,
-							HtmlColorUtils.BLUE));
+							HtmlColorUtils.BLUE, true));
 					ug.draw(text);
 				}
 			}

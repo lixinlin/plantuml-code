@@ -42,6 +42,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 
+import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.command.regex.MyPattern;
 
 public class HtmlColorSetSimple implements IHtmlColorSet {
@@ -234,13 +235,13 @@ public class HtmlColorSetSimple implements IHtmlColorSet {
 	}
 
 	private void register(String s, String color) {
-		htmlNames.put(s.toLowerCase(), color);
+		htmlNames.put(StringUtils.goLowerCase(s), color);
 		names.add(s);
 	}
 
 	private HtmlColor build(String s) {
 
-		s = removeFirstDieseAndToLowercase(s);
+		s = removeFirstDieseAndgoLowerCase(s);
 		final Color color;
 		if (s.equalsIgnoreCase("transparent")) {
 			return new HtmlColorTransparent();
@@ -257,7 +258,7 @@ public class HtmlColorSetSimple implements IHtmlColorSet {
 	}
 
 	private boolean isValid(String s, boolean acceptTransparent) {
-		s = removeFirstDieseAndToLowercase(s);
+		s = removeFirstDieseAndgoLowerCase(s);
 		if (s.matches("[0-9A-Fa-f]{6}")) {
 			return true;
 		}
@@ -271,8 +272,8 @@ public class HtmlColorSetSimple implements IHtmlColorSet {
 
 	}
 
-	private String removeFirstDieseAndToLowercase(String s) {
-		s = s.toLowerCase();
+	private String removeFirstDieseAndgoLowerCase(String s) {
+		s = StringUtils.goLowerCase(s);
 		if (s.startsWith("#")) {
 			s = s.substring(1);
 		}

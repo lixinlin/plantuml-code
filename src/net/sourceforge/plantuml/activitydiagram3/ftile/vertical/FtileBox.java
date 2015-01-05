@@ -118,7 +118,7 @@ public class FtileBox extends AbstractFtile {
 		this.backColor = backColor;
 		this.inRenreding = new LinkRendering(arrowColor);
 		final HtmlColor fontColor = skinParam.getFontHtmlColor(FontParam.ACTIVITY, null);
-		final FontConfiguration fc = new FontConfiguration(font, fontColor, skinParam.getHyperlinkColor());
+		final FontConfiguration fc = new FontConfiguration(font, fontColor, skinParam.getHyperlinkColor(), skinParam.useUnderlineForHyperlink());
 
 		final Sheet sheet = new CreoleParser(fc, HorizontalAlignment.LEFT, skinParam, false).createSheet(label);
 		this.tb = new SheetBlock2(new SheetBlock1(sheet, 0), new MyStencil(), new UStroke(1));

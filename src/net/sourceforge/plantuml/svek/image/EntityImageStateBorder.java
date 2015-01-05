@@ -85,7 +85,7 @@ public class EntityImageStateBorder extends AbstractEntityImage {
 
 		this.desc = TextBlockUtils.create(leaf.getDisplay(),
 				new FontConfiguration(SkinParamUtils.getFont(getSkinParam(), FontParam.STATE, stereotype), SkinParamUtils.getFontColor(getSkinParam(), FontParam.STATE, stereotype),
-						getSkinParam().getHyperlinkColor()),
+						getSkinParam().getHyperlinkColor(), getSkinParam().useUnderlineForHyperlink()),
 				HorizontalAlignment.CENTER, skinParam);
 	}
 

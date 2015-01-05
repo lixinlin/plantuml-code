@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 14056 $
+ * Revision $Revision: 14726 $
  *
  */
 package net.sourceforge.plantuml.graphic;
@@ -47,6 +47,7 @@ import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 
 import net.sourceforge.plantuml.FileSystem;
+import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.command.regex.MyPattern;
 
 public class Img implements HtmlCommand {
@@ -75,7 +76,7 @@ public class Img implements HtmlCommand {
 		if (m.find() == false) {
 			return ImgValign.TOP;
 		}
-		return ImgValign.valueOf(m.group(1).toUpperCase());
+		return ImgValign.valueOf(StringUtils.goUpperCase(m.group(1)));
 	}
 
 	static HtmlCommand getInstance(String html, boolean withSrc) {

@@ -58,11 +58,12 @@ import net.sourceforge.plantuml.version.PSystemVersion;
 
 public class PSystemDonors extends AbstractPSystem {
 
-	public static final String DONORS = "UDfTaSzkWp0Cnkz-2iwyHGGJ4cFTL7RQpIrkoGes2W4Dddwkja1Qd_B9_twVOxhqFyZ11tboYM4lRF4CdvJk8JrKiaitWWcjU8B2xIbQeAOJZjuY9mTf6Gmtuf92oAzqVrukMX7AaQ72Q15xo6qGjWEpZvOPwcb7MA2mwMEmG1aefn5gJqDBd6GYW_hBmnuQuRL_QXK7cNIMawDC8q4vFUNJRr4ZGGmMtY9gx6Efgqn7FyYDdZDhhKwzeblKwN6ppLSunFH-XVVEpjgGs_DDoRUCPNWPjz4SGQGqGxxsrhibgR2L1g6y7_shHHqVrQNKxT-bSLlqJ8nUwvHFkSe_UBezkE86VW7c0eiu";
+	public static final String DONORS = "UDfTKK5kWq0ClFiLdFa52XKIfMcLvDIR4vpW1coqB57XzNNQBalYquuy7izuipRzBtBmGPvSaebNOJp1WT9Osa6b4Re1iZ2AHoXSRD44UphYu1absMeZa4cjBYcK_4ptv_biZ417WGfNYyH3pW5m2rcKrXlinsXXWeBJnnA5ChWS1zXxwXkIPAFQMxuyxA41NhkdKNMmqPObsUau49JZKp_zKWiIGC_mjdADtHhQggobRvJQphbfs5Glw2PBkbjYomMsQ_T-XlUMRpQGy-bgpfSE2xmCYxIiJAHqWtpksBifgR3H6g6y7_spGPDVyL9gutTPNISxaw0tdlapN-MVURe-f9Bw0VvESXJY6Nu0AQ-Hq000";
 
-//	public ImageData exportDiagram(OutputStream os, int num, FileFormatOption fileFormat) throws IOException {
-//		return getGraphicStrings().exportDiagram(os, fileFormat);
-//	}
+	// public ImageData exportDiagram(OutputStream os, int num, FileFormatOption
+	// fileFormat) throws IOException {
+	// return getGraphicStrings().exportDiagram(os, fileFormat);
+	// }
 
 	public ImageData exportDiagram(OutputStream os, int num, FileFormatOption fileFormat) throws IOException {
 		final GraphicStrings result = getGraphicStrings();
@@ -76,16 +77,36 @@ public class PSystemDonors extends AbstractPSystem {
 		final List<String> lines = new ArrayList<String>();
 		lines.add("<b>Special thanks to our sponsors and donors !");
 		lines.add(" ");
+		int i = 0;
+		final List<String> donors = getDonors();
+		final int maxLine = (donors.size() + 1) / 2;
+		for (String d : donors) {
+			lines.add(d);
+			i++;
+			if (i == maxLine) {
+				lines.add(" ");
+				lines.add(" ");
+				i = 0;
+			}
+		}
+		lines.add(" ");
+		final UFont font = new UFont("SansSerif", Font.PLAIN, 12);
+		final GraphicStrings graphicStrings = new GraphicStrings(lines, font, HtmlColorUtils.BLACK,
+				HtmlColorUtils.WHITE, UAntiAliasing.ANTI_ALIASING_ON, PSystemVersion.getPlantumlImage(),
+				GraphicPosition.BACKGROUND_CORNER_BOTTOM_RIGHT);
+		graphicStrings.setMaxLine(maxLine + 2);
+		return graphicStrings;
+	}
+
+	private List<String> getDonors() throws IOException {
+		final List<String> lines = new ArrayList<String>();
 		final Transcoder t = new TranscoderImpl();
 		final String s = t.decode(DONORS).replace('*', '.');
 		final StringTokenizer st = new StringTokenizer(s, "\n");
 		while (st.hasMoreTokens()) {
 			lines.add(st.nextToken());
 		}
-		lines.add(" ");
-		final UFont font = new UFont("SansSerif", Font.PLAIN, 12);
-		return new GraphicStrings(lines, font, HtmlColorUtils.BLACK, HtmlColorUtils.WHITE,
-				UAntiAliasing.ANTI_ALIASING_ON, PSystemVersion.getPlantumlImage(), GraphicPosition.BACKGROUND_CORNER_BOTTOM_RIGHT);
+		return lines;
 	}
 
 	public DiagramDescription getDescription() {

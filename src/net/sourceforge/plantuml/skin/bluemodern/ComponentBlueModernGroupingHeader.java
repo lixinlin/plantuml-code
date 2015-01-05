@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 13841 $
+ * Revision $Revision: 14712 $
  *
  */
 package net.sourceforge.plantuml.skin.bluemodern;
@@ -67,9 +67,9 @@ public class ComponentBlueModernGroupingHeader extends AbstractTextualComponent 
 	private final HtmlColor borderColor;
 
 	public ComponentBlueModernGroupingHeader(HtmlColor headerBackgroundColor, HtmlColor generalBackgroundColor,
-			HtmlColor borderColor, HtmlColor fontColor1, HtmlColor fontColor2, HtmlColor hyperlinkColor, UFont bigFont,
+			HtmlColor borderColor, HtmlColor fontColor1, HtmlColor fontColor2, HtmlColor hyperlinkColor, boolean useUnderlineForHyperlink, UFont bigFont,
 			UFont smallFont, Display strings, ISkinSimple spriteContainer) {
-		super(strings.get(0), fontColor1, hyperlinkColor, bigFont, HorizontalAlignment.LEFT, 15, 30, 1,
+		super(strings.get(0), fontColor1, hyperlinkColor, useUnderlineForHyperlink, bigFont, HorizontalAlignment.LEFT, 15, 30, 1,
 				spriteContainer, 0);
 		this.headerBackgroundColor = headerBackgroundColor;
 		this.generalBackgroundColor = generalBackgroundColor;
@@ -78,7 +78,7 @@ public class ComponentBlueModernGroupingHeader extends AbstractTextualComponent 
 			this.commentTextBlock = null;
 		} else {
 			this.commentTextBlock = TextBlockUtils.create(Display.create("[" + strings.get(1) + "]"),
-					new FontConfiguration(smallFont, fontColor2, hyperlinkColor), HorizontalAlignment.LEFT,
+					new FontConfiguration(smallFont, fontColor2, hyperlinkColor, useUnderlineForHyperlink), HorizontalAlignment.LEFT,
 					spriteContainer);
 		}
 	}

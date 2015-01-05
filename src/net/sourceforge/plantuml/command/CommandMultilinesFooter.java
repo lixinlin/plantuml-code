@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 14321 $
+ * Revision $Revision: 14726 $
  *
  */
 package net.sourceforge.plantuml.command;
@@ -60,7 +60,7 @@ public class CommandMultilinesFooter extends CommandMultilines<UmlDiagram> {
 		}
 		final String align = m.group(1);
 		if (align != null) {
-			diagram.setFooterAlignment(HorizontalAlignment.valueOf(align.toUpperCase()));
+			diagram.setFooterAlignment(HorizontalAlignment.valueOf(StringUtils.goUpperCase(align)));
 		}
 		final Display strings = Display.create(lines.subList(1, lines.size() - 1));
 		if (strings.size() > 0) {

@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 14321 $
+ * Revision $Revision: 14727 $
  *
  */
 package net.sourceforge.plantuml;
@@ -240,7 +240,7 @@ public class Option {
 				OptionFlags.getInstance().setUseSuggestEngine(false);
 			} else if (s.equalsIgnoreCase("-printfonts")) {
 				OptionFlags.getInstance().setPrintFonts(true);
-			} else if (s.toLowerCase().startsWith("-ftp")) {
+			} else if (StringUtils.goLowerCase(s).startsWith("-ftp")) {
 				final int x = s.indexOf(':');
 				if (x == -1) {
 					this.ftpPort = 4242;

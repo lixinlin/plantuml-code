@@ -167,7 +167,8 @@ public class ActivityDiagram3 extends UmlDiagram {
 	}
 
 	@Override
-	protected ImageData exportDiagramInternal(OutputStream os, int index, FileFormatOption fileFormatOption) throws IOException {
+	protected ImageData exportDiagramInternal(OutputStream os, int index, FileFormatOption fileFormatOption)
+			throws IOException {
 		// BUG42
 		// TextBlock result = swinlanes;
 		TextBlock result = new TextBlockCompressed(swinlanes);
@@ -206,8 +207,8 @@ public class ActivityDiagram3 extends UmlDiagram {
 			return original;
 		}
 		final TextBlock text = TextBlockUtils.create(title, new FontConfiguration(getFont(FontParam.TITLE),
-				getFontColor(FontParam.TITLE, null), getSkinParam().getHyperlinkColor()), HorizontalAlignment.CENTER,
-				getSkinParam());
+				getFontColor(FontParam.TITLE, null), getSkinParam().getHyperlinkColor(), getSkinParam()
+						.useUnderlineForHyperlink()), HorizontalAlignment.CENTER, getSkinParam());
 
 		return new DecorateTextBlock(original, text, HorizontalAlignment.CENTER);
 	}
@@ -219,11 +220,11 @@ public class ActivityDiagram3 extends UmlDiagram {
 			return original;
 		}
 		final TextBlock textFooter = footer == null ? null : TextBlockUtils.create(footer, new FontConfiguration(
-				getFont(FontParam.FOOTER), getFontColor(FontParam.FOOTER, null), getSkinParam().getHyperlinkColor()),
-				getFooterAlignment(), getSkinParam());
+				getFont(FontParam.FOOTER), getFontColor(FontParam.FOOTER, null), getSkinParam().getHyperlinkColor(),
+				getSkinParam().useUnderlineForHyperlink()), getFooterAlignment(), getSkinParam());
 		final TextBlock textHeader = header == null ? null : TextBlockUtils.create(header, new FontConfiguration(
-				getFont(FontParam.HEADER), getFontColor(FontParam.HEADER, null), getSkinParam().getHyperlinkColor()),
-				getHeaderAlignment(), getSkinParam());
+				getFont(FontParam.HEADER), getFontColor(FontParam.HEADER, null), getSkinParam().getHyperlinkColor(),
+				getSkinParam().useUnderlineForHyperlink()), getHeaderAlignment(), getSkinParam());
 
 		return new DecorateTextBlock(original, textHeader, getHeaderAlignment(), textFooter, getFooterAlignment());
 	}

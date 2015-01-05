@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 13841 $
+ * Revision $Revision: 14708 $
  *
  */
 package net.sourceforge.plantuml.graph;
@@ -270,7 +270,7 @@ public class Elastane {
 			if (label != null) {
 				// polyline.getFirst().getCenter();
 				final TextBlock textBlock = TextBlockUtils.create(Display.create(label),
-						new FontConfiguration(UFont.getCurrentFont(g2d), HtmlColorUtils.BLACK, HtmlColorUtils.BLUE),
+						new FontConfiguration(UFont.getCurrentFont(g2d), HtmlColorUtils.BLACK, HtmlColorUtils.BLUE, true),
 						HorizontalAlignment.LEFT, new SpriteContainerEmpty());
 				textBlock.calculateDimension(StringBounderUtils.asStringBounder(g2d));
 				// textBlock.drawTOBEREMOVED(new ColorMapperIdentity(), g2d, center.getXint() - dim.getWidth() / 2,

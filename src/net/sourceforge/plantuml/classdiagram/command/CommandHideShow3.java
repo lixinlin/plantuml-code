@@ -37,6 +37,7 @@ import java.util.EnumSet;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.UmlDiagram;
 import net.sourceforge.plantuml.classdiagram.ClassDiagram;
 import net.sourceforge.plantuml.command.CommandExecutionResult;
@@ -84,7 +85,7 @@ public class CommandHideShow3 extends SingleLineCommand2<UmlDiagram> {
 		final Set<EntityPortion> portion = getEntityPortion(arg.get("PORTION", 0));
 
 		final Set<VisibilityModifier> visibilities = EnumSet.<VisibilityModifier> noneOf(VisibilityModifier.class);
-		final StringTokenizer st = new StringTokenizer(arg.get("VISIBILITY", 0).toLowerCase(), " ,");
+		final StringTokenizer st = new StringTokenizer(StringUtils.goLowerCase(arg.get("VISIBILITY", 0)), " ,");
 		while (st.hasMoreTokens()) {
 			addVisibilities(st.nextToken(), portion, visibilities);
 		}
@@ -122,7 +123,7 @@ public class CommandHideShow3 extends SingleLineCommand2<UmlDiagram> {
 	}
 
 	private Set<EntityPortion> getEntityPortion(String s) {
-		final String sub = s.substring(0, 3).toLowerCase();
+		final String sub = StringUtils.goLowerCase(s.substring(0, 3));
 		if (sub.equals("met")) {
 			return PORTION_METHOD;
 		}

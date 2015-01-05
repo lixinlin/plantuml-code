@@ -109,7 +109,7 @@ class FtileIfLong extends AbstractFtile {
 
 	static Ftile create(Swimlane swimlane, HtmlColor borderColor, HtmlColor backColor, UFont font,
 			HtmlColor arrowColor, FtileFactory ftileFactory, ConditionStyle conditionStyle, List<Branch> thens,
-			Branch branch2) {
+			Branch branch2, HtmlColor hyperlinkColor, boolean useUnderlineForHyperlink) {
 
 		final List<Ftile> tiles = new ArrayList<Ftile>();
 
@@ -119,7 +119,7 @@ class FtileIfLong extends AbstractFtile {
 
 		final Ftile tile2 = new FtileMinWidth(branch2.getFtile(), 30);
 
-		final FontConfiguration fc = new FontConfiguration(font, HtmlColorUtils.BLACK, HtmlColorUtils.BLUE);
+		final FontConfiguration fc = new FontConfiguration(font, HtmlColorUtils.BLACK, hyperlinkColor, useUnderlineForHyperlink);
 
 		final List<Ftile> diamonds = new ArrayList<Ftile>();
 		final List<Connection> conns = new ArrayList<Connection>();

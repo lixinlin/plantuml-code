@@ -70,7 +70,7 @@ public class ActivityBox implements TextBlock {
 		this.id = id;
 		this.label = label;
 		final UFont font = new UFont("Serif", Font.PLAIN, 14);
-		final FontConfiguration fc = new FontConfiguration(font, HtmlColorUtils.BLACK, HtmlColorUtils.BLUE);
+		final FontConfiguration fc = new FontConfiguration(font, HtmlColorUtils.BLACK, HtmlColorUtils.BLUE, true);
 		tb = TextBlockUtils.create(Display.create(label), fc, HorizontalAlignment.LEFT, new SpriteContainerEmpty());
 	}
 

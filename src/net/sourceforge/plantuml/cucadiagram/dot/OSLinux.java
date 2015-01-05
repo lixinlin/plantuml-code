@@ -35,6 +35,8 @@ package net.sourceforge.plantuml.cucadiagram.dot;
 
 import java.io.File;
 
+import net.sourceforge.plantuml.StringUtils;
+
 class OSLinux extends OS {
 
 	@Override
@@ -55,7 +57,7 @@ class OSLinux extends OS {
 
 	@Override
 	String getFileName(GraphvizLayoutStrategy strategy) {
-		return strategy.name().toLowerCase();
+		return StringUtils.goLowerCase(strategy.name());
 	}
 
 	@Override

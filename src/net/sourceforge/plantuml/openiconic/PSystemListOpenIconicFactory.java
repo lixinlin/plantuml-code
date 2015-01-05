@@ -34,13 +34,14 @@
 package net.sourceforge.plantuml.openiconic;
 
 import net.sourceforge.plantuml.AbstractPSystem;
+import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.command.PSystemSingleLineFactory;
 
 public class PSystemListOpenIconicFactory extends PSystemSingleLineFactory {
 
 	@Override
 	protected AbstractPSystem executeLine(String line) {
-		final String lineLower = line.toLowerCase();
+		final String lineLower = StringUtils.goLowerCase(line);
 		if (lineLower.startsWith("listopeniconic")) {
 			return new PSystemListOpenIconic();
 		}

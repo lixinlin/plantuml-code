@@ -69,7 +69,7 @@ public class CommandHideShowSpecificClass extends SingleLineCommand2<ClassDiagra
 			final Code code = Code.of(codeString);
 			final ILeaf leaf = classDiagram.getEntityFactory().getLeafs().get(code);
 			if (leaf == null) {
-				return CommandExecutionResult.error("Class does not exit : " + code);
+				return CommandExecutionResult.error("Class does not exist : " + code.getFullName());
 			}
 			classDiagram.hideOrShow(leaf, arg.get("COMMAND", 0).equalsIgnoreCase("show"));
 		}

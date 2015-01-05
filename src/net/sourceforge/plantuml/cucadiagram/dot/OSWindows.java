@@ -39,6 +39,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import net.sourceforge.plantuml.StringUtils;
+
 class OSWindows extends OS {
 
 	@Override
@@ -83,7 +85,7 @@ class OSWindows extends OS {
 
 	@Override
 	String getFileName(GraphvizLayoutStrategy strategy) {
-		return strategy.name().toLowerCase() + ".exe";
+		return StringUtils.goLowerCase(strategy.name()) + ".exe";
 	}
 
 	@Override

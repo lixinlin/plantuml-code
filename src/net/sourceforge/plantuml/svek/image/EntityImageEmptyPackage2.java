@@ -71,7 +71,7 @@ public class EntityImageEmptyPackage2 extends AbstractEntityImage {
 				entity.getDisplay(),
 				new FontConfiguration(SkinParamUtils.getFont(getSkinParam(),
 						FontParam.PACKAGE, stereotype), SkinParamUtils.getFontColor(getSkinParam(), FontParam.PACKAGE,
-				stereotype), getSkinParam().getHyperlinkColor()), HorizontalAlignment.CENTER, skinParam);
+				stereotype), getSkinParam().getHyperlinkColor(), getSkinParam().useUnderlineForHyperlink()), HorizontalAlignment.CENTER, skinParam);
 	}
 
 	public Dimension2D calculateDimension(StringBounder stringBounder) {

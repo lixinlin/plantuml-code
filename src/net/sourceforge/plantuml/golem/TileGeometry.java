@@ -33,6 +33,8 @@
  */
 package net.sourceforge.plantuml.golem;
 
+import net.sourceforge.plantuml.StringUtils;
+
 public enum TileGeometry {
 	NORTH, SOUTH, EAST, WEST, CENTER;
 
@@ -53,7 +55,7 @@ public enum TileGeometry {
 	}
 
 	public static TileGeometry fromString(String s) {
-		final char c = Character.toUpperCase(s.charAt(0));
+		final char c = StringUtils.goUpperCase(s.charAt(0));
 		switch (c) {
 		case 'N':
 			return NORTH;

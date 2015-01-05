@@ -49,6 +49,8 @@ import net.sourceforge.plantuml.ugraphic.UStroke;
 public interface ISkinParam extends ISkinSimple {
 
 	public HtmlColor getHyperlinkColor();
+	
+	public boolean useUnderlineForHyperlink();
 
 	public HtmlColor getBackgroundColor();
 
@@ -104,7 +106,7 @@ public interface ISkinParam extends ISkinSimple {
 
 	public Rankdir getRankdir();
 	
-	public boolean useOctagonForActivity();
+	public boolean useOctagonForActivity(Stereotype stereotype);
 	
 	public IHtmlColorSet getIHtmlColorSet();
 

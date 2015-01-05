@@ -51,6 +51,14 @@ public class InstructionList implements Instruction {
 	private final List<Instruction> all = new ArrayList<Instruction>();
 	private final Swimlane defaultSwimlane;
 
+	public boolean isOnlySingleStop() {
+		if (all.size() == 1) {
+			final Instruction last = getLast();
+			return last instanceof InstructionStop;
+		}
+		return false;
+	}
+
 	public InstructionList() {
 		this(null);
 	}
@@ -84,9 +92,9 @@ public class InstructionList implements Instruction {
 			}
 
 		}
-//		if (killed) {
-//			result = new FtileKilled(result);
-//		}
+		// if (killed) {
+		// result = new FtileKilled(result);
+		// }
 		return result;
 	}
 

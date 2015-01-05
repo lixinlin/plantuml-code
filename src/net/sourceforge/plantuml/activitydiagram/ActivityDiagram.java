@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 14661 $
+ * Revision $Revision: 14721 $
  *
  */
 package net.sourceforge.plantuml.activitydiagram;
@@ -93,8 +93,9 @@ public class ActivityDiagram extends CucaDiagram {
 		return (ILeaf) getOrCreate(Code.of("start"), Display.getWithNewlines("start"), LeafType.CIRCLE_START);
 	}
 
-	public ILeaf getEnd() {
-		return (ILeaf) getOrCreate(Code.of("end"), Display.getWithNewlines("end"), LeafType.CIRCLE_END);
+	public ILeaf getEnd(String suppId) {
+		final Code code = suppId == null ? Code.of("end") : Code.of("end$" + suppId);
+		return (ILeaf) getOrCreate(code, Display.getWithNewlines("end"), LeafType.CIRCLE_END);
 	}
 
 	private void updateLasts(final IEntity result) {
@@ -173,11 +174,9 @@ public class ActivityDiagram extends CucaDiagram {
 		if (getCurrentGroup().getGroupType() != GroupType.INNER_ACTIVITY) {
 			throw new IllegalStateException("type=" + getCurrentGroup().getGroupType());
 		}
-		getOrCreateGroup(code, Display.getWithNewlines("code"), GroupType.CONCURRENT_ACTIVITY,
-				getCurrentGroup());
+		getOrCreateGroup(code, Display.getWithNewlines("code"), GroupType.CONCURRENT_ACTIVITY, getCurrentGroup());
 		lastEntityConsulted = null;
 		lastEntityBrancheConsulted = null;
 	}
-	
 
 }

@@ -106,7 +106,7 @@ public final class FactorySequenceNoteOnArrowCommand implements SingleMultiFacto
 	private CommandExecutionResult executeInternal(SequenceDiagram system, final RegexResult line0, List<String> in) {
 		final AbstractMessage m = system.getLastMessage();
 		if (m != null) {
-			final NotePosition position = NotePosition.valueOf(line0.get("POSITION", 0).toUpperCase());
+			final NotePosition position = NotePosition.valueOf(StringUtils.goUpperCase(line0.get("POSITION", 0)));
 			final Url url;
 			if (in.size() > 0) {
 				final UrlBuilder urlBuilder = new UrlBuilder(system.getSkinParam().getValue("topurl"), ModeUrl.STRICT);

@@ -68,7 +68,7 @@ public class EntityImageArcCircle extends AbstractEntityImage {
 				entity.getDisplay(),
 				new FontConfiguration(SkinParamUtils.getFont(getSkinParam(),
 						FontParam.COMPONENT, stereotype), SkinParamUtils.getFontColor(getSkinParam(),
-				FontParam.COMPONENT, stereotype), getSkinParam().getHyperlinkColor()), HorizontalAlignment.CENTER, skinParam);
+				FontParam.COMPONENT, stereotype), getSkinParam().getHyperlinkColor(), getSkinParam().useUnderlineForHyperlink()), HorizontalAlignment.CENTER, skinParam);
 
 		if (stereotype == null || stereotype.getLabel() == null) {
 			this.stereo = null;
@@ -77,7 +77,7 @@ public class EntityImageArcCircle extends AbstractEntityImage {
 					Display.getWithNewlines(stereotype.getLabel()),
 					new FontConfiguration(SkinParamUtils.getFont(getSkinParam(),
 							FontParam.COMPONENT_STEREOTYPE, stereotype), SkinParamUtils.getFontColor(getSkinParam(),
-					FontParam.COMPONENT_STEREOTYPE, null), getSkinParam().getHyperlinkColor()), HorizontalAlignment.CENTER, skinParam);
+					FontParam.COMPONENT_STEREOTYPE, null), getSkinParam().getHyperlinkColor(), getSkinParam().useUnderlineForHyperlink()), HorizontalAlignment.CENTER, skinParam);
 		}
 
 	}

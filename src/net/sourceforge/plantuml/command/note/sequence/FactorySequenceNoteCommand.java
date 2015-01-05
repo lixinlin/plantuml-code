@@ -113,7 +113,7 @@ public final class FactorySequenceNoteCommand implements SingleMultiFactoryComma
 		final Participant p = diagram.getOrCreateParticipant(StringUtils
 				.eventuallyRemoveStartingAndEndingDoubleQuote(arg.get("PARTICIPANT", 0)));
 
-		final NotePosition position = NotePosition.valueOf(arg.get("POSITION", 0).toUpperCase());
+		final NotePosition position = NotePosition.valueOf(StringUtils.goUpperCase(arg.get("POSITION", 0)));
 
 		if (strings.size() > 0) {
 			final boolean tryMerge = arg.get("VMERGE", 0) != null;

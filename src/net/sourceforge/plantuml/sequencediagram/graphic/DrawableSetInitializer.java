@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 14626 $
+ * Revision $Revision: 14751 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.graphic;
@@ -383,6 +383,8 @@ class DrawableSetInitializer {
 					inGroupableStack.getTopGroupingStructure(), m.isParallel(), lazy);
 			final double preferredHeight = element.getPreferredHeight(stringBounder);
 			freeY2 = freeY2.add(preferredHeight, range);
+			// MODIF42
+			inGroupableStack.addElement((GroupingGraphicalElementElse)element);
 		} else if (m.getType() == GroupingType.END) {
 			if (m.isParallel()) {
 				freeY2 = ((FrontierStack) freeY2).closeBar();

@@ -51,6 +51,7 @@ import java.util.StringTokenizer;
 
 import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileUtils;
+import net.sourceforge.plantuml.StringUtils;
 
 class FtpLoop implements Runnable {
 	enum Mode {
@@ -101,7 +102,7 @@ class FtpLoop implements Runnable {
 	}
 
 	private boolean manage(final String cmd) throws UnknownHostException, IOException, InterruptedException {
-		final String upper = cmd.toUpperCase();
+		final String upper = StringUtils.goUpperCase(cmd);
 		if (upper.startsWith("USER")) {
 			myOut("331 Password required");
 			final String user = cmd.substring("USER ".length());

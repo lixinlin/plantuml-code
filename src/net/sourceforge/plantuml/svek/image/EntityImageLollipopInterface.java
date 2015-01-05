@@ -70,7 +70,7 @@ public class EntityImageLollipopInterface extends AbstractEntityImage {
 				entity.getDisplay(),
 				new FontConfiguration(SkinParamUtils.getFont(getSkinParam(),
 						FontParam.CLASS, stereotype), SkinParamUtils.getFontColor(getSkinParam(), FontParam.CLASS,
-				stereotype), getSkinParam().getHyperlinkColor()), HorizontalAlignment.CENTER, skinParam);
+				stereotype), getSkinParam().getHyperlinkColor(), getSkinParam().useUnderlineForHyperlink()), HorizontalAlignment.CENTER, skinParam);
 		this.url = entity.getUrl99();
 
 	}
