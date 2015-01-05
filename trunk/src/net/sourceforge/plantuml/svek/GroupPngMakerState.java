@@ -108,14 +108,14 @@ public final class GroupPngMakerState {
 
 	public IEntityImage getImage() throws IOException, InterruptedException {
 		final Display display = group.getDisplay();
+		final ISkinParam skinParam = diagram.getSkinParam();
 		final TextBlock title = TextBlockUtils.create(display, new FontConfiguration(getFont(FontParam.STATE),
-				HtmlColorUtils.BLACK, HtmlColorUtils.BLUE), HorizontalAlignment.CENTER, diagram.getSkinParam());
+				HtmlColorUtils.BLACK, skinParam.getHyperlinkColor(), skinParam.useUnderlineForHyperlink()), HorizontalAlignment.CENTER, diagram.getSkinParam());
 
 		if (group.size() == 0) {
 			return new EntityImageState(group, diagram.getSkinParam());
 		}
 		final List<Link> links = getPureInnerLinks();
-		final ISkinParam skinParam = diagram.getSkinParam();
 
 		boolean hasVerticalLine = false;
 		for (ILeaf leaf : group.getLeafsDirect()) {

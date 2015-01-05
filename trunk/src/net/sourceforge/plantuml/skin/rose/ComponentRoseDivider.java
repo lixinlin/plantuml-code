@@ -61,9 +61,9 @@ public class ComponentRoseDivider extends AbstractTextualComponent {
 	private final boolean withShadow;
 	private final UStroke stroke;
 
-	public ComponentRoseDivider(HtmlColor fontColor, HtmlColor hyperlinkColor, UFont font, HtmlColor background, Display stringsToDisplay,
+	public ComponentRoseDivider(HtmlColor fontColor, HtmlColor hyperlinkColor, boolean useUnderlineForHyperlink, UFont font, HtmlColor background, Display stringsToDisplay,
 			ISkinSimple spriteContainer, boolean withShadow, UStroke stroke) {
-		super(stringsToDisplay, fontColor, hyperlinkColor, font, HorizontalAlignment.CENTER, 4, 4, 4, spriteContainer, 0, false);
+		super(stringsToDisplay, fontColor, hyperlinkColor, useUnderlineForHyperlink, font, HorizontalAlignment.CENTER, 4, 4, 4, spriteContainer, 0, false);
 		this.background = background;
 		this.empty = stringsToDisplay.get(0).length() == 0;
 		this.withShadow = withShadow;

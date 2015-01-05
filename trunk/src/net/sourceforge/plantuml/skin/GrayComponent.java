@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 13841 $
+ * Revision $Revision: 14711 $
  *
  */
 package net.sourceforge.plantuml.skin;
@@ -75,7 +75,7 @@ class GrayComponent extends AbstractComponent {
 		}
 
 		final TextBlock textBlock = TextBlockUtils.create(Display.create(strings), new FontConfiguration(NORMAL, HtmlColorUtils.BLACK,
-				HtmlColorUtils.BLUE), HorizontalAlignment.LEFT, new SpriteContainerEmpty());
+				HtmlColorUtils.BLUE, true), HorizontalAlignment.LEFT, new SpriteContainerEmpty());
 		textBlock.drawU(ug);
 	}
 

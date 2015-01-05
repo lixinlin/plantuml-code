@@ -33,6 +33,7 @@
  */
 package net.sourceforge.plantuml.activitydiagram3.command;
 
+import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.activitydiagram3.ActivityDiagram3;
 import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.command.SingleLineCommand2;
@@ -68,7 +69,7 @@ public class CommandNote3 extends SingleLineCommand2<ActivityDiagram3> {
 		if (s == null) {
 			return NotePosition.LEFT;
 		}
-		return NotePosition.valueOf(s.toUpperCase());
+		return NotePosition.valueOf(StringUtils.goUpperCase(s));
 	}
 
 }

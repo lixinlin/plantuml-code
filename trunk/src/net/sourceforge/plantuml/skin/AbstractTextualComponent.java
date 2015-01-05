@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 13841 $
+ * Revision $Revision: 14712 $
  *
  */
 package net.sourceforge.plantuml.skin;
@@ -61,14 +61,14 @@ public abstract class AbstractTextualComponent extends AbstractComponent {
 	private final UFont font;
 	private final HtmlColor fontColor;
 
-	public AbstractTextualComponent(CharSequence label, HtmlColor fontColor, HtmlColor hyperlinkColor, UFont font,
+	public AbstractTextualComponent(CharSequence label, HtmlColor fontColor, HtmlColor hyperlinkColor, boolean useUnderlineForHyperlink, UFont font,
 			HorizontalAlignment horizontalAlignment, int marginX1, int marginX2, int marginY,
 			ISkinSimple spriteContainer, double maxMessageSize) {
-		this(Display.getWithNewlines(label == null ? "" : label.toString()), fontColor, hyperlinkColor, font, horizontalAlignment,
+		this(Display.getWithNewlines(label == null ? "" : label.toString()), fontColor, hyperlinkColor, useUnderlineForHyperlink, font, horizontalAlignment,
 				marginX1, marginX2, marginY, spriteContainer, maxMessageSize, false);
 	}
 
-	public AbstractTextualComponent(Display strings, HtmlColor fontColor, HtmlColor hyperlinkColor, UFont font,
+	public AbstractTextualComponent(Display strings, HtmlColor fontColor, HtmlColor hyperlinkColor, boolean useUnderlineForHyperlink, UFont font,
 			HorizontalAlignment horizontalAlignment, int marginX1, int marginX2, int marginY,
 			ISkinSimple spriteContainer, double maxMessageSize, boolean enhanced) {
 		this.font = font;
@@ -82,9 +82,9 @@ public abstract class AbstractTextualComponent extends AbstractComponent {
 			textBlock = new TextBlockEmpty();
 		} else if (enhanced) {
 			textBlock = new BodyEnhanced2(strings, FontParam.NOTE, spriteContainer, HorizontalAlignment.LEFT, font,
-					fontColor, hyperlinkColor);
+					fontColor, hyperlinkColor, useUnderlineForHyperlink);
 		} else {
-			textBlock = TextBlockUtils.create(strings, new FontConfiguration(font, fontColor, hyperlinkColor), horizontalAlignment,
+			textBlock = TextBlockUtils.create(strings, new FontConfiguration(font, fontColor, hyperlinkColor, useUnderlineForHyperlink), horizontalAlignment,
 					spriteContainer, maxMessageSize, false);
 		}
 	}

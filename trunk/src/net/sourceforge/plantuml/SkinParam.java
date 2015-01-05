@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 14321 $
+ * Revision $Revision: 14746 $
  *
  */
 package net.sourceforge.plantuml;
@@ -86,7 +86,7 @@ public class SkinParam implements ISkinParam {
 	}
 
 	static String cleanForKey(String key) {
-		key = key.toLowerCase().trim();
+		key = StringUtils.goLowerCase(key).trim();
 		key = key.replaceAll("_|\\.|\\s", "");
 		key = replaceSmart(key, "partition", "package");
 		key = replaceSmart(key, "sequenceparticipant", "participant");
@@ -145,7 +145,7 @@ public class SkinParam implements ISkinParam {
 			if (c == '_') {
 				upper = true;
 			} else {
-				sb.append(upper ? Character.toUpperCase(c) : Character.toLowerCase(c));
+				sb.append(upper ? StringUtils.goUpperCase(c) : StringUtils.goLowerCase(c));
 				upper = false;
 			}
 		}
@@ -258,10 +258,10 @@ public class SkinParam implements ISkinParam {
 			return param.getDefaultFontStyle(this, inPackageTitle);
 		}
 		int result = Font.PLAIN;
-		if (value.toLowerCase().contains("bold")) {
+		if (StringUtils.goLowerCase(value).contains("bold")) {
 			result = result | Font.BOLD;
 		}
-		if (value.toLowerCase().contains("italic")) {
+		if (StringUtils.goLowerCase(value).contains("italic")) {
 			result = result | Font.ITALIC;
 		}
 		return result;
@@ -329,7 +329,7 @@ public class SkinParam implements ISkinParam {
 	}
 
 	private static String capitalize(String name) {
-		return name.substring(0, 1).toUpperCase() + name.substring(1);
+		return StringUtils.goUpperCase(name.substring(0, 1)) + name.substring(1);
 	}
 
 	public int getDpi() {
@@ -556,8 +556,15 @@ public class SkinParam implements ISkinParam {
 		this.rankdir = rankdir;
 	}
 
-	public boolean useOctagonForActivity() {
-		final String value = getValue("activityshape");
+	public boolean useOctagonForActivity(Stereotype stereotype) {
+		String value = getValue("activityshape");
+		if (stereotype != null) {
+			checkStereotype(stereotype);
+			final String value2 = getValue("activityshape" + stereotype.getLabel());
+			if (value2 != null) {
+				value = value2;
+			}
+		}
 		if ("roundedbox".equalsIgnoreCase(value)) {
 			return false;
 		}
@@ -571,6 +578,14 @@ public class SkinParam implements ISkinParam {
 
 	public IHtmlColorSet getIHtmlColorSet() {
 		return htmlColorSet;
+	}
+
+	public boolean useUnderlineForHyperlink() {
+		final String value = getValue("hyperlinkunderline");
+		if ("false".equalsIgnoreCase(value)) {
+			return false;
+		}
+		return true;
 	}
 
 }

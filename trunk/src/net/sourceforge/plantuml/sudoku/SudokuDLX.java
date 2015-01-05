@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 12235 $
+ * Revision $Revision: 14726 $
  *
  */
 package net.sourceforge.plantuml.sudoku;
@@ -36,6 +36,7 @@ package net.sourceforge.plantuml.sudoku;
 import java.util.Random;
 
 import net.sourceforge.plantuml.Log;
+import net.sourceforge.plantuml.StringUtils;
 
 public class SudokuDLX implements ISudoku {
 
@@ -76,7 +77,7 @@ public class SudokuDLX implements ISudoku {
 			Log.println(s);
 		}
 		Log.println("Rate=" + rate);
-		Log.println("Seed=" + Long.toString(seed, 36).toUpperCase());
+		Log.println("Seed=" + StringUtils.goUpperCase(Long.toString(seed, 36)));
 	}
 
 	public static void main(String[] args) {

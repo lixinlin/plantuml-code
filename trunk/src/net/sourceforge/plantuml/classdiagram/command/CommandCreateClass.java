@@ -33,7 +33,10 @@
  */
 package net.sourceforge.plantuml.classdiagram.command;
 
+import java.util.Locale;
+
 import net.sourceforge.plantuml.FontParam;
+import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.Url;
 import net.sourceforge.plantuml.UrlBuilder;
 import net.sourceforge.plantuml.UrlBuilder.ModeUrl;
@@ -94,7 +97,7 @@ public class CommandCreateClass extends SingleLineCommand2<ClassDiagram> {
 
 	@Override
 	protected CommandExecutionResult executeArg(ClassDiagram diagram, RegexResult arg) {
-		final LeafType type = LeafType.getLeafType(arg.get("TYPE", 0).toUpperCase());
+		final LeafType type = LeafType.getLeafType(StringUtils.goUpperCase(arg.get("TYPE", 0)));
 		final Code code = Code.of(arg.getLazzy("CODE", 0)).eventuallyRemoveStartingAndEndingDoubleQuote("\"([:");
 		final String display = arg.getLazzy("DISPLAY", 0);
 

@@ -175,12 +175,16 @@ public class SkinParamDelegator implements ISkinParam {
 		return skinParam.getRankdir();
 	}
 	
-	public boolean useOctagonForActivity() {
-		return skinParam.useOctagonForActivity();
+	public boolean useOctagonForActivity(Stereotype stereotype) {
+		return skinParam.useOctagonForActivity(stereotype);
 	}
 
 	public IHtmlColorSet getIHtmlColorSet() {
 		return skinParam.getIHtmlColorSet();
+	}
+
+	public boolean useUnderlineForHyperlink() {
+		return skinParam.useUnderlineForHyperlink();
 	}
 
 

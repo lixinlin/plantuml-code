@@ -67,10 +67,10 @@ import net.sourceforge.plantuml.creole.CreoleParser;
 import net.sourceforge.plantuml.creole.Sheet;
 import net.sourceforge.plantuml.creole.SheetBlock1;
 import net.sourceforge.plantuml.creole.SheetBlock2;
+import net.sourceforge.plantuml.cucadiagram.Display;
 import net.sourceforge.plantuml.graphic.FontConfiguration;
 import net.sourceforge.plantuml.graphic.HorizontalAlignment;
 import net.sourceforge.plantuml.graphic.HtmlColor;
-import net.sourceforge.plantuml.graphic.HtmlColorUtils;
 import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.graphic.TextBlock;
 import net.sourceforge.plantuml.graphic.TextBlockUtils;
@@ -123,21 +123,29 @@ class FtileIf extends AbstractFtile {
 			HtmlColor arrowColor, FtileFactory ftileFactory, ConditionStyle conditionStyle, Branch branch1,
 			Branch branch2, ISkinParam skinParam, StringBounder stringBounder) {
 
+		final Display labelTest = branch1.getLabelTest();
+//		if (branch1.isOnlySingleStop() || branch2.isOnlySingleStop()) {
+//			final Branch nonStop = branch1.isOnlySingleStop() ? branch2 : branch1;
+//			return FtileIfAndStop.create(swimlane, borderColor, backColor, fontArrow, fontTest, arrowColor,
+//					ftileFactory, conditionStyle, nonStop, skinParam, stringBounder, labelTest);
+//		}
+
 		final Ftile tile1 = new FtileMinWidth(branch1.getFtile(), 30);
 		final Ftile tile2 = new FtileMinWidth(branch2.getFtile(), 30);
 
 		final HtmlColor fontColor = skinParam.getFontHtmlColor(FontParam.ACTIVITY_DIAMOND, null);
 
-		final FontConfiguration fcArrow = new FontConfiguration(fontArrow, fontColor, skinParam.getHyperlinkColor());
-		final FontConfiguration fcTest = new FontConfiguration(fontTest, fontColor, skinParam.getHyperlinkColor());
+		final FontConfiguration fcArrow = new FontConfiguration(fontArrow, fontColor, skinParam.getHyperlinkColor(),
+				skinParam.useUnderlineForHyperlink());
+		final FontConfiguration fcTest = new FontConfiguration(fontTest, fontColor, skinParam.getHyperlinkColor(),
+				skinParam.useUnderlineForHyperlink());
 
 		final TextBlock tb1 = TextBlockUtils.create(branch1.getLabelPositive(), fcArrow, HorizontalAlignment.LEFT,
 				ftileFactory);
 		final TextBlock tb2 = TextBlockUtils.create(branch2.getLabelPositive(), fcArrow, HorizontalAlignment.LEFT,
 				ftileFactory);
 
-		final Sheet sheet = new CreoleParser(fcTest, HorizontalAlignment.LEFT, skinParam, false).createSheet(branch1
-				.getLabelTest());
+		final Sheet sheet = new CreoleParser(fcTest, HorizontalAlignment.LEFT, skinParam, false).createSheet(labelTest);
 		final SheetBlock1 sheetBlock1 = new SheetBlock1(sheet, 0);
 		final TextBlock tbTest = new SheetBlock2(sheetBlock1, Diamond.asStencil(sheetBlock1), new UStroke(1.5));
 

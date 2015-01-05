@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 13836 $
+ * Revision $Revision: 14712 $
  *
  */
 package net.sourceforge.plantuml.skin.rose;
@@ -63,9 +63,9 @@ public class ComponentRoseSelfArrow extends AbstractComponentRoseArrow {
 	private final double thinCircle = 1.5;
 	private final boolean niceArrow;
 
-	public ComponentRoseSelfArrow(HtmlColor foregroundColor, HtmlColor colorFont, HtmlColor hyperlinkColor, UFont font, Display stringsToDisplay,
+	public ComponentRoseSelfArrow(HtmlColor foregroundColor, HtmlColor colorFont, HtmlColor hyperlinkColor, boolean useUnderlineForHyperlink, UFont font, Display stringsToDisplay,
 			ArrowConfiguration arrowConfiguration, ISkinSimple spriteContainer, double maxMessageSize, boolean niceArrow) {
-		super(foregroundColor, colorFont, hyperlinkColor, font, stringsToDisplay, arrowConfiguration, spriteContainer,
+		super(foregroundColor, colorFont, hyperlinkColor, useUnderlineForHyperlink, font, stringsToDisplay, arrowConfiguration, spriteContainer,
 				HorizontalAlignment.LEFT, maxMessageSize);
 		this.niceArrow = niceArrow;
 	}

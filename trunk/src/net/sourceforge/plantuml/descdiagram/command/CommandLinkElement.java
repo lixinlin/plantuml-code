@@ -167,7 +167,7 @@ public class CommandLinkElement extends SingleLineCommand2<DescriptionDiagram> {
 		if (s == null) {
 			return "";
 		}
-		return s.trim().toLowerCase();
+		return StringUtils.goLowerCase(s.trim());
 	}
 
 	private Direction getDirection(RegexResult arg) {

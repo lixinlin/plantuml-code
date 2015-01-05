@@ -54,9 +54,9 @@ public class ComponentRoseEntity extends AbstractTextualComponent {
 	private final TextBlock stickman;
 	private final boolean head;
 
-	public ComponentRoseEntity(HtmlColor yellow, HtmlColor red, HtmlColor fontColor, HtmlColor hyperlinkColor, UFont font,
+	public ComponentRoseEntity(HtmlColor yellow, HtmlColor red, HtmlColor fontColor, HtmlColor hyperlinkColor, boolean useUnderlineForHyperlink, UFont font,
 			Display stringsToDisplay, boolean head, ISkinSimple spriteContainer, double deltaShadow, UStroke stroke) {
-		super(stringsToDisplay, fontColor, hyperlinkColor, font, HorizontalAlignment.CENTER, 3, 3, 0, spriteContainer, 0, false);
+		super(stringsToDisplay, fontColor, hyperlinkColor, useUnderlineForHyperlink, font, HorizontalAlignment.CENTER, 3, 3, 0, spriteContainer, 0, false);
 		this.head = head;
 		this.stickman = new EntityDomain(yellow, red, deltaShadow, stroke.getThickness());
 	}

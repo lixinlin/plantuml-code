@@ -73,7 +73,7 @@ public class EntityImageClassHeader2 extends AbstractEntityImage {
 		final Stereotype stereotype = entity.getStereotype();
 		final String generic = entity.getGeneric();
 		FontConfiguration fontConfigurationName = new FontConfiguration(SkinParamUtils.getFont(getSkinParam(), FontParam.CLASS, stereotype),
-				color, getSkinParam().getHyperlinkColor());
+				color, getSkinParam().getHyperlinkColor(), getSkinParam().useUnderlineForHyperlink());
 		if (italic) {
 			fontConfigurationName = fontConfigurationName.italic();
 		}
@@ -89,7 +89,7 @@ public class EntityImageClassHeader2 extends AbstractEntityImage {
 					Display.create(stereotype.getLabels()),
 					new FontConfiguration(SkinParamUtils.getFont(getSkinParam(),
 							FontParam.CLASS_STEREOTYPE, stereotype), SkinParamUtils.getFontColor(getSkinParam(),
-					FontParam.CLASS_STEREOTYPE, stereotype), getSkinParam().getHyperlinkColor()), HorizontalAlignment.CENTER, skinParam), 1, 0);
+					FontParam.CLASS_STEREOTYPE, stereotype), getSkinParam().getHyperlinkColor(), getSkinParam().useUnderlineForHyperlink()), HorizontalAlignment.CENTER, skinParam), 1, 0);
 		}
 
 		TextBlock genericBlock;
@@ -100,7 +100,7 @@ public class EntityImageClassHeader2 extends AbstractEntityImage {
 					Display.getWithNewlines(generic),
 					new FontConfiguration(SkinParamUtils.getFont(getSkinParam(),
 							FontParam.CLASS_STEREOTYPE, stereotype), SkinParamUtils.getFontColor(getSkinParam(),
-					FontParam.CLASS_STEREOTYPE, stereotype), skinParam.getHyperlinkColor()), HorizontalAlignment.CENTER, skinParam);
+					FontParam.CLASS_STEREOTYPE, stereotype), skinParam.getHyperlinkColor(), getSkinParam().useUnderlineForHyperlink()), HorizontalAlignment.CENTER, skinParam);
 			genericBlock = TextBlockUtils.withMargin(genericBlock, 1, 1);
 			final HtmlColor classBackground = SkinParamUtils
 					.getColor(getSkinParam(), ColorParam.background, stereotype);

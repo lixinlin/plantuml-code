@@ -69,7 +69,7 @@ public class FtileFactoryDelegatorIf extends FtileFactoryDelegator {
 
 		if (thens.size() > 1) {
 			return FtileIfLong.create(swimlane, borderColor, backColor, fontArrow, arrowColor, getFactory(),
-					conditionStyle, thens, elseBranch);
+					conditionStyle, thens, elseBranch, getSkinParam().getHyperlinkColor(), getSkinParam().useUnderlineForHyperlink());
 		}
 		return FtileIf.create(swimlane, borderColor, backColor, fontArrow, fontTest, arrowColor, getFactory(),
 				conditionStyle, thens.get(0), elseBranch, getSkinParam(), getStringBounder());

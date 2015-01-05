@@ -47,7 +47,7 @@ public class CommandCloseWeekDay extends SingleLineCommand<PSystemProject2> {
 
 	@Override
 	protected CommandExecutionResult executeArg(PSystemProject2 diagram, List<String> arg) {
-		// final WeekDay weekDay = WeekDay.valueOf(arg.get(0).substring(0, 3).toUpperCase());
+		// final WeekDay weekDay = WeekDay.valueOf(arg.get(0).substring(0, 3).goUpperCase());
 //		getSystem().getProject().closeWeekDay(weekDay);
 		return CommandExecutionResult.ok();
 	}

@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 14321 $
+ * Revision $Revision: 14727 $
  *
  */
 package net.sourceforge.plantuml.cucadiagram;
@@ -56,7 +56,7 @@ public enum LeafType {
 	STILL_UNKNOWN;
 
 	public static LeafType getLeafType(String arg0) {
-		arg0 = arg0.toUpperCase();
+		arg0 = StringUtils.goUpperCase(arg0);
 		if (arg0.startsWith("ABSTRACT")) {
 			return LeafType.ABSTRACT_CLASS;
 		}
@@ -69,7 +69,7 @@ public enum LeafType {
 	}
 
 	public String toHtml() {
-		final String html = toString().replace('_', ' ').toLowerCase();
+		final String html = StringUtils.goLowerCase(toString().replace('_', ' '));
 		return StringUtils.capitalize(html);
 	}
 

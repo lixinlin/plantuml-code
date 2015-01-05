@@ -28,12 +28,14 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 12235 $
+ * Revision $Revision: 14727 $
  *
  */
 package net.sourceforge.plantuml.eggs;
 
 import java.math.BigInteger;
+
+import net.sourceforge.plantuml.StringUtils;
 
 public class EggUtils {
 
@@ -75,7 +77,7 @@ public class EggUtils {
 	}
 
 	private static int convertChar(char c) {
-		c = Character.toLowerCase(c);
+		c = StringUtils.goLowerCase(c);
 		if (c >= 'a' && c <= 'z') {
 			return c - 'a';
 		}

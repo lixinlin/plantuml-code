@@ -92,7 +92,7 @@ public class EntityImageState extends AbstractEntityImage {
 				entity.getDisplay(),
 				new FontConfiguration(SkinParamUtils.getFont(getSkinParam(),
 						FontParam.STATE, stereotype), SkinParamUtils.getFontColor(getSkinParam(), FontParam.STATE,
-				stereotype), getSkinParam().getHyperlinkColor()), HorizontalAlignment.CENTER, skinParam);
+				stereotype), getSkinParam().getHyperlinkColor(), getSkinParam().useUnderlineForHyperlink()), HorizontalAlignment.CENTER, skinParam);
 
 		Display list = Display.empty();
 		for (Member att : entity.getFieldsToDisplay()) {
@@ -105,7 +105,7 @@ public class EntityImageState extends AbstractEntityImage {
 				list,
 				new FontConfiguration(SkinParamUtils.getFont(getSkinParam(),
 						FontParam.STATE_ATTRIBUTE, stereotype), SkinParamUtils.getFontColor(getSkinParam(),
-				FontParam.STATE_ATTRIBUTE, stereotype), getSkinParam().getHyperlinkColor()), HorizontalAlignment.LEFT, skinParam);
+				FontParam.STATE_ATTRIBUTE, stereotype), getSkinParam().getHyperlinkColor(), getSkinParam().useUnderlineForHyperlink()), HorizontalAlignment.LEFT, skinParam);
 
 	}
 

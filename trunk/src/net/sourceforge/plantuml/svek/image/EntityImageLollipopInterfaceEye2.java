@@ -98,7 +98,7 @@ public class EntityImageLollipopInterfaceEye2 extends AbstractEntityImage {
 					Display.getWithNewlines(stereotype.getLabel()),
 					new FontConfiguration(SkinParamUtils.getFont(getSkinParam(),
 							symbol.getFontParamStereotype(), stereotype), SkinParamUtils.getFontColor(getSkinParam(),
-					symbol.getFontParamStereotype(), null), getSkinParam().getHyperlinkColor()), HorizontalAlignment.CENTER, skinParam);
+					symbol.getFontParamStereotype(), null), getSkinParam().getHyperlinkColor(), getSkinParam().useUnderlineForHyperlink()), HorizontalAlignment.CENTER, skinParam);
 		} else {
 			stereo = TextBlockUtils.empty(0, 0);
 		}

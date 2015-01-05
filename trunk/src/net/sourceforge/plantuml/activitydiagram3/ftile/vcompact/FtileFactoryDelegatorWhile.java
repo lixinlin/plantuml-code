@@ -68,7 +68,7 @@ public class FtileFactoryDelegatorWhile extends FtileFactoryDelegator {
 		final LinkRendering endInlinkRendering = whileBlock.getOutLinkRendering();
 		final HtmlColor endInlinkColor = endInlinkRendering == null ? arrowColor : endInlinkRendering.getColor();
 		return FtileWhile.create(swimlane, whileBlock, test, borderColor, backColor, arrowColor, yes, out,
-				fontArrow, endInlinkColor, afterEndwhile, getFactory(), conditionStyle, fontTest);
+				fontArrow, endInlinkColor, afterEndwhile, getFactory(), conditionStyle, fontTest, getSkinParam().getHyperlinkColor(), getSkinParam().useUnderlineForHyperlink());
 	}
 
 }

@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 14056 $
+ * Revision $Revision: 14727 $
  *
  */
 package net.sourceforge.plantuml.classdiagram.command;
@@ -38,6 +38,7 @@ import java.io.IOException;
 import java.util.List;
 
 import net.sourceforge.plantuml.FileSystem;
+import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.classdiagram.ClassDiagram;
 import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.command.SingleLineCommand;
@@ -79,10 +80,10 @@ public class CommandImport extends SingleLineCommand<ClassDiagram> {
 	}
 
 	private void includeSimpleFile(ClassDiagram classDiagram, File f) throws IOException {
-		if (f.getName().toLowerCase().endsWith(".java")) {
+		if (StringUtils.goLowerCase(f.getName()).endsWith(".java")) {
 			includeFileJava(classDiagram, f);
 		}
-		// if (f.getName().toLowerCase().endsWith(".sql")) {
+		// if (f.getName().goLowerCase().endsWith(".sql")) {
 		// includeFileSql(f);
 		// }
 	}

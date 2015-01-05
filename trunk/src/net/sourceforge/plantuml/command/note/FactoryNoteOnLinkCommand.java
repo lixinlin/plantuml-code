@@ -112,7 +112,7 @@ public final class FactoryNoteOnLinkCommand implements SingleMultiFactoryCommand
 		}
 		Position position = Position.BOTTOM;
 		if (arg.get("POSITION", 0) != null) {
-			position = Position.valueOf(arg.get("POSITION", 0).toUpperCase());
+			position = Position.valueOf(StringUtils.goUpperCase(arg.get("POSITION", 0)));
 		}
 		Url url = null;
 		if (note.size() > 0) {

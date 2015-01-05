@@ -375,7 +375,7 @@ public class DotStringFactory implements Moveable {
 	}
 
 	private int getClusterIndex(final String svg, int colorInt) {
-		final String colorString = StringUtils.getAsHtml(colorInt).toLowerCase();
+		final String colorString = StringUtils.goLowerCase(StringUtils.getAsHtml(colorInt));
 		final String keyTitle1 = "=\"" + colorString + "\"";
 		int idx = svg.indexOf(keyTitle1);
 		if (idx == -1) {

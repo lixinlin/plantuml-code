@@ -158,7 +158,7 @@ public final class FactoryNoteOnEntityCommand implements SingleMultiFactoryComma
 			note.addUrl(url);
 		}
 
-		final Position position = Position.valueOf(pos.toUpperCase()).withRankdir(diagram.getSkinParam().getRankdir());
+		final Position position = Position.valueOf(StringUtils.goUpperCase(pos)).withRankdir(diagram.getSkinParam().getRankdir());
 		final Link link;
 
 		final LinkType type = new LinkType(LinkDecor.NONE, LinkDecor.NONE).getDashed();

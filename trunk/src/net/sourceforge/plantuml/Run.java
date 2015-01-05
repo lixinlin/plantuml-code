@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 12866 $
+ * Revision $Revision: 14727 $
  *
  */
 package net.sourceforge.plantuml;
@@ -162,7 +162,7 @@ public class Run {
 			if (result.get(0).startsWith("4")) {
 				level = SpriteGrayLevel.GRAY_4;
 			}
-			compressed = result.get(0).toLowerCase().endsWith("z");
+			compressed = StringUtils.goLowerCase(result.get(0)).endsWith("z");
 			f = new File(result.get(1));
 		} else {
 			f = new File(result.get(0));

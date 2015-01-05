@@ -36,6 +36,7 @@ package net.sourceforge.plantuml.classdiagram.command;
 import java.util.EnumSet;
 import java.util.Set;
 
+import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.UmlDiagram;
 import net.sourceforge.plantuml.classdiagram.ClassDiagram;
 import net.sourceforge.plantuml.command.CommandExecutionResult;
@@ -164,7 +165,7 @@ public class CommandHideShow extends SingleLineCommand2<UmlDiagram> {
 	}
 
 	private Set<EntityPortion> getEntityPortion(String s) {
-		final String sub = s.substring(0, 3).toLowerCase();
+		final String sub = StringUtils.goLowerCase(s.substring(0, 3));
 		if (sub.equals("met")) {
 			return PORTION_METHOD;
 		}

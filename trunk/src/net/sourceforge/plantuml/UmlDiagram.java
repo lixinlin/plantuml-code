@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 14086 $
+ * Revision $Revision: 14727 $
  *
  */
 package net.sourceforge.plantuml;
@@ -133,7 +133,7 @@ public abstract class UmlDiagram extends AbstractPSystem implements Diagram {
 	}
 
 	public void setParam(String key, String value) {
-		skinParam.setParam(key.toLowerCase(), value);
+		skinParam.setParam(StringUtils.goLowerCase(key), value);
 	}
 
 	public final Display getHeader() {

@@ -35,6 +35,8 @@ package net.sourceforge.plantuml.oregon;
 
 import java.util.Random;
 
+import net.sourceforge.plantuml.StringUtils;
+
 public class OregonBasicGame implements BasicGame {
 
 	private Screen screen;
@@ -868,7 +870,7 @@ public class OregonBasicGame implements BasicGame {
 
 		public static ShootingWord safeValueOf(String s) {
 			try {
-				return valueOf(s.toUpperCase());
+				return valueOf(StringUtils.goUpperCase(s));
 			} catch (IllegalArgumentException e) {
 				return null;
 			}

@@ -76,7 +76,7 @@ public class EntityImageLegend implements TextBlock {
 		final UFont fontNote = skinParam.getFont(FontParam.LEGEND, null, false);
 
 		this.textBlock = TextBlockUtils.create(note, new FontConfiguration(fontNote, fontColor,
-				skinParam.getHyperlinkColor()), HorizontalAlignment.LEFT, skinParam);
+				skinParam.getHyperlinkColor(), skinParam.useUnderlineForHyperlink()), HorizontalAlignment.LEFT, skinParam);
 	}
 
 	public static TextBlock create(Display legend, ISkinParam skinParam) {

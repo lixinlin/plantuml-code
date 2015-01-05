@@ -69,7 +69,7 @@ public class CommandNoteLong3 extends CommandMultilines2<ActivityDiagram3> {
 		if (s == null) {
 			return NotePosition.LEFT;
 		}
-		return NotePosition.valueOf(s.toUpperCase());
+		return NotePosition.valueOf(StringUtils.goUpperCase(s));
 	}
 
 	static RegexConcat getRegexConcat() {

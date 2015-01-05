@@ -156,8 +156,8 @@ public class Movement {
 					arguments.get(3), arguments.get(4), last.getX(), last.getY());
 		}
 		// A still to be done
-		// System.err.println("Movement::toUpperCase " + letter);
-		throw new UnsupportedOperationException("Movement::toUpperCase " + letter);
+		// System.err.println("Movement::goUpperCase " + letter);
+		throw new UnsupportedOperationException("Movement::goUpperCase " + letter);
 	}
 
 	public SvgPosition getMirrorControlPoint() {

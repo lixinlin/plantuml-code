@@ -87,7 +87,7 @@ public class CommandMouseOver extends CommandMultilines2<ClassDiagram> {
 
 	// private Entity executeArg0(Map<String, RegexPartialMatch> arg) {
 	//
-	// final EntityType type = EntityType.getEntityType(arg.get("TYPE").get(0).toUpperCase());
+	// final EntityType type = EntityType.getEntityType(arg.get("TYPE").get(0).goUpperCase());
 	// final String code;
 	// final String display;
 	// if (arg.get("NAME1").get(1) != null) {

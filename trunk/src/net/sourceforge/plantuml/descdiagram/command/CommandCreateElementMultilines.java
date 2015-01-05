@@ -83,7 +83,7 @@ public class CommandCreateElementMultilines extends CommandMultilines2<Descripti
 	public CommandExecutionResult executeNow(DescriptionDiagram diagram, List<String> lines) {
 		StringUtils.trim(lines, false);
 		final RegexResult line0 = getStartingPattern().matcher(lines.get(0).trim());
-		final String symbol = line0.get("TYPE", 0).toUpperCase();
+		final String symbol = StringUtils.goUpperCase(line0.get("TYPE", 0));
 		final LeafType type;
 		final USymbol usymbol;
 

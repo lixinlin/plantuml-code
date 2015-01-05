@@ -95,7 +95,7 @@ public class EntityImageComponent extends AbstractEntityImage {
 					Display.getWithNewlines(stereotype.getLabel()),
 					new FontConfiguration(SkinParamUtils.getFont(getSkinParam(),
 							symbol.getFontParamStereotype(), stereotype), SkinParamUtils.getFontColor(getSkinParam(),
-					symbol.getFontParamStereotype(), null), getSkinParam().getHyperlinkColor()), HorizontalAlignment.CENTER, skinParam);
+					symbol.getFontParamStereotype(), null), getSkinParam().getHyperlinkColor(), getSkinParam().useUnderlineForHyperlink()), HorizontalAlignment.CENTER, skinParam);
 		}
 
 		asSmall = symbol.asSmall(desc, stereo, ctx);

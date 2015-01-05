@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 14321 $
+ * Revision $Revision: 14726 $
  *
  */
 package net.sourceforge.plantuml.cucadiagram.dot;
@@ -83,7 +83,7 @@ abstract class AbstractGraphviz implements Graphviz {
 		}
 
 		if (illegalDotExe()) {
-			// createPngNoGraphviz(os, new FileFormatOption(FileFormat.valueOf(type[0].toUpperCase())));
+			// createPngNoGraphviz(os, new FileFormatOption(FileFormat.valueOf(type[0].goUpperCase())));
 			throw new IllegalStateException();
 		}
 		final String cmd[] = getCommandLine();

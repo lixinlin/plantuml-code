@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 14439 $
+ * Revision $Revision: 14711 $
  *
  */
 package net.sourceforge.plantuml.cucadiagram;
@@ -360,7 +360,7 @@ public class Link implements Hideable, Removeable {
 			ISkinSimple spriteContainer) {
 		if (qualif != null) {
 			final TextBlock b = TextBlockUtils.create(Display.create(qualif), new FontConfiguration(fontQualif,
-					HtmlColorUtils.BLACK, HtmlColorUtils.BLUE), HorizontalAlignment.LEFT, spriteContainer);
+					HtmlColorUtils.BLACK, HtmlColorUtils.BLUE, true), HorizontalAlignment.LEFT, spriteContainer);
 			final Dimension2D dim = b.calculateDimension(stringBounder);
 			return Math.max(dim.getWidth(), dim.getHeight());
 		}

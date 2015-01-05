@@ -120,7 +120,7 @@ public class FtileGeometry extends Dimension2D {
 	}
 
 	public FtileGeometry addDim(double deltaWidth, double deltaHeight) {
-		return new FtileGeometry(width + deltaWidth, height + deltaWidth, left, inY, outY);
+		return new FtileGeometry(width + deltaWidth, height + deltaHeight, left, inY, outY + deltaHeight);
 	}
 
 	public FtileGeometry addMarginX(double marginx) {

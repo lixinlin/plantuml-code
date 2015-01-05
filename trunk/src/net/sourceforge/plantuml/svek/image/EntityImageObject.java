@@ -90,7 +90,7 @@ public class EntityImageObject extends AbstractEntityImage implements Stencil {
 				entity.getDisplay(),
 				new FontConfiguration(SkinParamUtils.getFont(getSkinParam(),
 						FontParam.OBJECT, stereotype), SkinParamUtils.getFontColor(getSkinParam(), FontParam.OBJECT,
-				stereotype), getSkinParam().getHyperlinkColor()), HorizontalAlignment.CENTER, skinParam), 2, 2);
+				stereotype), getSkinParam().getHyperlinkColor(), getSkinParam().useUnderlineForHyperlink()), HorizontalAlignment.CENTER, skinParam), 2, 2);
 		if (stereotype == null || stereotype.getLabel() == null) {
 			this.stereo = null;
 		} else {
@@ -98,7 +98,7 @@ public class EntityImageObject extends AbstractEntityImage implements Stencil {
 					Display.getWithNewlines(stereotype.getLabel()),
 					new FontConfiguration(SkinParamUtils.getFont(getSkinParam(),
 							FontParam.OBJECT_STEREOTYPE, stereotype), SkinParamUtils.getFontColor(getSkinParam(),
-					FontParam.OBJECT_STEREOTYPE, stereotype), getSkinParam().getHyperlinkColor()), HorizontalAlignment.CENTER, skinParam);
+					FontParam.OBJECT_STEREOTYPE, stereotype), getSkinParam().getHyperlinkColor(), getSkinParam().useUnderlineForHyperlink()), HorizontalAlignment.CENTER, skinParam);
 		}
 
 		if (entity.getFieldsToDisplay().size() == 0) {

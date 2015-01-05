@@ -35,6 +35,7 @@ package net.sourceforge.plantuml.command;
 
 import java.util.List;
 
+import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.UmlDiagram;
 
 public class CommandPragma extends SingleLineCommand<UmlDiagram> {
@@ -45,7 +46,7 @@ public class CommandPragma extends SingleLineCommand<UmlDiagram> {
 
 	@Override
 	protected CommandExecutionResult executeArg(UmlDiagram system, List<String> arg) {
-		system.getPragma().define(arg.get(0).toLowerCase(), arg.get(1));
+		system.getPragma().define(StringUtils.goLowerCase(arg.get(0)), arg.get(1));
 		return CommandExecutionResult.ok();
 	}
 

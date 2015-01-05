@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 14321 $
+ * Revision $Revision: 14727 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.command;
@@ -63,7 +63,7 @@ public class CommandGrouping extends SingleLineCommand2<SequenceDiagram> {
 
 	@Override
 	protected CommandExecutionResult executeArg(SequenceDiagram diagram, RegexResult arg) {
-		String type = arg.get("TYPE", 0).toLowerCase();
+		String type = StringUtils.goLowerCase(arg.get("TYPE", 0));
 		final HtmlColor backColorElement = diagram.getSkinParam().getIHtmlColorSet()
 				.getColorIfValid(arg.get("COLORS", 0));
 		final HtmlColor backColorGeneral = diagram.getSkinParam().getIHtmlColorSet()

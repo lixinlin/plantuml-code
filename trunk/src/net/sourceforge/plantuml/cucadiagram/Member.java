@@ -36,6 +36,7 @@ package net.sourceforge.plantuml.cucadiagram;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.Url;
 import net.sourceforge.plantuml.UrlBuilder;
 import net.sourceforge.plantuml.UrlBuilder.ModeUrl;
@@ -82,7 +83,7 @@ public class Member {
 			}
 		}
 
-		final String lower = display.toLowerCase();
+		final String lower = StringUtils.goLowerCase(display);
 
 		if (manageModifier) {
 			this.staticModifier = lower.contains("{static}") || lower.contains("{classifier}");

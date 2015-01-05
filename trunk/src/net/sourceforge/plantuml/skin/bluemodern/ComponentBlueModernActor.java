@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 13836 $
+ * Revision $Revision: 14712 $
  *
  */
 package net.sourceforge.plantuml.skin.bluemodern;
@@ -53,8 +53,8 @@ public class ComponentBlueModernActor extends AbstractTextualComponent {
 	private final boolean head;
 
 	public ComponentBlueModernActor(HtmlColor backgroundColor, HtmlColor foregroundColor, HtmlColor fontColor, HtmlColor hyperlinkColor,
-			UFont font, Display stringsToDisplay, boolean head, ISkinSimple spriteContainer) {
-		super(stringsToDisplay, fontColor, hyperlinkColor, font, HorizontalAlignment.CENTER, 3, 3, 0, spriteContainer, 0, false);
+			boolean useUnderlineForHyperlink, UFont font, Display stringsToDisplay, boolean head, ISkinSimple spriteContainer) {
+		super(stringsToDisplay, fontColor, hyperlinkColor, useUnderlineForHyperlink, font, HorizontalAlignment.CENTER, 3, 3, 0, spriteContainer, 0, false);
 		this.head = head;
 		stickman = new StickMan(backgroundColor, foregroundColor);
 	}

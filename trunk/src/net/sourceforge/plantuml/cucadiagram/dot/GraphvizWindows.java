@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 14616 $
+ * Revision $Revision: 14727 $
  *
  */
 package net.sourceforge.plantuml.cucadiagram.dot;
@@ -38,6 +38,8 @@ import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import net.sourceforge.plantuml.StringUtils;
 
 class GraphvizWindows extends AbstractGraphviz {
 
@@ -65,7 +67,7 @@ class GraphvizWindows extends AbstractGraphviz {
 		final List<File> dots = new ArrayList<File>();
 		for (File f : programFile.listFiles(new FileFilter() {
 			public boolean accept(File pathname) {
-				return pathname.isDirectory() && pathname.getName().toLowerCase().startsWith("graphviz");
+				return pathname.isDirectory() && StringUtils.goLowerCase(pathname.getName()).startsWith("graphviz");
 			}
 		})) {
 			final File result = new File(new File(f, "bin"), "dot.exe");

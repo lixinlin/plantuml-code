@@ -35,6 +35,7 @@ package net.sourceforge.plantuml.sequencediagram.command;
 
 import net.sourceforge.plantuml.FontParam;
 import net.sourceforge.plantuml.ISkinParam;
+import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.Url;
 import net.sourceforge.plantuml.UrlBuilder;
 import net.sourceforge.plantuml.UrlBuilder.ModeUrl;
@@ -82,13 +83,13 @@ public abstract class CommandParticipant extends SingleLineCommand2<SequenceDiag
 		final ParticipantType type;
 		final boolean create;
 		if (typeCreate1 != null) {
-			type = ParticipantType.valueOf(typeCreate1.toUpperCase());
+			type = ParticipantType.valueOf(StringUtils.goUpperCase(typeCreate1));
 			create = true;
 		} else if (typeString1.equalsIgnoreCase("CREATE")) {
 			type = ParticipantType.PARTICIPANT;
 			create = true;
 		} else {
-			type = ParticipantType.valueOf(typeString1.toUpperCase());
+			type = ParticipantType.valueOf(StringUtils.goUpperCase(typeString1));
 			create = false;
 		}
 		final Participant participant = diagram.createNewParticipant(type, code, strings);

@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -177,6 +178,22 @@ public class StringUtils {
 
 	public static String capitalize(String s) {
 		return s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
+	}
+	
+	public static String goUpperCase(String s) {
+		return s.toUpperCase(Locale.ENGLISH);
+	}
+
+	public static char goUpperCase(char c) {
+		return goUpperCase("" + c).charAt(0);
+	}
+
+	public static String goLowerCase(String s) {
+		return s.toLowerCase(Locale.ENGLISH);
+	}
+
+	public static char goLowerCase(char c) {
+		return goLowerCase("" + c).charAt(0);
 	}
 
 	public static String manageArrowForCuca(String s) {

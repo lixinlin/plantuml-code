@@ -62,7 +62,7 @@ public enum FileFormat {
 		if (this == EPS_TEXT) {
 			return EPS.getFileSuffix();
 		}
-		return "." + name().toLowerCase();
+		return "." + StringUtils.goLowerCase(name());
 	}
 
 	/**

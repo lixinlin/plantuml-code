@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 12235 $
+ * Revision $Revision: 14726 $
  *
  */
 package net.sourceforge.plantuml.classdiagram.command;
@@ -43,6 +43,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.command.regex.MyPattern;
 import net.sourceforge.plantuml.cucadiagram.LeafType;
 
@@ -80,7 +81,7 @@ class JavaFile {
 				if (matchClassDefinition.find()) {
 					final String n = matchClassDefinition.group(2);
 					final String p = matchClassDefinition.group(4);
-					final LeafType type = LeafType.valueOf(matchClassDefinition.group(1).toUpperCase());
+					final LeafType type = LeafType.valueOf(StringUtils.goUpperCase(matchClassDefinition.group(1)));
 					final LeafType parentType = getParentType(type, matchClassDefinition.group(3));
 					all.add(new JavaClass(javaPackage, n, p, type, parentType));
 				}

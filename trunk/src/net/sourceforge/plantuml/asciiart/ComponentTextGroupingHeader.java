@@ -70,7 +70,7 @@ public class ComponentTextGroupingHeader extends AbstractComponentText {
 
 		if (fileFormat == FileFormat.UTXT) {
 			charArea.drawHLine('\u2550', 0, 1, width - 1, '\u2502', '\u256a');
-			charArea.drawStringLR(text.toUpperCase() + "  /", 2, 1);
+			charArea.drawStringLR(StringUtils.goUpperCase(text) + "  /", 2, 1);
 			charArea.drawHLine('\u2500', 2, 1, text.length() + 4);
 			charArea.drawVLine('\u2551', 0, 1, height - 1);
 			charArea.drawVLine('\u2551', width - 1, 1, height - 1);
@@ -83,7 +83,7 @@ public class ComponentTextGroupingHeader extends AbstractComponentText {
 			charArea.drawChar('\u255d', width - 1, height - 1);
 		} else {
 			charArea.drawHLine('_', 0, 0, width - 1);
-			charArea.drawStringLR(text.toUpperCase() + "  /", 2, 1);
+			charArea.drawStringLR(StringUtils.goUpperCase(text) + "  /", 2, 1);
 			charArea.drawHLine('_', 2, 1, text.length() + 3);
 			charArea.drawChar('/', text.length() + 3, 2);
 			charArea.drawVLine('!', 0, 1, height);

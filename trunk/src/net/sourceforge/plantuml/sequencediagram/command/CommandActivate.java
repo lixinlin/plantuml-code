@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 14321 $
+ * Revision $Revision: 14726 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.command;
@@ -50,7 +50,7 @@ public class CommandActivate extends SingleLineCommand<SequenceDiagram> {
 
 	@Override
 	protected CommandExecutionResult executeArg(SequenceDiagram diagram, List<String> arg) {
-		final LifeEventType type = LifeEventType.valueOf(arg.get(0).toUpperCase());
+		final LifeEventType type = LifeEventType.valueOf(StringUtils.goUpperCase(arg.get(0)));
 		final Participant p = diagram.getOrCreateParticipant(StringUtils
 				.eventuallyRemoveStartingAndEndingDoubleQuote(arg.get(1)));
 		final String error = diagram.activate(p, type,
