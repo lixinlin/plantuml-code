@@ -96,9 +96,11 @@ class Step1MessageExo extends Step1Abstract {
 					.ensureValue(length);
 		}
 
-		for (LifeEvent lifeEvent : getMessage().getLiveEvents()) {
-			afterMessage(getStringBounder(), lifeEvent, arrowYEndLevel + marginActivateAndDeactive);
-		}
+		final double posYendLevel = arrowYEndLevel + marginActivateAndDeactive;
+		getMessage().setPosYendLevel(posYendLevel);
+//		for (LifeEvent lifeEvent : getMessage().getLiveEvents()) {
+//			lifeEvent.afterMessage(getStringBounder(), getMessage().getPosYendLevel(), getDrawingSet(), getMessage().isSelfMessage());
+//		}
 
 		assert graphic instanceof InGroupable;
 		if (graphic instanceof InGroupable) {

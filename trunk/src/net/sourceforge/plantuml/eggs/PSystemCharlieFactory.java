@@ -28,23 +28,22 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 14823 $
+ * Revision $Revision: 3830 $
  *
  */
-package net.sourceforge.plantuml.sequencediagram.graphic;
+package net.sourceforge.plantuml.eggs;
 
-public enum LifeSegmentVariation {
-	LARGER, SMALLER;
+import net.sourceforge.plantuml.AbstractPSystem;
+import net.sourceforge.plantuml.command.PSystemSingleLineFactory;
 
-	public int apply(int v) {
-		if (this == LARGER) {
-			return v + 1;
+public class PSystemCharlieFactory extends PSystemSingleLineFactory {
+
+	@Override
+	protected AbstractPSystem executeLine(String line) {
+		if (line.equalsIgnoreCase("charlie") || line.equalsIgnoreCase("jesuischarlie")) {
+			return new PSystemCharlie();
 		}
-		assert this == SMALLER;
-		if (v == 0) {
-			return 0;
-		}
-		return v - 1;
+		return null;
 	}
 
 }

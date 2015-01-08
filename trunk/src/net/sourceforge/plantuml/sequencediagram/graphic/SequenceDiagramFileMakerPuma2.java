@@ -42,17 +42,13 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import net.sourceforge.plantuml.CMapData;
 import net.sourceforge.plantuml.Dimension2DDouble;
 import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.FontParam;
-import net.sourceforge.plantuml.Url;
+import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.activitydiagram3.ftile.EntityImageLegend;
-import net.sourceforge.plantuml.api.ImageDataComplex;
-import net.sourceforge.plantuml.api.ImageDataSimple;
 import net.sourceforge.plantuml.core.ImageData;
 import net.sourceforge.plantuml.cucadiagram.Display;
 import net.sourceforge.plantuml.eps.EpsStrategy;
@@ -66,9 +62,6 @@ import net.sourceforge.plantuml.graphic.TextBlockUtils;
 import net.sourceforge.plantuml.graphic.UDrawable;
 import net.sourceforge.plantuml.png.PngTitler;
 import net.sourceforge.plantuml.sequencediagram.Event;
-import net.sourceforge.plantuml.sequencediagram.LifeEvent;
-import net.sourceforge.plantuml.sequencediagram.LifeEventType;
-import net.sourceforge.plantuml.sequencediagram.Message;
 import net.sourceforge.plantuml.sequencediagram.Newpage;
 import net.sourceforge.plantuml.sequencediagram.Participant;
 import net.sourceforge.plantuml.sequencediagram.SequenceDiagram;
@@ -87,7 +80,6 @@ import net.sourceforge.plantuml.ugraphic.html5.UGraphicHtml5;
 import net.sourceforge.plantuml.ugraphic.svg.UGraphicSvg;
 import net.sourceforge.plantuml.ugraphic.tikz.UGraphicTikz;
 import net.sourceforge.plantuml.ugraphic.visio.UGraphicVdx;
-import net.sourceforge.plantuml.StringUtils;
 
 public class SequenceDiagramFileMakerPuma2 implements FileMaker {
 
@@ -113,18 +105,18 @@ public class SequenceDiagramFileMakerPuma2 implements FileMaker {
 
 		for (Event ev : sequenceDiagram.events()) {
 			initializer.addEvent(ev);
-			if (ev instanceof Message) {
-				// TODO mieux faire
-				final Message m = (Message) ev;
-				for (LifeEvent lifeEvent : m.getLiveEvents()) {
-					if (lifeEvent.getType() == LifeEventType.DESTROY
-					/*
-					 * || lifeEvent.getType() == LifeEventType.CREATE
-					 */) {
-						initializer.addEvent(lifeEvent);
-					}
-				}
-			}
+//			if (ev instanceof Message) {
+//				// TODO mieux faire
+//				final Message m = (Message) ev;
+//				for (LifeEvent lifeEvent : m.getLiveEvents()) {
+//					if (lifeEvent.getType() == LifeEventType.DESTROY
+//					/*
+//					 * || lifeEvent.getType() == LifeEventType.CREATE
+//					 */) {
+//						initializer.addEvent(lifeEvent);
+//					}
+//				}
+//			}
 		}
 		drawableSet = initializer.createDrawableSet(dummyStringBounder);
 		final List<Newpage> newpages = new ArrayList<Newpage>();

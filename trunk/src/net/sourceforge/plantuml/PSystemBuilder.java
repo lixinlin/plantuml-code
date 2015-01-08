@@ -53,6 +53,7 @@ import net.sourceforge.plantuml.directdot.PSystemDotFactory;
 import net.sourceforge.plantuml.ditaa.PSystemDitaaFactory;
 import net.sourceforge.plantuml.donors.PSystemDonorsFactory;
 import net.sourceforge.plantuml.eggs.PSystemAppleTwoFactory;
+import net.sourceforge.plantuml.eggs.PSystemCharlieFactory;
 import net.sourceforge.plantuml.eggs.PSystemEggFactory;
 import net.sourceforge.plantuml.eggs.PSystemLostFactory;
 import net.sourceforge.plantuml.eggs.PSystemPathFactory;
@@ -152,6 +153,7 @@ public class PSystemBuilder {
 		factories.add(new PSystemLostFactory());
 		factories.add(new PSystemPathFactory());
 		factories.add(new PSystemOregonFactory());
+		factories.add(new PSystemCharlieFactory());
 		if (License.getCurrent() == License.GPL) {
 			factories.add(new PSystemXearthFactory());
 		}

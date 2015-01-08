@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 12650 $
+ * Revision $Revision: 14825 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.graphic;
@@ -117,9 +117,13 @@ class Step1Message extends Step1Abstract {
 			constraintSet.getConstraint(getParticipantBox1(), getParticipantBox2()).ensureValue(length);
 		}
 
-		for (LifeEvent lifeEvent : getMessage().getLiveEvents()) {
-			afterMessage(getStringBounder(), lifeEvent, arrowYEndLevel + marginActivateAndDeactive - delta1);
-		}
+		final double posYendLevel = arrowYEndLevel + marginActivateAndDeactive - delta1;
+		getMessage().setPosYendLevel(posYendLevel);
+//		for (LifeEvent lifeEvent : getMessage().getLiveEvents()) {
+//			// BUG2015_1
+//			// System.err.println("Step1 "+getMessage().getClass()+" "+getMessage());
+//			lifeEvent.afterMessage(getStringBounder(), getMessage().getPosYendLevel(), getDrawingSet(), getMessage().isSelfMessage());
+//		}
 
 		assert graphic instanceof InGroupable;
 		if (graphic instanceof InGroupable) {

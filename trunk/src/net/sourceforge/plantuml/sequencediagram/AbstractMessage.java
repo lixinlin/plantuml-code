@@ -98,6 +98,7 @@ public abstract class AbstractMessage implements Event {
 		// return false;
 		// }
 		// }
+		// System.err.println("AbstractMessage::addLifeEvent " + lifeEvent + " to " + this);
 		this.lifeEvents.add(lifeEvent);
 		return true;
 	}
@@ -184,7 +185,28 @@ public abstract class AbstractMessage implements Event {
 	}
 
 	public abstract boolean compatibleForCreate(Participant p);
-	
+
 	public abstract boolean isSelfMessage();
+
+	private double posYendLevel;
+
+	public void setPosYendLevel(double posYendLevel) {
+		this.posYendLevel = posYendLevel;
+	}
+
+	public double getPosYendLevel() {
+		return posYendLevel;
+	}
+
+	// // BUG2015_1
+	// private Event previousEvent;
+	//
+	// public Event getPreviousEvent() {
+	// return previousEvent;
+	// }
+	//
+	// public void setPreviousEvent(Event previousEvent) {
+	// this.previousEvent = previousEvent;
+	// }
 
 }

@@ -89,6 +89,18 @@ public class PSystemVersion extends AbstractPSystem {
 		return null;
 	}
 
+	public static BufferedImage getCharlieImage() {
+		try {
+			final InputStream is = PSystemVersion.class.getResourceAsStream("charlie.png");
+			final BufferedImage image = ImageIO.read(is);
+			is.close();
+			return image;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	public static BufferedImage getPlantumlSmallIcon() {
 		try {
 			final InputStream is = PSystemVersion.class.getResourceAsStream("favicon.png");

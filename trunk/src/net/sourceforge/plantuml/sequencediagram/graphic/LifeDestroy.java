@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 12235 $
+ * Revision $Revision: 14823 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.graphic;
@@ -39,7 +39,7 @@ import net.sourceforge.plantuml.skin.Context2D;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
 import net.sourceforge.plantuml.ugraphic.UTranslate;
 
-class LifeDestroy extends GraphicalElement {
+public class LifeDestroy extends GraphicalElement {
 
 	private final ParticipantBox participant;
 

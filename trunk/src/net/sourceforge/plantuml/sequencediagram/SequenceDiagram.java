@@ -187,6 +187,14 @@ public class SequenceDiagram extends UmlDiagram {
 		return Collections.unmodifiableList(events);
 	}
 
+//	// BUG2015_1
+//	private Event lastEvent() {
+//		if (events.size() == 0) {
+//			return null;
+//		}
+//		return events.get(events.size() - 1);
+//	}
+
 	private FileMaker getSequenceDiagramPngMaker(FileFormatOption fileFormatOption) {
 
 		final FileFormat fileFormat = fileFormatOption.getFileFormat();
@@ -194,7 +202,7 @@ public class SequenceDiagram extends UmlDiagram {
 		if (fileFormat == FileFormat.ATXT || fileFormat == FileFormat.UTXT) {
 			return new SequenceDiagramTxtMaker(this, fileFormat);
 		}
-		
+
 		if (OptionFlags.TEOZ) {
 			return new SequenceDiagramFileMakerTeoz(this, skin, fileFormatOption);
 		}
@@ -203,7 +211,8 @@ public class SequenceDiagram extends UmlDiagram {
 	}
 
 	@Override
-	protected ImageData exportDiagramInternal(OutputStream os, int index, FileFormatOption fileFormat) throws IOException {
+	protected ImageData exportDiagramInternal(OutputStream os, int index, FileFormatOption fileFormat)
+			throws IOException {
 		final FileMaker sequenceDiagramPngMaker = getSequenceDiagramPngMaker(fileFormat);
 		return sequenceDiagramPngMaker.createOne(os, index, fileFormat.isWithMetadata());
 	}
@@ -221,11 +230,15 @@ public class SequenceDiagram extends UmlDiagram {
 	private LifeEvent pendingCreate = null;
 
 	public String activate(Participant p, LifeEventType lifeEventType, HtmlColor backcolor) {
+		// BUG2015_1
+		//System.err.println("Sequence p=" + p + " type=" + lifeEventType);
 		if (lastDelay != null) {
 			return "You cannot Activate/Deactivate just after a ...";
 		}
+		final LifeEvent lifeEvent = new LifeEvent(p, lifeEventType, backcolor);
+		events.add(lifeEvent);
 		if (lifeEventType == LifeEventType.CREATE) {
-			pendingCreate = new LifeEvent(p, lifeEventType, backcolor);
+			pendingCreate = lifeEvent;
 			return null;
 		}
 		if (lastMessage == null) {
@@ -240,7 +253,11 @@ public class SequenceDiagram extends UmlDiagram {
 		} else if (lifeEventType == LifeEventType.DEACTIVATE && activationState.empty() == false) {
 			activationState.pop();
 		}
-		final boolean ok = lastMessage.addLifeEvent(new LifeEvent(p, lifeEventType, backcolor));
+		// BUG2015_1
+//		final Event lastEvent = lastEvent();
+		// System.err.println("lastEvent="+lastEvent);
+		final boolean ok = lastMessage.addLifeEvent(lifeEvent);
+//		lastMessage.setPreviousEvent(lastEvent);
 		if (ok) {
 			return null;
 		}
@@ -354,7 +371,6 @@ public class SequenceDiagram extends UmlDiagram {
 	public boolean isBoxPending() {
 		return participantEnglober != null;
 	}
-
 
 	@Override
 	public int getNbImages() {
