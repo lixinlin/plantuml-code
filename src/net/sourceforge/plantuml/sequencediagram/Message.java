@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 12630 $
+ * Revision $Revision: 14805 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram;
@@ -36,7 +36,7 @@ package net.sourceforge.plantuml.sequencediagram;
 import net.sourceforge.plantuml.cucadiagram.Display;
 import net.sourceforge.plantuml.skin.ArrowConfiguration;
 
-public class Message extends AbstractMessage {
+public final class Message extends AbstractMessage {
 
 	final private Participant p1;
 	final private Participant p2;

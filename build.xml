@@ -25,10 +25,20 @@
 			todir="build/net/sourceforge/plantuml/version" />
 		<copy file="src/net/sourceforge/plantuml/version/favicon.png"
 			todir="build/net/sourceforge/plantuml/version" />
+		<copy todir="build/net/sourceforge/plantuml/version">
+			<fileset dir="src/net/sourceforge/plantuml/version">
+				<include name="*.png" />
+			</fileset>
+		</copy>
 		<copy todir="build/net/sourceforge/plantuml/openiconic/data">
 			<fileset dir="src/net/sourceforge/plantuml/openiconic/data">
 				<include name="*.txt" />
 				<include name="*.svg" />
+			</fileset>
+		</copy>
+		<copy todir="build/net/sourceforge/plantuml/fun">
+			<fileset dir="src/net/sourceforge/plantuml/fun">
+				<include name="*.png" />
 			</fileset>
 		</copy>
 	</target>

@@ -131,6 +131,7 @@ public class QuoteUtils {
 			"I don't believe it. Prove it to me and I still won't believe it.", //
 			"Totally mad, utter nonsense. But we'll do it because it's brilliant nonsense.", //
 			"This sentence is not true."
+			// I would rather die standing that live on my knees.
 			);
 	
 

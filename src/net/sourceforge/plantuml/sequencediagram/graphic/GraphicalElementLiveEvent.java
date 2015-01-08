@@ -28,23 +28,34 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 14823 $
+ * Revision $Revision: 12235 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.graphic;
 
-public enum LifeSegmentVariation {
-	LARGER, SMALLER;
+import net.sourceforge.plantuml.graphic.StringBounder;
+import net.sourceforge.plantuml.skin.Context2D;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
 
-	public int apply(int v) {
-		if (this == LARGER) {
-			return v + 1;
-		}
-		assert this == SMALLER;
-		if (v == 0) {
-			return 0;
-		}
-		return v - 1;
+public class GraphicalElementLiveEvent extends GraphicalElement {
+
+	public GraphicalElementLiveEvent(double startingY) {
+		super(startingY);
+	}
+
+	protected void drawInternalU(UGraphic ug, double maxX, Context2D context) {
+	}
+
+	public double getStartingX(StringBounder stringBounder) {
+		return 0;
+	}
+
+	public double getPreferredWidth(StringBounder stringBounder) {
+		return 0;
+	}
+
+	public double getPreferredHeight(StringBounder stringBounder) {
+		return 0;
 	}
 
 }

@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 14751 $
+ * Revision $Revision: 14837 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.graphic;
@@ -38,11 +38,13 @@ import java.util.List;
 
 import net.sourceforge.plantuml.Dimension2DDouble;
 import net.sourceforge.plantuml.ISkinParam;
+import net.sourceforge.plantuml.OptionFlags;
 import net.sourceforge.plantuml.SkinParamBackcolored;
 import net.sourceforge.plantuml.SkinParamBackcoloredReference;
 import net.sourceforge.plantuml.cucadiagram.Display;
 import net.sourceforge.plantuml.graphic.HtmlColor;
 import net.sourceforge.plantuml.graphic.StringBounder;
+import net.sourceforge.plantuml.sequencediagram.AbstractMessage;
 import net.sourceforge.plantuml.sequencediagram.Delay;
 import net.sourceforge.plantuml.sequencediagram.Divider;
 import net.sourceforge.plantuml.sequencediagram.Event;
@@ -113,16 +115,16 @@ class DrawableSetInitializer {
 		return getFullParticipantRange();
 	}
 
-	private int getParticipantRangeIndex(Participant participant) {
-		int r = 0;
-		for (Participant p : drawableSet.getAllParticipants()) {
-			r++;
-			if (p == participant) {
-				return r;
-			}
-		}
-		throw new IllegalArgumentException();
-	}
+	// private int getParticipantRangeIndex(Participant participant) {
+	// int r = 0;
+	// for (Participant p : drawableSet.getAllParticipants()) {
+	// r++;
+	// if (p == participant) {
+	// return r;
+	// }
+	// }
+	// throw new IllegalArgumentException();
+	// }
 
 	public DrawableSet createDrawableSet(StringBounder stringBounder) {
 		if (freeY2 != null) {
@@ -174,7 +176,7 @@ class DrawableSetInitializer {
 			} else if (ev instanceof Notes) {
 				prepareNotes(stringBounder, (Notes) ev, range);
 			} else if (ev instanceof LifeEvent) {
-				prepareLiveEvent(stringBounder, (LifeEvent) ev);
+				prepareLiveEvent(stringBounder, (LifeEvent) ev, range);
 			} else if (ev instanceof GroupingLeaf) {
 				prepareGroupingLeaf(stringBounder, (GroupingLeaf) ev, range);
 			} else if (ev instanceof GroupingStart) {
@@ -384,7 +386,7 @@ class DrawableSetInitializer {
 			final double preferredHeight = element.getPreferredHeight(stringBounder);
 			freeY2 = freeY2.add(preferredHeight, range);
 			// MODIF42
-			inGroupableStack.addElement((GroupingGraphicalElementElse)element);
+			inGroupableStack.addElement((GroupingGraphicalElementElse) element);
 		} else if (m.getType() == GroupingType.END) {
 			if (m.isParallel()) {
 				freeY2 = ((FrontierStack) freeY2).closeBar();
@@ -400,6 +402,8 @@ class DrawableSetInitializer {
 					Display.create(m.getComment()));
 			final double preferredHeight = comp.getPreferredHeight(stringBounder);
 			freeY2 = freeY2.add(preferredHeight, range);
+			// BUG2015_1
+			// System.err.println("prepareGroupingLeaf END2 freeY2=" + freeY2.getFreeY(range));
 			inGroupableStack.pop();
 		} else {
 			throw new IllegalStateException();
@@ -462,15 +466,62 @@ class DrawableSetInitializer {
 		return ComponentType.NOTE;
 	}
 
-	private void prepareLiveEvent(StringBounder stringBounder, LifeEvent lifeEvent) {
-		if (lifeEvent.getType() != LifeEventType.DESTROY && lifeEvent.getType() != LifeEventType.CREATE) {
-			throw new IllegalStateException();
+	private void prepareLiveEvent(StringBounder stringBounder, LifeEvent lifeEvent, ParticipantRange range) {
+		final double y = freeY2.getFreeY(range);
+		// System.err.println("prepareLiveEvent = " + lifeEvent + " y=" + y);
+
+		if (lifeEvent.getType() == LifeEventType.DESTROY) {
+			final Component comp = drawableSet.getSkin().createComponent(ComponentType.DESTROY, null,
+					drawableSet.getSkinParam(), null);
+			final double delta = comp.getPreferredHeight(stringBounder) / 2;
+			final LivingParticipantBox livingParticipantBox = drawableSet.getLivingParticipantBox(lifeEvent
+					.getParticipant());
+			final LifeDestroy destroy = new LifeDestroy(lifeEvent.getStrangePos() - delta,
+					livingParticipantBox.getParticipantBox(), comp);
+			drawableSet.addEvent(lifeEvent, destroy);
+		} else {
+			drawableSet.addEvent(lifeEvent, new GraphicalElementLiveEvent(y));
 		}
+
+	}
+
+	private void prepareMessageExo(StringBounder stringBounder, MessageExo m, ParticipantRange range) {
+		final Step1MessageExo step1Message = new Step1MessageExo(range, stringBounder, m, drawableSet, freeY2);
+		freeY2 = step1Message.prepareMessage(constraintSet, inGroupableStack);
+		afterMessage(stringBounder, m);
+	}
+
+	private void afterMessage(StringBounder stringBounder, AbstractMessage m) {
+		// System.err.println("prepareMessage " + m + " " + m.getLiveEvents());
+		for (LifeEvent lifeEvent : m.getLiveEvents()) {
+			afterMessage(lifeEvent, stringBounder, m.getPosYendLevel(), drawableSet, m.isSelfMessage());
+		}
+	}
+
+	private void afterMessage(LifeEvent lifeEvent, StringBounder stringBounder, final double pos,
+			DrawableSet drawingSet, boolean isSelfMessage) {
+
+		lifeEvent.setStrangePos(pos);
+		if (lifeEvent.getType() == LifeEventType.DESTROY || lifeEvent.getType() == LifeEventType.DEACTIVATE) {
+			double delta = 0;
+			if (OptionFlags.STRICT_SELFMESSAGE_POSITION && isSelfMessage) {
+				delta += 7;
+			}
+			final Participant p = lifeEvent.getParticipant();
+			final LifeLine line = drawingSet.getLivingParticipantBox(p).getLifeLine();
+			// BUG2015_1
+			// System.err.println("lifeEvent::afterMessage " + this + " pos=" + pos);
+			// Thread.dumpStack();
+
+			line.addSegmentVariation(LifeSegmentVariation.SMALLER, pos - delta, lifeEvent.getSpecificBackColor());
+		}
+
 	}
 
 	private void prepareMessage(StringBounder stringBounder, Message m, ParticipantRange range) {
 		final Step1Message step1Message = new Step1Message(range, stringBounder, m, drawableSet, freeY2);
 		freeY2 = step1Message.prepareMessage(constraintSet, inGroupableStack);
+		afterMessage(stringBounder, m);
 	}
 
 	private void prepareReference(StringBounder stringBounder, Reference reference, ParticipantRange range) {
@@ -509,11 +560,6 @@ class DrawableSetInitializer {
 
 		freeY2 = freeY2.add(graphicalReference.getPreferredHeight(stringBounder), range);
 		drawableSet.addEvent(reference, graphicalReference);
-	}
-
-	private void prepareMessageExo(StringBounder stringBounder, MessageExo m, ParticipantRange range) {
-		final Step1MessageExo step1Message = new Step1MessageExo(range, stringBounder, m, drawableSet, freeY2);
-		freeY2 = step1Message.prepareMessage(constraintSet, inGroupableStack);
 	}
 
 	private void prepareParticipant(StringBounder stringBounder, Participant p) {

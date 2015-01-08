@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 13707 $
+ * Revision $Revision: 14823 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.graphic;
@@ -49,7 +49,7 @@ import net.sourceforge.plantuml.skin.Skin;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
 import net.sourceforge.plantuml.ugraphic.UTranslate;
 
-class LifeLine {
+public class LifeLine {
 
 	static class Variation {
 		final private LifeSegmentVariation type;
@@ -177,9 +177,15 @@ class LifeLine {
 				level--;
 			}
 			if (level == 0) {
-				return new SegmentColored(events.get(i).y, events.get(j).y, events.get(i).backcolor, shadowing);
+				// BUG2015_1
+				final double y1 = events.get(i).y;
+				final double y2 = events.get(j).y;
+				// System.err.println("cas1 y1="+y1+" y2="+y2);
+				return new SegmentColored(y1, y2, events.get(i).backcolor, shadowing);
 			}
 		}
+		// BUG2015_1
+		// System.err.println("cas2");
 		return new SegmentColored(events.get(i).y, events.get(events.size() - 1).y, events.get(i).backcolor, shadowing);
 	}
 
@@ -207,14 +213,14 @@ class LifeLine {
 				}
 				final Component compAliveBox = skin.createComponent(type, null, skinParam2, null);
 				type = ComponentType.ALIVE_BOX_OPEN_OPEN;
-				final int currentLevel = getLevel(seg.getSegment().getPos1());
+				final int currentLevel = getLevel(seg.getPos1Initial());
 				seg.drawU(ug, compAliveBox, currentLevel);
 			}
 		}
 	}
 
 	private double create = 0;
-	private double destroy = 0;
+	// private double destroy = 0;
 
 	public final void setCreate(double create) {
 		this.create = create;
@@ -225,12 +231,12 @@ class LifeLine {
 	}
 
 	public final double getDestroy() {
-		return destroy;
+		return 0;
 	}
 
-	public final void setDestroy(double destroy) {
-		this.destroy = destroy;
-	}
+//	public final void setDestroy(double destroy) {
+//		this.destroy = destroy;
+//	}
 
 	public final boolean shadowing() {
 		return shadowing;

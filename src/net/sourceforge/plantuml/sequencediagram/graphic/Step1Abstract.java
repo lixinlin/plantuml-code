@@ -45,7 +45,6 @@ import net.sourceforge.plantuml.sequencediagram.NotePosition;
 import net.sourceforge.plantuml.sequencediagram.Participant;
 import net.sourceforge.plantuml.skin.ArrowConfiguration;
 import net.sourceforge.plantuml.skin.Component;
-import net.sourceforge.plantuml.skin.ComponentType;
 
 abstract class Step1Abstract {
 
@@ -110,48 +109,6 @@ abstract class Step1Abstract {
 		line.addSegmentVariation(LifeSegmentVariation.LARGER, pos + delta, n.getSpecificBackColor());
 	}
 
-	protected final void afterMessage(StringBounder stringBounder, LifeEvent n, final double pos) {
-		final Participant p = n.getParticipant();
-		final LifeLine line = drawingSet.getLivingParticipantBox(p).getLifeLine();
-
-		if (n.getType() == LifeEventType.ACTIVATE || n.getType() == LifeEventType.CREATE) {
-			return;
-		}
-
-		if (n.getType() == LifeEventType.DESTROY) {
-			final Component comp = drawingSet.getSkin().createComponent(ComponentType.DESTROY, null,
-					drawingSet.getSkinParam(), null);
-			final double delta = comp.getPreferredHeight(stringBounder) / 2;
-			final LifeDestroy destroy = new LifeDestroy(pos - delta, drawingSet.getLivingParticipantBox(p)
-					.getParticipantBox(), comp);
-			if (lifelineAfterDestroy()) {
-				line.setDestroy(pos);
-			}
-			drawingSet.addEvent(n, destroy);
-		} else if (n.getType() != LifeEventType.DEACTIVATE) {
-			throw new IllegalStateException();
-		}
-
-		double delta = 0;
-		if (OptionFlags.STRICT_SELFMESSAGE_POSITION && message.isSelfMessage()) {
-			delta += 7;
-		}
-
-		line.addSegmentVariation(LifeSegmentVariation.SMALLER, pos - delta, n.getSpecificBackColor());
-	}
-
-	private boolean lifelineAfterDestroy() {
-		// final String v = drawingSet.getSkinParam().getValue("lifelineafterdestroy");
-		return false;
-	}
-
-	// protected final ComponentType getType() {
-	// return type;
-	// }
-	//
-	// protected final void setType(ComponentType type) {
-	// this.type = type;
-	// }
 
 	protected final ArrowConfiguration getConfig() {
 		return config;

@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 13827 $
+ * Revision $Revision: 14823 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.graphic;
@@ -63,7 +63,7 @@ import net.sourceforge.plantuml.ugraphic.UClip;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
 import net.sourceforge.plantuml.ugraphic.UTranslate;
 
-class DrawableSet {
+public class DrawableSet {
 
 	private final Map<Participant, LivingParticipantBox> participants = new LinkedHashMap<Participant, LivingParticipantBox>();
 	private final Map<Event, GraphicalElement> events = new HashMap<Event, GraphicalElement>();

@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 13707 $
+ * Revision $Revision: 14837 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram;
@@ -75,6 +75,16 @@ public class LifeEvent implements Event {
 
 	public boolean hasUrl() {
 		return false;
+	}
+
+	private double strangePos;
+
+	public void setStrangePos(double strangePos) {
+		this.strangePos = strangePos;
+	}
+
+	public double getStrangePos() {
+		return strangePos;
 	}
 
 }
