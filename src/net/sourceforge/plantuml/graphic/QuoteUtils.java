@@ -130,8 +130,9 @@ public class QuoteUtils {
 			"Please call me Eddie if it will help you to relax.", //
 			"I don't believe it. Prove it to me and I still won't believe it.", //
 			"Totally mad, utter nonsense. But we'll do it because it's brilliant nonsense.", //
-			"This sentence is not true."
-			// I would rather die standing that live on my knees.
+			"This sentence is not true.",
+			"I would rather die standing than live on my knees.",
+			"You are being watched."
 			);
 	
 

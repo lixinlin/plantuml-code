@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 14837 $
+ * Revision $Revision: 14860 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.graphic;
@@ -402,8 +402,6 @@ class DrawableSetInitializer {
 					Display.create(m.getComment()));
 			final double preferredHeight = comp.getPreferredHeight(stringBounder);
 			freeY2 = freeY2.add(preferredHeight, range);
-			// BUG2015_1
-			// System.err.println("prepareGroupingLeaf END2 freeY2=" + freeY2.getFreeY(range));
 			inGroupableStack.pop();
 		} else {
 			throw new IllegalStateException();
@@ -468,7 +466,33 @@ class DrawableSetInitializer {
 
 	private void prepareLiveEvent(StringBounder stringBounder, LifeEvent lifeEvent, ParticipantRange range) {
 		final double y = freeY2.getFreeY(range);
-		// System.err.println("prepareLiveEvent = " + lifeEvent + " y=" + y);
+		final AbstractMessage message = lifeEvent.getMessage();
+		if (lifeEvent.getType() == LifeEventType.ACTIVATE) {
+			double pos = 0;
+			if (message != null) {
+				int delta1 = 0;
+				if (message.isCreate()) {
+					delta1 += 10;
+				} else if (OptionFlags.STRICT_SELFMESSAGE_POSITION && message.isSelfMessage()) {
+					delta1 += 8;
+				}
+				pos = message.getPosYstartLevel() + delta1;
+			}
+			final LifeLine line1 = drawableSet.getLivingParticipantBox(lifeEvent.getParticipant()).getLifeLine();
+			line1.addSegmentVariation(LifeSegmentVariation.LARGER, pos, lifeEvent.getSpecificBackColor());
+		} else if (lifeEvent.getType() == LifeEventType.DESTROY || lifeEvent.getType() == LifeEventType.DEACTIVATE) {
+			double delta = 0;
+			if (OptionFlags.STRICT_SELFMESSAGE_POSITION && message != null && message.isSelfMessage()) {
+				delta += 7;
+			}
+			final Participant p = lifeEvent.getParticipant();
+			final LifeLine line = drawableSet.getLivingParticipantBox(p).getLifeLine();
+			double pos2 = y;
+			if (message != null) {
+				pos2 = message.getPosYendLevel() - delta;
+			}
+			line.addSegmentVariation(LifeSegmentVariation.SMALLER, pos2, lifeEvent.getSpecificBackColor());
+		}
 
 		if (lifeEvent.getType() == LifeEventType.DESTROY) {
 			final Component comp = drawableSet.getSkin().createComponent(ComponentType.DESTROY, null,
@@ -476,7 +500,7 @@ class DrawableSetInitializer {
 			final double delta = comp.getPreferredHeight(stringBounder) / 2;
 			final LivingParticipantBox livingParticipantBox = drawableSet.getLivingParticipantBox(lifeEvent
 					.getParticipant());
-			final LifeDestroy destroy = new LifeDestroy(lifeEvent.getStrangePos() - delta,
+			final LifeDestroy destroy = new LifeDestroy(lifeEvent.getMessage().getPosYendLevel() - delta,
 					livingParticipantBox.getParticipantBox(), comp);
 			drawableSet.addEvent(lifeEvent, destroy);
 		} else {
@@ -488,40 +512,11 @@ class DrawableSetInitializer {
 	private void prepareMessageExo(StringBounder stringBounder, MessageExo m, ParticipantRange range) {
 		final Step1MessageExo step1Message = new Step1MessageExo(range, stringBounder, m, drawableSet, freeY2);
 		freeY2 = step1Message.prepareMessage(constraintSet, inGroupableStack);
-		afterMessage(stringBounder, m);
-	}
-
-	private void afterMessage(StringBounder stringBounder, AbstractMessage m) {
-		// System.err.println("prepareMessage " + m + " " + m.getLiveEvents());
-		for (LifeEvent lifeEvent : m.getLiveEvents()) {
-			afterMessage(lifeEvent, stringBounder, m.getPosYendLevel(), drawableSet, m.isSelfMessage());
-		}
-	}
-
-	private void afterMessage(LifeEvent lifeEvent, StringBounder stringBounder, final double pos,
-			DrawableSet drawingSet, boolean isSelfMessage) {
-
-		lifeEvent.setStrangePos(pos);
-		if (lifeEvent.getType() == LifeEventType.DESTROY || lifeEvent.getType() == LifeEventType.DEACTIVATE) {
-			double delta = 0;
-			if (OptionFlags.STRICT_SELFMESSAGE_POSITION && isSelfMessage) {
-				delta += 7;
-			}
-			final Participant p = lifeEvent.getParticipant();
-			final LifeLine line = drawingSet.getLivingParticipantBox(p).getLifeLine();
-			// BUG2015_1
-			// System.err.println("lifeEvent::afterMessage " + this + " pos=" + pos);
-			// Thread.dumpStack();
-
-			line.addSegmentVariation(LifeSegmentVariation.SMALLER, pos - delta, lifeEvent.getSpecificBackColor());
-		}
-
 	}
 
 	private void prepareMessage(StringBounder stringBounder, Message m, ParticipantRange range) {
 		final Step1Message step1Message = new Step1Message(range, stringBounder, m, drawableSet, freeY2);
 		freeY2 = step1Message.prepareMessage(constraintSet, inGroupableStack);
-		afterMessage(stringBounder, m);
 	}
 
 	private void prepareReference(StringBounder stringBounder, Reference reference, ParticipantRange range) {

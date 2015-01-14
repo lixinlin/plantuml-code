@@ -46,6 +46,7 @@ import net.sourceforge.plantuml.activitydiagram3.ftile.AbstractConnection;
 import net.sourceforge.plantuml.activitydiagram3.ftile.AbstractFtile;
 import net.sourceforge.plantuml.activitydiagram3.ftile.Arrows;
 import net.sourceforge.plantuml.activitydiagram3.ftile.Connection;
+import net.sourceforge.plantuml.activitydiagram3.ftile.ConnectionTranslatable;
 import net.sourceforge.plantuml.activitydiagram3.ftile.Diamond;
 import net.sourceforge.plantuml.activitydiagram3.ftile.Ftile;
 import net.sourceforge.plantuml.activitydiagram3.ftile.FtileGeometry;
@@ -159,7 +160,7 @@ class FtileRepeat extends AbstractFtile {
 		}
 	}
 
-	class ConnectionOut extends AbstractConnection {
+	class ConnectionOut extends AbstractConnection implements ConnectionTranslatable {
 		private final HtmlColor arrowColor;
 
 		public ConnectionOut(HtmlColor arrowColor) {
@@ -186,6 +187,26 @@ class FtileRepeat extends AbstractFtile {
 
 			ug.draw(snake);
 		}
+		
+		public void drawTranslate(UGraphic ug, UTranslate translate1, UTranslate translate2) {
+			final StringBounder stringBounder = ug.getStringBounder();
+			final Snake snake = new Snake(arrowColor);
+			final Point2D mp1a = translate1.getTranslated(getP1(stringBounder));
+			final Point2D mp2b = translate2.getTranslated(getP2(stringBounder));
+			final double middle = (mp1a.getY() + mp2b.getY()) / 2.0;
+			snake.addPoint(mp1a);
+			snake.addPoint(mp1a.getX(), middle);
+			snake.addPoint(mp2b.getX(), middle);
+			// snake.addPoint(mp2b);
+			ug.draw(snake);
+
+			final Snake small = new Snake(arrowColor, Arrows.asToDown());
+			small.addPoint(mp2b.getX(), middle);
+			small.addPoint(mp2b);
+			ug.draw(small);
+
+		}
+
 	}
 
 	class ConnectionBack extends AbstractConnection {

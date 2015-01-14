@@ -92,4 +92,28 @@ public enum Direction {
 		}
 		throw new IllegalArgumentException();
 	}
+
+	public static Direction fromVector(Point2D p1, Point2D p2) {
+		final double x1 = p1.getX();
+		final double y1 = p1.getY();
+		final double x2 = p2.getX();
+		final double y2 = p2.getY();
+		if (x1 == x2 && y1 == y2) {
+			return null;
+		}
+		if (x1 == x2) {
+			if (y2 > y1) {
+				return Direction.DOWN;
+			}
+			return Direction.UP;
+		}
+		if (y1 == y2) {
+			if (x2 > x1) {
+				return Direction.RIGHT;
+			}
+			return Direction.LEFT;
+		}
+		throw new IllegalArgumentException();
+
+	}
 }

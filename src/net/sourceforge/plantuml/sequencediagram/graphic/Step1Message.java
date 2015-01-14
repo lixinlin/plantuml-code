@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 14825 $
+ * Revision $Revision: 14860 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.graphic;
@@ -39,7 +39,6 @@ import net.sourceforge.plantuml.SkinParamBackcolored;
 import net.sourceforge.plantuml.cucadiagram.Display;
 import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.sequencediagram.InGroupable;
-import net.sourceforge.plantuml.sequencediagram.LifeEvent;
 import net.sourceforge.plantuml.sequencediagram.Message;
 import net.sourceforge.plantuml.sequencediagram.NotePosition;
 import net.sourceforge.plantuml.skin.ArrowConfiguration;
@@ -87,10 +86,7 @@ class Step1Message extends Step1Abstract {
 
 		// final double delta1 = isSelfMessage() ? 4 : 0;
 		final double delta1 = 0;
-
-		for (LifeEvent lifeEvent : getMessage().getLiveEvents()) {
-			beforeMessage(lifeEvent, arrowYStartLevel + delta1);
-		}
+		getMessage().setPosYstartLevel(arrowYStartLevel + delta1);
 
 		final double length;
 		if (isSelfMessage()) {
@@ -119,11 +115,6 @@ class Step1Message extends Step1Abstract {
 
 		final double posYendLevel = arrowYEndLevel + marginActivateAndDeactive - delta1;
 		getMessage().setPosYendLevel(posYendLevel);
-//		for (LifeEvent lifeEvent : getMessage().getLiveEvents()) {
-//			// BUG2015_1
-//			// System.err.println("Step1 "+getMessage().getClass()+" "+getMessage());
-//			lifeEvent.afterMessage(getStringBounder(), getMessage().getPosYendLevel(), getDrawingSet(), getMessage().isSelfMessage());
-//		}
 
 		assert graphic instanceof InGroupable;
 		if (graphic instanceof InGroupable) {

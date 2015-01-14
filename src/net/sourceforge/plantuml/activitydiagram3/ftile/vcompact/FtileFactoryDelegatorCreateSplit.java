@@ -150,6 +150,7 @@ public class FtileFactoryDelegatorCreateSplit extends FtileFactoryDelegator {
 			}
 
 			final Snake s = new Snake(arrowColor);
+			s.goUnmergeable();
 			s.addPoint(minX, y);
 			s.addPoint(maxX, y);
 			ug.draw(s);

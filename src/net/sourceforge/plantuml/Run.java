@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 14727 $
+ * Revision $Revision: 14871 $
  *
  */
 package net.sourceforge.plantuml;
@@ -197,7 +197,7 @@ public class Run {
 	private static void goFtp(Option option) throws IOException {
 		final int ftpPort = option.getFtpPort();
 		System.err.println("ftpPort=" + ftpPort);
-		final FtpServer ftpServer = new FtpServer(ftpPort);
+		final FtpServer ftpServer = new FtpServer(ftpPort, option.getFileFormat());
 		ftpServer.go();
 	}
 

@@ -97,22 +97,26 @@ public class CreoleStripeSimpleParser {
 			return;
 		}
 
-		final Pattern p1 = MyPattern.cmpile("^(\\*+)([^*]+(?:[^*]|\\*\\*[^*]+\\*\\*)*)$");
-		final Matcher m1 = p1.matcher(line);
-		if (m1.find()) {
-			this.line = m1.group(2).trim();
-			final int order = m1.group(1).length() - 1;
-			this.style = new StripeStyle(StripeStyleType.LIST_WITHOUT_NUMBER, order, '\0');
-			return;
+		if (modeSimpleLine == false) {
+			final Pattern p1 = MyPattern.cmpile("^(\\*+)([^*]+(?:[^*]|\\*\\*[^*]+\\*\\*)*)$");
+			final Matcher m1 = p1.matcher(line);
+			if (m1.find()) {
+				this.line = m1.group(2).trim();
+				final int order = m1.group(1).length() - 1;
+				this.style = new StripeStyle(StripeStyleType.LIST_WITHOUT_NUMBER, order, '\0');
+				return;
+			}
 		}
 
-		final Pattern p2 = MyPattern.cmpile("^(#+)(.+)$");
-		final Matcher m2 = p2.matcher(CharHidder.hide(line));
-		if (m2.find()) {
-			this.line = CharHidder.unhide(m2.group(2)).trim();
-			final int order = CharHidder.unhide(m2.group(1)).length() - 1;
-			this.style = new StripeStyle(StripeStyleType.LIST_WITH_NUMBER, order, '\0');
-			return;
+		if (modeSimpleLine == false) {
+			final Pattern p2 = MyPattern.cmpile("^(#+)(.+)$");
+			final Matcher m2 = p2.matcher(CharHidder.hide(line));
+			if (m2.find()) {
+				this.line = CharHidder.unhide(m2.group(2)).trim();
+				final int order = CharHidder.unhide(m2.group(1)).length() - 1;
+				this.style = new StripeStyle(StripeStyleType.LIST_WITH_NUMBER, order, '\0');
+				return;
+			}
 		}
 
 		final Pattern p3 = MyPattern.cmpile("^(=+)(.+)$");

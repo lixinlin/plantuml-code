@@ -76,9 +76,9 @@ public class UGraphicForSnake extends UGraphicDelegator {
 		}
 
 		public PendingSnake merge(PendingSnake newItem) {
-			if (snake.isMergeable() == false || newItem.snake.isMergeable() == false) {
-				return null;
-			}
+//			if (snake.isMergeable() == false || newItem.snake.isMergeable() == false) {
+//				return null;
+//			}
 			final Snake s1 = snake.move(dx, dy);
 			final Snake s2 = newItem.snake.move(newItem.dx, newItem.dy);
 			final Snake merge = s1.merge(s2);

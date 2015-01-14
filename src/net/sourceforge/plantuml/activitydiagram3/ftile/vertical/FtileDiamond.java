@@ -73,10 +73,16 @@ public class FtileDiamond extends AbstractFtile {
 	}
 
 	public FtileDiamond withWest(TextBlock west1) {
+		if (west1 == null) {
+			return this;
+		}
 		return new FtileDiamond(shadowing(), backColor, borderColor, swimlane, north, south, east1, west1);
 	}
 
 	public FtileDiamond withEast(TextBlock east1) {
+		if (east1 == null) {
+			return this;
+		}
 		return new FtileDiamond(shadowing(), backColor, borderColor, swimlane, north, south, east1, west1);
 	}
 

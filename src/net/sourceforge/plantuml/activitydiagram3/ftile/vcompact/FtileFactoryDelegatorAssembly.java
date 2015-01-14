@@ -108,6 +108,6 @@ public class FtileFactoryDelegatorAssembly extends FtileFactoryDelegator {
 		final UFont font = skinParam.getFont(FontParam.ACTIVITY_ARROW, null, false);
 		final HtmlColor color = rose.getFontColor(skinParam, FontParam.ACTIVITY_ARROW);
 		final FontConfiguration fontConfiguration = new FontConfiguration(font, color, skinParam.getHyperlinkColor(), skinParam.useUnderlineForHyperlink());
-		return TextBlockUtils.create(display, fontConfiguration, HorizontalAlignment.LEFT, null);
+		return TextBlockUtils.create(display, fontConfiguration, HorizontalAlignment.LEFT, null, true);
 	}
 }

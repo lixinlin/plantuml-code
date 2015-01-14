@@ -27,60 +27,19 @@
  * in the United States and other countries.]
  *
  * Original Author:  Arnaud Roques
- *
- * Revision $Revision: 9786 $
+ * 
+ * Revision $Revision: 4636 $
  *
  */
-package net.sourceforge.plantuml.activitydiagram3;
+package net.sourceforge.plantuml.sequencediagram;
 
-import net.sourceforge.plantuml.cucadiagram.Display;
-import net.sourceforge.plantuml.graphic.HtmlColor;
+public interface EventWithDeactivate extends Event {
 
-public class LinkRendering {
+	public void setPosYendLevel(double posYendLevel);
 
-	private final HtmlColor color;
-	private Display display;
+	public double getPosYendLevel();
+	
+	public boolean addLifeEvent(LifeEvent lifeEvent);
 
-	public LinkRendering(HtmlColor color) {
-		this.color = color;
-	}
-
-	public void setDisplay(Display display) {
-		this.display = display;
-	}
-
-	public Display getDisplay() {
-		return display;
-	}
-
-	public HtmlColor getColor() {
-		return color;
-	}
-
-	@Override
-	public String toString() {
-		return super.toString() + " " + color;
-	}
-
-	public static HtmlColor getColor(LinkRendering inLinkRendering, HtmlColor defaultColor) {
-		if (inLinkRendering == null || inLinkRendering.getColor() == null) {
-			return defaultColor;
-		}
-		return inLinkRendering.getColor();
-	}
-
-	public static HtmlColor getColor(HtmlColor col, HtmlColor defaultColor) {
-		if (col == null) {
-			return defaultColor;
-		}
-		return col;
-	}
-
-	public static Display getDisplay(LinkRendering linkRendering) {
-		if (linkRendering == null) {
-			return null;
-		}
-		return linkRendering.getDisplay();
-	}
 
 }

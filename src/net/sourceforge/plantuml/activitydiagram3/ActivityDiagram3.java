@@ -144,7 +144,7 @@ public class ActivityDiagram3 extends UmlDiagram {
 
 	public void stop() {
 		manageSwimlaneStrategy();
-		current().add(new InstructionStop(swinlanes.getCurrentSwimlane()));
+		current().add(new InstructionStop(swinlanes.getCurrentSwimlane(), nextLinkRenderer()));
 	}
 
 	public DiagramDescription getDescription() {
@@ -170,6 +170,7 @@ public class ActivityDiagram3 extends UmlDiagram {
 	protected ImageData exportDiagramInternal(OutputStream os, int index, FileFormatOption fileFormatOption)
 			throws IOException {
 		// BUG42
+		// COMPRESSION
 		// TextBlock result = swinlanes;
 		TextBlock result = new TextBlockCompressed(swinlanes);
 		result = new TextBlockRecentred(result);
@@ -288,6 +289,7 @@ public class ActivityDiagram3 extends UmlDiagram {
 		final InstructionIf instructionIf = new InstructionIf(swinlanes.getCurrentSwimlane(), current(), test,
 				whenThen, nextLinkRenderer(), color, getSkinParam());
 		current().add(instructionIf);
+		setNextLinkRendererInternal(null);
 		setCurrent(instructionIf);
 	}
 
