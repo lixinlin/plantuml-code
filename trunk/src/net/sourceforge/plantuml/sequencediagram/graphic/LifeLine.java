@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 14823 $
+ * Revision $Revision: 14860 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram.graphic;
@@ -87,7 +87,7 @@ public class LifeLine {
 			final Variation last = events.get(events.size() - 1);
 			if (y < last.y) {
 				return;
-//				throw new IllegalArgumentException();
+				// throw new IllegalArgumentException();
 			}
 			if (y == last.y && type != last.type) {
 				return;
@@ -177,15 +177,11 @@ public class LifeLine {
 				level--;
 			}
 			if (level == 0) {
-				// BUG2015_1
 				final double y1 = events.get(i).y;
 				final double y2 = events.get(j).y;
-				// System.err.println("cas1 y1="+y1+" y2="+y2);
 				return new SegmentColored(y1, y2, events.get(i).backcolor, shadowing);
 			}
 		}
-		// BUG2015_1
-		// System.err.println("cas2");
 		return new SegmentColored(events.get(i).y, events.get(events.size() - 1).y, events.get(i).backcolor, shadowing);
 	}
 
@@ -201,7 +197,7 @@ public class LifeLine {
 		final StringBounder stringBounder = ug.getStringBounder();
 
 		ug = ug.apply(new UTranslate(getStartingX(stringBounder), 0));
-		
+
 		for (int i = 0; i < events.size(); i++) {
 			ComponentType type = ComponentType.ALIVE_BOX_CLOSE_OPEN;
 			for (final Iterator<SegmentColored> it = getSegmentsCutted(stringBounder, i).iterator(); it.hasNext();) {
@@ -220,6 +216,7 @@ public class LifeLine {
 	}
 
 	private double create = 0;
+
 	// private double destroy = 0;
 
 	public final void setCreate(double create) {
@@ -234,9 +231,9 @@ public class LifeLine {
 		return 0;
 	}
 
-//	public final void setDestroy(double destroy) {
-//		this.destroy = destroy;
-//	}
+	// public final void setDestroy(double destroy) {
+	// this.destroy = destroy;
+	// }
 
 	public final boolean shadowing() {
 		return shadowing;

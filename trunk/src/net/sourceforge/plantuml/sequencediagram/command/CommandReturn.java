@@ -39,6 +39,7 @@ import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.command.SingleLineCommand;
 import net.sourceforge.plantuml.cucadiagram.Display;
 import net.sourceforge.plantuml.sequencediagram.AbstractMessage;
+import net.sourceforge.plantuml.sequencediagram.EventWithDeactivate;
 import net.sourceforge.plantuml.sequencediagram.LifeEventType;
 import net.sourceforge.plantuml.sequencediagram.Message;
 import net.sourceforge.plantuml.sequencediagram.SequenceDiagram;
@@ -56,7 +57,7 @@ public class CommandReturn extends SingleLineCommand<SequenceDiagram> {
 		Message message = sequenceDiagram.getActivatingMessage();
 		boolean doDeactivation = true;
 		if (message == null) {
-			final AbstractMessage last = sequenceDiagram.getLastMessage();
+			final EventWithDeactivate last = sequenceDiagram.getLastEventWithDeactivate();
 			if (last instanceof Message == false) {
 				return CommandExecutionResult.error("Nowhere to return to.");
 			}

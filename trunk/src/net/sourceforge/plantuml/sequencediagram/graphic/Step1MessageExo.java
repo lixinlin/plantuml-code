@@ -38,7 +38,6 @@ import net.sourceforge.plantuml.SkinParamBackcolored;
 import net.sourceforge.plantuml.cucadiagram.Display;
 import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.sequencediagram.InGroupable;
-import net.sourceforge.plantuml.sequencediagram.LifeEvent;
 import net.sourceforge.plantuml.sequencediagram.MessageExo;
 import net.sourceforge.plantuml.sequencediagram.MessageExoType;
 import net.sourceforge.plantuml.sequencediagram.MessageNumber;
@@ -74,9 +73,7 @@ class Step1MessageExo extends Step1Abstract {
 		final double arrowYStartLevel = graphic.getArrowYStartLevel(getStringBounder());
 		final double arrowYEndLevel = graphic.getArrowYEndLevel(getStringBounder());
 
-		for (LifeEvent lifeEvent : getMessage().getLiveEvents()) {
-			beforeMessage(lifeEvent, arrowYStartLevel);
-		}
+		getMessage().setPosYstartLevel(arrowYStartLevel);
 
 		final double length = graphic.getArrowOnlyWidth(getStringBounder());
 		incFreeY(graphic.getPreferredHeight(getStringBounder()));
@@ -98,9 +95,6 @@ class Step1MessageExo extends Step1Abstract {
 
 		final double posYendLevel = arrowYEndLevel + marginActivateAndDeactive;
 		getMessage().setPosYendLevel(posYendLevel);
-//		for (LifeEvent lifeEvent : getMessage().getLiveEvents()) {
-//			lifeEvent.afterMessage(getStringBounder(), getMessage().getPosYendLevel(), getDrawingSet(), getMessage().isSelfMessage());
-//		}
 
 		assert graphic instanceof InGroupable;
 		if (graphic instanceof InGroupable) {

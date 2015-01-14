@@ -86,10 +86,10 @@ public class SequenceDiagram extends UmlDiagram {
 		return result;
 	}
 
-	private AbstractMessage lastMessage;
+	private EventWithDeactivate lastEventWithDeactivate;
 
-	public AbstractMessage getLastMessage() {
-		return lastMessage;
+	public EventWithDeactivate getLastEventWithDeactivate() {
+		return lastEventWithDeactivate;
 	}
 
 	public Participant createNewParticipant(ParticipantType type, String code, Display display) {
@@ -111,7 +111,7 @@ public class SequenceDiagram extends UmlDiagram {
 	}
 
 	public String addMessage(AbstractMessage m) {
-		lastMessage = m;
+		lastEventWithDeactivate = m;
 		lastDelay = null;
 		events.add(m);
 		if (pendingCreate != null) {
@@ -187,14 +187,6 @@ public class SequenceDiagram extends UmlDiagram {
 		return Collections.unmodifiableList(events);
 	}
 
-//	// BUG2015_1
-//	private Event lastEvent() {
-//		if (events.size() == 0) {
-//			return null;
-//		}
-//		return events.get(events.size() - 1);
-//	}
-
 	private FileMaker getSequenceDiagramPngMaker(FileFormatOption fileFormatOption) {
 
 		final FileFormat fileFormat = fileFormatOption.getFileFormat();
@@ -230,8 +222,6 @@ public class SequenceDiagram extends UmlDiagram {
 	private LifeEvent pendingCreate = null;
 
 	public String activate(Participant p, LifeEventType lifeEventType, HtmlColor backcolor) {
-		// BUG2015_1
-		//System.err.println("Sequence p=" + p + " type=" + lifeEventType);
 		if (lastDelay != null) {
 			return "You cannot Activate/Deactivate just after a ...";
 		}
@@ -241,23 +231,22 @@ public class SequenceDiagram extends UmlDiagram {
 			pendingCreate = lifeEvent;
 			return null;
 		}
-		if (lastMessage == null) {
+		if (lastEventWithDeactivate == null) {
 			if (lifeEventType == LifeEventType.ACTIVATE) {
 				p.incInitialLife(backcolor);
 				return null;
 			}
 			return "Only activate command can occur before message are send";
 		}
-		if (lifeEventType == LifeEventType.ACTIVATE && lastMessage instanceof Message) {
-			activationState.push((Message) lastMessage);
+		if (lifeEventType == LifeEventType.ACTIVATE && lastEventWithDeactivate instanceof Message) {
+			activationState.push((Message) lastEventWithDeactivate);
 		} else if (lifeEventType == LifeEventType.DEACTIVATE && activationState.empty() == false) {
 			activationState.pop();
 		}
-		// BUG2015_1
-//		final Event lastEvent = lastEvent();
-		// System.err.println("lastEvent="+lastEvent);
-		final boolean ok = lastMessage.addLifeEvent(lifeEvent);
-//		lastMessage.setPreviousEvent(lastEvent);
+		final boolean ok = lastEventWithDeactivate.addLifeEvent(lifeEvent);
+		if (lastEventWithDeactivate instanceof AbstractMessage) {
+			lifeEvent.setMessage((AbstractMessage) lastEventWithDeactivate);
+		}
 		if (ok) {
 			return null;
 		}
@@ -283,6 +272,7 @@ public class SequenceDiagram extends UmlDiagram {
 			openGroupings.add(0, (GroupingStart) g);
 		} else if (type == GroupingType.END) {
 			openGroupings.remove(0);
+			lastEventWithDeactivate = (GroupingLeaf) g;
 		}
 
 		return true;

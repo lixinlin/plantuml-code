@@ -91,24 +91,6 @@ abstract class Step1Abstract {
 		return result;
 	}
 
-	protected final void beforeMessage(LifeEvent n, final double pos) {
-		final Participant p = n.getParticipant();
-		final LifeLine line = drawingSet.getLivingParticipantBox(p).getLifeLine();
-
-		if (n.getType() != LifeEventType.ACTIVATE) {
-			return;
-		}
-		assert n.getType() == LifeEventType.ACTIVATE;
-
-		int delta = 0;
-		if (message.isCreate()) {
-			delta += 10;
-		} else if (OptionFlags.STRICT_SELFMESSAGE_POSITION && message.isSelfMessage()) {
-			delta += 8;
-		}
-		line.addSegmentVariation(LifeSegmentVariation.LARGER, pos + delta, n.getSpecificBackColor());
-	}
-
 
 	protected final ArrowConfiguration getConfig() {
 		return config;

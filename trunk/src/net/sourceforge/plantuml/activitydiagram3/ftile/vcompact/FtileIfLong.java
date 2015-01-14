@@ -372,6 +372,7 @@ class FtileIfLong extends AbstractFtile {
 			}
 
 			final Snake s = new Snake(arrowColor);
+			s.goUnmergeable();
 			final double height = totalDim.getHeight();
 			s.addPoint(minX, height);
 			s.addPoint(maxX, height);

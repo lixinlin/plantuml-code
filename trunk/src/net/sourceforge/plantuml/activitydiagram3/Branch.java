@@ -89,6 +89,10 @@ public class Branch {
 	}
 
 	public final Display getLabelPositive() {
+		final LinkRendering in = ftile.getInLinkRendering();
+		if (in != null && in.getDisplay() != null) {
+			return in.getDisplay();
+		}
 		return labelPositive;
 	}
 

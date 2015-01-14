@@ -50,6 +50,7 @@ import net.sourceforge.plantuml.command.regex.RegexResult;
 import net.sourceforge.plantuml.cucadiagram.Display;
 import net.sourceforge.plantuml.graphic.HtmlColorUtils;
 import net.sourceforge.plantuml.sequencediagram.AbstractMessage;
+import net.sourceforge.plantuml.sequencediagram.EventWithDeactivate;
 import net.sourceforge.plantuml.sequencediagram.NotePosition;
 import net.sourceforge.plantuml.sequencediagram.SequenceDiagram;
 import net.sourceforge.plantuml.StringUtils;
@@ -104,8 +105,8 @@ public final class FactorySequenceNoteOnArrowCommand implements SingleMultiFacto
 	}
 
 	private CommandExecutionResult executeInternal(SequenceDiagram system, final RegexResult line0, List<String> in) {
-		final AbstractMessage m = system.getLastMessage();
-		if (m != null) {
+		final EventWithDeactivate m = system.getLastEventWithDeactivate();
+		if (m instanceof AbstractMessage) {
 			final NotePosition position = NotePosition.valueOf(StringUtils.goUpperCase(line0.get("POSITION", 0)));
 			final Url url;
 			if (in.size() > 0) {
@@ -118,7 +119,7 @@ public final class FactorySequenceNoteOnArrowCommand implements SingleMultiFacto
 				in = in.subList(1, in.size());
 			}
 
-			m.setNote(Display.create(in), position, line0.get("COLOR", 0), url);
+			((AbstractMessage) m).setNote(Display.create(in), position, line0.get("COLOR", 0), url);
 		}
 
 		return CommandExecutionResult.ok();

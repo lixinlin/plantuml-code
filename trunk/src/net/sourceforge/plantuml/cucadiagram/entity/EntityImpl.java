@@ -40,6 +40,7 @@ import java.util.List;
 
 import net.sourceforge.plantuml.FontParam;
 import net.sourceforge.plantuml.ISkinParam;
+import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.Url;
 import net.sourceforge.plantuml.cucadiagram.BlockMember;
 import net.sourceforge.plantuml.cucadiagram.BlockMemberImpl;
@@ -50,6 +51,7 @@ import net.sourceforge.plantuml.cucadiagram.Display;
 import net.sourceforge.plantuml.cucadiagram.EntityPortion;
 import net.sourceforge.plantuml.cucadiagram.EntityPosition;
 import net.sourceforge.plantuml.cucadiagram.EntityUtils;
+import net.sourceforge.plantuml.cucadiagram.GroupRoot;
 import net.sourceforge.plantuml.cucadiagram.GroupType;
 import net.sourceforge.plantuml.cucadiagram.IGroup;
 import net.sourceforge.plantuml.cucadiagram.ILeaf;
@@ -69,7 +71,6 @@ import net.sourceforge.plantuml.svek.IEntityImage;
 import net.sourceforge.plantuml.svek.PackageStyle;
 import net.sourceforge.plantuml.svek.SingleStrategy;
 import net.sourceforge.plantuml.ugraphic.UStroke;
-import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.utils.UniqueSequence;
 
 final class EntityImpl implements ILeaf, IGroup {
@@ -357,6 +358,9 @@ final class EntityImpl implements ILeaf, IGroup {
 	public EntityPosition getEntityPosition() {
 		checkNotGroup();
 		if (leafType != LeafType.STATE) {
+			return EntityPosition.NORMAL;
+		}
+		if (getParentContainer() instanceof GroupRoot) {
 			return EntityPosition.NORMAL;
 		}
 		final Stereotype stereotype = getStereotype();

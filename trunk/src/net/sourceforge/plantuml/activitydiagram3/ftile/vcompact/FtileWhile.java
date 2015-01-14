@@ -40,6 +40,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import net.sourceforge.plantuml.Direction;
 import net.sourceforge.plantuml.ISkinSimple;
 import net.sourceforge.plantuml.activitydiagram3.LinkRendering;
 import net.sourceforge.plantuml.activitydiagram3.ftile.AbstractConnection;
@@ -238,13 +239,14 @@ class FtileWhile extends AbstractFtile {
 			snake.addPoint(xx, y1 + Diamond.diamondHalfSize);
 			snake.addPoint(xx, y2);
 			snake.addPoint(x2, y2);
+			snake.emphasizeDirection(Direction.UP);
 
 			ug.draw(snake);
 
 			ug.apply(new UTranslate(x1, y1 + Diamond.diamondHalfSize)).draw(new UEmpty(5, Diamond.diamondHalfSize));
 
-			ug = ug.apply(new UChangeColor(endInlinkColor)).apply(new UChangeBackColor(endInlinkColor));
-			ug.apply(new UTranslate(xx, (y1 + y2) / 2)).draw(Arrows.asToUp());
+			// ug = ug.apply(new UChangeColor(endInlinkColor)).apply(new UChangeBackColor(endInlinkColor));
+			// ug.apply(new UTranslate(xx, (y1 + y2) / 2)).draw(Arrows.asToUp());
 		}
 
 		public void drawTranslate(UGraphic ug, UTranslate translate1, UTranslate translate2) {
@@ -315,12 +317,13 @@ class FtileWhile extends AbstractFtile {
 			snake.addPoint(x1, y1);
 			snake.addPoint(Diamond.diamondHalfSize, y1);
 			snake.addPoint(Diamond.diamondHalfSize, y2);
+			snake.emphasizeDirection(Direction.DOWN);
 
 			ug.draw(snake);
-			ug = ug.apply(new UChangeColor(afterEndwhileColor)).apply(new UChangeBackColor(afterEndwhileColor));
-			ug.apply(new UTranslate(Diamond.diamondHalfSize, (y1 + y2) / 2)).draw(Arrows.asToDown());
+			// ug = ug.apply(new UChangeColor(afterEndwhileColor)).apply(new UChangeBackColor(afterEndwhileColor));
+			// ug.apply(new UTranslate(Diamond.diamondHalfSize, (y1 + y2) / 2)).draw(Arrows.asToDown());
 
-			final Snake snake2 = new Snake(afterEndwhileColor, true);
+			final Snake snake2 = new Snake(afterEndwhileColor);
 			snake2.addPoint(Diamond.diamondHalfSize, y2);
 			snake2.addPoint(x2, y2);
 			ug.draw(snake2);
