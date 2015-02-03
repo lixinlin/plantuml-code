@@ -33,10 +33,8 @@
  */
 package net.sourceforge.plantuml.sequencediagram;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import net.sourceforge.plantuml.Url;
@@ -58,6 +56,7 @@ public abstract class AbstractMessage implements EventWithDeactivate {
 	private Url urlNote;
 	private final Url url;
 	private final String messageNumber;
+	private boolean parallel = false;
 
 	public AbstractMessage(Display label, ArrowConfiguration arrowConfiguration, String messageNumber) {
 		this.url = label.initUrl();
@@ -65,6 +64,15 @@ public abstract class AbstractMessage implements EventWithDeactivate {
 		this.arrowConfiguration = arrowConfiguration;
 		this.messageNumber = messageNumber;
 	}
+
+	public void goParallel() {
+		this.parallel = true;
+	}
+	
+	public boolean isParallel() {
+		return parallel;
+	}
+
 
 	final public Url getUrl() {
 		if (url == null) {
@@ -123,10 +131,6 @@ public abstract class AbstractMessage implements EventWithDeactivate {
 
 	public final boolean isActivateAndDeactive() {
 		return firstIsActivate && isDeactivateOrDestroy();
-	}
-
-	public final List<LifeEvent> getLiveEvents() {
-		throw new UnsupportedOperationException();
 	}
 
 	public final Display getLabel() {

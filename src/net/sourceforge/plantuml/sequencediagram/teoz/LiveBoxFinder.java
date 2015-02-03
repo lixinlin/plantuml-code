@@ -97,37 +97,11 @@ public class LiveBoxFinder implements UGraphic {
 		final double x = translate.getDx();
 		final double y = translate.getDy();
 		if (shape instanceof GroupingTile) {
-			System.err.println("GroupingTile " + shape);
 			((GroupingTile) shape).drawU(this);
-		} else if (shape instanceof CommunicationTile) {
-			System.err.println("CommunicationTile " + shape);
-			System.err.println("y=" + y);
-			((CommunicationTile) shape).updateStairs(stringBounder, y);
-		} else if (shape instanceof CommunicationTileSelf) {
-			System.err.println("CommunicationTile " + shape);
-			System.err.println("y=" + y);
-			((CommunicationTileSelf) shape).updateStairs(stringBounder, y);
+		} else if (shape instanceof TileWithUpdateStairs) {
+			((TileWithUpdateStairs) shape).updateStairs(stringBounder, y);
 		} else if (shape instanceof Tile) {
 			System.err.println("OtherTile " + shape);
-			// To be done
-			// } else if (shape instanceof ULine) {
-			// // To be done
-			// } else if (shape instanceof UEllipse) {
-			// // To be done
-			// } else if (shape instanceof UPolygon) {
-			// // To be done
-			// } else if (shape instanceof UPath) {
-			// // To be done
-			// } else if (shape instanceof URectangle) {
-			// // To be done
-			// } else if (shape instanceof UImage) {
-			// // To be done
-			// } else if (shape instanceof UEmpty) {
-			// // To be done
-			// } else if (shape instanceof TextBlock) {
-			// // To be done
-			// } else if (shape instanceof UCenteredCharacter) {
-			// // To be done
 		} else {
 			throw new UnsupportedOperationException(shape.getClass().getName());
 		}

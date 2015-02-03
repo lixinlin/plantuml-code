@@ -125,10 +125,16 @@ public class InstructionList implements Instruction {
 	}
 
 	public Swimlane getSwimlaneIn() {
+		if (getSwimlanes().size() == 0) {
+			return null;
+		}
 		return all.get(0).getSwimlaneIn();
 	}
 
 	public Swimlane getSwimlaneOut() {
+		if (getSwimlanes().size() == 0) {
+			return null;
+		}
 		return getLast().getSwimlaneOut();
 	}
 

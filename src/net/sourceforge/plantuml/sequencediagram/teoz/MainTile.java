@@ -34,27 +34,25 @@
 package net.sourceforge.plantuml.sequencediagram.teoz;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import net.sourceforge.plantuml.ISkinParam;
 import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.graphic.TextBlockUtils;
-import net.sourceforge.plantuml.graphic.UGraphicInterceptorUDrawable;
 import net.sourceforge.plantuml.real.Real;
 import net.sourceforge.plantuml.real.RealMax;
 import net.sourceforge.plantuml.real.RealMin;
 import net.sourceforge.plantuml.sequencediagram.Event;
 import net.sourceforge.plantuml.sequencediagram.SequenceDiagram;
 import net.sourceforge.plantuml.skin.Skin;
+import net.sourceforge.plantuml.ugraphic.LimitFinder;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
-import net.sourceforge.plantuml.ugraphic.UTranslate;
 
 public class MainTile implements Tile {
 
 	private final RealMin min = new RealMin();
 	private final RealMax max = new RealMax();
-	private double height;
+	// private double height;
 
 	private final List<Tile> tiles = new ArrayList<Tile>();
 
@@ -72,25 +70,9 @@ public class MainTile implements Tile {
 		tiles.addAll(TileBuilder.buildSeveral(diagram.events().iterator(), tileArguments, null));
 
 		for (Tile tile : tiles) {
-			height += tile.getPreferredHeight(stringBounder);
+			// height += tile.getPreferredHeight(stringBounder);
 			min.put(tile.getMinX(stringBounder));
 			max.put(tile.getMaxX(stringBounder));
-			// if (tile instanceof DelayTile) {
-			// for (LivingSpace livingSpace : livingSpaces.values()) {
-			// livingSpace.addDelayTile((DelayTile) tile);
-			// }
-			// }
-		}
-	}
-
-	private void beforeDrawing(StringBounder stringBounder, Collection<LivingSpace> livingSpaces) {
-		double h = 0;
-		for (Tile tile : tiles) {
-			System.err.println("tile=" + tile);
-			// if (tile instanceof DelayTile) {
-			// ((DelayTile) tile).setStartingY(h);
-			// }
-			h += tile.getPreferredHeight(stringBounder);
 		}
 	}
 
@@ -99,21 +81,38 @@ public class MainTile implements Tile {
 		final LiveBoxFinder liveBoxFinder = new LiveBoxFinder(stringBounder);
 
 		drawUInternal(liveBoxFinder);
-		drawUInternal(new UGraphicInterceptorUDrawable(ug));
+		final UGraphicInterceptorTile interceptor = new UGraphicInterceptorTile(ug, true);
+		drawUInternal(interceptor);
+	}
+
+	public void drawForeground(UGraphic ug) {
+		final UGraphicInterceptorTile interceptor = new UGraphicInterceptorTile(ug, false);
+		drawUInternal(interceptor);
 	}
 
 	private void drawUInternal(UGraphic ug) {
 		final StringBounder stringBounder = ug.getStringBounder();
-		double h = 0;
+		double y = 0;
+		double lastY = 0;
+		final List<YPositionedTile> positionedTiles = new ArrayList<YPositionedTile>();
 		for (Tile tile : tiles) {
-			// tile.drawU(ug.apply(new UTranslate(0, h)));
-			ug.apply(new UTranslate(0, h)).draw(tile);
-			h += tile.getPreferredHeight(stringBounder);
+			if (tile.getEvent().isParallel()) {
+				y = lastY;
+			}
+			positionedTiles.add(new YPositionedTile(tile, y));
+			lastY = y;
+			y += tile.getPreferredHeight(stringBounder);
+		}
+		for (YPositionedTile tile : positionedTiles) {
+			tile.drawU(ug);
 		}
 	}
 
 	public double getPreferredHeight(StringBounder stringBounder) {
-		return height;
+		final LimitFinder limitFinder = new LimitFinder(stringBounder, true);
+		final UGraphicInterceptorTile interceptor = new UGraphicInterceptorTile(limitFinder, false);
+		drawUInternal(interceptor);
+		return limitFinder.getMinMax().getDimension().getHeight() + 10;
 	}
 
 	public void addConstraints(StringBounder stringBounder) {

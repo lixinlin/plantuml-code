@@ -48,7 +48,7 @@ public interface Tile extends UDrawable, UShape {
 	public Real getMinX(StringBounder stringBounder);
 
 	public Real getMaxX(StringBounder stringBounder);
-	
+
 	public Event getEvent();
 
 }

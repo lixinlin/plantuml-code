@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.Set;
 
 import net.sourceforge.plantuml.Dimension2DDouble;
+import net.sourceforge.plantuml.Direction;
 import net.sourceforge.plantuml.ISkinSimple;
 import net.sourceforge.plantuml.activitydiagram3.LinkRendering;
 import net.sourceforge.plantuml.activitydiagram3.ftile.AbstractConnection;
@@ -98,11 +99,13 @@ class FtileRepeat extends AbstractFtile {
 		return repeat.getSwimlanes();
 	}
 
-	public static Ftile create(Swimlane swimlane, Ftile repeat, Display test, Display yes, Display out,
-			HtmlColor borderColor, HtmlColor backColor, UFont fontTest, HtmlColor arrowColor,
-			HtmlColor endRepeatLinkColor, ConditionStyle conditionStyle, ISkinSimple spriteContainer, HtmlColor hyperlinkColor, boolean useUnderlineForHyperlink) {
+	public static Ftile create(LinkRendering backRepeatLinkRendering, Swimlane swimlane, Ftile repeat, Display test,
+			Display yes, Display out, HtmlColor borderColor, HtmlColor backColor, UFont fontTest, HtmlColor arrowColor,
+			HtmlColor endRepeatLinkColor, ConditionStyle conditionStyle, ISkinSimple spriteContainer,
+			HtmlColor hyperlinkColor, boolean useUnderlineForHyperlink) {
 
-		final FontConfiguration fc = new FontConfiguration(fontTest, HtmlColorUtils.BLACK, hyperlinkColor, useUnderlineForHyperlink);
+		final FontConfiguration fc = new FontConfiguration(fontTest, HtmlColorUtils.BLACK, hyperlinkColor,
+				useUnderlineForHyperlink);
 		final TextBlock tbTest = TextBlockUtils.create(test, fc, HorizontalAlignment.LEFT, spriteContainer);
 		final TextBlock yesTb = TextBlockUtils.create(yes, fc, HorizontalAlignment.LEFT, spriteContainer);
 		final TextBlock outTb = TextBlockUtils.create(out, fc, HorizontalAlignment.LEFT, spriteContainer);
@@ -125,18 +128,31 @@ class FtileRepeat extends AbstractFtile {
 		}
 
 		final List<Connection> conns = new ArrayList<Connection>();
-		conns.add(result.new ConnectionIn(LinkRendering.getColor(repeat.getInLinkRendering(), arrowColor)));
-		conns.add(result.new ConnectionBack(arrowColor));
-		conns.add(result.new ConnectionOut(LinkRendering.getColor(endRepeatLinkColor, arrowColor)));
+		final Display in1 = LinkRendering.getDisplay(repeat.getInLinkRendering());
+		final TextBlock tbin1 = in1 == null ? null : TextBlockUtils.create(in1, fc, HorizontalAlignment.LEFT,
+				spriteContainer, true);
+		conns.add(result.new ConnectionIn(LinkRendering.getColor(repeat.getInLinkRendering(), arrowColor), tbin1));
+
+		final Display backLink1 = LinkRendering.getDisplay(backRepeatLinkRendering);
+		final TextBlock tbbackLink1 = backLink1 == null ? null : TextBlockUtils.create(backLink1, fc,
+				HorizontalAlignment.LEFT, spriteContainer, true);
+		conns.add(result.new ConnectionBack(LinkRendering.getColor(backRepeatLinkRendering, arrowColor), tbbackLink1));
+		
+		final Display out1 = LinkRendering.getDisplay(repeat.getOutLinkRendering());
+		final TextBlock tbout1 = out1 == null ? null : TextBlockUtils.create(out1, fc, HorizontalAlignment.LEFT,
+				spriteContainer, true);
+		conns.add(result.new ConnectionOut(LinkRendering.getColor(endRepeatLinkColor, arrowColor), tbout1));
 		return FtileUtils.addConnection(result, conns);
 	}
 
 	class ConnectionIn extends AbstractConnection {
 		private final HtmlColor arrowColor;
+		private final TextBlock tbin;
 
-		public ConnectionIn(HtmlColor arrowColor) {
+		public ConnectionIn(HtmlColor arrowColor, TextBlock tbin) {
 			super(diamond1, repeat);
 			this.arrowColor = arrowColor;
+			this.tbin = tbin;
 		}
 
 		private Point2D getP1(final StringBounder stringBounder) {
@@ -153,6 +169,7 @@ class FtileRepeat extends AbstractFtile {
 			final StringBounder stringBounder = ug.getStringBounder();
 
 			final Snake snake = new Snake(arrowColor, Arrows.asToDown());
+			snake.setLabel(tbin);
 			snake.addPoint(getP1(stringBounder));
 			snake.addPoint(getP2(stringBounder));
 
@@ -162,10 +179,12 @@ class FtileRepeat extends AbstractFtile {
 
 	class ConnectionOut extends AbstractConnection implements ConnectionTranslatable {
 		private final HtmlColor arrowColor;
+		private final TextBlock tbout;
 
-		public ConnectionOut(HtmlColor arrowColor) {
+		public ConnectionOut(HtmlColor arrowColor, TextBlock tbout) {
 			super(repeat, diamond2);
 			this.arrowColor = arrowColor;
+			this.tbout = tbout;
 		}
 
 		private Point2D getP1(final StringBounder stringBounder) {
@@ -182,15 +201,17 @@ class FtileRepeat extends AbstractFtile {
 			final StringBounder stringBounder = ug.getStringBounder();
 
 			final Snake snake = new Snake(arrowColor, Arrows.asToDown());
+			snake.setLabel(tbout);
 			snake.addPoint(getP1(stringBounder));
 			snake.addPoint(getP2(stringBounder));
 
 			ug.draw(snake);
 		}
-		
+
 		public void drawTranslate(UGraphic ug, UTranslate translate1, UTranslate translate2) {
 			final StringBounder stringBounder = ug.getStringBounder();
 			final Snake snake = new Snake(arrowColor);
+			snake.setLabel(tbout);
 			final Point2D mp1a = translate1.getTranslated(getP1(stringBounder));
 			final Point2D mp2b = translate2.getTranslated(getP2(stringBounder));
 			final double middle = (mp1a.getY() + mp2b.getY()) / 2.0;
@@ -211,10 +232,12 @@ class FtileRepeat extends AbstractFtile {
 
 	class ConnectionBack extends AbstractConnection {
 		private final HtmlColor arrowColor;
+		private final TextBlock tbback;
 
-		public ConnectionBack(HtmlColor arrowColor) {
+		public ConnectionBack(HtmlColor arrowColor, TextBlock tbback) {
 			super(diamond2, repeat);
 			this.arrowColor = arrowColor;
+			this.tbback = tbback;
 		}
 
 		private Point2D getP1(final StringBounder stringBounder) {
@@ -229,6 +252,8 @@ class FtileRepeat extends AbstractFtile {
 			final StringBounder stringBounder = ug.getStringBounder();
 
 			final Snake snake = new Snake(arrowColor, Arrows.asToLeft());
+			snake.setLabel(tbback);
+			snake.emphasizeDirection(Direction.UP);
 			final Dimension2D dimTotal = calculateDimensionInternal(stringBounder);
 			final Point2D p1 = getP1(stringBounder);
 			final Point2D p2 = getP2(stringBounder);
@@ -246,8 +271,8 @@ class FtileRepeat extends AbstractFtile {
 			snake.addPoint(x2, y2);
 
 			ug.draw(snake);
-			ug = ug.apply(new UChangeColor(arrowColor)).apply(new UChangeBackColor(arrowColor));
-			ug.apply(new UTranslate(yy, dimTotal.getHeight() / 2)).draw(Arrows.asToUp());
+			// ug = ug.apply(new UChangeColor(arrowColor)).apply(new UChangeBackColor(arrowColor));
+			// ug.apply(new UTranslate(yy, dimTotal.getHeight() / 2)).draw(Arrows.asToUp());
 		}
 
 	}

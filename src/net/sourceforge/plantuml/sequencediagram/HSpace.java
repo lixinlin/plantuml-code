@@ -33,10 +33,8 @@
  */
 package net.sourceforge.plantuml.sequencediagram;
 
-import net.sourceforge.plantuml.Url;
+public class HSpace extends AbstractEvent implements Event {
 
-public class HSpace implements Event {
-	
 	private final int pixel;
 
 	public HSpace() {
@@ -52,14 +50,6 @@ public class HSpace implements Event {
 	}
 
 	public boolean dealWith(Participant someone) {
-		return false;
-	}
-
-	public Url getUrl() {
-		return null;
-	}
-	
-	public boolean hasUrl() {
 		return false;
 	}
 

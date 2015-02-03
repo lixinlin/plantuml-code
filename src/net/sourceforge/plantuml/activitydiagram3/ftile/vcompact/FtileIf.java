@@ -219,7 +219,7 @@ class FtileIf extends AbstractFtile {
 			color = getInColor(branch);
 			usingArrow = branch.isEmpty() ? null : Arrows.asToDown();
 		}
-
+		
 		public void drawU(UGraphic ug) {
 			final StringBounder stringBounder = ug.getStringBounder();
 			final Point2D p1 = getP1(stringBounder);
@@ -302,7 +302,7 @@ class FtileIf extends AbstractFtile {
 			this.myArrowColor = myArrowColor == null ? arrowColor : myArrowColor;
 			this.branchEmpty = branchEmpty;
 		}
-
+		
 		public void drawU(UGraphic ug) {
 			final StringBounder stringBounder = ug.getStringBounder();
 

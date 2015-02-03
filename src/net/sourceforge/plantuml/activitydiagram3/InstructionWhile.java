@@ -35,9 +35,11 @@ package net.sourceforge.plantuml.activitydiagram3;
 
 import java.util.Set;
 
+import net.sourceforge.plantuml.ISkinParam;
 import net.sourceforge.plantuml.activitydiagram3.ftile.Ftile;
 import net.sourceforge.plantuml.activitydiagram3.ftile.FtileFactory;
 import net.sourceforge.plantuml.activitydiagram3.ftile.Swimlane;
+import net.sourceforge.plantuml.activitydiagram3.ftile.vcompact.FtileWithNoteOpale;
 import net.sourceforge.plantuml.cucadiagram.Display;
 import net.sourceforge.plantuml.graphic.HtmlColor;
 import net.sourceforge.plantuml.sequencediagram.NotePosition;
@@ -55,24 +57,32 @@ public class InstructionWhile implements Instruction {
 	private LinkRendering endInlinkRendering;
 	private LinkRendering afterEndwhile;
 	private final Swimlane swimlane;
+	private final ISkinParam skinParam;
 
 	public InstructionWhile(Swimlane swimlane, Instruction parent, Display test, LinkRendering nextLinkRenderer,
-			Display yes, HtmlColor color) {
+			Display yes, HtmlColor color, ISkinParam skinParam) {
 		this.parent = parent;
 		this.test = test;
 		this.nextLinkRenderer = nextLinkRenderer;
 		this.yes = yes;
 		this.swimlane = swimlane;
 		this.color = color;
+		this.skinParam = skinParam;
 	}
 
 	public void add(Instruction ins) {
 		repeatList.add(ins);
 	}
 
+	private Display note;
+	private NotePosition position;
+
 	public Ftile createFtile(FtileFactory factory) {
 		Ftile tmp = factory.decorateOut(repeatList.createFtile(factory), endInlinkRendering);
 		tmp = factory.createWhile(swimlane, tmp, test, yes, out, afterEndwhile, color);
+		if (note != null) {
+			tmp = new FtileWithNoteOpale(tmp, note, position, skinParam, false);
+		}
 		// tmp = factory.decorateOut(tmp, afterEndwhile);
 		return tmp;
 	}
@@ -99,7 +109,12 @@ public class InstructionWhile implements Instruction {
 	}
 
 	public void addNote(Display note, NotePosition position) {
-		repeatList.addNote(note, position);
+		if (repeatList.isEmpty()) {
+			this.note = note;
+			this.position = position;
+		} else {
+			repeatList.addNote(note, position);
+		}
 	}
 
 	public Set<Swimlane> getSwimlanes() {

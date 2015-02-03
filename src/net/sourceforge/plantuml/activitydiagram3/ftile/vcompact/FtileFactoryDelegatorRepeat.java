@@ -53,10 +53,12 @@ public class FtileFactoryDelegatorRepeat extends FtileFactoryDelegator {
 	}
 
 	@Override
-	public Ftile repeat(Swimlane swimlane, Ftile repeat, Display test, Display yes, Display out, HtmlColor color) {
+	public Ftile repeat(Swimlane swimlane, Ftile repeat, Display test, Display yes, Display out, HtmlColor color,
+			LinkRendering backRepeatLinkRendering) {
 		final ConditionStyle conditionStyle = getSkinParam().getConditionStyle();
 		final UFont font = getSkinParam().getFont(
-				conditionStyle == ConditionStyle.INSIDE ? FontParam.ACTIVITY_DIAMOND : FontParam.ACTIVITY_ARROW, null, false);
+				conditionStyle == ConditionStyle.INSIDE ? FontParam.ACTIVITY_DIAMOND : FontParam.ACTIVITY_ARROW, null,
+				false);
 
 		final HtmlColor borderColor = getRose().getHtmlColor(getSkinParam(), ColorParam.activityBorder);
 		final HtmlColor backColor = color == null ? getRose().getHtmlColor(getSkinParam(),
@@ -66,8 +68,9 @@ public class FtileFactoryDelegatorRepeat extends FtileFactoryDelegator {
 		final LinkRendering endRepeatLinkRendering = repeat.getOutLinkRendering();
 		final HtmlColor endRepeatLinkColor = endRepeatLinkRendering == null ? null : endRepeatLinkRendering.getColor();
 
-		return FtileRepeat.create(swimlane, repeat, test, yes, out, borderColor, backColor, font, arrowColor,
-				endRepeatLinkColor, conditionStyle, this, getSkinParam().getHyperlinkColor(), getSkinParam().useUnderlineForHyperlink());
+		return FtileRepeat.create(backRepeatLinkRendering, swimlane, repeat, test, yes, out, borderColor, backColor, font, arrowColor,
+				endRepeatLinkColor, conditionStyle, this, getSkinParam().getHyperlinkColor(), getSkinParam()
+						.useUnderlineForHyperlink());
 	}
 
 }

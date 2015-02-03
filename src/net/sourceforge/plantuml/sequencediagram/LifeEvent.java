@@ -28,15 +28,14 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 14859 $
+ * Revision $Revision: 15048 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram;
 
-import net.sourceforge.plantuml.Url;
 import net.sourceforge.plantuml.graphic.HtmlColor;
 
-public class LifeEvent implements Event {
+public class LifeEvent extends AbstractEvent implements Event {
 
 	private final Participant p;
 	private final LifeEventType type;
@@ -69,39 +68,36 @@ public class LifeEvent implements Event {
 		return this.p == someone;
 	}
 
-	public Url getUrl() {
-		return null;
+	public boolean isActivate() {
+		return type == LifeEventType.ACTIVATE;
 	}
 
-	public boolean hasUrl() {
-		return false;
+	public boolean isDeactivateOrDestroy() {
+		return type == LifeEventType.DEACTIVATE || type == LifeEventType.DESTROY;
 	}
 
-//	public double getStrangePos() {
-//		return message.getPosYendLevel();
-//	}
-//
+	// public double getStrangePos() {
+	// return message.getPosYendLevel();
+	// }
+	//
 	private AbstractMessage message;
 
 	public void setMessage(AbstractMessage message) {
 		this.message = message;
 	}
-	
+
 	public AbstractMessage getMessage() {
 		return message;
 	}
-	
-	private boolean linkedToGroupingEnd;
 
-	public boolean isLinkedToGroupingEnd() {
-		return linkedToGroupingEnd;
-	}
+	// private boolean linkedToGroupingEnd;
+	//
+	// // public boolean isLinkedToGroupingEnd() {
+	// // return linkedToGroupingEnd;
+	// // }
 
 	public void setLinkedToGroupingEnd(boolean linkedToGroupingEnd) {
-		this.linkedToGroupingEnd = linkedToGroupingEnd;
+		// this.linkedToGroupingEnd = linkedToGroupingEnd;
 	}
-	
-
-
 
 }

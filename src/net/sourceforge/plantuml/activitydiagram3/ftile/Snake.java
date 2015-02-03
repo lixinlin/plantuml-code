@@ -44,6 +44,7 @@ import net.sourceforge.plantuml.Direction;
 import net.sourceforge.plantuml.graphic.HtmlColor;
 import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.graphic.TextBlock;
+import net.sourceforge.plantuml.ugraphic.CompressionTransform;
 import net.sourceforge.plantuml.ugraphic.UChangeBackColor;
 import net.sourceforge.plantuml.ugraphic.UChangeColor;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
@@ -61,6 +62,19 @@ public class Snake implements UShape {
 	private TextBlock textBlock;
 	private boolean mergeable = true;
 	private Direction emphasizeDirection;
+
+	public Snake transformX(CompressionTransform compressionTransform) {
+		final Snake result = new Snake(color, endDecoration);
+		result.textBlock = this.textBlock;
+		result.mergeable = this.mergeable;
+		result.emphasizeDirection = this.emphasizeDirection;
+		for (Point2D.Double pt : points) {
+			final double x = compressionTransform.transform(pt.x);
+			final double y = pt.y;
+			result.addPoint(x, y);
+		}
+		return result;
+	}
 
 	public Snake(HtmlColor color, UPolygon endDecoration) {
 		this.endDecoration = endDecoration;

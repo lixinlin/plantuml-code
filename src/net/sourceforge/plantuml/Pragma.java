@@ -65,4 +65,9 @@ public class Pragma {
 		return isDefine("horizontallinebetweendifferentpackageallowed");
 	}
 
+	public boolean useTeozLayout() {
+		final String teoz = getValue("teoz");
+		return "true".equalsIgnoreCase(teoz) || "on".equalsIgnoreCase(teoz);
+	}
+
 }

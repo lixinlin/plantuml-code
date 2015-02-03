@@ -41,45 +41,42 @@ import net.sourceforge.plantuml.sequencediagram.graphic.Stairs;
 import net.sourceforge.plantuml.skin.Area;
 import net.sourceforge.plantuml.skin.Component;
 import net.sourceforge.plantuml.skin.ComponentType;
-import net.sourceforge.plantuml.skin.SimpleContext2D;
+import net.sourceforge.plantuml.skin.Context2D;
 import net.sourceforge.plantuml.skin.Skin;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
 import net.sourceforge.plantuml.ugraphic.UTranslate;
 
 public class LiveBoxes implements UDrawable {
 
-	private final Stairs stairs;
+	private final EventsHistory eventsHistory;
 	private final Skin skin;
 	private final ISkinParam skinParam;
 	private final double totalHeight;
+	private final Context2D context;
 
-	public LiveBoxes(Stairs stairs, Skin skin, ISkinParam skinParam, double totalHeight) {
-		this.stairs = stairs;
+	public LiveBoxes(EventsHistory eventsHistory, Skin skin, ISkinParam skinParam, double totalHeight, Context2D context) {
+		this.eventsHistory = eventsHistory;
 		this.skin = skin;
 		this.skinParam = skinParam;
 		this.totalHeight = totalHeight;
+		this.context = context;
 	}
 
 	public void drawU(UGraphic ug) {
-		stairs.addStep(totalHeight, stairs.getLastValue());
-		System.err.println("stairs=" + stairs);
-		for (Double y : stairs.getYs()) {
-			System.err.println("LiveBoxes y=" + y + " " + stairs.getValue(y));
-		}
+		final Stairs stairs = eventsHistory.getStairs(totalHeight);
 		final int max = stairs.getMaxValue();
 		for (int i = 1; i <= max; i++) {
-			drawOneLevel(ug, i);
+			drawOneLevel(ug, i, stairs, context);
 		}
 	}
 
-	private void drawOneLevel(UGraphic ug, int levelToDraw) {
+	private void drawOneLevel(UGraphic ug, int levelToDraw, Stairs stairs, Context2D context) {
 		final Component comp = skin.createComponent(ComponentType.ALIVE_BOX_CLOSE_CLOSE, null, skinParam, null);
 		final double width = comp.getPreferredWidth(ug.getStringBounder());
 		ug = ug.apply(new UTranslate((levelToDraw - 1) * width / 2.0, 0));
 
 		double y1 = Double.MAX_VALUE;
 		for (Iterator<Double> it = stairs.getYs().iterator(); it.hasNext();) {
-			// for (Double y : stairs.getYs()) {
 			final double y = it.next();
 			final int level = stairs.getValue(y);
 			if (y1 == Double.MAX_VALUE && level == levelToDraw) {
@@ -87,7 +84,7 @@ public class LiveBoxes implements UDrawable {
 			} else if (y1 != Double.MAX_VALUE && (it.hasNext() == false || level < levelToDraw)) {
 				final double y2 = y;
 				final Area area = new Area(width, y2 - y1);
-				comp.drawU(ug.apply(new UTranslate(-width / 2, y1)), area, new SimpleContext2D(false));
+				comp.drawU(ug.apply(new UTranslate(-width / 2, y1)), area, context);
 				y1 = Double.MAX_VALUE;
 			}
 		}

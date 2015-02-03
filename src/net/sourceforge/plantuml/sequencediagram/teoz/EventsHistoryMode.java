@@ -28,26 +28,12 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 15048 $
+ * Revision $Revision: 4636 $
  *
  */
-package net.sourceforge.plantuml.sequencediagram;
+package net.sourceforge.plantuml.sequencediagram.teoz;
 
-import net.sourceforge.plantuml.cucadiagram.Display;
+public enum EventsHistoryMode {
+	IGNORE_FUTURE_DEACTIVATE, IGNORE_FUTURE_ACTIVATE, CONSIDERE_FUTURE_DEACTIVATE;
 
-public class Newpage extends AbstractEvent implements Event {
-
-	private final Display title;
-
-	public Newpage(Display strings) {
-		this.title = strings;
-	}
-
-	public final Display getTitle() {
-		return title;
-	}
-
-	public boolean dealWith(Participant someone) {
-		return false;
-	}
 }

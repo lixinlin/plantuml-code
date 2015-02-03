@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 14805 $
+ * Revision $Revision: 14994 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram;
@@ -46,6 +46,11 @@ public final class Message extends AbstractMessage {
 		super(label, arrowConfiguration, messageNumber);
 		this.p1 = p1;
 		this.p2 = p2;
+	}
+
+	@Override
+	public String toString() {
+		return super.toString() + " " + p1 + "->" + p2 + " " + getLabel();
 	}
 
 	public Participant getParticipant1() {

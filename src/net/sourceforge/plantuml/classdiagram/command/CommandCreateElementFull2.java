@@ -68,7 +68,7 @@ public class CommandCreateElementFull2 extends SingleLineCommand2<ClassDiagram> 
 
 	private static RegexConcat getRegexConcat(Mode mode) {
 
-		String regex = "(?:(actor|usecase)[%s]+)";
+		String regex = "(?:(actor|usecase|component)[%s]+)";
 		if (mode == Mode.WITH_MIX_PREFIX) {
 			regex = "mix_" + regex;
 		}

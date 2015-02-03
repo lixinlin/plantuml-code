@@ -40,6 +40,7 @@ public class CharHidder {
 	}
 
 	public static String hide(String s) {
+		// System.err.println("hide " + s);
 		final StringBuilder result = new StringBuilder();
 		for (int i = 0; i < s.length(); i++) {
 			final char c = s.charAt(i);
@@ -61,7 +62,7 @@ public class CharHidder {
 	}
 
 	private static boolean isToBeHidden(final char c) {
-		if (c == '_' || c == '\"' || c == '#' || c == ']' || c == '[' || c == '*' || c == '.') {
+		if (c == '_' || c == '\"' || c == '#' || c == ']' || c == '[' || c == '*' || c == '.' || c == '/') {
 			return true;
 		}
 		return false;
@@ -87,6 +88,7 @@ public class CharHidder {
 			final char c = s.charAt(i);
 			result.append(unhideChar(c));
 		}
+		// System.err.println("unhide " + result);
 		return result.toString();
 	}
 

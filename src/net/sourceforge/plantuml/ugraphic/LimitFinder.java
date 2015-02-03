@@ -215,6 +215,9 @@ public class LimitFinder implements UGraphic {
 	}
 
 	public MinMax getMinMax() {
+		if (minmax.isInfinity()) {
+			return MinMax.getEmpty(true);
+		}
 		return MinMax.fromMutable(minmax);
 	}
 

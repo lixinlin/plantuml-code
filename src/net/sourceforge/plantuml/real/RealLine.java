@@ -71,9 +71,9 @@ class RealLine {
 				}
 			}
 			if (done) {
-				System.err.println("cpt=" + cpt + " size=" + forces.size());
+				// System.err.println("cpt=" + cpt + " size=" + forces.size());
 				CPT += cpt;
-				System.err.println("CPT=" + CPT);
+				// System.err.println("CPT=" + CPT);
 				return;
 			}
 			cpt++;

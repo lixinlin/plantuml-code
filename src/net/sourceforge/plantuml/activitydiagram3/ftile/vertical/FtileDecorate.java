@@ -97,7 +97,7 @@ public abstract class FtileDecorate implements Ftile {
 	public boolean shadowing() {
 		return ftile.shadowing();
 	}
-
+	
 	protected final Ftile getFtileDelegated() {
 		return ftile;
 	}

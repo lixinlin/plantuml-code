@@ -33,10 +33,9 @@
  */
 package net.sourceforge.plantuml.sequencediagram;
 
-import net.sourceforge.plantuml.Url;
 import net.sourceforge.plantuml.cucadiagram.Display;
 
-public class Divider implements Event {
+public class Divider extends AbstractEvent implements Event {
 
 	private final Display text;
 
@@ -49,14 +48,6 @@ public class Divider implements Event {
 	}
 
 	public boolean dealWith(Participant someone) {
-		return false;
-	}
-
-	public Url getUrl() {
-		return null;
-	}
-	
-	public boolean hasUrl() {
 		return false;
 	}
 

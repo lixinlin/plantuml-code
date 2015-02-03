@@ -37,9 +37,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import net.sourceforge.plantuml.Url;
-
-public class Notes implements Event, Iterable<Note> {
+public class Notes extends AbstractEvent implements Event, Iterable<Note> {
 
 	private final List<Note> notes = new ArrayList<Note>();
 
@@ -58,14 +56,6 @@ public class Notes implements Event, Iterable<Note> {
 				return true;
 			}
 		}
-		return false;
-	}
-
-	public Url getUrl() {
-		return null;
-	}
-	
-	public boolean hasUrl() {
 		return false;
 	}
 

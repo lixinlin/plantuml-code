@@ -46,6 +46,7 @@ import net.sourceforge.plantuml.sequencediagram.Event;
 import net.sourceforge.plantuml.sequencediagram.GroupingLeaf;
 import net.sourceforge.plantuml.sequencediagram.GroupingStart;
 import net.sourceforge.plantuml.sequencediagram.GroupingType;
+import net.sourceforge.plantuml.sequencediagram.LifeEvent;
 import net.sourceforge.plantuml.sequencediagram.Message;
 import net.sourceforge.plantuml.sequencediagram.MessageExo;
 import net.sourceforge.plantuml.sequencediagram.Note;
@@ -76,6 +77,7 @@ public class TileBuilder {
 		final LivingSpaces livingSpaces = tileArguments.getLivingSpaces();
 
 		Tile tile = null;
+		// System.err.println("TileBuilder::buildOne " + ev);
 		if (ev instanceof Message) {
 			final Message msg = (Message) ev;
 			final LivingSpace livingSpace1 = livingSpaces.get(msg.getParticipant1());
@@ -84,20 +86,20 @@ public class TileBuilder {
 			if (msg.isSelfMessage()) {
 				tile = new CommunicationTileSelf(livingSpace1, msg, skin, skinParam, livingSpaces);
 			} else {
-				System.err.println("msg=" + msg + " " + msg.getLiveEvents());
+				// System.err.println("msg=" + msg);
 				tile = new CommunicationTile(livingSpace1, livingSpace2, msg, skin, skinParam);
 				reverse = ((CommunicationTile) tile).isReverse(stringBounder);
 			}
 			if (msg.getNote() != null) {
 				final NotePosition notePosition = msg.getNotePosition();
 				if (notePosition == NotePosition.LEFT) {
-					tile = new CommunicationTileNoteLeft(tile, msg, skin, skinParam, reverse ? livingSpace2
-							: livingSpace1);
+					tile = new CommunicationTileNoteLeft((TileWithUpdateStairs) tile, msg, skin, skinParam,
+							reverse ? livingSpace2 : livingSpace1);
 				} else if (notePosition == NotePosition.RIGHT && msg.isSelfMessage()) {
 					tile = new CommunicationTileSelfNoteRight((CommunicationTileSelf) tile, msg, skin, skinParam);
 				} else if (notePosition == NotePosition.RIGHT) {
-					tile = new CommunicationTileNoteRight(tile, msg, skin, skinParam, reverse ? livingSpace1
-							: livingSpace2);
+					tile = new CommunicationTileNoteRight((TileWithUpdateStairs) tile, msg, skin, skinParam,
+							reverse ? livingSpace1 : livingSpace2);
 				}
 			}
 		} else if (ev instanceof Note) {
@@ -117,6 +119,7 @@ public class TileBuilder {
 		} else if (ev instanceof GroupingStart) {
 			final GroupingStart start = (GroupingStart) ev;
 			tile = new GroupingTile(it, start, tileArguments);
+			// tile = TileUtils.withMargin(tile, 10, 10, 10, 10);
 		} else if (ev instanceof GroupingLeaf && ((GroupingLeaf) ev).getType() == GroupingType.ELSE) {
 			final GroupingLeaf anElse = (GroupingLeaf) ev;
 			tile = new ElseTile(anElse, skin, skinParam, parent);
@@ -126,8 +129,12 @@ public class TileBuilder {
 		} else if (ev instanceof Delay) {
 			final Delay delay = (Delay) ev;
 			tile = new DelayTile(delay, tileArguments);
+		} else if (ev instanceof LifeEvent) {
+			final LifeEvent lifeEvent = (LifeEvent) ev;
+			final LivingSpace livingSpace = livingSpaces.get(lifeEvent.getParticipant());
+			tile = new LifeEventTile(lifeEvent, tileArguments, livingSpace);
 		} else {
-			System.err.println("Ignoring " + ev.getClass());
+			System.err.println("TileBuilder::Ignoring " + ev.getClass());
 		}
 		return tile;
 	}

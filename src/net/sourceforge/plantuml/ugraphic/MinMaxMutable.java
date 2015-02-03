@@ -51,6 +51,10 @@ public class MinMaxMutable {
 		return new MinMaxMutable(Double.MAX_VALUE, Double.MAX_VALUE, -Double.MAX_VALUE, -Double.MAX_VALUE);
 	}
 
+	public boolean isInfinity() {
+		return minX == Double.MAX_VALUE;
+	}
+
 	@Override
 	public String toString() {
 		return "X=" + minX + " " + maxX + " Y=" + minY + " " + maxY;

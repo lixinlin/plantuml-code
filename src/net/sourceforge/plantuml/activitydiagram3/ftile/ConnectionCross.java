@@ -46,6 +46,8 @@ public class ConnectionCross extends AbstractConnection {
 
 	public void drawU(UGraphic ug) {
 		if (connection instanceof ConnectionTranslatable) {
+			final ConnectionTranslatable conn = (ConnectionTranslatable) connection;
+
 			final Swimlane swimlane1 = getFtile1().getSwimlaneOut();
 			final Swimlane swimlane2 = getFtile2().getSwimlaneIn();
 			if (swimlane1 == null) {
@@ -54,7 +56,7 @@ public class ConnectionCross extends AbstractConnection {
 			if (swimlane2 == null) {
 				throw new IllegalStateException("" + getFtile2().getClass());
 			}
-			((ConnectionTranslatable) connection).drawTranslate(ug, swimlane1.getTranslate(), swimlane2.getTranslate());
+			conn.drawTranslate(ug, swimlane1.getTranslate(), swimlane2.getTranslate());
 		}
 	}
 }

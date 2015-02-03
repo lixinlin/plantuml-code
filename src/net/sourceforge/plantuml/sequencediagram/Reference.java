@@ -41,7 +41,7 @@ import net.sourceforge.plantuml.Url;
 import net.sourceforge.plantuml.cucadiagram.Display;
 import net.sourceforge.plantuml.graphic.HtmlColor;
 
-public class Reference implements Event {
+public class Reference extends AbstractEvent implements Event {
 
 	private final List<Participant> participants;
 	private final Url url;

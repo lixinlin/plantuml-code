@@ -44,11 +44,10 @@ import net.sourceforge.plantuml.sequencediagram.Event;
 import net.sourceforge.plantuml.sequencediagram.Participant;
 import net.sourceforge.plantuml.sequencediagram.ParticipantEnglober;
 import net.sourceforge.plantuml.sequencediagram.ParticipantType;
-import net.sourceforge.plantuml.sequencediagram.graphic.Stairs;
 import net.sourceforge.plantuml.skin.Area;
 import net.sourceforge.plantuml.skin.Component;
 import net.sourceforge.plantuml.skin.ComponentType;
-import net.sourceforge.plantuml.skin.SimpleContext2D;
+import net.sourceforge.plantuml.skin.Context2D;
 import net.sourceforge.plantuml.skin.Skin;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
 
@@ -71,16 +70,14 @@ public class LivingSpace {
 
 	private final EventsHistory eventsHistory;
 
-	public int getLevelAt(Tile tile) {
-		return eventsHistory.getLevelAt(tile.getEvent());
+	public int getLevelAt(Tile tile, EventsHistoryMode mode) {
+		// assert mode == EventsHistoryMode.IGNORE_FUTURE_DEACTIVATE;
+		return eventsHistory.getLevelAt(tile.getEvent(), mode);
 	}
 
-	private final Stairs stairs = new Stairs();
-
-	public void addStep(double y, int value) {
-		stairs.addStep(y, value);
+	public void addStepForLivebox(Event event, double y) {
+		eventsHistory.addStepForLivebox(event, y);
 	}
-
 
 	@Override
 	public String toString() {
@@ -122,7 +119,8 @@ public class LivingSpace {
 		} else {
 			throw new IllegalArgumentException();
 		}
-		this.stairs.addStep(0, p.getInitialLife());
+		// this.stairs2.addStep2(0, p.getInitialLife());
+		// this.stairs2.addStep2(0, 0);
 		this.useContinueLineBecauseOfDelay = useContinueLineBecauseOfDelay(events);
 		this.mutingLine = new MutingLine(skin, skinParam, events);
 
@@ -141,17 +139,17 @@ public class LivingSpace {
 		return false;
 	}
 
-	public void drawLine(UGraphic ug, double height) {
-		
-		mutingLine.drawLine(ug, height);
-//		final ComponentType defaultLineType = useContinueLineBecauseOfDelay ? ComponentType.CONTINUE_LINE
-//				: ComponentType.PARTICIPANT_LINE;
-//		final Component comp = skin.createComponent(defaultLineType, null, skinParam, p.getDisplay(false));
-//		final Dimension2D dim = comp.getPreferredDimension(ug.getStringBounder());
-//		final Area area = new Area(dim.getWidth(), height);
-//		comp.drawU(ug, area, new SimpleContext2D(false));
+	public void drawLineAndLiveBoxes(UGraphic ug, double height, Context2D context) {
 
-		final LiveBoxes liveBoxes = new LiveBoxes(stairs, skin, skinParam, height);
+		mutingLine.drawLine(ug, height, context);
+		// final ComponentType defaultLineType = useContinueLineBecauseOfDelay ? ComponentType.CONTINUE_LINE
+		// : ComponentType.PARTICIPANT_LINE;
+		// final Component comp = skin.createComponent(defaultLineType, null, skinParam, p.getDisplay(false));
+		// final Dimension2D dim = comp.getPreferredDimension(ug.getStringBounder());
+		// final Area area = new Area(dim.getWidth(), height);
+		// comp.drawU(ug, area, new SimpleContext2D(false));
+
+		final LiveBoxes liveBoxes = new LiveBoxes(eventsHistory, skin, skinParam, height, context);
 		liveBoxes.drawU(ug);
 	}
 
@@ -159,11 +157,11 @@ public class LivingSpace {
 	// System.err.println("addDelayTile " + this + " " + tile);
 	// }
 
-	public void drawHead(UGraphic ug) {
+	public void drawHead(UGraphic ug, Context2D context) {
 		final Component comp = skin.createComponent(headType, null, skinParam, p.getDisplay(false));
 		final Dimension2D dim = comp.getPreferredDimension(ug.getStringBounder());
 		final Area area = new Area(dim);
-		comp.drawU(ug, area, new SimpleContext2D(false));
+		comp.drawU(ug, area, context);
 	}
 
 	public Dimension2D getHeadPreferredDimension(StringBounder stringBounder) {

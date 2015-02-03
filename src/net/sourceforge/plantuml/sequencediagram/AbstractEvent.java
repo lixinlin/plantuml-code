@@ -28,26 +28,25 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 15048 $
+ * Revision $Revision: 12235 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram;
 
-import net.sourceforge.plantuml.cucadiagram.Display;
+import net.sourceforge.plantuml.Url;
 
-public class Newpage extends AbstractEvent implements Event {
+public abstract class AbstractEvent implements Event {
 
-	private final Display title;
-
-	public Newpage(Display strings) {
-		this.title = strings;
-	}
-
-	public final Display getTitle() {
-		return title;
-	}
-
-	public boolean dealWith(Participant someone) {
+	public boolean isParallel() {
 		return false;
 	}
+
+	public Url getUrl() {
+		return null;
+	}
+
+	public boolean hasUrl() {
+		return false;
+	}
+
 }

@@ -45,6 +45,7 @@ import net.sourceforge.plantuml.sequencediagram.NotePosition;
 import net.sourceforge.plantuml.skin.Area;
 import net.sourceforge.plantuml.skin.Component;
 import net.sourceforge.plantuml.skin.ComponentType;
+import net.sourceforge.plantuml.skin.Context2D;
 import net.sourceforge.plantuml.skin.SimpleContext2D;
 import net.sourceforge.plantuml.skin.Skin;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
@@ -57,11 +58,10 @@ public class NoteTile implements Tile {
 	private final Skin skin;
 	private final ISkinParam skinParam;
 	private final Note note;
-	
+
 	public Event getEvent() {
 		return note;
 	}
-
 
 	public NoteTile(LivingSpace livingSpace1, LivingSpace livingSpace2, Note note, Skin skin, ISkinParam skinParam) {
 		this.livingSpace1 = livingSpace1;
@@ -84,7 +84,7 @@ public class NoteTile implements Tile {
 		final Area area = new Area(getUsedWidth(stringBounder), dim.getHeight());
 
 		ug = ug.apply(new UTranslate(x, 0));
-		comp.drawU(ug, area, new SimpleContext2D(false));
+		comp.drawU(ug, area, (Context2D) ug);
 		// ug.draw(new ULine(x2 - x1, 0));
 	}
 
@@ -109,7 +109,9 @@ public class NoteTile implements Tile {
 		if (position == NotePosition.LEFT) {
 			return livingSpace1.getPosC(stringBounder).addFixed(-width);
 		} else if (position == NotePosition.RIGHT) {
-			return livingSpace1.getPosC(stringBounder);
+			final int level = livingSpace1.getLevelAt(this, EventsHistoryMode.IGNORE_FUTURE_DEACTIVATE);
+			final double dx = level * CommunicationTile.LIVE_DELTA_SIZE;
+			return livingSpace1.getPosC(stringBounder).addFixed(dx);
 		} else if (position == NotePosition.OVER_SEVERAL) {
 			final Real x1 = livingSpace1.getPosC(stringBounder);
 			final Real x2 = livingSpace2.getPosC(stringBounder);

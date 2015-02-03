@@ -91,7 +91,6 @@ public class FtileAssemblySimple implements Ftile {
 		ug.apply(getTranslated2(stringBounder)).draw(tile2);
 	}
 
-
 	public LinkRendering getInLinkRendering() {
 		return tile1.getInLinkRendering();
 	}

@@ -43,6 +43,7 @@ import net.sourceforge.plantuml.sequencediagram.Event;
 import net.sourceforge.plantuml.skin.Area;
 import net.sourceforge.plantuml.skin.Component;
 import net.sourceforge.plantuml.skin.ComponentType;
+import net.sourceforge.plantuml.skin.Context2D;
 import net.sourceforge.plantuml.skin.SimpleContext2D;
 import net.sourceforge.plantuml.skin.Skin;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
@@ -80,7 +81,7 @@ public class DividerTile implements Tile {
 		final Area area = new Area(omega.getCurrentValue() - origin.getCurrentValue(), dim.getHeight());
 
 		// ug = ug.apply(new UTranslate(x, 0));
-		comp.drawU(ug, area, new SimpleContext2D(false));
+		comp.drawU(ug, area, (Context2D) ug);
 	}
 
 	public double getPreferredHeight(StringBounder stringBounder) {

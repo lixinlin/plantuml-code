@@ -39,5 +39,5 @@ import net.sourceforge.plantuml.ugraphic.UTranslate;
 public interface ConnectionTranslatable extends Connection {
 
 	public void drawTranslate(UGraphic ug, UTranslate translate1, UTranslate translate2);
-
+	
 }

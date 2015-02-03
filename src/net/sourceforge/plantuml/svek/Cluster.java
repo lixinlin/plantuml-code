@@ -49,6 +49,7 @@ import net.sourceforge.plantuml.ColorParam;
 import net.sourceforge.plantuml.Dimension2DDouble;
 import net.sourceforge.plantuml.FontParam;
 import net.sourceforge.plantuml.ISkinParam;
+import net.sourceforge.plantuml.LineParam;
 import net.sourceforge.plantuml.UmlDiagramType;
 import net.sourceforge.plantuml.Url;
 import net.sourceforge.plantuml.cucadiagram.EntityPosition;
@@ -339,7 +340,7 @@ public class Cluster implements Moveable {
 				final HtmlColor stateBack = getStateBackColor(getBackColor(), dotData.getSkinParam(),
 						group.getStereotype());
 				final ClusterDecoration decoration = new ClusterDecoration(style, group.getUSymbol(), ztitle, zstereo,
-						stateBack, minX, minY, maxX, maxY);
+						stateBack, minX, minY, maxX, maxY, getStroke(dotData.getSkinParam(), group.getStereotype()));
 				decoration.drawU(ug, borderColor, dotData.getSkinParam().shadowing());
 				return;
 			}
@@ -357,6 +358,14 @@ public class Cluster implements Moveable {
 			}
 		}
 
+	}
+
+	private UStroke getStroke(ISkinParam skinParam, Stereotype stereo) {
+		UStroke stroke = skinParam.getThickness(LineParam.packageBorder, stereo);
+		if (stroke == null) {
+			stroke = new UStroke(2.0);
+		}
+		return stroke;
 	}
 
 	private void manageEntryExitPoint(DotData dotData, StringBounder stringBounder) {
