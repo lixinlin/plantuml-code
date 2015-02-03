@@ -28,26 +28,34 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 15048 $
+ * Revision $Revision: 10266 $
  *
  */
-package net.sourceforge.plantuml.sequencediagram;
+package net.sourceforge.plantuml.graphic;
 
-import net.sourceforge.plantuml.cucadiagram.Display;
+import java.awt.geom.Dimension2D;
 
-public class Newpage extends AbstractEvent implements Event {
+import net.sourceforge.plantuml.Dimension2DDouble;
+import net.sourceforge.plantuml.ugraphic.CompressionTransform;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
+import net.sourceforge.plantuml.ugraphic.UGraphicCompress2;
 
-	private final Display title;
+public class TextBlockCompressed2 implements TextBlock {
 
-	public Newpage(Display strings) {
-		this.title = strings;
+	private final TextBlock textBlock;
+	private final CompressionTransform compressionTransform;
+
+	public TextBlockCompressed2(TextBlock textBlock, CompressionTransform compressionTransform) {
+		this.textBlock = textBlock;
+		this.compressionTransform = compressionTransform;
 	}
 
-	public final Display getTitle() {
-		return title;
+	public void drawU(final UGraphic ug) {
+		textBlock.drawU(new UGraphicCompress2(ug, compressionTransform));
 	}
 
-	public boolean dealWith(Participant someone) {
-		return false;
+	public Dimension2D calculateDimension(StringBounder stringBounder) {
+		final Dimension2D dim = textBlock.calculateDimension(stringBounder);
+		return new Dimension2DDouble(compressionTransform.transform(dim.getWidth()), dim.getHeight());
 	}
 }

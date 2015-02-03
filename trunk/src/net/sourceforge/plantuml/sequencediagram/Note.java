@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 12235 $
+ * Revision $Revision: 15048 $
  *
  */
 package net.sourceforge.plantuml.sequencediagram;
@@ -40,7 +40,7 @@ import net.sourceforge.plantuml.UrlBuilder.ModeUrl;
 import net.sourceforge.plantuml.cucadiagram.Display;
 import net.sourceforge.plantuml.graphic.HtmlColor;
 
-public class Note implements Event, SpecificBackcolorable {
+public class Note extends AbstractEvent implements Event, SpecificBackcolorable {
 
 	private final Participant p;
 	private final Participant p2;

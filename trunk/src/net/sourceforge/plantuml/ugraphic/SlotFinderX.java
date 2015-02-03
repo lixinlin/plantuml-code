@@ -36,41 +36,43 @@ package net.sourceforge.plantuml.ugraphic;
 import net.sourceforge.plantuml.Url;
 import net.sourceforge.plantuml.graphic.StringBounder;
 
-public class SlotFinder implements UGraphic {
-	
+public class SlotFinderX implements UGraphic {
+
 	public boolean isSpecialTxt() {
 		return false;
 	}
 
 	public UGraphic apply(UChange change) {
 		if (change instanceof UTranslate) {
-			return new SlotFinder(stringBounder, yslot, translate.compose((UTranslate) change));
+			return new SlotFinderX(stringBounder, xslot, yslot, translate.compose((UTranslate) change));
 		} else if (change instanceof UStroke) {
-			return new SlotFinder(this);
+			return new SlotFinderX(this);
 		} else if (change instanceof UChangeBackColor) {
-			return new SlotFinder(this);
+			return new SlotFinderX(this);
 		} else if (change instanceof UChangeColor) {
-			return new SlotFinder(this);
+			return new SlotFinderX(this);
 		}
 		throw new UnsupportedOperationException();
 	}
 
+	private final SlotSet xslot;
 	private final SlotSet yslot;
 	private final StringBounder stringBounder;
 	private final UTranslate translate;
 
-	public SlotFinder(StringBounder stringBounder) {
-		this(stringBounder, new SlotSet(), new UTranslate());
+	public SlotFinderX(StringBounder stringBounder) {
+		this(stringBounder, new SlotSet(), new SlotSet(), new UTranslate());
 	}
 
-	private SlotFinder(StringBounder stringBounder, SlotSet yslot, UTranslate translate) {
+	private SlotFinderX(StringBounder stringBounder, SlotSet xslot, SlotSet yslot, UTranslate translate) {
 		this.stringBounder = stringBounder;
+		this.xslot = xslot;
 		this.yslot = yslot;
 		this.translate = translate;
 	}
 
-	private SlotFinder(SlotFinder other) {
-		this(other.stringBounder, other.yslot, other.translate);
+	private SlotFinderX(SlotFinderX other) {
+		this(other.stringBounder, other.xslot, other.yslot, other.translate);
 	}
 
 	public StringBounder getStringBounder() {
@@ -98,24 +100,29 @@ public class SlotFinder implements UGraphic {
 	}
 
 	private void drawEmpty(double x, double y, UEmpty shape) {
+		xslot.addSlot(x, x + shape.getWidth());
 		yslot.addSlot(y, y + shape.getHeight());
 	}
 
 	private void drawText(double x, double y, UText shape) {
 		final TextLimitFinder finder = new TextLimitFinder(stringBounder, false);
 		finder.apply(new UTranslate(x, y)).draw(shape);
+		xslot.addSlot(finder.getMinX(), finder.getMaxX());
 		yslot.addSlot(finder.getMinY(), finder.getMaxY());
 	}
 
 	private void drawEllipse(double x, double y, UEllipse shape) {
+		xslot.addSlot(x, x + shape.getWidth());
 		yslot.addSlot(y, y + shape.getHeight());
 	}
 
 	private void drawPolygon(double x, double y, UPolygon shape) {
+		xslot.addSlot(x + shape.getMinX(), x + shape.getMaxX());
 		yslot.addSlot(y + shape.getMinY(), y + shape.getMaxY());
 	}
 
 	private void drawRectangle(double x, double y, URectangle shape) {
+		xslot.addSlot(x, x + shape.getWidth());
 		yslot.addSlot(y, y + shape.getHeight());
 	}
 
@@ -127,6 +134,10 @@ public class SlotFinder implements UGraphic {
 	}
 
 	public void closeAction() {
+	}
+
+	public SlotSet getXSlotSet() {
+		return xslot;
 	}
 
 	public SlotSet getYSlotSet() {

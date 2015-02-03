@@ -68,6 +68,7 @@ public class CommandArrow extends SingleLineCommand2<SequenceDiagram> {
 	static RegexConcat getRegexConcat() {
 		return new RegexConcat(
 				new RegexLeaf("^"), //
+				new RegexLeaf("PARALLEL", "(&%s*)?"), //
 				new RegexOr("PART1", //
 						new RegexLeaf("PART1CODE", "([\\p{L}0-9_.@]+)"), //
 						new RegexLeaf("PART1LONG", "[%g]([^%g]+)[%g]"), //
@@ -205,12 +206,19 @@ public class CommandArrow extends SingleLineCommand2<SequenceDiagram> {
 			diagram.activate(p2, LifeEventType.CREATE, null);
 		}
 
-		final String error = diagram.addMessage(new Message(p1, p2, labels, config, diagram.getNextMessageNumber()));
+		final Message msg = new Message(p1, p2, labels, config, diagram.getNextMessageNumber());
+		final boolean parallel = arg.get("PARALLEL", 0) != null;
+		if (parallel) {
+			msg.goParallel();
+		}
+
+		final String error = diagram.addMessage(msg);
 		if (error != null) {
 			return CommandExecutionResult.error(error);
 		}
 
-		final HtmlColor activationColor = diagram.getSkinParam().getIHtmlColorSet().getColorIfValid(arg.get("LIFECOLOR", 0));
+		final HtmlColor activationColor = diagram.getSkinParam().getIHtmlColorSet()
+				.getColorIfValid(arg.get("LIFECOLOR", 0));
 
 		if (activationSpec != null) {
 			switch (activationSpec.charAt(0)) {

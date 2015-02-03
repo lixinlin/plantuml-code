@@ -74,6 +74,7 @@ public class UGraphicInterceptorOneSwimlane extends UGraphicDelegator {
 					|| tile1.getSwimlaneOut() == swimlane;
 			final boolean contained2 = tile2 == null || tile2.getSwimlaneIn() == null
 					|| tile2.getSwimlaneIn() == swimlane;
+
 			if (contained1 && contained2) {
 				connection.drawU(this);
 			}

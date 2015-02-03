@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 14746 $
+ * Revision $Revision: 14942 $
  *
  */
 package net.sourceforge.plantuml;
@@ -383,6 +383,15 @@ public class SkinParam implements ISkinParam {
 		final HorizontalAlignment result = HorizontalAlignment.fromString(value);
 		if (result == null) {
 			return param.getDefaultValue();
+		}
+		return result;
+	}
+
+	public HorizontalAlignment getDefaultTextAlignment() {
+		final String value = getValue("defaulttextalignment");
+		final HorizontalAlignment result = HorizontalAlignment.fromString(value);
+		if (result == null) {
+			return HorizontalAlignment.CENTER;
 		}
 		return result;
 	}

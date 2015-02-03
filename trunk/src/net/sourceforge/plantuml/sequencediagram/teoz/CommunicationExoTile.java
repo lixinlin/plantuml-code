@@ -44,6 +44,7 @@ import net.sourceforge.plantuml.skin.Area;
 import net.sourceforge.plantuml.skin.ArrowConfiguration;
 import net.sourceforge.plantuml.skin.Component;
 import net.sourceforge.plantuml.skin.ComponentType;
+import net.sourceforge.plantuml.skin.Context2D;
 import net.sourceforge.plantuml.skin.SimpleContext2D;
 import net.sourceforge.plantuml.skin.Skin;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
@@ -91,7 +92,7 @@ public class CommunicationExoTile implements Tile {
 		final double x2 = getPoint2(stringBounder).getCurrentValue();
 		final Area area = new Area(x2 - x1, dim.getHeight());
 		ug = ug.apply(new UTranslate(x1, 0));
-		comp.drawU(ug, area, new SimpleContext2D(false));
+		comp.drawU(ug, area, (Context2D) ug);
 	}
 
 	public double getPreferredHeight(StringBounder stringBounder) {

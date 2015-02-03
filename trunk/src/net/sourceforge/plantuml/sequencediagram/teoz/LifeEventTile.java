@@ -27,68 +27,58 @@
  * in the United States and other countries.]
  *
  * Original Author:  Arnaud Roques
- *
- * Revision $Revision: 8475 $
+ * 
+ * Revision $Revision: 4636 $
  *
  */
-package net.sourceforge.plantuml.activitydiagram3.ftile;
-
-import java.util.Collections;
-import java.util.Set;
+package net.sourceforge.plantuml.sequencediagram.teoz;
 
 import net.sourceforge.plantuml.graphic.StringBounder;
+import net.sourceforge.plantuml.real.Real;
+import net.sourceforge.plantuml.sequencediagram.Event;
+import net.sourceforge.plantuml.sequencediagram.LifeEvent;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
 
-public class FtileEmpty extends AbstractFtile {
+public class LifeEventTile implements TileWithUpdateStairs {
 
-	private final double width;
-	private final double height;
-	private final Swimlane swimlaneIn;
-	private final Swimlane swimlaneOut;
+	private final LifeEvent lifeEvent;
+	private final TileArguments tileArguments;
+	private final LivingSpace livingSpace;
 
-	public FtileEmpty(boolean shadowing, double width, double height) {
-		this(shadowing, width, height, null, null);
+	public void updateStairs(StringBounder stringBounder, double y) {
+		System.err.println("LifeEventTile::updateStairs " + lifeEvent + " " + livingSpace.getParticipant() + " y=" + y);
+		livingSpace.addStepForLivebox(getEvent(), y);
 	}
 
-	public FtileEmpty(boolean shadowing, double width, double height, Swimlane swimlaneIn, Swimlane swimlaneOut) {
-		super(shadowing);
-		this.width = width;
-		this.height = height;
-		this.swimlaneIn = swimlaneIn;
-		this.swimlaneOut = swimlaneOut;
-
+	public Event getEvent() {
+		return lifeEvent;
 	}
 
-	public FtileEmpty(boolean shadowing) {
-		this(shadowing, 0, 0, null, null);
-	}
-
-	public FtileEmpty(boolean shadowing, Swimlane swimlane) {
-		this(shadowing, 0, 0, swimlane, swimlane);
-	}
-
-	@Override
-	public String toString() {
-		return "FtileEmpty";
+	public LifeEventTile(LifeEvent lifeEvent, TileArguments tileArguments, LivingSpace livingSpace) {
+		this.lifeEvent = lifeEvent;
+		this.tileArguments = tileArguments;
+		this.livingSpace = livingSpace;
 	}
 
 	public void drawU(UGraphic ug) {
 	}
 
-	public FtileGeometry calculateDimension(StringBounder stringBounder) {
-		return new FtileGeometry(width, height, width / 2, 0, height);
+	public double getPreferredHeight(StringBounder stringBounder) {
+		if (lifeEvent.isActivate()) {
+			return 20;
+		}
+		return 0;
 	}
 
-	public Swimlane getSwimlaneIn() {
-		return swimlaneIn;
+	public void addConstraints(StringBounder stringBounder) {
 	}
 
-	public Swimlane getSwimlaneOut() {
-		return swimlaneOut;
+	public Real getMinX(StringBounder stringBounder) {
+		return tileArguments.getLivingSpace(lifeEvent.getParticipant()).getPosB();
 	}
 
-	public Set<Swimlane> getSwimlanes() {
-		return Collections.emptySet();
+	public Real getMaxX(StringBounder stringBounder) {
+		return tileArguments.getLivingSpace(lifeEvent.getParticipant()).getPosD(stringBounder);
 	}
-	
+
 }

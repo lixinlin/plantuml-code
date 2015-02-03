@@ -38,9 +38,11 @@ import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.command.SingleLineCommand2;
 import net.sourceforge.plantuml.command.regex.RegexConcat;
 import net.sourceforge.plantuml.command.regex.RegexLeaf;
+import net.sourceforge.plantuml.command.regex.RegexOptional;
 import net.sourceforge.plantuml.command.regex.RegexOr;
 import net.sourceforge.plantuml.command.regex.RegexResult;
 import net.sourceforge.plantuml.cucadiagram.Display;
+import net.sourceforge.plantuml.graphic.HtmlColor;
 
 public class CommandRepeatWhile3 extends SingleLineCommand2<ActivityDiagram3> {
 
@@ -68,6 +70,16 @@ public class CommandRepeatWhile3 extends SingleLineCommand2<ActivityDiagram3> {
 						), //
 						new RegexLeaf("TEST1", "(?:\\((.*)\\))?") //
 				), //
+				new RegexLeaf("[%s]*"), //
+				new RegexOptional(new RegexConcat( //
+						new RegexOr(//
+								new RegexLeaf("->"), //
+								new RegexLeaf("COLOR", "-\\[(#\\w+)\\]->")), //
+						new RegexLeaf("[%s]*"), //
+						new RegexOr(//
+								new RegexLeaf("LABEL", "(.*)"), //
+								new RegexLeaf("")) //
+						)), //
 				new RegexLeaf(";?$"));
 	}
 
@@ -76,7 +88,9 @@ public class CommandRepeatWhile3 extends SingleLineCommand2<ActivityDiagram3> {
 		final Display test = Display.getWithNewlines(arg.getLazzy("TEST", 0));
 		final Display yes = Display.getWithNewlines(arg.getLazzy("WHEN", 0));
 		final Display out = Display.getWithNewlines(arg.getLazzy("OUT", 0));
-		return diagram.repeatWhile(test, yes, out);
+		final HtmlColor linkColor = diagram.getSkinParam().getIHtmlColorSet().getColorIfValid(arg.get("COLOR", 0));
+		final Display linkLabel = Display.getWithNewlines(arg.get("LABEL", 0));
+		return diagram.repeatWhile(test, yes, out, linkLabel, linkColor);
 	}
 
 }

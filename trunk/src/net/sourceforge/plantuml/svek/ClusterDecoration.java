@@ -54,6 +54,7 @@ import net.sourceforge.plantuml.ugraphic.UTranslate;
 
 public class ClusterDecoration {
 
+	private final UStroke defaultStroke;// = new UStroke(2);
 	final private PackageStyle style;
 	final private USymbol symbol;
 	final private TextBlock title;
@@ -66,7 +67,7 @@ public class ClusterDecoration {
 	final private double maxY;
 
 	public ClusterDecoration(PackageStyle style, USymbol symbol, TextBlock title, TextBlock stereo,
-			HtmlColor stateBack, double minX, double minY, double maxX, double maxY) {
+			HtmlColor stateBack, double minX, double minY, double maxX, double maxY, UStroke stroke) {
 		this.symbol = symbol;
 		this.style = style;
 		this.stereo = stereo;
@@ -76,6 +77,7 @@ public class ClusterDecoration {
 		this.minY = minY;
 		this.maxX = maxX;
 		this.maxY = maxY;
+		this.defaultStroke = stroke;
 		// if (stateBack instanceof HtmlColorTransparent) {
 		// throw new UnsupportedOperationException();
 		// }
@@ -84,7 +86,7 @@ public class ClusterDecoration {
 	public void drawU(UGraphic ug, HtmlColor borderColor, boolean shadowing) {
 		if (symbol != null) {
 			final SymbolContext symbolContext = new SymbolContext(stateBack, borderColor).withShadow(shadowing)
-					.withStroke(new UStroke(2));
+					.withStroke(defaultStroke);
 			symbol.asBig(title, stereo, maxX - minX, maxY - minY, symbolContext).drawU(
 					ug.apply(new UTranslate(minX, minY)));
 			// ug.getParam().resetStroke();
@@ -113,7 +115,7 @@ public class ClusterDecoration {
 		final double width = maxX - minX;
 		final double height = maxY - minY;
 		ug = ug.apply(new UChangeBackColor(stateBack)).apply(new UChangeColor(borderColor));
-		ug = ug.apply(new UStroke(2));
+		ug = ug.apply(defaultStroke);
 		PackageStyle.CLOUD.drawU(ug.apply(new UTranslate(minX, minY)), new Dimension2DDouble(width, height), dimTitle,
 				shadowing);
 		ug = ug.apply(new UStroke());
@@ -126,7 +128,7 @@ public class ClusterDecoration {
 		final Dimension2D dimTitle = title.calculateDimension(ug.getStringBounder());
 		final double width = maxX - minX;
 		final double height = maxY - minY;
-		ug = ug.apply(new UStroke(2));
+		ug = ug.apply(defaultStroke);
 		ug = ug.apply(new UChangeBackColor(stateBack)).apply(new UChangeColor(borderColor));
 		PackageStyle.DATABASE.drawU(ug.apply(new UTranslate(minX, minY - 10)),
 				new Dimension2DDouble(width, height + 10), dimTitle, shadowing);
@@ -141,7 +143,7 @@ public class ClusterDecoration {
 		final double width = maxX - minX;
 		final double height = maxY - minY;
 		ug = ug.apply(new UChangeBackColor(stateBack)).apply(new UChangeColor(borderColor));
-		ug = ug.apply(new UStroke(2));
+		ug = ug.apply(defaultStroke);
 		PackageStyle.FRAME.drawU(ug.apply(new UTranslate(minX, minY)), new Dimension2DDouble(width, height), dimTitle,
 				shadowing);
 		ug = ug.apply(new UStroke());
@@ -153,7 +155,7 @@ public class ClusterDecoration {
 	private void drawWithTitleCard(UGraphic ug, HtmlColor borderColor, boolean shadowing) {
 		final double width = maxX - minX;
 		final double height = maxY - minY;
-		final SymbolContext ctx = new SymbolContext(stateBack, borderColor).withStroke(new UStroke(2)).withShadow(
+		final SymbolContext ctx = new SymbolContext(stateBack, borderColor).withStroke(defaultStroke).withShadow(
 				shadowing);
 		USymbol.CARD.asBig(title, TextBlockUtils.empty(0, 0), width + 10, height, ctx).drawU(
 				ug.apply(new UTranslate(minX, minY)));
@@ -163,7 +165,7 @@ public class ClusterDecoration {
 	private void drawWithTitleNode(UGraphic ug, HtmlColor borderColor, boolean shadowing) {
 		final double width = maxX - minX;
 		final double height = maxY - minY;
-		final SymbolContext ctx = new SymbolContext(stateBack, borderColor).withStroke(new UStroke(2)).withShadow(
+		final SymbolContext ctx = new SymbolContext(stateBack, borderColor).withStroke(defaultStroke).withShadow(
 				shadowing);
 		USymbol.NODE.asBig(title, TextBlockUtils.empty(0, 0), width + 10, height, ctx).drawU(
 				ug.apply(new UTranslate(minX, minY)));
@@ -197,7 +199,7 @@ public class ClusterDecoration {
 		}
 
 		ug = ug.apply(new UChangeBackColor(stateBack)).apply(new UChangeColor(borderColor));
-		ug = ug.apply(new UStroke(2));
+		ug = ug.apply(defaultStroke);
 		ug.apply(new UTranslate(minX, minY)).draw(shape);
 		ug.apply(new UTranslate(minX, minY + htitle)).draw(new ULine(wtitle + marginTitleX3, 0));
 		ug = ug.apply(new UStroke());
@@ -215,7 +217,7 @@ public class ClusterDecoration {
 		}
 
 		ug = ug.apply(new UChangeBackColor(stateBack)).apply(new UChangeColor(borderColor));
-		ug = ug.apply(new UStroke(2));
+		ug = ug.apply(defaultStroke);
 
 		ug.apply(new UTranslate(minX, minY)).draw(shape);
 		ug = ug.apply(new UStroke());

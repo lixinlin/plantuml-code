@@ -63,6 +63,8 @@ public interface ISkinParam extends ISkinSimple {
 	public UFont getFont(FontParam fontParam, Stereotype stereotype, boolean inPackageTitle);
 
 	public HorizontalAlignment getHorizontalAlignment(AlignParam param);
+	
+	public HorizontalAlignment getDefaultTextAlignment();
 
 	public int getCircledCharacterRadius();
 

@@ -28,71 +28,56 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 7696 $
+ * Revision $Revision: 4636 $
  *
  */
-package net.sourceforge.plantuml.ugraphic;
+package net.sourceforge.plantuml.sequencediagram.teoz;
 
-public class Slot implements Comparable<Slot> {
+import net.sourceforge.plantuml.graphic.StringBounder;
+import net.sourceforge.plantuml.real.Real;
+import net.sourceforge.plantuml.sequencediagram.Event;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
+import net.sourceforge.plantuml.ugraphic.UTranslate;
 
-	private final double start;
-	private final double end;
+public class TileMarged implements Tile {
 
-	public Slot(double start, double end) {
-		if (start >= end) {
-			throw new IllegalArgumentException();
-		}
-		this.start = start;
-		this.end = end;
+	private final Tile tile;
+	private final double x1;
+	private final double x2;
+	private final double y1;
+	private final double y2;
+
+	public TileMarged(Tile tile, double x1, double x2, double y1, double y2) {
+		this.tile = tile;
+		this.x1 = x1;
+		this.x2 = x2;
+		this.y1 = y1;
+		this.y2 = y2;
 	}
 
-	@Override
-	public String toString() {
-		return "(" + start + "," + end + ")";
+	public void drawU(UGraphic ug) {
+		tile.drawU(ug.apply(new UTranslate(x1, y1)));
+
 	}
 
-	public double getStart() {
-		return start;
+	public double getPreferredHeight(StringBounder stringBounder) {
+		return tile.getPreferredHeight(stringBounder) + y1 + y2;
 	}
 
-	public double getEnd() {
-		return end;
+	public void addConstraints(StringBounder stringBounder) {
+		tile.addConstraints(stringBounder);
 	}
 
-	public double size() {
-		return end - start;
+	public Real getMinX(StringBounder stringBounder) {
+		return tile.getMinX(stringBounder);
 	}
 
-	public boolean contains(double v) {
-		return v >= start && v <= end;
+	public Real getMaxX(StringBounder stringBounder) {
+		return tile.getMaxX(stringBounder).addFixed(x1 + x2);
 	}
 
-	public boolean intersect(Slot other) {
-		return contains(other.start) || contains(other.end) || other.contains(start) || other.contains(end);
-	}
-
-	public Slot merge(Slot other) {
-		return new Slot(Math.min(start, other.start), Math.max(end, other.end));
-	}
-
-	public Slot intersect(double otherStart, double otherEnd) {
-		if (otherStart >= end) {
-			return null;
-		}
-		if (otherEnd <= start) {
-			return null;
-		}
-		return new Slot(Math.max(start, otherStart), Math.min(end, otherEnd));
-	}
-
-	public int compareTo(Slot other) {
-		if (this.start < other.start) {
-			return -1;
-		}
-		if (this.start > other.start) {
-			return 1;
-		}
-		return 0;
+	public Event getEvent() {
+		return tile.getEvent();
 	}
 
 }

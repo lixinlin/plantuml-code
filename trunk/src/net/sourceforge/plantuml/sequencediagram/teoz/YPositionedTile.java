@@ -28,26 +28,28 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 15048 $
+ * Revision $Revision: 4636 $
  *
  */
-package net.sourceforge.plantuml.sequencediagram;
+package net.sourceforge.plantuml.sequencediagram.teoz;
 
-import net.sourceforge.plantuml.cucadiagram.Display;
+import net.sourceforge.plantuml.graphic.UDrawable;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
+import net.sourceforge.plantuml.ugraphic.UTranslate;
 
-public class Newpage extends AbstractEvent implements Event {
+public class YPositionedTile implements UDrawable {
 
-	private final Display title;
+	private final Tile tile;
+	private final double y;
 
-	public Newpage(Display strings) {
-		this.title = strings;
+	public YPositionedTile(Tile tile, double y) {
+		this.tile = tile;
+		this.y = y;
 	}
 
-	public final Display getTitle() {
-		return title;
+	public void drawU(UGraphic ug) {
+		// System.err.println("YPositionedTile::drawU y=" + y + " " + tile);
+		ug.apply(new UTranslate(0, y)).draw(tile);
 	}
 
-	public boolean dealWith(Participant someone) {
-		return false;
-	}
 }

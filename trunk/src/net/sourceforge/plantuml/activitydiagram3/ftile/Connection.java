@@ -41,10 +41,7 @@ public interface Connection extends UDrawable, UShape {
 
 	public Ftile getFtile1();
 
-	// public Position getPosition1();
-
 	public Ftile getFtile2();
-
-	// public Position getPosition2();
+	
 
 }

@@ -33,10 +33,9 @@
  */
 package net.sourceforge.plantuml.sequencediagram;
 
-import net.sourceforge.plantuml.Url;
 import net.sourceforge.plantuml.cucadiagram.Display;
 
-public class Delay implements Event {
+public class Delay extends AbstractEvent implements Event {
 
 	private final Display text;
 
@@ -51,13 +50,4 @@ public class Delay implements Event {
 	public boolean dealWith(Participant someone) {
 		return false;
 	}
-
-	public Url getUrl() {
-		return null;
-	}
-
-	public boolean hasUrl() {
-		return false;
-	}
-
 }

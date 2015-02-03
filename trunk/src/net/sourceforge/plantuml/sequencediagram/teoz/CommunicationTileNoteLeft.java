@@ -42,16 +42,18 @@ import net.sourceforge.plantuml.real.Real;
 import net.sourceforge.plantuml.sequencediagram.Event;
 import net.sourceforge.plantuml.sequencediagram.Message;
 import net.sourceforge.plantuml.skin.Area;
+import net.sourceforge.plantuml.skin.ArrowComponent;
 import net.sourceforge.plantuml.skin.Component;
 import net.sourceforge.plantuml.skin.ComponentType;
+import net.sourceforge.plantuml.skin.Context2D;
 import net.sourceforge.plantuml.skin.SimpleContext2D;
 import net.sourceforge.plantuml.skin.Skin;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
 import net.sourceforge.plantuml.ugraphic.UTranslate;
 
-public class CommunicationTileNoteLeft implements Tile {
+public class CommunicationTileNoteLeft implements TileWithUpdateStairs {
 
-	private final Tile tile;
+	private final TileWithUpdateStairs tile;
 	private final Message message;
 	private final Skin skin;
 	private final ISkinParam skinParam;
@@ -64,7 +66,7 @@ public class CommunicationTileNoteLeft implements Tile {
 	}
 
 
-	public CommunicationTileNoteLeft(Tile tile, Message message, Skin skin, ISkinParam skinParam,
+	public CommunicationTileNoteLeft(TileWithUpdateStairs tile, Message message, Skin skin, ISkinParam skinParam,
 			LivingSpace livingSpace) {
 		this.tile = tile;
 		this.message = message;
@@ -74,6 +76,11 @@ public class CommunicationTileNoteLeft implements Tile {
 		// this.notePosition = message.getNotePosition();
 		this.livingSpace = livingSpace;
 	}
+	
+	public void updateStairs(StringBounder stringBounder, double y) {
+		tile.updateStairs(stringBounder, y);
+	}
+
 
 	private Component getComponent(StringBounder stringBounder) {
 		final Component comp = skin.createComponent(ComponentType.NOTE, null, skinParam, notes);
@@ -94,7 +101,7 @@ public class CommunicationTileNoteLeft implements Tile {
 		tile.drawU(ug);
 		final Real p = getNotePosition(stringBounder);
 
-		comp.drawU(ug.apply(new UTranslate(p.getCurrentValue(), 0)), area, new SimpleContext2D(false));
+		comp.drawU(ug.apply(new UTranslate(p.getCurrentValue(), 0)), area, (Context2D) ug);
 	}
 
 	public double getPreferredHeight(StringBounder stringBounder) {

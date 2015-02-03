@@ -49,6 +49,8 @@ import net.sourceforge.plantuml.real.RealUtils;
 import net.sourceforge.plantuml.sequencediagram.Participant;
 import net.sourceforge.plantuml.sequencediagram.SequenceDiagram;
 import net.sourceforge.plantuml.sequencediagram.graphic.FileMaker;
+import net.sourceforge.plantuml.skin.Context2D;
+import net.sourceforge.plantuml.skin.SimpleContext2D;
 import net.sourceforge.plantuml.skin.Skin;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
 import net.sourceforge.plantuml.ugraphic.UGraphic2;
@@ -97,19 +99,23 @@ public class SequenceDiagramFileMakerTeoz implements FileMaker {
 
 		final Real min1 = mainTile.getMinX(stringBounder);
 		final Real max1 = mainTile.getMaxX(stringBounder);
-		System.err.println("min1=" + min1.getCurrentValue());
-		System.err.println("max1=" + max1.getCurrentValue());
+		// System.err.println("min1=" + min1.getCurrentValue());
+		// System.err.println("max1=" + max1.getCurrentValue());
 
 		final Dimension2D dim = new Dimension2DDouble(max1.getCurrentValue() - min1.getCurrentValue(), height);
 		final UGraphic2 ug = (UGraphic2) fileFormatOption.createUGraphic(dim).apply(
 				new UTranslate(-min1.getCurrentValue(), 0));
 		stringBounder = ug.getStringBounder();
 
-		drawHeads(ug, livingSpaces);
+		final Context2D context = new SimpleContext2D(false);
+		drawHeads(ug, livingSpaces, context);
 		// mainTile.beforeDrawing(ug.getStringBounder(), livingSpaces.values());
 		mainTile.drawU(ug.apply(new UTranslate(0, headHeight)));
-		drawLifeLines(ug.apply(new UTranslate(0, headHeight)), mainTile.getPreferredHeight(stringBounder), livingSpaces);
-		drawHeads(ug.apply(new UTranslate(0, mainTile.getPreferredHeight(stringBounder) + headHeight)), livingSpaces);
+		drawLifeLines(ug.apply(new UTranslate(0, headHeight)), mainTile.getPreferredHeight(stringBounder),
+				livingSpaces, context);
+		drawHeads(ug.apply(new UTranslate(0, mainTile.getPreferredHeight(stringBounder) + headHeight)), livingSpaces,
+				context);
+		mainTile.drawForeground(ug.apply(new UTranslate(0, headHeight)));
 
 		ug.writeImageTOBEMOVED(os, isWithMetadata ? diagram.getMetadata() : null, diagram.getDpi(fileFormatOption));
 		final Dimension2D info = new Dimension2DDouble(dim.getWidth(), dim.getHeight());
@@ -127,19 +133,24 @@ public class SequenceDiagramFileMakerTeoz implements FileMaker {
 		return new ImageDataSimple(info);
 	}
 
-	private void drawLifeLines(final UGraphic ug, double height, LivingSpaces livingSpaces) {
+	private void drawLifeLines(final UGraphic ug, double height, LivingSpaces livingSpaces, Context2D context) {
+		int i = 0;
 		for (LivingSpace livingSpace : livingSpaces.values()) {
-			System.err.println("drawing lines " + livingSpace);
+			// if (i++ == 0) {
+			// System.err.println("TEMPORARY SKIPPING OTHERS");
+			// continue;
+			// }
+			// System.err.println("drawing lines " + livingSpace);
 			final double x = livingSpace.getPosC(ug.getStringBounder()).getCurrentValue();
-			livingSpace.drawLine(ug.apply(new UTranslate(x, 0)), height);
+			livingSpace.drawLineAndLiveBoxes(ug.apply(new UTranslate(x, 0)), height, context);
 		}
 	}
 
-	private void drawHeads(final UGraphic ug, LivingSpaces livingSpaces) {
+	private void drawHeads(final UGraphic ug, LivingSpaces livingSpaces, Context2D context) {
 		for (LivingSpace livingSpace : livingSpaces.values()) {
-			System.err.println("drawing heads " + livingSpace);
+			// System.err.println("drawing heads " + livingSpace);
 			final double x = livingSpace.getPosB().getCurrentValue();
-			livingSpace.drawHead(ug.apply(new UTranslate(x, 0)));
+			livingSpace.drawHead(ug.apply(new UTranslate(x, 0)), context);
 		}
 	}
 

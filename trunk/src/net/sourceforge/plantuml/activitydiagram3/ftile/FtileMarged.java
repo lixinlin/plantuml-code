@@ -35,6 +35,7 @@ package net.sourceforge.plantuml.activitydiagram3.ftile;
 
 import java.util.Set;
 
+import net.sourceforge.plantuml.OptionFlags;
 import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
 import net.sourceforge.plantuml.ugraphic.UTranslate;

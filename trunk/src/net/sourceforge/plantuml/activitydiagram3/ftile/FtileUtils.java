@@ -49,4 +49,11 @@ public class FtileUtils {
 		return new FtileWithSwimlanes(ftile, ftile.getSwimlaneIn(), out);
 	}
 
+	private static Ftile neverNull(Ftile ftile) {
+		if (ftile == null) {
+			return new FtileEmpty(false);
+		}
+		return ftile;
+	}
+
 }

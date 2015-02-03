@@ -47,7 +47,14 @@ public class Stairs {
 
 	@Override
 	public String toString() {
-		return super.toString() + " " + ys.size();
+		final List<Double> copy = new ArrayList<Double>(ys);
+		Collections.sort(copy);
+		final StringBuilder sb = new StringBuilder("[");
+		for (Double y : copy) {
+			sb.append(y + "=" + getValue(y) + " ");
+		}
+		sb.append("]");
+		return sb.toString();
 	}
 
 	public void addStep(double y, int value) {
@@ -67,7 +74,7 @@ public class Stairs {
 		values.add(value);
 		cache.clear();
 	}
-	
+
 	public int getMaxValue() {
 		int max = Integer.MIN_VALUE;
 		for (Integer v : values) {

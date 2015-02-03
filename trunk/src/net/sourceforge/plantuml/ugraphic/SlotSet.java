@@ -42,6 +42,21 @@ public class SlotSet implements Iterable<Slot> {
 
 	private final List<Slot> all = new ArrayList<Slot>();
 
+	public SlotSet filter(double start, double end) {
+		final SlotSet result = new SlotSet();
+		for (Slot slot : all) {
+			final Slot intersec = slot.intersect(start, end);
+			if (intersec != null) {
+				result.all.add(intersec);
+			}
+		}
+		return result;
+	}
+
+	public void addAll(SlotSet other) {
+		this.all.addAll(other.all);
+	}
+
 	public void addSlot(double start, double end) {
 		final List<Slot> collisions = new ArrayList<Slot>();
 		Slot newSlot = new Slot(start, end);
@@ -93,6 +108,13 @@ public class SlotSet implements Iterable<Slot> {
 			last = slot;
 		}
 		return result;
+	}
+
+	public void drawDebugX(UGraphic ug, double size) {
+		for (Slot slot : all) {
+			final URectangle rect = new URectangle(slot.getEnd() - slot.getStart(), size);
+			ug.apply(new UTranslate(slot.getStart(), 0)).draw(rect);
+		}
 	}
 
 }

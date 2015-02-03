@@ -28,26 +28,14 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 15048 $
+ * Revision $Revision: 4636 $
  *
  */
-package net.sourceforge.plantuml.sequencediagram;
+package net.sourceforge.plantuml.sequencediagram.teoz;
 
-import net.sourceforge.plantuml.cucadiagram.Display;
+import net.sourceforge.plantuml.graphic.StringBounder;
 
-public class Newpage extends AbstractEvent implements Event {
+public interface TileWithUpdateStairs extends Tile {
 
-	private final Display title;
-
-	public Newpage(Display strings) {
-		this.title = strings;
-	}
-
-	public final Display getTitle() {
-		return title;
-	}
-
-	public boolean dealWith(Participant someone) {
-		return false;
-	}
+	public void updateStairs(StringBounder stringBounder, double y);
 }

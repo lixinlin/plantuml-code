@@ -28,26 +28,15 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 15048 $
+ * Revision $Revision: 4636 $
  *
  */
-package net.sourceforge.plantuml.sequencediagram;
+package net.sourceforge.plantuml.sequencediagram.teoz;
 
-import net.sourceforge.plantuml.cucadiagram.Display;
+public class TileUtils {
 
-public class Newpage extends AbstractEvent implements Event {
-
-	private final Display title;
-
-	public Newpage(Display strings) {
-		this.title = strings;
+	private static Tile withMargin(Tile tile, double x1, double x2, double y1, double y2) {
+		return new TileMarged(tile, x1, x2, y1, y2);
 	}
 
-	public final Display getTitle() {
-		return title;
-	}
-
-	public boolean dealWith(Participant someone) {
-		return false;
-	}
 }

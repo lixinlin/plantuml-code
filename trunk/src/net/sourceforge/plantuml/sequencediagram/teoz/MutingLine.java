@@ -42,7 +42,7 @@ import net.sourceforge.plantuml.sequencediagram.Event;
 import net.sourceforge.plantuml.skin.Area;
 import net.sourceforge.plantuml.skin.Component;
 import net.sourceforge.plantuml.skin.ComponentType;
-import net.sourceforge.plantuml.skin.SimpleContext2D;
+import net.sourceforge.plantuml.skin.Context2D;
 import net.sourceforge.plantuml.skin.Skin;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
 
@@ -71,13 +71,13 @@ public class MutingLine {
 		return false;
 	}
 
-	public void drawLine(UGraphic ug, double height) {
+	public void drawLine(UGraphic ug, double height, Context2D context) {
 		final ComponentType defaultLineType = useContinueLineBecauseOfDelay ? ComponentType.CONTINUE_LINE
 				: ComponentType.PARTICIPANT_LINE;
 		final Component comp = skin.createComponent(defaultLineType, null, skinParam, null);
 		final Dimension2D dim = comp.getPreferredDimension(ug.getStringBounder());
 		final Area area = new Area(dim.getWidth(), height);
-		comp.drawU(ug, area, new SimpleContext2D(false));
+		comp.drawU(ug, area, context);
 	}
 
 }

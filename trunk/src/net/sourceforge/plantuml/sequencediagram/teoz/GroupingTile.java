@@ -53,6 +53,7 @@ import net.sourceforge.plantuml.sequencediagram.GroupingType;
 import net.sourceforge.plantuml.skin.Area;
 import net.sourceforge.plantuml.skin.Component;
 import net.sourceforge.plantuml.skin.ComponentType;
+import net.sourceforge.plantuml.skin.Context2D;
 import net.sourceforge.plantuml.skin.SimpleContext2D;
 import net.sourceforge.plantuml.skin.Skin;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
@@ -60,10 +61,14 @@ import net.sourceforge.plantuml.ugraphic.UTranslate;
 
 public class GroupingTile implements Tile {
 
+	private static final int MARGINX = 16;
+	private static final int MARGINY = 10;
 	private final List<Tile> tiles = new ArrayList<Tile>();
 	private final RealMin min = new RealMin();
 	private final RealMax max = new RealMax();
 	private final GroupingStart start;
+
+	// private final double marginX = 20;
 
 	private final Skin skin;
 	private final ISkinParam skinParam;
@@ -93,8 +98,8 @@ public class GroupingTile implements Tile {
 			final Tile tile = TileBuilder.buildOne(it, tileArguments, ev, this);
 			if (tile != null) {
 				tiles.add(tile);
-				min.put(tile.getMinX(stringBounder));
-				max.put(tile.getMaxX(stringBounder));
+				min.put(tile.getMinX(stringBounder).addFixed(-MARGINX));
+				max.put(tile.getMaxX(stringBounder).addFixed(MARGINX));
 				bodyHeight += tile.getPreferredHeight(stringBounder);
 			}
 		}
@@ -106,7 +111,7 @@ public class GroupingTile implements Tile {
 			max.put(tileArguments.getOmega());
 		}
 		// max.ensureBiggerThan(min.addFixed(width));
-		this.max.ensureBiggerThan(getMinX(stringBounder).addFixed(width));
+		this.max.ensureBiggerThan(getMinX(stringBounder).addFixed(width + 16));
 	}
 
 	private Component getComponent(StringBounder stringBounder) {
@@ -123,14 +128,15 @@ public class GroupingTile implements Tile {
 
 		final Component comp = getComponent(stringBounder);
 		final Dimension2D dim1 = getPreferredDimensionIfEmpty(stringBounder);
-		final Area area = new Area(max.getCurrentValue() - min.getCurrentValue(), bodyHeight + dim1.getHeight());
+		final Area area = new Area(max.getCurrentValue() - min.getCurrentValue(), bodyHeight + dim1.getHeight()
+				+ MARGINY / 2);
 
 		if (ug instanceof LiveBoxFinder == false) {
-			comp.drawU(ug.apply(new UTranslate(min.getCurrentValue(), 0)), area, new SimpleContext2D(false));
+			comp.drawU(ug.apply(new UTranslate(min.getCurrentValue(), 0)), area, (Context2D) ug);
 		}
 		// ug.apply(new UChangeBackColor(HtmlColorUtils.LIGHT_GRAY)).draw(new URectangle(area.getDimensionToUse()));
 
-		double h = dim1.getHeight();
+		double h = dim1.getHeight() + MARGINY / 2;
 		for (Tile tile : tiles) {
 			ug.apply(new UTranslate(0, h)).draw(tile);
 			h += tile.getPreferredHeight(stringBounder);
@@ -140,7 +146,7 @@ public class GroupingTile implements Tile {
 
 	public double getPreferredHeight(StringBounder stringBounder) {
 		final Dimension2D dim1 = getPreferredDimensionIfEmpty(stringBounder);
-		return dim1.getHeight() + bodyHeight;
+		return dim1.getHeight() + bodyHeight + MARGINY;
 	}
 
 	public void addConstraints(StringBounder stringBounder) {

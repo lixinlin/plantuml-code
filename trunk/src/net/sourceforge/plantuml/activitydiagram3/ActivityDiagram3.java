@@ -330,14 +330,18 @@ public class ActivityDiagram3 extends UmlDiagram {
 				nextLinkRenderer(), color);
 		current().add(instructionRepeat);
 		setCurrent(instructionRepeat);
+		setNextLinkRendererInternal(null);
 
 	}
 
-	public CommandExecutionResult repeatWhile(Display label, Display yes, Display out) {
+	public CommandExecutionResult repeatWhile(Display label, Display yes, Display out, Display linkLabel,
+			HtmlColor linkColor) {
 		manageSwimlaneStrategy();
 		if (current() instanceof InstructionRepeat) {
 			final InstructionRepeat instructionRepeat = (InstructionRepeat) current();
-			instructionRepeat.setTest(label, yes, out, nextLinkRenderer());
+			final LinkRendering back = new LinkRendering(linkColor);
+			back.setDisplay(linkLabel);
+			instructionRepeat.setTest(label, yes, out, nextLinkRenderer(), back);
 			setCurrent(instructionRepeat.getParent());
 			this.setNextLinkRendererInternal(null);
 			return CommandExecutionResult.ok();
@@ -349,7 +353,7 @@ public class ActivityDiagram3 extends UmlDiagram {
 	public void doWhile(Display test, Display yes, HtmlColor color) {
 		manageSwimlaneStrategy();
 		final InstructionWhile instructionWhile = new InstructionWhile(swinlanes.getCurrentSwimlane(), current(), test,
-				nextLinkRenderer(), yes, color);
+				nextLinkRenderer(), yes, color, getSkinParam());
 		current().add(instructionWhile);
 		setCurrent(instructionWhile);
 	}

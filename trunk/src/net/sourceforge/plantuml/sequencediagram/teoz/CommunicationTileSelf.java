@@ -47,12 +47,13 @@ import net.sourceforge.plantuml.skin.ArrowComponent;
 import net.sourceforge.plantuml.skin.ArrowConfiguration;
 import net.sourceforge.plantuml.skin.Component;
 import net.sourceforge.plantuml.skin.ComponentType;
+import net.sourceforge.plantuml.skin.Context2D;
 import net.sourceforge.plantuml.skin.SimpleContext2D;
 import net.sourceforge.plantuml.skin.Skin;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
 import net.sourceforge.plantuml.ugraphic.UTranslate;
 
-public class CommunicationTileSelf implements Tile {
+public class CommunicationTileSelf implements TileWithUpdateStairs {
 
 	private final LivingSpace livingSpace1;
 	private final Message message;
@@ -92,21 +93,17 @@ public class CommunicationTileSelf implements Tile {
 	}
 
 	public void updateStairs(StringBounder stringBounder, double y) {
-		System.err.println("self=" + message.getLiveEvents() + " " + message.isActivate() + " "
-				+ message.isDeactivate());
 		final ArrowComponent comp = (ArrowComponent) getComponent(stringBounder);
 		final Dimension2D dim = comp.getPreferredDimension(stringBounder);
 		final Point2D p1 = comp.getStartPoint(stringBounder, dim);
 		final Point2D p2 = comp.getEndPoint(stringBounder, dim);
-		final int level1 = livingSpace1.getLevelAt(this);
-		System.err.println("CommunicationTileSelf level1=" + level1 + " y=" + y + " p1=" + p1 + " p2=" + p2 + " dim="
-				+ dim);
 
 		if (message.isActivate()) {
-			livingSpace1.addStep(y + p2.getY(), level1);
-		}
-		if (message.isDeactivate()) {
-			livingSpace1.addStep(y + p1.getY(), level1);
+			livingSpace1.addStepForLivebox(getEvent(), y + p2.getY());
+			System.err.println("CommunicationTileSelf::updateStairs activate y=" + (y + p2.getY()) + " " + message);
+		} else if (message.isDeactivate()) {
+			livingSpace1.addStepForLivebox(getEvent(), y + p1.getY());
+			System.err.println("CommunicationTileSelf::updateStairs deactivate y=" + (y + p1.getY()) + " " + message);
 		}
 
 		// livingSpace1.addStep(y + arrowY, level1);
@@ -121,18 +118,25 @@ public class CommunicationTileSelf implements Tile {
 		final Component comp = getComponent(stringBounder);
 		final Dimension2D dim = comp.getPreferredDimension(stringBounder);
 		double x1 = getPoint1(stringBounder).getCurrentValue();
-		final int level1 = livingSpace1.getLevelAt(this);
-		x1 += CommunicationTile.LIVE_DELTA_SIZE * level1;
+		final int levelIgnore = livingSpace1.getLevelAt(this, EventsHistoryMode.IGNORE_FUTURE_ACTIVATE);
+		final int levelConsidere = livingSpace1.getLevelAt(this, EventsHistoryMode.CONSIDERE_FUTURE_DEACTIVATE);
+		System.err.println("CommunicationTileSelf::drawU levelIgnore=" + levelIgnore + " levelConsidere="
+				+ levelConsidere);
+		x1 += CommunicationTile.LIVE_DELTA_SIZE * levelIgnore;
+		if (levelIgnore < levelConsidere) {
+			x1 += CommunicationTile.LIVE_DELTA_SIZE;
+		}
 
 		final Area area = new Area(dim.getWidth(), dim.getHeight());
-		if (message.isActivate()) {
-			area.setDeltaX1(-CommunicationTile.LIVE_DELTA_SIZE);
-		} else if (message.isDeactivate()) {
-			area.setDeltaX1(CommunicationTile.LIVE_DELTA_SIZE);
-			x1 += CommunicationTile.LIVE_DELTA_SIZE * level1;
-		}
+		// if (message.isActivate()) {
+		// area.setDeltaX1(CommunicationTile.LIVE_DELTA_SIZE);
+		// } else if (message.isDeactivate()) {
+		// // area.setDeltaX1(CommunicationTile.LIVE_DELTA_SIZE);
+		// // x1 += CommunicationTile.LIVE_DELTA_SIZE * levelConsidere;
+		// }
+		area.setDeltaX1((levelIgnore - levelConsidere) * CommunicationTile.LIVE_DELTA_SIZE);
 		ug = ug.apply(new UTranslate(x1, 0));
-		comp.drawU(ug, area, new SimpleContext2D(false));
+		comp.drawU(ug, area, (Context2D) ug);
 	}
 
 	public double getPreferredHeight(StringBounder stringBounder) {
