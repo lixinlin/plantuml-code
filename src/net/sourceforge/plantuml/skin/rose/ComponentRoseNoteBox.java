@@ -55,9 +55,11 @@ final public class ComponentRoseNoteBox extends AbstractTextualComponent {
 	private final double deltaShadow;
 	private final UStroke stroke;
 
-	public ComponentRoseNoteBox(HtmlColor back, HtmlColor foregroundColor, HtmlColor fontColor, HtmlColor hyperlinkColor, boolean useUnderlineForHyperlink, UFont font,
-			Display strings, ISkinSimple spriteContainer, double deltaShadow, UStroke stroke) {
-		super(strings, fontColor, hyperlinkColor, useUnderlineForHyperlink, font, HorizontalAlignment.LEFT, 4, 4, 4, spriteContainer, 0, false);
+	public ComponentRoseNoteBox(HtmlColor back, HtmlColor foregroundColor, HtmlColor fontColor,
+			HtmlColor hyperlinkColor, boolean useUnderlineForHyperlink, UFont font, Display strings,
+			ISkinSimple spriteContainer, double deltaShadow, UStroke stroke) {
+		super(strings, fontColor, hyperlinkColor, useUnderlineForHyperlink, font, HorizontalAlignment.LEFT, 4, 4, 4,
+				spriteContainer, 0, false);
 		this.back = back;
 		this.foregroundColor = foregroundColor;
 		this.deltaShadow = deltaShadow;
@@ -90,7 +92,14 @@ final public class ComponentRoseNoteBox extends AbstractTextualComponent {
 		final StringBounder stringBounder = ug.getStringBounder();
 		final int textHeight = (int) getTextHeight(stringBounder);
 
-		final int x2 = (int) getTextWidth(stringBounder);
+		int x2 = (int) getTextWidth(stringBounder);
+		final double diffX = area.getDimensionToUse().getWidth() - getPreferredWidth(stringBounder);
+		if (diffX < 0) {
+			throw new IllegalArgumentException();
+		}
+		if (area.getDimensionToUse().getWidth() > getPreferredWidth(stringBounder)) {
+			x2 = (int) (area.getDimensionToUse().getWidth() - 2 * getPaddingX());
+		}
 
 		ug = ug.apply(new UChangeBackColor(back)).apply(new UChangeColor(foregroundColor));
 		ug = ug.apply(stroke);
@@ -99,7 +108,7 @@ final public class ComponentRoseNoteBox extends AbstractTextualComponent {
 		ug.draw(rect);
 		ug = ug.apply(new UStroke());
 
-		getTextBlock().drawU(ug.apply(new UTranslate(getMarginX1(), getMarginY())));
+		getTextBlock().drawU(ug.apply(new UTranslate(getMarginX1() + diffX / 2, getMarginY())));
 
 	}
 }

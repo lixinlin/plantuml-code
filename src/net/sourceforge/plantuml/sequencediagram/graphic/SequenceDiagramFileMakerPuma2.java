@@ -33,8 +33,6 @@
  */
 package net.sourceforge.plantuml.sequencediagram.graphic;
 
-import java.awt.Color;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Dimension2D;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -44,22 +42,18 @@ import java.util.List;
 import java.util.Map;
 
 import net.sourceforge.plantuml.Dimension2DDouble;
-import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.FontParam;
-import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.activitydiagram3.ftile.EntityImageLegend;
 import net.sourceforge.plantuml.core.ImageData;
 import net.sourceforge.plantuml.cucadiagram.Display;
-import net.sourceforge.plantuml.eps.EpsStrategy;
 import net.sourceforge.plantuml.graphic.HorizontalAlignment;
 import net.sourceforge.plantuml.graphic.HtmlColor;
-import net.sourceforge.plantuml.graphic.HtmlColorGradient;
-import net.sourceforge.plantuml.graphic.HtmlColorSimple;
 import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.graphic.TextBlock;
 import net.sourceforge.plantuml.graphic.TextBlockUtils;
 import net.sourceforge.plantuml.graphic.UDrawable;
+import net.sourceforge.plantuml.graphic.VerticalAlignment;
 import net.sourceforge.plantuml.png.PngTitler;
 import net.sourceforge.plantuml.sequencediagram.Event;
 import net.sourceforge.plantuml.sequencediagram.Newpage;
@@ -72,14 +66,7 @@ import net.sourceforge.plantuml.skin.SimpleContext2D;
 import net.sourceforge.plantuml.skin.Skin;
 import net.sourceforge.plantuml.ugraphic.ImageBuilder;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
-import net.sourceforge.plantuml.ugraphic.UGraphic2;
 import net.sourceforge.plantuml.ugraphic.UTranslate;
-import net.sourceforge.plantuml.ugraphic.eps.UGraphicEps;
-import net.sourceforge.plantuml.ugraphic.g2d.UGraphicG2d;
-import net.sourceforge.plantuml.ugraphic.html5.UGraphicHtml5;
-import net.sourceforge.plantuml.ugraphic.svg.UGraphicSvg;
-import net.sourceforge.plantuml.ugraphic.tikz.UGraphicTikz;
-import net.sourceforge.plantuml.ugraphic.visio.UGraphicVdx;
 
 public class SequenceDiagramFileMakerPuma2 implements FileMaker {
 
@@ -105,18 +92,18 @@ public class SequenceDiagramFileMakerPuma2 implements FileMaker {
 
 		for (Event ev : sequenceDiagram.events()) {
 			initializer.addEvent(ev);
-//			if (ev instanceof Message) {
-//				// TODO mieux faire
-//				final Message m = (Message) ev;
-//				for (LifeEvent lifeEvent : m.getLiveEvents()) {
-//					if (lifeEvent.getType() == LifeEventType.DESTROY
-//					/*
-//					 * || lifeEvent.getType() == LifeEventType.CREATE
-//					 */) {
-//						initializer.addEvent(lifeEvent);
-//					}
-//				}
-//			}
+			// if (ev instanceof Message) {
+			// // TODO mieux faire
+			// final Message m = (Message) ev;
+			// for (LifeEvent lifeEvent : m.getLiveEvents()) {
+			// if (lifeEvent.getType() == LifeEventType.DESTROY
+			// /*
+			// * || lifeEvent.getType() == LifeEventType.CREATE
+			// */) {
+			// initializer.addEvent(lifeEvent);
+			// }
+			// }
+			// }
 		}
 		drawableSet = initializer.createDrawableSet(dummyStringBounder);
 		final List<Newpage> newpages = new ArrayList<Newpage>();
@@ -199,21 +186,27 @@ public class SequenceDiagramFileMakerPuma2 implements FileMaker {
 					delta = 0;
 				}
 
+				double legendYdelta = 0;
 				if (compTitle != null) {
 					final StringBounder stringBounder = ug.getStringBounder();
 					final double h = compTitle.getPreferredHeight(stringBounder);
+					legendYdelta += h;
 					final double w = compTitle.getPreferredWidth(stringBounder);
 					compTitle.drawU(ug.apply(new UTranslate(area.getTitleX(), area.getTitleY())), new Area(
 							new Dimension2DDouble(w, h)), new SimpleContext2D(false));
 				}
 
-				// ug.apply(new UTranslate(area.getSequenceAreaX() + delta1 / 2, area.getSequenceAreaY()))
-				// final double delta1 = Math.max(0, dimLegend.getWidth() - area.getWidth());
 				final double delta1 = Math.max(0, dimLegend.getWidth() - area.getWidth());
 
-				drawableSet.drawU22(
-						ug.apply(new UTranslate(area.getSequenceAreaX() + delta1 / 2, area.getSequenceAreaY())), delta,
-						fullDimension.getWidth(), page, diagram.isShowFootbox());
+				final boolean legendTop = legend != null
+						&& diagram.getLegendVerticalAlignment() == VerticalAlignment.TOP;
+
+				double sequenceAreaY = area.getSequenceAreaY();
+				if (legendTop) {
+					sequenceAreaY += legendBlock.calculateDimension(ug.getStringBounder()).getHeight();
+				}
+				drawableSet.drawU22(ug.apply(new UTranslate(area.getSequenceAreaX() + delta1 / 2, sequenceAreaY)),
+						delta, fullDimension.getWidth(), page, diagram.isShowFootbox());
 
 				addHeader3(area, ug);
 				addFooter3(area, ug);
@@ -227,7 +220,8 @@ public class SequenceDiagramFileMakerPuma2 implements FileMaker {
 					} else {
 						delta2 = Math.max(0, area.getWidth() - dimLegend.getWidth()) / 2;
 					}
-					legendBlock.drawU(ug.apply(new UTranslate(delta2, area.getHeight())));
+					legendBlock.drawU(ug.apply(new UTranslate(delta2, legendTop ? legendYdelta : legendYdelta
+							+ area.getHeight())));
 				}
 
 			}
@@ -260,115 +254,6 @@ public class SequenceDiagramFileMakerPuma2 implements FileMaker {
 			return 1;
 		}
 		return diagram.getScale().getScale(width, height);
-	}
-
-	private UGraphic2 createImage(final int diagramWidth, final Page page, final int indice) {
-		double delta = 0;
-		if (indice > 0) {
-			delta = page.getNewpage1() - page.getHeaderHeight();
-		}
-		if (delta < 0) {
-			delta = 0;
-		}
-
-		final SequenceDiagramArea area = new SequenceDiagramArea(diagramWidth, page.getHeight());
-
-		Component compTitle = null;
-
-		if (page.getTitle() != null) {
-			compTitle = drawableSet.getSkin().createComponent(ComponentType.TITLE, null, drawableSet.getSkinParam(),
-					page.getTitle());
-			area.setTitleArea(compTitle.getPreferredWidth(dummyStringBounder),
-					compTitle.getPreferredHeight(dummyStringBounder));
-		}
-		addFooter2(area);
-		addHeader2(area);
-
-		Color backColor = null;
-		if (diagram.getSkinParam().getBackgroundColor() instanceof HtmlColorSimple) {
-			backColor = diagram.getSkinParam().getColorMapper()
-					.getMappedColor(diagram.getSkinParam().getBackgroundColor());
-		}
-		final FileFormat fileFormat = fileFormatOption.getFileFormat();
-		final double dpiFactor = diagram.getDpiFactor(fileFormatOption);
-
-		final Display legend = diagram.getLegend();
-		final TextBlock legendBlock;
-		if (legend == null) {
-			legendBlock = TextBlockUtils.empty(0, 0);
-		} else {
-			legendBlock = EntityImageLegend.create(legend, diagram.getSkinParam());
-		}
-		final Dimension2D dimLegend = TextBlockUtils.getDimension(legendBlock);
-
-		scale = getScale(area.getWidth(), area.getHeight());
-		UGraphic2 ug;
-		if (fileFormat == FileFormat.PNG) {
-			double imageHeight = area.getHeight() * getScale(area.getWidth(), area.getHeight()) * 1;
-			if (imageHeight == 0) {
-				imageHeight = 1;
-			}
-			final double imageWidthWithDpi = getImageWidth(area, 1, dimLegend.getWidth());
-			final Dimension2D dim = new Dimension2DDouble(imageWidthWithDpi, imageHeight + dimLegend.getHeight());
-
-			ug = fileFormatOption.createUGraphic(diagram.getSkinParam().getColorMapper(), dpiFactor, dim, diagram
-					.getSkinParam().getBackgroundColor(), diagram.isRotation());
-
-			final AffineTransform scaleAt = ((UGraphicG2d) ug).getGraphics2D().getTransform();
-			scaleAt.scale(scale, scale);
-			((UGraphicG2d) ug).getGraphics2D().setTransform(scaleAt);
-		} else if (fileFormat == FileFormat.SVG) {
-			if (diagram.getSkinParam().getBackgroundColor() instanceof HtmlColorGradient) {
-				ug = new UGraphicSvg(diagram.getSkinParam().getColorMapper(), (HtmlColorGradient) diagram
-						.getSkinParam().getBackgroundColor(), false, scale);
-			} else if (backColor == null || backColor.equals(Color.WHITE)) {
-				ug = new UGraphicSvg(diagram.getSkinParam().getColorMapper(), false, scale);
-			} else {
-				ug = new UGraphicSvg(diagram.getSkinParam().getColorMapper(), StringUtils.getAsHtml(backColor), false,
-						scale);
-			}
-		} else if (fileFormat == FileFormat.EPS) {
-			ug = new UGraphicEps(diagram.getSkinParam().getColorMapper(), EpsStrategy.getDefault2());
-		} else if (fileFormat == FileFormat.EPS_TEXT) {
-			ug = new UGraphicEps(diagram.getSkinParam().getColorMapper(), EpsStrategy.WITH_MACRO_AND_TEXT);
-		} else if (fileFormat == FileFormat.HTML5) {
-			ug = new UGraphicHtml5(diagram.getSkinParam().getColorMapper());
-		} else if (fileFormat == FileFormat.VDX) {
-			ug = new UGraphicVdx(diagram.getSkinParam().getColorMapper());
-		} else if (fileFormat == FileFormat.LATEX) {
-			ug = new UGraphicTikz(diagram.getSkinParam().getColorMapper());
-		} else {
-			throw new UnsupportedOperationException();
-		}
-
-		if (compTitle != null) {
-			final StringBounder stringBounder = ug.getStringBounder();
-			final double h = compTitle.getPreferredHeight(stringBounder);
-			final double w = compTitle.getPreferredWidth(stringBounder);
-			compTitle.drawU(ug.apply(new UTranslate(area.getTitleX(), area.getTitleY())), new Area(
-					new Dimension2DDouble(w, h)), new SimpleContext2D(false));
-		}
-
-		addHeader3(area, ug);
-		addFooter3(area, ug);
-
-		final double delta1 = Math.max(0, dimLegend.getWidth() - area.getWidth());
-		// bugnewway X*58
-		drawableSet.drawU(ug.apply(new UTranslate(area.getSequenceAreaX() + delta1 / 2, area.getSequenceAreaY())),
-				delta, diagramWidth, page, diagram.isShowFootbox());
-
-		if (legend != null) {
-			final double delta2;
-			if (diagram.getLegendAlignment() == HorizontalAlignment.LEFT) {
-				delta2 = 0;
-			} else if (diagram.getLegendAlignment() == HorizontalAlignment.RIGHT) {
-				delta2 = Math.max(0, area.getWidth() - dimLegend.getWidth());
-			} else {
-				delta2 = Math.max(0, area.getWidth() - dimLegend.getWidth()) / 2;
-			}
-			legendBlock.drawU(ug.apply(new UTranslate(delta2, area.getHeight())));
-		}
-		return ug;
 	}
 
 	private void addFooter2(SequenceDiagramArea area) {

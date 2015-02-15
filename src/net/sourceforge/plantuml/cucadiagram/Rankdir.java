@@ -28,12 +28,12 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 12235 $
+ * Revision $Revision: 15146 $
  *
  */
 package net.sourceforge.plantuml.cucadiagram;
 
 public enum Rankdir {
-	LEFT_TO_RIGHT, TOP_TO_BOTTOM
+	LEFT_TO_RIGHT, TOP_TO_BOTTOM;
 
 }

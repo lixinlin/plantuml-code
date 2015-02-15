@@ -195,7 +195,7 @@ public class SequenceDiagram extends UmlDiagram {
 			return new SequenceDiagramTxtMaker(this, fileFormat);
 		}
 
-		if (getPragma().useTeozLayout()) {
+		if (OptionFlags.FORCE_TEOZ || getPragma().useTeozLayout()) {
 			return new SequenceDiagramFileMakerTeoz(this, skin, fileFormatOption);
 		}
 

@@ -107,11 +107,11 @@ public final class GroupPngMakerActivity {
 		// skinParam = new SkinParamBackcolored(skinParam, null, group.getSpecificBackColor());
 		// }
 		final DotData dotData = new DotData(group, links, group.getLeafsDirect(), diagram.getUmlDiagramType(),
-				skinParam, group.getRankdir(), new InnerGroupHierarchy(), diagram.getColorMapper(),
-				diagram.getEntityFactory(), false, DotMode.NORMAL, diagram.getNamespaceSeparator(), diagram.getPragma());
+				skinParam, new InnerGroupHierarchy(), diagram.getColorMapper(), diagram.getEntityFactory(), false,
+				DotMode.NORMAL, diagram.getNamespaceSeparator(), diagram.getPragma());
 
 		final CucaDiagramFileMakerSvek2 svek2 = new CucaDiagramFileMakerSvek2(dotData, diagram.getEntityFactory(),
-				false, diagram.getSource(), diagram.getPragma());
+				diagram.getSource(), diagram.getPragma());
 
 		if (group.getGroupType() == GroupType.INNER_ACTIVITY) {
 			final Stereotype stereo = group.getStereotype();

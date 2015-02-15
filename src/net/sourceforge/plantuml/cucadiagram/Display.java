@@ -43,22 +43,23 @@ import net.sourceforge.plantuml.EmbededDiagram;
 import net.sourceforge.plantuml.Url;
 import net.sourceforge.plantuml.UrlBuilder;
 import net.sourceforge.plantuml.UrlBuilder.ModeUrl;
-import net.sourceforge.plantuml.StringUtils;
+import net.sourceforge.plantuml.graphic.HorizontalAlignment;
 
 public class Display implements Iterable<CharSequence> {
 
 	private final List<CharSequence> display = new ArrayList<CharSequence>();
+	private final HorizontalAlignment naturalHorizontalAlignment;
 
 	public static Display empty() {
-		return new Display();
+		return new Display((HorizontalAlignment) null);
 	}
 
 	public static Display create(CharSequence... s) {
-		return new Display(Arrays.asList(s));
+		return create(Arrays.asList(s));
 	}
 
 	public static Display create(List<? extends CharSequence> other) {
-		return new Display(other);
+		return new Display(other, null);
 	}
 
 	public static Display getWithNewlines(Code s) {
@@ -69,17 +70,49 @@ public class Display implements Iterable<CharSequence> {
 		if (s == null) {
 			return null;
 		}
-		return new Display(getWithNewlinesInternal(s));
+		final List<String> result = new ArrayList<String>();
+		final StringBuilder current = new StringBuilder();
+		HorizontalAlignment naturalHorizontalAlignment = null;
+		for (int i = 0; i < s.length(); i++) {
+			final char c = s.charAt(i);
+			if (c == '\\' && i < s.length() - 1) {
+				final char c2 = s.charAt(i + 1);
+				i++;
+				if (c2 == 'n' || c2 == 'r' || c2 == 'l') {
+					if (c2 == 'r') {
+						naturalHorizontalAlignment = HorizontalAlignment.RIGHT;
+					} else if (c2 == 'l') {
+						naturalHorizontalAlignment = HorizontalAlignment.LEFT;
+					}
+					result.add(current.toString());
+					current.setLength(0);
+				} else if (c2 == 't') {
+					current.append('\t');
+				} else if (c2 == '\\') {
+					current.append(c2);
+				} else {
+					current.append(c);
+					current.append(c2);
+				}
+			} else {
+				current.append(c);
+			}
+		}
+		result.add(current.toString());
+		return new Display(result, naturalHorizontalAlignment);
 	}
 
 	private Display(Display other) {
+		this(other.naturalHorizontalAlignment);
 		this.display.addAll(other.display);
 	}
 
-	private Display() {
+	private Display(HorizontalAlignment naturalHorizontalAlignment) {
+		this.naturalHorizontalAlignment = naturalHorizontalAlignment;
 	}
 
-	private Display(List<? extends CharSequence> other) {
+	private Display(List<? extends CharSequence> other, HorizontalAlignment naturalHorizontalAlignment) {
+		this(naturalHorizontalAlignment);
 		this.display.addAll(manageEmbededDiagrams2(other));
 	}
 
@@ -111,7 +144,7 @@ public class Display implements Iterable<CharSequence> {
 		for (CharSequence line : display) {
 			result.add("<u>" + line);
 		}
-		return new Display(result);
+		return new Display(result, this.naturalHorizontalAlignment);
 	}
 
 	@Override
@@ -191,38 +224,11 @@ public class Display implements Iterable<CharSequence> {
 	}
 
 	public Display subList(int i, int size) {
-		return new Display(display.subList(i, size));
+		return new Display(display.subList(i, size), this.naturalHorizontalAlignment);
 	}
 
 	public List<? extends CharSequence> as() {
 		return Collections.unmodifiableList(display);
-	}
-
-	private static List<String> getWithNewlinesInternal(String s) {
-		final List<String> result = new ArrayList<String>();
-		final StringBuilder current = new StringBuilder();
-		for (int i = 0; i < s.length(); i++) {
-			final char c = s.charAt(i);
-			if (c == '\\' && i < s.length() - 1) {
-				final char c2 = s.charAt(i + 1);
-				i++;
-				if (c2 == 'n') {
-					result.add(current.toString());
-					current.setLength(0);
-				} else if (c2 == 't') {
-					current.append('\t');
-				} else if (c2 == '\\') {
-					current.append(c2);
-				} else {
-					current.append(c);
-					current.append(c2);
-				}
-			} else {
-				current.append(c);
-			}
-		}
-		result.add(current.toString());
-		return result;
 	}
 
 	public Url initUrl() {
@@ -237,7 +243,7 @@ public class Display implements Iterable<CharSequence> {
 		if (url == null) {
 			return this;
 		}
-		final Display result = new Display();
+		final Display result = new Display(this.naturalHorizontalAlignment);
 		result.display.add(UrlBuilder.purgeUrl(this.get(0).toString()));
 		result.display.addAll(this.subList(1, this.size()).display);
 		return result;
@@ -251,6 +257,10 @@ public class Display implements Iterable<CharSequence> {
 			}
 		}
 		return false;
+	}
+
+	public HorizontalAlignment getNaturalHorizontalAlignment() {
+		return naturalHorizontalAlignment;
 	}
 
 }

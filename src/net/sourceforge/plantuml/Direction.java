@@ -113,7 +113,7 @@ public enum Direction {
 			}
 			return Direction.LEFT;
 		}
-		throw new IllegalArgumentException();
+		throw new IllegalArgumentException("Not a H or V line!");
 
 	}
 }

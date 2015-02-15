@@ -41,7 +41,7 @@ import net.sourceforge.plantuml.activitydiagram3.ftile.Ftile;
 import net.sourceforge.plantuml.activitydiagram3.ftile.FtileFactory;
 import net.sourceforge.plantuml.activitydiagram3.ftile.FtileFactoryDelegator;
 import net.sourceforge.plantuml.activitydiagram3.ftile.FtileGeometry;
-import net.sourceforge.plantuml.activitydiagram3.ftile.FtileMargedBottom;
+import net.sourceforge.plantuml.activitydiagram3.ftile.FtileMargedVertically;
 import net.sourceforge.plantuml.activitydiagram3.ftile.FtileMinWidth;
 import net.sourceforge.plantuml.activitydiagram3.ftile.FtileUtils;
 import net.sourceforge.plantuml.cucadiagram.Display;
@@ -70,7 +70,7 @@ public class FtileFactoryDelegatorAssembly extends FtileFactoryDelegator {
 			height += textBlock.calculateDimension(stringBounder).getHeight();
 		}
 		// final Ftile space = new FtileEmpty(getFactory().shadowing(), 1, height);
-		final Ftile tile1andSpace = new FtileMargedBottom(tile1, height);
+		final Ftile tile1andSpace = FtileUtils.addBottom(tile1, height);
 		Ftile result = super.assembly(tile1andSpace, tile2);
 		final FtileGeometry geo = tile1.calculateDimension(stringBounder);
 		if (geo.hasPointOut() == false) {
@@ -101,13 +101,15 @@ public class FtileFactoryDelegatorAssembly extends FtileFactoryDelegator {
 	private final Rose rose = new Rose();
 
 	private TextBlock getTextBlock(Display display) {
+		// DUP1433
 		if (display == null) {
 			return null;
 		}
 		final ISkinParam skinParam = getSkinParam();
 		final UFont font = skinParam.getFont(FontParam.ACTIVITY_ARROW, null, false);
 		final HtmlColor color = rose.getFontColor(skinParam, FontParam.ACTIVITY_ARROW);
-		final FontConfiguration fontConfiguration = new FontConfiguration(font, color, skinParam.getHyperlinkColor(), skinParam.useUnderlineForHyperlink());
+		final FontConfiguration fontConfiguration = new FontConfiguration(font, color, skinParam.getHyperlinkColor(),
+				skinParam.useUnderlineForHyperlink());
 		return TextBlockUtils.create(display, fontConfiguration, HorizontalAlignment.LEFT, null, true);
 	}
 }

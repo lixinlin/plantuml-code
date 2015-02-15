@@ -237,6 +237,7 @@ public class Snake implements UShape {
 			change = change || removePattern4();
 			change = change || removePattern5();
 			change = change || removePattern6();
+			change = change || removePattern7();
 		} while (change);
 	}
 
@@ -270,6 +271,22 @@ public class Snake implements UShape {
 					|| Arrays.asList(Direction.DOWN, Direction.RIGHT, Direction.DOWN, Direction.LEFT).equals(patternAt)) {
 				final Point2D.Double newPoint = new Point2D.Double(points.get(i + 1).x, points.get(i + 3).y);
 				points.remove(i + 3);
+				points.remove(i + 2);
+				points.remove(i + 1);
+				points.add(i + 1, newPoint);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean removePattern7() {
+		if (points.size() > 4) {
+			final int i = 0;
+			final List<Direction> patternAt = getPatternAt(i);
+			if (Arrays.asList(Direction.RIGHT, Direction.DOWN, Direction.LEFT, Direction.DOWN).equals(patternAt)
+					&& points.get(i + 3).x > points.get(i).x) {
+				final Point2D.Double newPoint = new Point2D.Double(points.get(i + 3).x, points.get(i).y);
 				points.remove(i + 2);
 				points.remove(i + 1);
 				points.add(i + 1, newPoint);

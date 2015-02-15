@@ -109,7 +109,7 @@ public final class CucaDiagramFileMakerSvek implements CucaDiagramFileMaker {
 				diagram.getColorMapper(), diagram.getEntityFactory(), diagram.isHideEmptyDescriptionForState(),
 				dotMode, diagram.getNamespaceSeparator(), diagram.getPragma());
 		final CucaDiagramFileMakerSvek2 svek2 = new CucaDiagramFileMakerSvek2(dotData, diagram.getEntityFactory(),
-				false, diagram.getSource(), diagram.getPragma());
+				diagram.getSource(), diagram.getPragma());
 		return svek2;
 
 	}
@@ -191,10 +191,12 @@ public final class CucaDiagramFileMakerSvek implements CucaDiagramFileMaker {
 		}
 		final TextBlock textFooter = footer == null ? null : TextBlockUtils.create(footer, new FontConfiguration(
 				getFont(FontParam.FOOTER), getFontColor(FontParam.FOOTER, null), diagram.getSkinParam()
-						.getHyperlinkColor(), diagram.getSkinParam().useUnderlineForHyperlink()), diagram.getFooterAlignment(), diagram.getSkinParam());
+						.getHyperlinkColor(), diagram.getSkinParam().useUnderlineForHyperlink()), diagram
+				.getFooterAlignment(), diagram.getSkinParam());
 		final TextBlock textHeader = header == null ? null : TextBlockUtils.create(header, new FontConfiguration(
 				getFont(FontParam.HEADER), getFontColor(FontParam.HEADER, null), diagram.getSkinParam()
-						.getHyperlinkColor(), diagram.getSkinParam().useUnderlineForHyperlink()), diagram.getHeaderAlignment(), diagram.getSkinParam());
+						.getHyperlinkColor(), diagram.getSkinParam().useUnderlineForHyperlink()), diagram
+				.getHeaderAlignment(), diagram.getSkinParam());
 
 		return new DecorateEntityImage(original, textHeader, diagram.getHeaderAlignment(), textFooter,
 				diagram.getFooterAlignment());
@@ -206,8 +208,8 @@ public final class CucaDiagramFileMakerSvek implements CucaDiagramFileMaker {
 			return original;
 		}
 		final TextBlock text = TextBlockUtils.create(title, new FontConfiguration(getFont(FontParam.TITLE),
-				getFontColor(FontParam.TITLE, null), diagram.getSkinParam().getHyperlinkColor(), diagram.getSkinParam().useUnderlineForHyperlink()),
-				HorizontalAlignment.CENTER, diagram.getSkinParam());
+				getFontColor(FontParam.TITLE, null), diagram.getSkinParam().getHyperlinkColor(), diagram.getSkinParam()
+						.useUnderlineForHyperlink()), HorizontalAlignment.CENTER, diagram.getSkinParam());
 
 		return DecorateEntityImage.addTop(original, text, HorizontalAlignment.CENTER);
 	}
@@ -219,7 +221,8 @@ public final class CucaDiagramFileMakerSvek implements CucaDiagramFileMaker {
 		}
 		final TextBlock text = EntityImageLegend.create(legend, diagram.getSkinParam());
 
-		return DecorateEntityImage.addBottom(original, text, diagram.getLegendAlignment());
+		return DecorateEntityImage.add(original, text, diagram.getLegendAlignment(),
+				diagram.getLegendVerticalAlignment());
 	}
 
 	private final UFont getFont(FontParam fontParam) {

@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 13813 $
+ * Revision $Revision: 15087 $
  *
  */
 package net.sourceforge.plantuml.graphic;
@@ -78,6 +78,9 @@ public class TextBlockUtils {
 	public static TextBlock create(Display texts, FontConfiguration fontConfiguration,
 			HorizontalAlignment horizontalAlignment, ISkinSimple spriteContainer, double maxMessageSize,
 			boolean modeSimpleLine) {
+		if (texts.getNaturalHorizontalAlignment() != null) {
+			horizontalAlignment = texts.getNaturalHorizontalAlignment();
+		}
 		if (texts.size() > 0) {
 			if (texts.get(0) instanceof Stereotype) {
 				return createStereotype(texts, fontConfiguration, horizontalAlignment, spriteContainer, 0);

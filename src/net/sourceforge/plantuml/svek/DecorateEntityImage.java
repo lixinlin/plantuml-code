@@ -40,6 +40,7 @@ import net.sourceforge.plantuml.graphic.HorizontalAlignment;
 import net.sourceforge.plantuml.graphic.HtmlColor;
 import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.graphic.TextBlock;
+import net.sourceforge.plantuml.graphic.VerticalAlignment;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
 import net.sourceforge.plantuml.ugraphic.UTranslate;
 
@@ -60,6 +61,14 @@ public class DecorateEntityImage implements TextBlockBackcolored {
 
 	public static DecorateEntityImage addBottom(TextBlock original, TextBlock text, HorizontalAlignment horizontal) {
 		return new DecorateEntityImage(original, null, null, text, horizontal);
+	}
+
+	public static DecorateEntityImage add(TextBlock original, TextBlock text, HorizontalAlignment horizontal,
+			VerticalAlignment verticalAlignment) {
+		if (verticalAlignment == VerticalAlignment.TOP) {
+			return addTop(original, text, horizontal);
+		}
+		return addBottom(original, text, horizontal);
 	}
 
 	public DecorateEntityImage(TextBlock original, TextBlock text1, HorizontalAlignment horizontal1, TextBlock text2,

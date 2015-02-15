@@ -53,6 +53,7 @@ import net.sourceforge.plantuml.cucadiagram.LeafType;
 import net.sourceforge.plantuml.cucadiagram.Link;
 import net.sourceforge.plantuml.cucadiagram.Member;
 import net.sourceforge.plantuml.cucadiagram.MethodsOrFieldsArea;
+import net.sourceforge.plantuml.cucadiagram.Rankdir;
 import net.sourceforge.plantuml.cucadiagram.Stereotype;
 import net.sourceforge.plantuml.cucadiagram.dot.DotData;
 import net.sourceforge.plantuml.graphic.FontConfiguration;
@@ -106,31 +107,32 @@ public final class GroupPngMakerState {
 		return result;
 	}
 
-	public IEntityImage getImage() throws IOException, InterruptedException {
+	public IEntityImage getImage() {
 		final Display display = group.getDisplay();
 		final ISkinParam skinParam = diagram.getSkinParam();
 		final TextBlock title = TextBlockUtils.create(display, new FontConfiguration(getFont(FontParam.STATE),
-				HtmlColorUtils.BLACK, skinParam.getHyperlinkColor(), skinParam.useUnderlineForHyperlink()), HorizontalAlignment.CENTER, diagram.getSkinParam());
+				HtmlColorUtils.BLACK, skinParam.getHyperlinkColor(), skinParam.useUnderlineForHyperlink()),
+				HorizontalAlignment.CENTER, diagram.getSkinParam());
 
 		if (group.size() == 0) {
 			return new EntityImageState(group, diagram.getSkinParam());
 		}
 		final List<Link> links = getPureInnerLinks();
 
-		boolean hasVerticalLine = false;
-		for (ILeaf leaf : group.getLeafsDirect()) {
-			if (leaf.getEntityType() == LeafType.STATE_CONCURRENT) {
-				hasVerticalLine = true;
-			}
-		}
+		// boolean hasVerticalLine = false;
+		// for (ILeaf leaf : group.getLeafsDirect()) {
+		// if (leaf.getEntityType() == LeafType.STATE_CONCURRENT) {
+		// hasVerticalLine = true;
+		// }
+		// }
 
 		final DotData dotData = new DotData(group, links, group.getLeafsDirect(), diagram.getUmlDiagramType(),
-				skinParam, group.getRankdir(), new InnerGroupHierarchy(), diagram.getColorMapper(),
-				diagram.getEntityFactory(), diagram.isHideEmptyDescriptionForState(), DotMode.NORMAL,
-				diagram.getNamespaceSeparator(), diagram.getPragma());
+				skinParam, new InnerGroupHierarchy(), diagram.getColorMapper(), diagram.getEntityFactory(),
+				diagram.isHideEmptyDescriptionForState(), DotMode.NORMAL, diagram.getNamespaceSeparator(),
+				diagram.getPragma());
 
 		final CucaDiagramFileMakerSvek2 svek2 = new CucaDiagramFileMakerSvek2(dotData, diagram.getEntityFactory(),
-				hasVerticalLine, diagram.getSource(), diagram.getPragma());
+				diagram.getSource(), diagram.getPragma());
 		UStroke stroke = group.getSpecificLineStroke();
 		if (stroke == null) {
 			stroke = new UStroke(1.5);
@@ -158,12 +160,27 @@ public final class GroupPngMakerState {
 			final Stereotype stereotype = group.getStereotype();
 			final boolean withSymbol = stereotype != null && stereotype.isWithOOSymbol();
 
-			return new InnerStateAutonom(svek2.createFile(), title, attribute, borderColor, backColor,
-					skinParam.shadowing(), group.getUrl99(), withSymbol, stroke);
+			final boolean containsOnlyConcurrentStates = containsOnlyConcurrentStates(dotData);
+			final IEntityImage image = containsOnlyConcurrentStates ? svek2.createFileForConcurrentState() : svek2
+					.createFile();
+			return new InnerStateAutonom(image, title, attribute, borderColor, backColor, skinParam.shadowing(),
+					group.getUrl99(), withSymbol, stroke);
 		}
 
 		throw new UnsupportedOperationException(group.getGroupType().toString());
 
+	}
+
+	private boolean containsOnlyConcurrentStates(DotData dotData) {
+		for (ILeaf leaf : dotData.getLeafs()) {
+			if (leaf instanceof IGroup == false) {
+				return false;
+			}
+			if (((IGroup) leaf).getEntityType() != LeafType.STATE_CONCURRENT) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	private UFont getFont(FontParam fontParam) {

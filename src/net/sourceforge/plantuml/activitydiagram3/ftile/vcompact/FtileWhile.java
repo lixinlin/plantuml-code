@@ -41,6 +41,7 @@ import java.util.List;
 import java.util.Set;
 
 import net.sourceforge.plantuml.Direction;
+import net.sourceforge.plantuml.FileGroup;
 import net.sourceforge.plantuml.ISkinSimple;
 import net.sourceforge.plantuml.activitydiagram3.LinkRendering;
 import net.sourceforge.plantuml.activitydiagram3.ftile.AbstractConnection;
@@ -101,8 +102,10 @@ class FtileWhile extends AbstractFtile {
 		this.supplementarySouthText = supplementarySouthText;
 	}
 
-	private static TextBlock createLabel1(Display test, Display yes, UFont font, ISkinSimple spriteContainer, HtmlColor hyperlinkColor, boolean useUnderlineForHyperlink) {
-		final FontConfiguration fc = new FontConfiguration(font, HtmlColorUtils.BLACK, hyperlinkColor, useUnderlineForHyperlink);
+	private static TextBlock createLabel1(Display test, Display yes, UFont font, ISkinSimple spriteContainer,
+			HtmlColor hyperlinkColor, boolean useUnderlineForHyperlink) {
+		final FontConfiguration fc = new FontConfiguration(font, HtmlColorUtils.BLACK, hyperlinkColor,
+				useUnderlineForHyperlink);
 		final TextBlock tmpb = TextBlockUtils.create(yes, fc, HorizontalAlignment.LEFT, spriteContainer);
 		if (test == null) {
 			return tmpb;
@@ -112,11 +115,14 @@ class FtileWhile extends AbstractFtile {
 	}
 
 	public static Ftile create(Swimlane swimlane, Ftile whileBlock, Display test, HtmlColor borderColor,
-			HtmlColor backColor, HtmlColor arrowColor, Display yes, Display out2, UFont fontArrow, HtmlColor endInlinkColor,
-			LinkRendering afterEndwhile, FtileFactory ftileFactory, ConditionStyle conditionStyle, UFont fontTest, HtmlColor hyperlinkColor, boolean useUnderlineForHyperlink) {
+			HtmlColor backColor, HtmlColor arrowColor, Display yes, Display out2, UFont fontArrow,
+			HtmlColor endInlinkColor, LinkRendering afterEndwhile, FtileFactory ftileFactory,
+			ConditionStyle conditionStyle, UFont fontTest, HtmlColor hyperlinkColor, boolean useUnderlineForHyperlink) {
 
-		final FontConfiguration fcArrow = new FontConfiguration(fontArrow, HtmlColorUtils.BLACK, hyperlinkColor, useUnderlineForHyperlink);
-		final FontConfiguration fcTest = new FontConfiguration(fontTest, HtmlColorUtils.BLACK, hyperlinkColor, useUnderlineForHyperlink);
+		final FontConfiguration fcArrow = new FontConfiguration(fontArrow, HtmlColorUtils.BLACK, hyperlinkColor,
+				useUnderlineForHyperlink);
+		final FontConfiguration fcTest = new FontConfiguration(fontTest, HtmlColorUtils.BLACK, hyperlinkColor,
+				useUnderlineForHyperlink);
 		final TextBlock yesTb = TextBlockUtils.create(yes, fcArrow, HorizontalAlignment.LEFT, ftileFactory);
 		final TextBlock testTb = TextBlockUtils.create(test, fcTest, HorizontalAlignment.LEFT, ftileFactory);
 		final TextBlock out = TextBlockUtils.create(out2, fcArrow, HorizontalAlignment.LEFT, ftileFactory);
@@ -132,7 +138,8 @@ class FtileWhile extends AbstractFtile {
 			diamond1 = new FtileDiamondFoo1(whileBlock.shadowing(), backColor, borderColor, swimlane, testTb)
 					.withNorth(yesTb).withWest(out);
 		} else if (conditionStyle == ConditionStyle.DIAMOND) {
-			supplementarySouthText = createLabel1(test, yes, fontArrow, ftileFactory, hyperlinkColor, useUnderlineForHyperlink);
+			supplementarySouthText = createLabel1(test, yes, fontArrow, ftileFactory, hyperlinkColor,
+					useUnderlineForHyperlink);
 			diamond1 = new FtileDiamond(whileBlock.shadowing(), backColor, borderColor, swimlane).withWest(out)
 					.withSouth(supplementarySouthText);
 		} else {
@@ -226,12 +233,12 @@ class FtileWhile extends AbstractFtile {
 				return;
 			}
 			final Point2D p2 = getP2(stringBounder);
-			final Dimension2D dimDiamond1 = diamond1.calculateDimension(stringBounder);
+			final FtileGeometry dimDiamond1 = diamond1.calculateDimension(stringBounder);
 
 			final double x1 = p1.getX();
 			final double y1 = p1.getY();
 			final double x2 = p2.getX() + dimDiamond1.getWidth();
-			final double y2 = p2.getY() + dimDiamond1.getHeight() / 2;
+			final double y2 = p2.getY() + dimDiamond1.getOutY() / 2;
 
 			snake.addPoint(x1, y1);
 			snake.addPoint(x1, y1 + Diamond.diamondHalfSize);
@@ -305,12 +312,12 @@ class FtileWhile extends AbstractFtile {
 
 			final Snake snake = new Snake(afterEndwhileColor);
 
-			final Dimension2D dimDiamond1 = diamond1.calculateDimension(stringBounder);
+			final FtileGeometry dimDiamond1 = diamond1.calculateDimension(stringBounder);
 			final Point2D p1 = getP1(stringBounder);
 			final Point2D p2 = getP2(stringBounder);
 
 			final double x1 = p1.getX();
-			final double y1 = p1.getY() + dimDiamond1.getHeight() / 2;
+			final double y1 = p1.getY() + dimDiamond1.getOutY() / 2;
 			final double x2 = p2.getX();
 			final double y2 = p2.getY();
 
@@ -346,7 +353,7 @@ class FtileWhile extends AbstractFtile {
 			geoWhile = geoWhile.addMarginX(diff / 2);
 		}
 		final FtileGeometry geo = geoDiamond1.appendBottom(geoWhile);
-		final double height = geo.getHeight() + 8 * Diamond.diamondHalfSize + dimSupplementarySouth.getHeight();
+		final double height = geo.getHeight() + 4 * Diamond.diamondHalfSize + dimSupplementarySouth.getHeight();
 		final double dx = 2 * Diamond.diamondHalfSize;
 		return new FtileGeometry(geo.getWidth() + dx + Diamond.diamondHalfSize, height, geo.getLeft() + dx, 0, height);
 

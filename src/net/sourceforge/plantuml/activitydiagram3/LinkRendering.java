@@ -59,7 +59,7 @@ public class LinkRendering {
 
 	@Override
 	public String toString() {
-		return super.toString() + " " + color;
+		return super.toString() + " " + display + " " + color;
 	}
 
 	public static HtmlColor getColor(LinkRendering inLinkRendering, HtmlColor defaultColor) {

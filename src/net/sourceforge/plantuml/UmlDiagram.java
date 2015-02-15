@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 14727 $
+ * Revision $Revision: 15094 $
  *
  */
 package net.sourceforge.plantuml;
@@ -69,6 +69,7 @@ import net.sourceforge.plantuml.graphic.HorizontalAlignment;
 import net.sourceforge.plantuml.graphic.HtmlColorUtils;
 import net.sourceforge.plantuml.graphic.QuoteUtils;
 import net.sourceforge.plantuml.graphic.UDrawable;
+import net.sourceforge.plantuml.graphic.VerticalAlignment;
 import net.sourceforge.plantuml.mjpeg.MJPEGGenerator;
 import net.sourceforge.plantuml.pdf.PdfConverter;
 import net.sourceforge.plantuml.svek.EmptySvgException;
@@ -95,6 +96,7 @@ public abstract class UmlDiagram extends AbstractPSystem implements Diagram {
 	private Display footer;
 	private Display legend = null;
 	private HorizontalAlignment legendAlignment = HorizontalAlignment.CENTER;
+	private VerticalAlignment legendVerticalAlignment = VerticalAlignment.BOTTOM;
 
 	private HorizontalAlignment headerAlignment = HorizontalAlignment.RIGHT;
 	private HorizontalAlignment footerAlignment = HorizontalAlignment.CENTER;
@@ -415,8 +417,13 @@ public abstract class UmlDiagram extends AbstractPSystem implements Diagram {
 		return legendAlignment;
 	}
 
-	public final void setLegend(Display legend, HorizontalAlignment horizontalAlignment) {
+	public final VerticalAlignment getLegendVerticalAlignment() {
+		return legendVerticalAlignment;
+	}
+
+	public final void setLegend(Display legend, HorizontalAlignment horizontalAlignment, VerticalAlignment valignment) {
 		this.legend = legend;
 		this.legendAlignment = horizontalAlignment;
+		this.legendVerticalAlignment = valignment;
 	}
 }

@@ -60,10 +60,6 @@ public interface IGroup extends IEntity {
 
 	public void setAutonom(boolean autonom);
 
-	public Rankdir getRankdir();
-
-	public void setRankdir(Rankdir rankdir);
-
 	public PackageStyle getPackageStyle();
 
 	public void overideImage(IEntityImage img, LeafType state);
@@ -71,4 +67,8 @@ public interface IGroup extends IEntity {
 	public SingleStrategy getSingleStrategy();
 
 	public FontParam getTitleFontParam();
+	
+	public char getConcurrentSeparator();
+	
+	public void setConcurrentSeparator(char separator);
 }

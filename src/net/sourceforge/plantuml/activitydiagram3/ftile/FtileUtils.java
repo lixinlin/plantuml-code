@@ -49,6 +49,17 @@ public class FtileUtils {
 		return new FtileWithSwimlanes(ftile, ftile.getSwimlaneIn(), out);
 	}
 
+	public static Ftile addBottom(Ftile ftile, double marginBottom) {
+		return new FtileMargedVertically(ftile, 0, marginBottom);
+	}
+
+	public static Ftile addVerticalMargin(Ftile ftile, double marginTop, double marginBottom) {
+		if (marginTop == 0 && marginBottom == 0) {
+			return ftile;
+		}
+		return new FtileMargedVertically(ftile, marginTop, marginBottom);
+	}
+
 	private static Ftile neverNull(Ftile ftile) {
 		if (ftile == null) {
 			return new FtileEmpty(false);
