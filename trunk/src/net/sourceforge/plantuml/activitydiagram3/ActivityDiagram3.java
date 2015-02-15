@@ -163,7 +163,7 @@ public class ActivityDiagram3 extends UmlDiagram {
 		}
 		final TextBlock text = EntityImageLegend.create(legend, getSkinParam());
 
-		return DecorateEntityImage.addBottom(original, text, getLegendAlignment());
+		return DecorateEntityImage.add(original, text, getLegendAlignment(), getLegendVerticalAlignment());
 	}
 
 	@Override
@@ -263,14 +263,16 @@ public class ActivityDiagram3 extends UmlDiagram {
 	}
 
 	public void split() {
-		final InstructionSplit instructionSplit = new InstructionSplit(current());
+		final InstructionSplit instructionSplit = new InstructionSplit(current(), nextLinkRenderer());
+		setNextLinkRendererInternal(null);
 		current().add(instructionSplit);
 		setCurrent(instructionSplit);
 	}
 
 	public CommandExecutionResult splitAgain() {
 		if (current() instanceof InstructionSplit) {
-			((InstructionSplit) current()).splitAgain();
+			((InstructionSplit) current()).splitAgain(nextLinkRenderer());
+			setNextLinkRendererInternal(null);
 			return CommandExecutionResult.ok();
 		}
 		return CommandExecutionResult.error("Cannot find split");
@@ -278,6 +280,8 @@ public class ActivityDiagram3 extends UmlDiagram {
 
 	public CommandExecutionResult endSplit() {
 		if (current() instanceof InstructionSplit) {
+			((InstructionSplit) current()).endSplit(nextLinkRenderer());
+			setNextLinkRendererInternal(null);
 			setCurrent(((InstructionSplit) current()).getParent());
 			return CommandExecutionResult.ok();
 		}

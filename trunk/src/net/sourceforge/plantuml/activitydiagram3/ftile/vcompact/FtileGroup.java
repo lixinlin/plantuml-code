@@ -38,6 +38,7 @@ import java.awt.geom.Dimension2D;
 import java.util.Set;
 
 import net.sourceforge.plantuml.ISkinParam;
+import net.sourceforge.plantuml.activitydiagram3.LinkRendering;
 import net.sourceforge.plantuml.activitydiagram3.ftile.AbstractFtile;
 import net.sourceforge.plantuml.activitydiagram3.ftile.Ftile;
 import net.sourceforge.plantuml.activitydiagram3.ftile.FtileGeometry;
@@ -77,7 +78,8 @@ public class FtileGroup extends AbstractFtile {
 		this.color = color;
 		this.titleColor = titleColor;
 		final UFont font = new UFont("Serif", Font.PLAIN, 14);
-		final FontConfiguration fc = new FontConfiguration(font, HtmlColorUtils.BLACK, skinParam.getHyperlinkColor(), skinParam.useUnderlineForHyperlink());
+		final FontConfiguration fc = new FontConfiguration(font, HtmlColorUtils.BLACK, skinParam.getHyperlinkColor(),
+				skinParam.useUnderlineForHyperlink());
 		if (title == null) {
 			this.name = TextBlockUtils.empty(0, 0);
 		} else {
@@ -86,25 +88,13 @@ public class FtileGroup extends AbstractFtile {
 		if (displayNote == null) {
 			this.headerNote = TextBlockUtils.empty(0, 0);
 		} else {
-			// final TextBlock tmp = TextBlockUtils.create(displayNote, fc, HorizontalAlignment.LEFT, skinParam);
-
-			// final Rose rose = new Rose();
-			// final HtmlColor fontColor = rose.getFontColor(skinParam, FontParam.NOTE);
-			// final UFont fontNote = skinParam.getFont(FontParam.NOTE, null);
-			//
-			// final HtmlColor noteBackgroundColor = rose.getHtmlColor(skinParam, ColorParam.noteBackground);
-			// final HtmlColor borderColor = rose.getHtmlColor(skinParam, ColorParam.noteBorder);
-			//
-			// final FontConfiguration fc2 = new FontConfiguration(fontNote, fontColor, skinParam.getHyperlinkColor());
-			//
-			// final Sheet sheet = new CreoleParser(fc2, HorizontalAlignment.LEFT, skinParam,
-			// false).createSheet(displayNote);
-			// final TextBlock text = new SheetBlock2(new SheetBlock1(sheet, 0), this, new UStroke(1));
-			// final TextBlock tmp = new Opale(borderColor, noteBackgroundColor, text, skinParam.shadowing(), false);
-
-			// this.headerNote = new Opale(HtmlColorUtils.BLUE, HtmlColorUtils.RED, tmp, inner.shadowing(), false);
 			this.headerNote = new FloatingNote(displayNote, skinParam);
 		}
+	}
+	
+	@Override
+	public LinkRendering getInLinkRendering() {
+		return inner.getInLinkRendering();
 	}
 
 	public Set<Swimlane> getSwimlanes() {

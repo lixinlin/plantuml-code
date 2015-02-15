@@ -90,7 +90,9 @@ public class InstructionList implements Instruction {
 			} else {
 				result = factory.assembly(result, cur);
 			}
-
+		}
+		if (outlinkRendering != null) {
+			result = factory.decorateOut(result, outlinkRendering);
 		}
 		// if (killed) {
 		// result = new FtileKilled(result);
@@ -144,6 +146,12 @@ public class InstructionList implements Instruction {
 			result.addAll(ins.getSwimlanes());
 		}
 		return Collections.unmodifiableSet(result);
+	}
+
+	private LinkRendering outlinkRendering;
+
+	public void setOutRendering(LinkRendering outlinkRendering) {
+		this.outlinkRendering = outlinkRendering;
 	}
 
 }

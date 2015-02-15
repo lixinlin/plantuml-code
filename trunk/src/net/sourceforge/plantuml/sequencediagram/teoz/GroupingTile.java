@@ -99,7 +99,8 @@ public class GroupingTile implements Tile {
 			if (tile != null) {
 				tiles.add(tile);
 				min.put(tile.getMinX(stringBounder).addFixed(-MARGINX));
-				max.put(tile.getMaxX(stringBounder).addFixed(MARGINX));
+				final Real m = tile.getMaxX(stringBounder);
+				max.put(m == tileArguments.getOmega() ? m : m.addFixed(MARGINX));
 				bodyHeight += tile.getPreferredHeight(stringBounder);
 			}
 		}

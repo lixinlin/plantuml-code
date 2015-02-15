@@ -27,63 +27,39 @@
  * in the United States and other countries.]
  *
  * Original Author:  Arnaud Roques
- * 
- * Revision $Revision: 6711 $
+ *
+ * Revision $Revision: 8475 $
  *
  */
-package net.sourceforge.plantuml.svek;
+package net.sourceforge.plantuml.activitydiagram3.ftile;
 
-import java.awt.geom.Dimension2D;
-
-import net.sourceforge.plantuml.graphic.HtmlColor;
-import net.sourceforge.plantuml.graphic.HtmlColorUtils;
+import net.sourceforge.plantuml.activitydiagram3.ftile.vertical.FtileDecorate;
 import net.sourceforge.plantuml.graphic.StringBounder;
-import net.sourceforge.plantuml.ugraphic.UChangeColor;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
-import net.sourceforge.plantuml.ugraphic.URectangle;
-import net.sourceforge.plantuml.ugraphic.UShape;
-import net.sourceforge.plantuml.ugraphic.UStroke;
+import net.sourceforge.plantuml.ugraphic.UTranslate;
 
-public final class InnerStateConcurrent implements IEntityImage {
+public class FtileMargedVertically extends FtileDecorate {
 
-	private final IEntityImage im;
+	private final double margin1;
+	private final double margin2;
 
-	public InnerStateConcurrent(final IEntityImage im) {
-		this.im = im;
+	public FtileMargedVertically(Ftile tile, double margin1, double margin2) {
+		super(tile);
+		this.margin1 = margin1;
+		this.margin2 = margin2;
 	}
-
-	public final static double THICKNESS_BORDER = 1.5;
-	private static final int DASH = 8;
 
 	public void drawU(UGraphic ug) {
-		final Dimension2D dim = calculateDimension(ug.getStringBounder());
-		final UShape rect = new URectangle(dim.getWidth(), dim.getHeight());
-		ug = ug.apply(new UChangeColor(HtmlColorUtils.BLACK));
-		ug.apply(new UStroke(DASH, 10, THICKNESS_BORDER)).draw(rect);
-
-		im.drawU(ug);
+		if (margin1 > 0) {
+			ug = ug.apply(new UTranslate(0, margin1));
+		}
+		ug.draw(getFtileDelegated());
 	}
 
-	public HtmlColor getBackcolor() {
-		return null;
-	}
-
-	public Dimension2D calculateDimension(StringBounder stringBounder) {
-		final Dimension2D img = im.calculateDimension(stringBounder);
-
-		return img;
-	}
-
-	public ShapeType getShapeType() {
-		return ShapeType.RECTANGLE;
-	}
-
-	public int getShield() {
-		return 0;
-	}
-
-	public boolean isHidden() {
-		return im.isHidden();
+	public FtileGeometry calculateDimension(StringBounder stringBounder) {
+		final FtileGeometry orig = getFtileDelegated().calculateDimension(stringBounder);
+		return new FtileGeometry(orig.getWidth(), orig.getHeight() + margin1 + margin2, orig.getLeft(), orig.getInY()
+				+ margin1, orig.getOutY() + margin1);
 	}
 
 }

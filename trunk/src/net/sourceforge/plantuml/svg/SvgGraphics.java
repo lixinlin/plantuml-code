@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 14321 $
+ * Revision $Revision: 15106 $
  *
  */
 package net.sourceforge.plantuml.svg;
@@ -299,6 +299,9 @@ public class SvgGraphics {
 	}
 
 	public void svgRectangle(double x, double y, double width, double height, double rx, double ry, double deltaShadow) {
+		if (height <= 0 || width <= 0) {
+			throw new IllegalArgumentException();
+		}
 		manageShadow(deltaShadow);
 		if (hidden == false) {
 			final Element elt = createRectangleInternal(x, y, width, height);

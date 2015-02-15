@@ -35,7 +35,7 @@ package net.sourceforge.plantuml.activitydiagram3.ftile;
 
 import java.util.Set;
 
-import net.sourceforge.plantuml.OptionFlags;
+import net.sourceforge.plantuml.activitydiagram3.LinkRendering;
 import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
 import net.sourceforge.plantuml.ugraphic.UTranslate;
@@ -49,6 +49,16 @@ public class FtileMarged extends AbstractFtile {
 		super(tile.shadowing());
 		this.tile = tile;
 		this.margin = margin;
+	}
+
+	@Override
+	public LinkRendering getInLinkRendering() {
+		return tile.getInLinkRendering();
+	}
+
+	@Override
+	public LinkRendering getOutLinkRendering() {
+		return tile.getOutLinkRendering();
 	}
 
 	public Set<Swimlane> getSwimlanes() {

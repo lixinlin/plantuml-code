@@ -68,7 +68,7 @@ public class FtileFactoryDelegatorIf extends FtileFactoryDelegator {
 		final HtmlColor arrowColor = getRose().getHtmlColor(getSkinParam(), ColorParam.activityArrow);
 
 		if (thens.size() > 1) {
-			return FtileIfLong.create(swimlane, borderColor, backColor, fontArrow, arrowColor, getFactory(),
+			return FtileIfLong2.create(swimlane, borderColor, backColor, fontArrow, arrowColor, getFactory(),
 					conditionStyle, thens, elseBranch, getSkinParam().getHyperlinkColor(), getSkinParam().useUnderlineForHyperlink());
 		}
 		return FtileIf.create(swimlane, borderColor, backColor, fontArrow, fontTest, arrowColor, getFactory(),

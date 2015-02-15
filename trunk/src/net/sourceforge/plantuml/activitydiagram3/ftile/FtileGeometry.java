@@ -55,6 +55,11 @@ public class FtileGeometry extends Dimension2D {
 	}
 
 	@Override
+	public String toString() {
+		return "[" + width + "x" + height + " left=" + left + "]";
+	}
+
+	@Override
 	public void setSize(double width, double height) {
 		throw new UnsupportedOperationException();
 	}

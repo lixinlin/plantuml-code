@@ -54,6 +54,7 @@ import net.sourceforge.plantuml.SkinParamForecolored;
 import net.sourceforge.plantuml.SkinParamSameClassWidth;
 import net.sourceforge.plantuml.UmlDiagramType;
 import net.sourceforge.plantuml.core.UmlSource;
+import net.sourceforge.plantuml.cucadiagram.CucaDiagram;
 import net.sourceforge.plantuml.cucadiagram.Display;
 import net.sourceforge.plantuml.cucadiagram.EntityPortion;
 import net.sourceforge.plantuml.cucadiagram.EntityPosition;
@@ -114,7 +115,6 @@ public final class CucaDiagramFileMakerSvek2 {
 
 	private final DotData dotData;
 	private final EntityFactory entityFactory;
-	private final boolean hasVerticalLine;
 	private final UmlSource source;
 	private final Pragma pragma;
 
@@ -125,11 +125,9 @@ public final class CucaDiagramFileMakerSvek2 {
 		stringBounder = StringBounderUtils.asStringBounder(builder.getGraphics2D());
 	}
 
-	public CucaDiagramFileMakerSvek2(DotData dotData, EntityFactory entityFactory, boolean hasVerticalLine,
-			UmlSource source, Pragma pragma) {
+	public CucaDiagramFileMakerSvek2(DotData dotData, EntityFactory entityFactory, UmlSource source, Pragma pragma) {
 		this.dotData = dotData;
 		this.entityFactory = entityFactory;
-		this.hasVerticalLine = hasVerticalLine;
 		this.source = source;
 		this.pragma = pragma;
 	}
@@ -140,7 +138,13 @@ public final class CucaDiagramFileMakerSvek2 {
 		return dotStringFactory.getBibliotekon();
 	}
 
-	public IEntityImage createFile(String... dotStrings) throws IOException, InterruptedException {
+	public IEntityImage createFileForConcurrentState() {
+		return new CucaDiagramFileMakerSvek2InternalImage(dotData.getLeafs(), dotData.getTopParent()
+				.getConcurrentSeparator(), dotData.getSkinParam(), dotData.getSkinParam().getBackgroundColor());
+
+	}
+
+	public IEntityImage createFile(String... dotStrings) {
 
 		dotStringFactory = new DotStringFactory(colorSequence, stringBounder, dotData);
 
@@ -199,8 +203,12 @@ public final class CucaDiagramFileMakerSvek2 {
 		}
 
 		final boolean trace = OptionFlags.getInstance().isKeepTmpFiles() || OptionFlags.TRACE_DOT || isSvekTrace();
-
-		final String svg = dotStringFactory.getSvg(trace, dotStrings);
+		final String svg;
+		try {
+			svg = dotStringFactory.getSvg(trace, dotStrings);
+		} catch (IOException e) {
+			return new GraphvizCrash(source.getPlainString());
+		}
 		if (svg.length() == 0) {
 			return new GraphvizCrash(source.getPlainString());
 		}
@@ -212,7 +220,7 @@ public final class CucaDiagramFileMakerSvek2 {
 			if (minX > 0 || minY > 0) {
 				throw new IllegalStateException();
 			}
-			final SvekResult result = new SvekResult(position, dotData, dotStringFactory, hasVerticalLine);
+			final SvekResult result = new SvekResult(position, dotData, dotStringFactory);
 			result.moveSvek(6 - minX, -minY);
 			return result;
 		} catch (Exception e) {
@@ -457,7 +465,7 @@ public final class CucaDiagramFileMakerSvek2 {
 		return result;
 	}
 
-	private void printGroups(IGroup parent) throws IOException {
+	private void printGroups(IGroup parent) {
 		for (IGroup g : dotData.getGroupHierarchy().getChildrenGroups(parent)) {
 			if (g.isRemoved()) {
 				continue;
@@ -481,7 +489,7 @@ public final class CucaDiagramFileMakerSvek2 {
 		}
 	}
 
-	private void printGroup(IGroup g) throws IOException {
+	private void printGroup(IGroup g) {
 		if (g.getGroupType() == GroupType.CONCURRENT_STATE) {
 			return;
 		}
@@ -532,7 +540,8 @@ public final class CucaDiagramFileMakerSvek2 {
 		return TextBlockUtils.create(label,
 				new FontConfiguration(dotData.getSkinParam().getFont(fontParam, stereotype2, true), dotData
 						.getSkinParam().getFontHtmlColor(fontParam, stereotype2), dotData.getSkinParam()
-						.getHyperlinkColor(), dotData.getSkinParam().useUnderlineForHyperlink()), HorizontalAlignment.CENTER, dotData.getSkinParam());
+						.getHyperlinkColor(), dotData.getSkinParam().useUnderlineForHyperlink()),
+				HorizontalAlignment.CENTER, dotData.getSkinParam());
 	}
 
 	private TextBlock getStereoBlock(IGroup g) {
@@ -554,7 +563,8 @@ public final class CucaDiagramFileMakerSvek2 {
 		return TextBlockUtils.create(Display.create(stereos),
 				new FontConfiguration(dotData.getSkinParam().getFont(fontParam, stereotype2, false), dotData
 						.getSkinParam().getFontHtmlColor(fontParam, stereotype2), dotData.getSkinParam()
-						.getHyperlinkColor(), dotData.getSkinParam().useUnderlineForHyperlink()), HorizontalAlignment.CENTER, dotData.getSkinParam());
+						.getHyperlinkColor(), dotData.getSkinParam().useUnderlineForHyperlink()),
+				HorizontalAlignment.CENTER, dotData.getSkinParam());
 	}
 
 }

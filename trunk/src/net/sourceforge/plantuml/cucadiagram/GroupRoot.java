@@ -203,16 +203,6 @@ public class GroupRoot implements IGroup {
 
 	}
 
-	public Rankdir getRankdir() {
-		throw new UnsupportedOperationException();
-
-	}
-
-	public void setRankdir(Rankdir rankdir) {
-		throw new UnsupportedOperationException();
-
-	}
-
 	public PackageStyle getPackageStyle() {
 		throw new UnsupportedOperationException();
 
@@ -276,6 +266,14 @@ public class GroupRoot implements IGroup {
 	}
 
 	public int getRawLayout() {
+		throw new UnsupportedOperationException();
+	}
+
+	public char getConcurrentSeparator() {
+		throw new UnsupportedOperationException();
+	}
+
+	public void setConcurrentSeparator(char separator) {
 		throw new UnsupportedOperationException();
 	}
 

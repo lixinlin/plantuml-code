@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 14661 $
+ * Revision $Revision: 15147 $
  *
  */
 package net.sourceforge.plantuml.statediagram;
@@ -42,6 +42,7 @@ import net.sourceforge.plantuml.cucadiagram.GroupType;
 import net.sourceforge.plantuml.cucadiagram.IEntity;
 import net.sourceforge.plantuml.cucadiagram.IGroup;
 import net.sourceforge.plantuml.cucadiagram.LeafType;
+import net.sourceforge.plantuml.cucadiagram.Rankdir;
 import net.sourceforge.plantuml.graphic.USymbol;
 import net.sourceforge.plantuml.utils.UniqueSequence;
 
@@ -107,17 +108,19 @@ public class StateDiagram extends AbstractEntityDiagram {
 	public IEntity getHistorical(Code codeGroup) {
 		final IEntity g = getOrCreateGroup(codeGroup, Display.getWithNewlines(codeGroup), GroupType.STATE,
 				getRootGroup());
-		final IEntity result = getOrCreateLeaf(Code.of("*historical*" + g.getCode().getFullName()), LeafType.PSEUDO_STATE, null);
+		final IEntity result = getOrCreateLeaf(Code.of("*historical*" + g.getCode().getFullName()),
+				LeafType.PSEUDO_STATE, null);
 		endGroup();
 		return result;
 	}
 
-	public boolean concurrentState() {
+	public boolean concurrentState(char direction) {
 		final IGroup cur = getCurrentGroup();
 		// printlink("BEFORE");
 		if (EntityUtils.groupRoot(cur) == false && cur.getGroupType() == GroupType.CONCURRENT_STATE) {
 			super.endGroup();
 		}
+		getCurrentGroup().setConcurrentSeparator(direction);
 		final IGroup conc1 = getOrCreateGroup(UniqueSequence.getCode("CONC"), Display.create(""),
 				GroupType.CONCURRENT_STATE, getCurrentGroup());
 		if (EntityUtils.groupRoot(cur) == false && cur.getGroupType() == GroupType.STATE) {
@@ -160,7 +163,6 @@ public class StateDiagram extends AbstractEntityDiagram {
 	public final boolean isHideEmptyDescriptionForState() {
 		return hideEmptyDescription;
 	}
-	
 
 	// public Link isEntryPoint(IEntity ent) {
 	// final Stereotype stereotype = ent.getStereotype();

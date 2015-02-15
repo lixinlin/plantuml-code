@@ -56,7 +56,7 @@ public abstract class AbstractFtile implements Ftile {
 		return null;
 	}
 
-	final public LinkRendering getOutLinkRendering() {
+	public LinkRendering getOutLinkRendering() {
 		return null;
 	}
 

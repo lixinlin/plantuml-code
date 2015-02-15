@@ -102,7 +102,6 @@ final class EntityImpl implements ILeaf, IGroup {
 	private GroupType groupType;
 
 	private boolean autonom = true;
-	private Rankdir rankdir = Rankdir.TOP_TO_BOTTOM;
 
 	// Other
 
@@ -116,6 +115,7 @@ final class EntityImpl implements ILeaf, IGroup {
 	private UStroke specificStroke;
 	private USymbol symbol;
 	private final int rawLayout;
+	private char concurrentSeparator;
 
 	// Back to Entity
 	public final boolean isTop() {
@@ -483,16 +483,6 @@ final class EntityImpl implements ILeaf, IGroup {
 
 	}
 
-	public Rankdir getRankdir() {
-		checkGroup();
-		return rankdir;
-	}
-
-	public void setRankdir(Rankdir rankdir) {
-		checkGroup();
-		this.rankdir = rankdir;
-	}
-
 	public PackageStyle getPackageStyle() {
 		checkGroup();
 		if (stereotype == null) {
@@ -638,6 +628,14 @@ final class EntityImpl implements ILeaf, IGroup {
 
 	public final int getRawLayout() {
 		return rawLayout;
+	}
+
+	public char getConcurrentSeparator() {
+		return concurrentSeparator;
+	}
+
+	public void setConcurrentSeparator(char separator) {
+		this.concurrentSeparator = separator;
 	}
 
 }

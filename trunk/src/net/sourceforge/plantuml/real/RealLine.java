@@ -38,19 +38,7 @@ import java.util.List;
 
 class RealLine {
 
-	// private final List<RealImpl> allReals = new ArrayList<RealImpl>();
-
 	private final List<PositiveForce> forces = new ArrayList<PositiveForce>();
-
-	// private boolean isFreezed;
-	//
-	// public void freeze() {
-	// this.isFreezed = true;
-	// }
-	//
-	// public final boolean isFreezed() {
-	// return isFreezed;
-	// }
 
 	public void addForce(PositiveForce force) {
 		this.forces.add(force);
