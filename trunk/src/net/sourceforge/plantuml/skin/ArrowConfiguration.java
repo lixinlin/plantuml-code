@@ -47,9 +47,11 @@ public class ArrowConfiguration {
 
 	private final HtmlColor color;
 
+	private final boolean isSelf;
+
 	private ArrowConfiguration(ArrowBody body, ArrowDressing dressing1, ArrowDressing dressing2,
-			ArrowDecoration decoration1, ArrowDecoration decoration2, HtmlColor color) {
-		if (body == null || dressing1 == null) {
+			ArrowDecoration decoration1, ArrowDecoration decoration2, HtmlColor color, boolean isSelf) {
+		if (body == null || dressing1 == null || dressing2 == null) {
 			throw new IllegalArgumentException();
 		}
 		this.body = body;
@@ -58,6 +60,7 @@ public class ArrowConfiguration {
 		this.decoration1 = decoration1;
 		this.decoration2 = decoration2;
 		this.color = color;
+		this.isSelf = isSelf;
 	}
 
 	@Override
@@ -66,26 +69,25 @@ public class ArrowConfiguration {
 	}
 
 	public String name() {
-		if (dressing2 == null) {
-			return body.name() + "(" + dressing1.name() + ")" + color + " " + decoration1;
-		}
 		return body.name() + "(" + dressing1.name() + " " + decoration1 + ")(" + dressing2.name() + " " + decoration2
-				+ ")" + color;
+				+ ")" + isSelf + " " + color;
 	}
 
 	public static ArrowConfiguration withDirectionNormal() {
 		return new ArrowConfiguration(ArrowBody.NORMAL, ArrowDressing.create(), ArrowDressing.create().withHead(
-				ArrowHead.NORMAL), ArrowDecoration.NONE, ArrowDecoration.NONE, null);
+				ArrowHead.NORMAL), ArrowDecoration.NONE, ArrowDecoration.NONE, null, false);
 	}
 
 	public static ArrowConfiguration withDirectionBoth() {
 		return new ArrowConfiguration(ArrowBody.NORMAL, ArrowDressing.create().withHead(ArrowHead.NORMAL),
-				ArrowDressing.create().withHead(ArrowHead.NORMAL), ArrowDecoration.NONE, ArrowDecoration.NONE, null);
+				ArrowDressing.create().withHead(ArrowHead.NORMAL), ArrowDecoration.NONE, ArrowDecoration.NONE, null,
+				false);
 	}
 
 	public static ArrowConfiguration withDirectionSelf() {
-		return new ArrowConfiguration(ArrowBody.NORMAL, ArrowDressing.create().withHead(ArrowHead.NORMAL), null,
-				ArrowDecoration.NONE, ArrowDecoration.NONE, null);
+		return new ArrowConfiguration(ArrowBody.NORMAL, ArrowDressing.create().withHead(ArrowHead.NORMAL),
+				ArrowDressing.create().withHead(ArrowHead.NORMAL), ArrowDecoration.NONE, ArrowDecoration.NONE, null,
+				true);
 	}
 
 	public static ArrowConfiguration withDirectionReverse() {
@@ -93,55 +95,59 @@ public class ArrowConfiguration {
 	}
 
 	public ArrowConfiguration reverse() {
-		return new ArrowConfiguration(body, dressing2, dressing1, decoration2, decoration1, color);
+		return new ArrowConfiguration(body, dressing2, dressing1, decoration2, decoration1, color, isSelf);
 	}
 
 	public ArrowConfiguration self() {
-		return new ArrowConfiguration(body, dressing1, null, decoration1, decoration2, color);
+		return new ArrowConfiguration(body, dressing1, dressing2, decoration1, decoration2, color, true);
 	}
 
 	public ArrowConfiguration withDotted() {
-		return new ArrowConfiguration(ArrowBody.DOTTED, dressing1, dressing2, decoration1, decoration2, color);
+		return new ArrowConfiguration(ArrowBody.DOTTED, dressing1, dressing2, decoration1, decoration2, color, isSelf);
 	}
 
 	public ArrowConfiguration withHead(ArrowHead head) {
 		final ArrowDressing newDressing1 = addHead(dressing1, head);
 		final ArrowDressing newDressing2 = addHead(dressing2, head);
-		return new ArrowConfiguration(body, newDressing1, newDressing2, decoration1, decoration2, color);
+		return new ArrowConfiguration(body, newDressing1, newDressing2, decoration1, decoration2, color, isSelf);
 	}
 
 	private static ArrowDressing addHead(ArrowDressing dressing, ArrowHead head) {
-		if (dressing == null || dressing.getHead() == ArrowHead.NONE) {
+		if (dressing.getHead() == ArrowHead.NONE) {
 			return dressing;
 		}
 		return dressing.withHead(head);
 	}
 
 	public ArrowConfiguration withHead1(ArrowHead head) {
-		return new ArrowConfiguration(body, dressing1.withHead(head), dressing2, decoration1, decoration2, color);
+		return new ArrowConfiguration(body, dressing1.withHead(head), dressing2, decoration1, decoration2, color,
+				isSelf);
 	}
 
 	public ArrowConfiguration withHead2(ArrowHead head) {
-		return new ArrowConfiguration(body, dressing1, dressing2.withHead(head), decoration1, decoration2, color);
+		return new ArrowConfiguration(body, dressing1, dressing2.withHead(head), decoration1, decoration2, color,
+				isSelf);
 	}
 
 	public ArrowConfiguration withPart(ArrowPart part) {
-		if (dressing2 != null && dressing2.getHead() != ArrowHead.NONE) {
-			return new ArrowConfiguration(body, dressing1, dressing2.withPart(part), decoration1, decoration2, color);
+		if (dressing2.getHead() != ArrowHead.NONE) {
+			return new ArrowConfiguration(body, dressing1, dressing2.withPart(part), decoration1, decoration2, color,
+					isSelf);
 		}
-		return new ArrowConfiguration(body, dressing1.withPart(part), dressing2, decoration1, decoration2, color);
+		return new ArrowConfiguration(body, dressing1.withPart(part), dressing2, decoration1, decoration2, color,
+				isSelf);
 	}
 
 	public ArrowConfiguration withDecoration1(ArrowDecoration decoration1) {
-		return new ArrowConfiguration(body, dressing1, dressing2, decoration1, decoration2, color);
+		return new ArrowConfiguration(body, dressing1, dressing2, decoration1, decoration2, color, isSelf);
 	}
 
 	public ArrowConfiguration withDecoration2(ArrowDecoration decoration2) {
-		return new ArrowConfiguration(body, dressing1, dressing2, decoration1, decoration2, color);
+		return new ArrowConfiguration(body, dressing1, dressing2, decoration1, decoration2, color, isSelf);
 	}
 
 	public ArrowConfiguration withColor(HtmlColor color) {
-		return new ArrowConfiguration(body, dressing1, dressing2, decoration1, decoration2, color);
+		return new ArrowConfiguration(body, dressing1, dressing2, decoration1, decoration2, color, isSelf);
 	}
 
 	public final ArrowDecoration getDecoration1() {
@@ -153,7 +159,7 @@ public class ArrowConfiguration {
 	}
 
 	public final ArrowDirection getArrowDirection() {
-		if (this.dressing2 == null) {
+		if (isSelf) {
 			return ArrowDirection.SELF;
 		}
 		if (this.dressing1.getHead() == ArrowHead.NONE && this.dressing2.getHead() != ArrowHead.NONE) {
@@ -181,11 +187,11 @@ public class ArrowConfiguration {
 	}
 
 	public boolean isAsync() {
-		return dressing1.getHead() == ArrowHead.ASYNC || (dressing2 != null && dressing2.getHead() == ArrowHead.ASYNC);
+		return dressing1.getHead() == ArrowHead.ASYNC || dressing2.getHead() == ArrowHead.ASYNC;
 	}
 
 	public final ArrowPart getPart() {
-		if (dressing2 != null && dressing2.getHead() != ArrowHead.NONE) {
+		if (dressing2.getHead() != ArrowHead.NONE) {
 			return dressing2.getPart();
 		}
 		return dressing1.getPart();

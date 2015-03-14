@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 14711 $
+ * Revision $Revision: 15543 $
  *
  */
 package net.sourceforge.plantuml.cucadiagram;
@@ -82,6 +82,7 @@ public class Link implements Hideable, Removeable {
 
 	private boolean opale;
 	private boolean horizontalSolitary;
+	private String sametail;
 
 	private Url url;
 
@@ -129,6 +130,9 @@ public class Link implements Hideable, Removeable {
 		if (qualifier2 != null) {
 			((ILeaf) cl2).setNearDecoration(true);
 		}
+//		if (type.getDecor2() == LinkDecor.EXTENDS) {
+//			setSametail(cl1.getUid());
+//		}
 	}
 
 	private static boolean doWeHaveToRemoveUrlAtStart(Display label) {
@@ -165,6 +169,10 @@ public class Link implements Hideable, Removeable {
 
 	public void goHidden() {
 		this.hidden = true;
+	}
+
+	public void goNorank() {
+		setConstraint(false);
 	}
 
 	public void goBold() {
@@ -221,6 +229,9 @@ public class Link implements Hideable, Removeable {
 
 	public LinkType getType() {
 		if (opale) {
+			return new LinkType(LinkDecor.NONE, LinkDecor.NONE);
+		}
+		if (getSametail() != null) {
 			return new LinkType(LinkDecor.NONE, LinkDecor.NONE);
 		}
 		LinkType result = type;
@@ -473,6 +484,14 @@ public class Link implements Hideable, Removeable {
 			return true;
 		}
 		return getUrl() != null;
+	}
+
+	public String getSametail() {
+		return sametail;
+	}
+
+	public void setSametail(String sametail) {
+		this.sametail = sametail;
 	}
 
 }

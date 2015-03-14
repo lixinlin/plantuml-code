@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 15106 $
+ * Revision $Revision: 15532 $
  *
  */
 package net.sourceforge.plantuml.svg;
@@ -479,7 +479,6 @@ public class SvgGraphics {
 	}
 
 	private void createXmlInternal(OutputStream os) throws TransformerException {
-
 		// // Add lines
 		// for (Line l : lines) {
 		// l.drawNow();
@@ -541,6 +540,7 @@ public class SvgGraphics {
 				sb.append("A" + format(coord[0]) + "," + format(coord[1]) + " " + format(coord[2]) + ","
 						+ format(coord[3]) + " " + format(coord[4]) + "," + format(coord[5] + x) + ","
 						+ format(coord[6] + y) + " ");
+				ensureVisible(coord[5] + coord[0] + x + 2 * deltaShadow, coord[6] + coord[1] + y + 2 * deltaShadow);
 			} else if (type == USegmentType.SEG_CLOSE) {
 				// Nothing
 			} else {

@@ -42,8 +42,8 @@ import net.sourceforge.plantuml.Direction;
 import net.sourceforge.plantuml.Hideable;
 import net.sourceforge.plantuml.ISkinParam;
 import net.sourceforge.plantuml.Log;
-import net.sourceforge.plantuml.OptionFlags;
 import net.sourceforge.plantuml.Pragma;
+import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.Url;
 import net.sourceforge.plantuml.command.Position;
 import net.sourceforge.plantuml.cucadiagram.Display;
@@ -64,6 +64,7 @@ import net.sourceforge.plantuml.graphic.TextBlock;
 import net.sourceforge.plantuml.graphic.TextBlockArrow;
 import net.sourceforge.plantuml.graphic.TextBlockUtils;
 import net.sourceforge.plantuml.graphic.UDrawable;
+import net.sourceforge.plantuml.graphic.USymbolFolder;
 import net.sourceforge.plantuml.graphic.VerticalAlignment;
 import net.sourceforge.plantuml.posimo.BezierUtils;
 import net.sourceforge.plantuml.posimo.DotPath;
@@ -80,7 +81,6 @@ import net.sourceforge.plantuml.ugraphic.UPolygon;
 import net.sourceforge.plantuml.ugraphic.UShape;
 import net.sourceforge.plantuml.ugraphic.UStroke;
 import net.sourceforge.plantuml.ugraphic.UTranslate;
-import net.sourceforge.plantuml.StringUtils;
 
 public class Line implements Moveable, Hideable {
 
@@ -118,7 +118,7 @@ public class Line implements Moveable, Hideable {
 	private boolean opale;
 	private Cluster projectionCluster;
 	private final GraphvizVersion graphvizVersion;
-	
+
 	private final Pragma pragma;
 
 	// private GraphvizVersion getGraphvizVersion() {
@@ -369,16 +369,12 @@ public class Line implements Moveable, Hideable {
 		}
 
 		if (link.isConstraint() == false || link.hasTwoEntryPointsSameContainer()) {
-			sb.append("constraint=false,");
+			sb.append(",constraint=false");
 		}
 
-		// if (link.getLabeldistance() != null) {
-		// sb.append("labeldistance=" + link.getLabeldistance() + ",");
-		// }
-		// if (link.getLabelangle() != null) {
-		// sb.append("labelangle=" + link.getLabelangle() + ",");
-		// }
-		// sb.append("labelangle=1,");
+		if (link.getSametail() != null) {
+			sb.append(",sametail=" + link.getSametail());
+		}
 
 		sb.append("];");
 		SvekUtils.println(sb);
@@ -537,11 +533,13 @@ public class Line implements Moveable, Hideable {
 
 	}
 
-	public void drawU(UGraphic ug, double x, double y, HtmlColor color) {
+	public void drawU(UGraphic ug, HtmlColor color) {
 		if (opale) {
 			return;
 		}
 
+		double x = 0;
+		double y = 0;
 		final Url url = link.getUrl();
 		if (url != null) {
 			ug.startUrl(url);
@@ -591,7 +589,19 @@ public class Line implements Moveable, Hideable {
 				Log.info("DotPath is null for " + this);
 				return;
 			}
-			ug.apply(new UTranslate(x, y)).draw(dotPath);
+			DotPath todraw = dotPath;
+			if (link.getEntity2().isGroup() && link.getEntity2().getUSymbol() instanceof USymbolFolder) {
+				final Cluster endCluster = bibliotekon.getCluster((IGroup) link.getEntity2());
+				if (endCluster != null) {
+					final double deltaFolderH = endCluster.checkFolderPosition(dotPath.getEndPoint(),
+							ug.getStringBounder());
+					todraw = new DotPath(dotPath);
+					todraw.moveEndPoint(0, deltaFolderH);
+					moveEndY = deltaFolderH;
+				}
+			}
+
+			ug.apply(new UTranslate(x, y)).draw(todraw);
 		}
 
 		ug = ug.apply(new UStroke()).apply(new UChangeColor(color));
@@ -813,6 +823,26 @@ public class Line implements Moveable, Hideable {
 
 	private Point2D moveDelta(Point2D pt) {
 		return new Point2D.Double(pt.getX() + dx, pt.getY() + dy);
+	}
+
+	public boolean isLink(Link link) {
+		return this.link == link;
+	}
+
+	public Point2D getStartContactPoint() {
+		final Point2D start = dotPath.getStartPoint();
+		if (start == null) {
+			return null;
+		}
+		return new Point2D.Double(dx + start.getX(), dy + start.getY());
+	}
+
+	public Point2D getEndContactPoint() {
+		final Point2D end = dotPath.getEndPoint();
+		if (end == null) {
+			return null;
+		}
+		return new Point2D.Double(dx + end.getX(), dy + end.getY());
 	}
 
 }

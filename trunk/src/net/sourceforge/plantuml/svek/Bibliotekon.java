@@ -43,6 +43,7 @@ import java.util.Map;
 import net.sourceforge.plantuml.cucadiagram.IEntity;
 import net.sourceforge.plantuml.cucadiagram.IGroup;
 import net.sourceforge.plantuml.cucadiagram.ILeaf;
+import net.sourceforge.plantuml.cucadiagram.Link;
 
 public class Bibliotekon {
 
@@ -64,7 +65,7 @@ public class Bibliotekon {
 				return cl;
 			}
 		}
-		throw new IllegalArgumentException();
+		return null;
 	}
 
 	public void addLine(Line line) {
@@ -168,6 +169,15 @@ public class Bibliotekon {
 			}
 		}
 		return Collections.unmodifiableList(result);
+	}
+
+	public Line getLine(Link link) {
+		for (Line line : allLines) {
+			if (line.isLink(link)) {
+				return line;
+			}
+		}
+		throw new IllegalArgumentException();
 	}
 
 }

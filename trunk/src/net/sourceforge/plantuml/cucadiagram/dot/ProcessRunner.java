@@ -40,9 +40,7 @@ import java.io.OutputStream;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import net.sourceforge.plantuml.OptionFlags;
 import net.sourceforge.plantuml.api.MyRunnable;
-import net.sourceforge.plantuml.api.Performance;
 import net.sourceforge.plantuml.api.TimeoutExecutor;
 
 public class ProcessRunner {
@@ -162,7 +160,6 @@ public class ProcessRunner {
 				process = Runtime.getRuntime().exec(cmd, null, dir);
 			} catch (IOException e) {
 				e.printStackTrace();
-				Performance.incDotInterruption1();
 				changeState.lock();
 				try {
 					state = ProcessState.IO_EXCEPTION1(e);
@@ -185,7 +182,6 @@ public class ProcessRunner {
 						os.close();
 					}
 				} catch (IOException e) {
-					Performance.incDotInterruption2();
 					changeState.lock();
 					try {
 						state = ProcessState.IO_EXCEPTION2(e);

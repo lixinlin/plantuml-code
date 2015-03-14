@@ -132,7 +132,7 @@ public class TileBuilder {
 		} else if (ev instanceof LifeEvent) {
 			final LifeEvent lifeEvent = (LifeEvent) ev;
 			final LivingSpace livingSpace = livingSpaces.get(lifeEvent.getParticipant());
-			tile = new LifeEventTile(lifeEvent, tileArguments, livingSpace);
+			tile = new LifeEventTile(lifeEvent, tileArguments, livingSpace, skin, skinParam);
 		} else {
 			System.err.println("TileBuilder::Ignoring " + ev.getClass());
 		}

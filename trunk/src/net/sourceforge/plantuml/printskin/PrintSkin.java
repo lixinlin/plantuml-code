@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 14708 $
+ * Revision $Revision: 15580 $
  *
  */
 package net.sourceforge.plantuml.printskin;
@@ -126,7 +126,7 @@ class PrintSkin extends AbstractPSystem {
 	private void printComponent(ComponentType type) {
 		println(type.name());
 		final Component comp = skin.createComponent(type, ArrowConfiguration.withDirectionNormal(),
-				new SkinParam(null), Display.create(toPrint));
+				SkinParam.noShadowing(), Display.create(toPrint));
 		if (comp == null) {
 			println("null");
 			return;

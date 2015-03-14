@@ -78,6 +78,10 @@ public abstract class UGraphicUtils {
 			final UGraphicEps ug = new UGraphicEps(colorMapper, EpsStrategy.getDefault2());
 			image.drawU(ug);
 			os.write(ug.getEPSCode().getBytes());
+		} else if (fileFormat == FileFormat.EPS_TEXT) {
+			final UGraphicEps ug = new UGraphicEps(colorMapper, EpsStrategy.WITH_MACRO_AND_TEXT);
+			image.drawU(ug);
+			os.write(ug.getEPSCode().getBytes());
 		} else {
 			throw new UnsupportedOperationException();
 		}

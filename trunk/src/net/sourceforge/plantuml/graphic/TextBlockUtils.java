@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 15087 $
+ * Revision $Revision: 15222 $
  *
  */
 package net.sourceforge.plantuml.graphic;
@@ -103,7 +103,8 @@ public class TextBlockUtils {
 			boolean modeSimpleLine) {
 		final Sheet sheet = new CreoleParser(fontConfiguration, horizontalAlignment, spriteContainer, modeSimpleLine)
 				.createSheet(texts);
-		final SheetBlock1 sheetBlock1 = new SheetBlock1(sheet, maxMessageSize);
+		final SheetBlock1 sheetBlock1 = new SheetBlock1(sheet, maxMessageSize, spriteContainer == null ? 0
+				: spriteContainer.getPadding());
 		return new SheetBlock2(sheetBlock1, sheetBlock1, new UStroke(1.5));
 	}
 

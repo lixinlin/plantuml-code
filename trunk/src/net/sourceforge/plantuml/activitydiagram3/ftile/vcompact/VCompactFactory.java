@@ -162,4 +162,8 @@ public class VCompactFactory implements FtileFactory {
 		return skinParam.getValue(key);
 	}
 
+	public double getPadding() {
+		return skinParam.getPadding();
+	}
+
 }

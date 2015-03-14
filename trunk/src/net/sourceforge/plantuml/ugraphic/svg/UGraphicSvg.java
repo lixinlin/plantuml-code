@@ -120,8 +120,8 @@ public class UGraphicSvg extends AbstractUGraphic<SvgGraphics> implements ClipCo
 		}
 		registerDriver(ULine.class, new DriverLineSvg(this));
 		registerDriver(UPolygon.class, new DriverPolygonSvg(this));
-		registerDriver(UEllipse.class, new DriverEllipseSvg());
-		registerDriver(UImage.class, new DriverImagePng());
+		registerDriver(UEllipse.class, new DriverEllipseSvg(this));
+		registerDriver(UImage.class, new DriverImagePng(this));
 		registerDriver(UImageSvg.class, new DriverImageSvgSvg());
 		registerDriver(UPath.class, new DriverPathSvg(this));
 		registerDriver(DotPath.class, new DriverDotPathSvg());

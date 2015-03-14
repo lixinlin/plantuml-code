@@ -278,7 +278,6 @@ public class CommandLinkElement extends SingleLineCommand2<DescriptionDiagram> {
 			link = link.getInv();
 		}
 		CommandLinkClass.applyStyle(arg.getLazzy("ARROW_STYLE", 0), link);
-
 		diagram.addLink(link);
 		return CommandExecutionResult.ok();
 	}
@@ -292,15 +291,15 @@ public class CommandLinkElement extends SingleLineCommand2<DescriptionDiagram> {
 		}
 		final char codeChar = code.length() > 2 ? code.charAt(0) : 0;
 		if (codeChar == '(') {
-			return diagram.getOrCreateLeaf(code2.eventuallyRemoveStartingAndEndingDoubleQuote("\"([:"), LeafType.USECASE,
-					USymbol.USECASE);
+			return diagram.getOrCreateLeaf(code2.eventuallyRemoveStartingAndEndingDoubleQuote("\"([:"),
+					LeafType.USECASE, USymbol.USECASE);
 		} else if (codeChar == ':') {
-			return diagram.getOrCreateLeaf(code2.eventuallyRemoveStartingAndEndingDoubleQuote("\"([:"), LeafType.DESCRIPTION,
-					USymbol.ACTOR);
+			return diagram.getOrCreateLeaf(code2.eventuallyRemoveStartingAndEndingDoubleQuote("\"([:"),
+					LeafType.DESCRIPTION, USymbol.ACTOR);
 		} else if (codeChar == '[') {
 			final USymbol sym = diagram.getSkinParam().useUml2ForComponent() ? USymbol.COMPONENT2 : USymbol.COMPONENT1;
-			return diagram.getOrCreateLeaf(code2.eventuallyRemoveStartingAndEndingDoubleQuote("\"([:"), LeafType.DESCRIPTION,
-					sym);
+			return diagram.getOrCreateLeaf(code2.eventuallyRemoveStartingAndEndingDoubleQuote("\"([:"),
+					LeafType.DESCRIPTION, sym);
 		}
 
 		return diagram.getOrCreateLeaf(code2, null, null);
@@ -323,6 +322,7 @@ public class CommandLinkElement extends SingleLineCommand2<DescriptionDiagram> {
 		if (dir == Direction.LEFT || dir == Direction.UP) {
 			link = link.getInv();
 		}
+		CommandLinkClass.applyStyle(arg.getLazzy("ARROW_STYLE", 0), link);
 		diagram.addLink(link);
 		return CommandExecutionResult.ok();
 	}

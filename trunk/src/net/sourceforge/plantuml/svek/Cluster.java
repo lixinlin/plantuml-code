@@ -310,7 +310,7 @@ public class Cluster implements Moveable {
 			if (hasEntryOrExitPoint()) {
 				manageEntryExitPoint(dotData, ug.getStringBounder());
 			}
-			if (skinParam.useSwimlanes()) {
+			if (skinParam.useSwimlanes(dotData.getUmlDiagramType())) {
 				drawSwinLinesState(ug, borderColor, dotData);
 				return;
 			}
@@ -543,7 +543,7 @@ public class Cluster implements Moveable {
 	}
 
 	public boolean printCluster2(StringBuilder sb, Collection<Line> lines, StringBounder stringBounder,
-			DotMode dotMode, GraphvizVersion graphvizVersion) {
+			DotMode dotMode, GraphvizVersion graphvizVersion, UmlDiagramType type) {
 		// Log.println("Cluster::printCluster " + this);
 
 		boolean added = false;
@@ -557,7 +557,7 @@ public class Cluster implements Moveable {
 		}
 
 		for (Cluster child : getChildren()) {
-			child.printInternal(sb, lines, stringBounder, dotMode, graphvizVersion);
+			child.printInternal(sb, lines, stringBounder, dotMode, graphvizVersion, type);
 		}
 
 		return added;
@@ -619,50 +619,50 @@ public class Cluster implements Moveable {
 
 	public final static String CENTER_ID = "za";
 
-	private boolean protection0() {
-		if (skinParam.useSwimlanes()) {
+	private boolean protection0(UmlDiagramType type) {
+		if (skinParam.useSwimlanes(type)) {
 			return false;
 		}
 		return true;
 	}
 
-	private boolean protection1() {
-		if (skinParam.useSwimlanes()) {
+	private boolean protection1(UmlDiagramType type) {
+		if (skinParam.useSwimlanes(type)) {
 			return false;
 		}
 		return true;
 	}
 
-	public String getMinPoint() {
-		if (skinParam.useSwimlanes()) {
+	public String getMinPoint(UmlDiagramType type) {
+		if (skinParam.useSwimlanes(type)) {
 			return "minPoint" + color;
 		}
 		return null;
 	}
 
-	public String getMaxPoint() {
-		if (skinParam.useSwimlanes()) {
+	public String getMaxPoint(UmlDiagramType type) {
+		if (skinParam.useSwimlanes(type)) {
 			return "maxPoint" + color;
 		}
 		return null;
 	}
 
-	private String getSourceInPoint() {
-		if (skinParam.useSwimlanes()) {
+	private String getSourceInPoint(UmlDiagramType type) {
+		if (skinParam.useSwimlanes(type)) {
 			return "sourceIn" + color;
 		}
 		return null;
 	}
 
-	private String getSinkInPoint() {
-		if (skinParam.useSwimlanes()) {
+	private String getSinkInPoint(UmlDiagramType type) {
+		if (skinParam.useSwimlanes(type)) {
 			return "sinkIn" + color;
 		}
 		return null;
 	}
 
 	private void printInternal(StringBuilder sb, Collection<Line> lines, StringBounder stringBounder, DotMode dotMode,
-			GraphvizVersion graphvizVersion) {
+			GraphvizVersion graphvizVersion, UmlDiagramType type) {
 		final boolean thereALinkFromOrToGroup2 = isThereALinkFromOrToGroup(lines);
 		boolean thereALinkFromOrToGroup1 = thereALinkFromOrToGroup2;
 		final boolean useProtectionWhenThereALinkFromOrToGroup = graphvizVersion
@@ -682,8 +682,8 @@ public class Cluster implements Moveable {
 				}
 			}
 		}
-		boolean protection0 = protection0();
-		boolean protection1 = protection1();
+		boolean protection0 = protection0(type);
+		boolean protection1 = protection1(type);
 		if (hasEntryOrExitPoint || useProtectionWhenThereALinkFromOrToGroup == false) {
 			protection0 = false;
 			protection1 = false;
@@ -728,23 +728,23 @@ public class Cluster implements Moveable {
 		if (protection1) {
 			subgraphCluster(sb, "p1");
 		}
-		if (skinParam.useSwimlanes()) {
+		if (skinParam.useSwimlanes(type)) {
 			sb.append("{rank = source; ");
-			sb.append(getSourceInPoint());
+			sb.append(getSourceInPoint(type));
 			sb.append(" [shape=point,width=.01,label=\"\"];");
-			sb.append(getMinPoint() + "->" + getSourceInPoint() + "  [weight=999];");
+			sb.append(getMinPoint(type) + "->" + getSourceInPoint(type) + "  [weight=999];");
 			sb.append("}");
 			SvekUtils.println(sb);
 			sb.append("{rank = sink; ");
-			sb.append(getSinkInPoint());
+			sb.append(getSinkInPoint(type));
 			sb.append(" [shape=point,width=.01,label=\"\"];");
 			sb.append("}");
-			sb.append(getSinkInPoint() + "->" + getMaxPoint() + "  [weight=999];");
+			sb.append(getSinkInPoint(type) + "->" + getMaxPoint(type) + "  [weight=999];");
 			SvekUtils.println(sb);
 		}
 		SvekUtils.println(sb);
 		printCluster1(sb, lines);
-		final boolean added = printCluster2(sb, lines, stringBounder, dotMode, graphvizVersion);
+		final boolean added = printCluster2(sb, lines, stringBounder, dotMode, graphvizVersion, type);
 		if (hasEntryOrExitPoint && added == false) {
 			final String empty = "empty" + color;
 			sb.append(empty + " [shape=point,width=.01,label=\"\"];");
@@ -823,6 +823,22 @@ public class Cluster implements Moveable {
 			stateBack = new HtmlColorTransparent();
 		}
 		return stateBack;
+	}
+
+	public double checkFolderPosition(Point2D pt, StringBounder stringBounder) {
+		if (getClusterPosition().isPointJustUpper(pt)) {
+			if (ztitle == null) {
+				return 0;
+			}
+			final Dimension2D dimTitle = ztitle.calculateDimension(stringBounder);
+
+			if (pt.getX() < getClusterPosition().getMinX() + dimTitle.getWidth()) {
+				return 0;
+			}
+
+			return getClusterPosition().getMinY() - pt.getY() + dimTitle.getHeight();
+		}
+		return 0;
 	}
 
 	// public Point2D projection(double x, double y) {

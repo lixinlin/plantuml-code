@@ -162,4 +162,8 @@ public class FtileFactoryDelegator implements FtileFactory {
 		return skinParam.getValue(key);
 	}
 
+	public double getPadding() {
+		return skinParam.getPadding();
+	}
+
 }

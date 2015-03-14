@@ -27,50 +27,43 @@
  * in the United States and other countries.]
  *
  * Original Author:  Arnaud Roques
- *
- * Revision $Revision: 9786 $
+ * 
+ * Revision $Revision: 6054 $
  *
  */
-package net.sourceforge.plantuml.api;
+package net.sourceforge.plantuml.sequencediagram.teoz;
 
-public interface HealthCheck {
+public class StairsPosition implements Comparable<StairsPosition> {
 
-	public long timeStamp();
+	private final double value;
+	private final boolean destroy;
 
-	public long startTime();
+	public StairsPosition(double value, boolean destroy) {
+		this.value = value;
+		this.destroy = destroy;
+	}
 
-	public int availableProcessors();
+	@Override
+	public String toString() {
+		return "" + value + "-(" + destroy + ")";
+	}
 
-	public long freeMemory();
+	public double getValue() {
+		return value;
+	}
 
-	public long maxMemory();
+	public int compareTo(StairsPosition other) {
+		if (this.value > other.value) {
+			return 1;
+		}
+		if (this.value < other.value) {
+			return -1;
+		}
+		return 0;
+	}
 
-	public long totalMemory();
-
-	public long usedMemory();
-
-	public int threadActiveCount();
-	
-	public int maxThreadActiveCount();
-
-	public long jvmCpuTime();
-
-	// public int dotCount();
-
-	public int diagramCount();
-	
-	public INumberAnalyzed dotTime();
-
-	// public long totalDotTime();
-
-	public String pid();
-
-	public long runningTime();
-
-	public int dotInterruption1();
-
-	public int dotInterruption2();
-
-	public int dotInterruption3();
+	public boolean isDestroy() {
+		return destroy;
+	}
 
 }

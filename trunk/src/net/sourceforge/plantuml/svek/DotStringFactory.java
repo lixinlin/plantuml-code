@@ -175,7 +175,7 @@ public class DotStringFactory implements Moveable {
 			line.appendLine(sb);
 		}
 		root.fillRankMin(rankMin);
-		root.printCluster2(sb, bibliotekon.allLines(), stringBounder, dotData.getDotMode(), getGraphvizVersion());
+		root.printCluster2(sb, bibliotekon.allLines(), stringBounder, dotData.getDotMode(), getGraphvizVersion(), dotData.getUmlDiagramType());
 		printMinRanking(sb);
 
 		for (Line line : bibliotekon.lines1()) {
@@ -191,11 +191,11 @@ public class DotStringFactory implements Moveable {
 		final List<String> minPointCluster = new ArrayList<String>();
 		final List<String> maxPointCluster = new ArrayList<String>();
 		for (Cluster cluster : bibliotekon.allCluster()) {
-			final String minPoint = cluster.getMinPoint();
+			final String minPoint = cluster.getMinPoint(dotData.getUmlDiagramType());
 			if (minPoint != null) {
 				minPointCluster.add(minPoint);
 			}
-			final String maxPoint = cluster.getMaxPoint();
+			final String maxPoint = cluster.getMaxPoint(dotData.getUmlDiagramType());
 			if (maxPoint != null) {
 				maxPointCluster.add(maxPoint);
 			}

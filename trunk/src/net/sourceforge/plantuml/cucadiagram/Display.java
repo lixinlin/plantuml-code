@@ -50,6 +50,10 @@ public class Display implements Iterable<CharSequence> {
 	private final List<CharSequence> display = new ArrayList<CharSequence>();
 	private final HorizontalAlignment naturalHorizontalAlignment;
 
+	public boolean isWhite() {
+		return display.size() == 0 || (display.size() == 1 && display.get(0).toString().matches("\\s*"));
+	}
+
 	public static Display empty() {
 		return new Display((HorizontalAlignment) null);
 	}

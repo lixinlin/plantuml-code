@@ -34,7 +34,7 @@
 package net.sourceforge.plantuml.core;
 
 public enum DiagramType {
-	UML, DITAA, DOT, PROJECT, JCCKIT, SALT, TURING, FLOW, CREOLE, JUNGLE, UNKNOWN;
+	UML, DITAA, DOT, PROJECT, JCCKIT, SALT, TURING, FLOW, CREOLE, JUNGLE, CUTE, UNKNOWN;
 
 	static public DiagramType getTypeFromArobaseStart(String s) {
 //		if (s.startsWith("@startuml2")) {
@@ -69,6 +69,9 @@ public enum DiagramType {
 		}
 		if (s.startsWith("@starttree")) {
 			return JUNGLE;
+		}
+		if (s.startsWith("@startcute")) {
+			return CUTE;
 		}
 		return UNKNOWN;
 	}

@@ -197,6 +197,13 @@ public class DotPath implements UShape, Moveable {
 		beziers.get(beziers.size() - 1).ctrly2 = y;
 	}
 
+	public void moveEndPoint(double dx, double dy) {
+		beziers.get(beziers.size() - 1).x2 += dx;
+		beziers.get(beziers.size() - 1).y2 += dy;
+		beziers.get(beziers.size() - 1).ctrlx2 += dx;
+		beziers.get(beziers.size() - 1).ctrly2 += dy;
+	}
+
 	public MinFinder getMinFinder() {
 		final MinFinder result = new MinFinder();
 		for (CubicCurve2D.Double c : beziers) {

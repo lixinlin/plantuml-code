@@ -43,7 +43,7 @@ import net.sourceforge.plantuml.ugraphic.ULine;
 import net.sourceforge.plantuml.ugraphic.UPolygon;
 import net.sourceforge.plantuml.ugraphic.UTranslate;
 
-class USymbolFolder extends USymbol {
+public class USymbolFolder extends USymbol {
 
 	private final static int marginTitleX1 = 3;
 	private final static int marginTitleX2 = 3;

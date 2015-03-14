@@ -70,14 +70,14 @@ public class GTileNode implements GTile {
 
 	public static SheetBlock1 getTextBlock(final Display display) {
 		final Rose rose = new Rose();
-		final SkinParam skinParam = new SkinParam(UmlDiagramType.CLASS);
+		final SkinParam skinParam = new SkinParam();
 		final HtmlColor fontColor = rose.getFontColor(skinParam, FontParam.NOTE);
 		final UFont fontNote = skinParam.getFont(FontParam.NOTE, null, false);
 
 		final FontConfiguration fc = new FontConfiguration(fontNote, fontColor, skinParam.getHyperlinkColor(), skinParam.useUnderlineForHyperlink());
 
 		final Sheet sheet9 = new CreoleParser(fc, HorizontalAlignment.LEFT, skinParam, false).createSheet(display);
-		final SheetBlock1 sheetBlock1 = new SheetBlock1(sheet9, 0);
+		final SheetBlock1 sheetBlock1 = new SheetBlock1(sheet9, 0, 0);
 		return sheetBlock1;
 	}
 

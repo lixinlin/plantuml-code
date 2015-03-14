@@ -33,6 +33,7 @@
  */
 package net.sourceforge.plantuml.cucadiagram;
 
+import net.sourceforge.plantuml.cucadiagram.dot.Neighborhood;
 import net.sourceforge.plantuml.graphic.USymbol;
 import net.sourceforge.plantuml.svek.IEntityImage;
 
@@ -63,7 +64,11 @@ public interface ILeaf extends IEntity {
 	public void setGeneric(String generic);
 
 	public void setSvekImage(IEntityImage svekImage);
-	
+
 	public void setRemoved(boolean removed);
+
+	public void setNeighborhood(Neighborhood neighborhood);
+
+	public Neighborhood getNeighborhood();
 
 }

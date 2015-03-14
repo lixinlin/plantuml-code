@@ -45,4 +45,8 @@ public class SpriteContainerEmpty implements SpriteContainer, ISkinSimple {
 		return null;
 	}
 
+	public double getPadding() {
+		return 0;
+	}
+
 }
