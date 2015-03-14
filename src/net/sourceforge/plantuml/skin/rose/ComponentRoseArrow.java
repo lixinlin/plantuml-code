@@ -72,9 +72,9 @@ public class ComponentRoseArrow extends AbstractComponentRoseArrow {
 		this.niceArrow = niceArrow;
 	}
 
-	private final double spaceCrossX = 6;
+	public static final double spaceCrossX = 6;
 	public static final double diamCircle = 8;
-	private final double thinCircle = 1.5;
+	public static final double thinCircle = 1.5;
 
 	@Override
 	public void drawInternalU(UGraphic ug, Area area) {

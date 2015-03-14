@@ -65,4 +65,9 @@ public class Dictionary implements SpriteContainer, ISkinSimple {
 	public String getValue(String key) {
 		return null;
 	}
+	
+	public double getPadding() {
+		return 0;
+	}
+
 }

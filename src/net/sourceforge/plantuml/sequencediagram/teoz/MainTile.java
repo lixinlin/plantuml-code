@@ -80,17 +80,17 @@ public class MainTile implements Tile {
 		final StringBounder stringBounder = ug.getStringBounder();
 		final LiveBoxFinder liveBoxFinder = new LiveBoxFinder(stringBounder);
 
-		drawUInternal(liveBoxFinder);
+		drawUInternal(liveBoxFinder, false);
 		final UGraphicInterceptorTile interceptor = new UGraphicInterceptorTile(ug, true);
-		drawUInternal(interceptor);
+		drawUInternal(interceptor, false);
 	}
 
 	public void drawForeground(UGraphic ug) {
 		final UGraphicInterceptorTile interceptor = new UGraphicInterceptorTile(ug, false);
-		drawUInternal(interceptor);
+		drawUInternal(interceptor, false);
 	}
 
-	private void drawUInternal(UGraphic ug) {
+	private double drawUInternal(UGraphic ug, boolean trace) {
 		final StringBounder stringBounder = ug.getStringBounder();
 		double y = 0;
 		double lastY = 0;
@@ -99,6 +99,9 @@ public class MainTile implements Tile {
 			if (tile.getEvent().isParallel()) {
 				y = lastY;
 			}
+			if (trace) {
+				System.err.println("MainTile::drawUInternal tile=" + tile + " y=" + y);
+			}
 			positionedTiles.add(new YPositionedTile(tile, y));
 			lastY = y;
 			y += tile.getPreferredHeight(stringBounder);
@@ -106,13 +109,17 @@ public class MainTile implements Tile {
 		for (YPositionedTile tile : positionedTiles) {
 			tile.drawU(ug);
 		}
+		System.err.println("MainTile::drawUInternal finalY=" + y);
+		return y;
 	}
 
 	public double getPreferredHeight(StringBounder stringBounder) {
 		final LimitFinder limitFinder = new LimitFinder(stringBounder, true);
 		final UGraphicInterceptorTile interceptor = new UGraphicInterceptorTile(limitFinder, false);
-		drawUInternal(interceptor);
-		return limitFinder.getMinMax().getDimension().getHeight() + 10;
+		final double finalY = drawUInternal(interceptor, true);
+		final double result = Math.max(limitFinder.getMinMax().getDimension().getHeight(), finalY) + 10;
+		System.err.println("MainTile::getPreferredHeight=" + result);
+		return result;
 	}
 
 	public void addConstraints(StringBounder stringBounder) {

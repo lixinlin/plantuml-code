@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 15205 $
+ * Revision $Revision: 15591 $
  *
  */
 package net.sourceforge.plantuml.version;
@@ -38,7 +38,7 @@ import java.util.Date;
 public class Version {
 
 	public static int version() {
-		return 8020;
+		return 8021;
 	}
 
 	public static String versionString() {
@@ -54,7 +54,7 @@ public class Version {
 	}
 
 	private static long compileTime() {
-		return 1423937526141L;
+		return 1426355408180L;
 	}
 
 	public static String compileTimeString() {

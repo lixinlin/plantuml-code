@@ -83,11 +83,11 @@ final public class CommandLinkClass extends SingleLineCommand2<AbstractClassOrOb
 						new RegexLeaf("ARROW_HEAD1", "([%s]+o|[#\\[<*+^]|[<\\[]\\|)?"), //
 						new RegexLeaf("ARROW_BODY1", "([-=.]+)"), //
 						new RegexLeaf("ARROW_STYLE1",
-								"(?:\\[((?:#\\w+|dotted|dashed|bold|hidden)(?:,#\\w+|,dotted|,dashed|,bold|,hidden)*)\\])?"),
+								"(?:\\[((?:#\\w+|dotted|dashed|bold|hidden|norank)(?:,#\\w+|,dotted|,dashed|,bold|,hidden|,norank)*)\\])?"),
 						new RegexLeaf("ARROW_DIRECTION", "(left|right|up|down|le?|ri?|up?|do?)?"), //
 						new RegexLeaf("INSIDE", "(?:(0|\\(0\\)|\\(0|0\\))(?=[-=.~]))?"), //
 						new RegexLeaf("ARROW_STYLE2",
-								"(?:\\[((?:#\\w+|dotted|dashed|bold|hidden)(?:,#\\w+|,dotted|,dashed|,bold|,hidden)*)\\])?"),
+								"(?:\\[((?:#\\w+|dotted|dashed|bold|hidden|norank)(?:,#\\w+|,dotted|,dashed|,bold|,hidden|,norank)*)\\])?"),
 						new RegexLeaf("ARROW_BODY2", "([-=.]*)"), //
 						new RegexLeaf("ARROW_HEAD2", "(o[%s]+|[#\\]>*+^]|\\|[>\\]])?")), //
 
@@ -485,6 +485,8 @@ final public class CommandLinkClass extends SingleLineCommand2<AbstractClassOrOb
 				link.goDotted();
 			} else if (s.equalsIgnoreCase("hidden")) {
 				link.goHidden();
+			} else if (s.equalsIgnoreCase("norank")) {
+				link.goNorank();
 			} else {
 				link.setSpecificColor(s);
 			}

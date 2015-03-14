@@ -180,4 +180,11 @@ public class ClusterPosition {
 		return new Dimension2DDouble(maxX - minX, maxY - minY);
 	}
 
+	public boolean isPointJustUpper(Point2D pt) {
+		if (pt.getX() >= minX && pt.getX() <= maxX && pt.getY() <= minY) {
+			return true;
+		}
+		return false;
+	}
+
 }

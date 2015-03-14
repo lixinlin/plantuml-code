@@ -66,12 +66,12 @@ public class StripeTable implements Stripe {
 		return Collections.<Atom> singletonList(marged);
 	}
 
-	private static Atom asAtom(List<StripeSimple> cells) {
+	private static Atom asAtom(List<StripeSimple> cells, double padding) {
 		final Sheet sheet = new Sheet(HorizontalAlignment.LEFT);
 		for (StripeSimple cell : cells) {
 			sheet.add(cell);
 		}
-		return new SheetBlock1(sheet, 0);
+		return new SheetBlock1(sheet, 0, padding);
 	}
 
 	private void analyzeAndAddInternal(String line, Mode mode) {
@@ -89,7 +89,7 @@ public class StripeTable implements Stripe {
 				cell.analyzeAndAdd(s);
 				cells.add(cell);
 			}
-			table.addCell(asAtom(cells));
+			table.addCell(asAtom(cells, skinParam.getPadding()));
 		}
 	}
 

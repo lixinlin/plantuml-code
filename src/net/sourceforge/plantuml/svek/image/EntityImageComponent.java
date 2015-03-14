@@ -73,8 +73,9 @@ public class EntityImageComponent extends AbstractEntityImage {
 			throw new IllegalArgumentException();
 		}
 
-		final TextBlock desc = new BodyEnhanced(entity.getDisplay(), symbol.getFontParam(), skinParam,
-				HorizontalAlignment.CENTER, stereotype, symbol.manageHorizontalLine(), false);
+		final TextBlock desc = entity.getDisplay().isWhite() ? TextBlockUtils.empty(0, 0) : new BodyEnhanced(
+				entity.getDisplay(), symbol.getFontParam(), skinParam, HorizontalAlignment.CENTER, stereotype,
+				symbol.manageHorizontalLine(), false);
 
 		this.url = entity.getUrl99();
 
@@ -93,9 +94,10 @@ public class EntityImageComponent extends AbstractEntityImage {
 				&& portionShower.showPortion(EntityPortion.STEREOTYPE, entity)) {
 			stereo = TextBlockUtils.create(
 					Display.getWithNewlines(stereotype.getLabel()),
-					new FontConfiguration(SkinParamUtils.getFont(getSkinParam(),
-							symbol.getFontParamStereotype(), stereotype), SkinParamUtils.getFontColor(getSkinParam(),
-					symbol.getFontParamStereotype(), null), getSkinParam().getHyperlinkColor(), getSkinParam().useUnderlineForHyperlink()), HorizontalAlignment.CENTER, skinParam);
+					new FontConfiguration(SkinParamUtils.getFont(getSkinParam(), symbol.getFontParamStereotype(),
+							stereotype), SkinParamUtils.getFontColor(getSkinParam(), symbol.getFontParamStereotype(),
+							null), getSkinParam().getHyperlinkColor(), getSkinParam().useUnderlineForHyperlink()),
+					HorizontalAlignment.CENTER, skinParam);
 		}
 
 		asSmall = symbol.asSmall(desc, stereo, ctx);

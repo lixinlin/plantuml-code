@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 15094 $
+ * Revision $Revision: 15577 $
  *
  */
 package net.sourceforge.plantuml;
@@ -104,7 +104,7 @@ public abstract class UmlDiagram extends AbstractPSystem implements Diagram {
 	private Scale scale;
 	private Animation animation;
 
-	private final SkinParam skinParam = new SkinParam(getUmlDiagramType());
+	private final SkinParam skinParam = new SkinParam();
 
 	final public void setTitle(Display strings) {
 		this.title = strings;

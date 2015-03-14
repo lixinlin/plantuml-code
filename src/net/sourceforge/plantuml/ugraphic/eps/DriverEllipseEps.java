@@ -32,7 +32,9 @@
 package net.sourceforge.plantuml.ugraphic.eps;
 
 import net.sourceforge.plantuml.eps.EpsGraphics;
+import net.sourceforge.plantuml.ugraphic.ClipContainer;
 import net.sourceforge.plantuml.ugraphic.ColorMapper;
+import net.sourceforge.plantuml.ugraphic.UClip;
 import net.sourceforge.plantuml.ugraphic.UDriver;
 import net.sourceforge.plantuml.ugraphic.UEllipse;
 import net.sourceforge.plantuml.ugraphic.UParam;
@@ -40,10 +42,26 @@ import net.sourceforge.plantuml.ugraphic.UShape;
 
 public class DriverEllipseEps implements UDriver<EpsGraphics> {
 
+	private final ClipContainer clipContainer;
+
+	public DriverEllipseEps(ClipContainer clipContainer) {
+		this.clipContainer = clipContainer;
+	}
+
 	public void draw(UShape ushape, double x, double y, ColorMapper mapper, UParam param, EpsGraphics eps) {
 		final UEllipse shape = (UEllipse) ushape;
 		final double width = shape.getWidth();
 		final double height = shape.getHeight();
+
+		final UClip clip = clipContainer.getClip();
+		if (clip != null) {
+			if (clip.isInside(x, y) == false) {
+				return;
+			}
+			if (clip.isInside(x + width, y + height) == false) {
+				return;
+			}
+		}
 
 		// Shadow
 		if (shape.getDeltaShadow() != 0) {

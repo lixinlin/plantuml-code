@@ -75,5 +75,16 @@ public class CounterOutputStream extends OutputStream {
 	public int getLength() {
 		return length;
 	}
+	
+	@Override
+	public void flush() throws IOException {
+		os.flush();
+	}
+	
+	
+	@Override
+	public void close() throws IOException {
+		os.close();
+	}
 
 }

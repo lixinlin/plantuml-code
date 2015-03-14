@@ -33,9 +33,6 @@
  */
 package net.sourceforge.plantuml.sequencediagram.teoz;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
 import net.sourceforge.plantuml.Url;
 import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.ugraphic.ColorMapper;

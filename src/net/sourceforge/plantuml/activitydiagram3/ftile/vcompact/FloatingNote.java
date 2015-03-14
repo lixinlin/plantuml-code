@@ -71,7 +71,7 @@ public class FloatingNote implements Stencil, TextBlock {
 		final FontConfiguration fc = new FontConfiguration(fontNote, fontColor, skinParam.getHyperlinkColor(), skinParam.useUnderlineForHyperlink());
 
 		final Sheet sheet = new CreoleParser(fc, HorizontalAlignment.LEFT, skinParam, false).createSheet(note);
-		final SheetBlock2 sheetBlock2 = new SheetBlock2(new SheetBlock1(sheet, 0), this, new UStroke(1));
+		final SheetBlock2 sheetBlock2 = new SheetBlock2(new SheetBlock1(sheet, 0, skinParam.getPadding()), this, new UStroke(1));
 		this.opale =  new Opale(borderColor, noteBackgroundColor, sheetBlock2, skinParam.shadowing(), false);
 
 		// this.text = sheetBlock2;

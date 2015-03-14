@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 14942 $
+ * Revision $Revision: 15580 $
  *
  */
 package net.sourceforge.plantuml;
@@ -62,7 +62,6 @@ import net.sourceforge.plantuml.ugraphic.ColorMapperMonochrome;
 import net.sourceforge.plantuml.ugraphic.Sprite;
 import net.sourceforge.plantuml.ugraphic.UFont;
 import net.sourceforge.plantuml.ugraphic.UStroke;
-import net.sourceforge.plantuml.StringUtils;
 
 public class SkinParam implements ISkinParam {
 
@@ -76,14 +75,21 @@ public class SkinParam implements ISkinParam {
 	private static final String stereoPatternString = "\\<\\<(.*?)\\>\\>";
 	private static final Pattern stereoPattern = MyPattern.cmpile(stereoPatternString);
 
-	private final UmlDiagramType type;
+//	public SkinParam() {
+//
+//	}
 
-	public SkinParam(UmlDiagramType type) {
-		this.type = type;
-		if (type == null) {
-			setParam("shadowing", "false");
-		}
+	public static SkinParam noShadowing() {
+		final SkinParam result = new SkinParam();
+		result.setParam("shadowing", "false");
+		return result;
 	}
+
+//	public SkinParam(String type) {
+//		if (type == null) {
+//			setParam("shadowing", "false");
+//		}
+//	}
 
 	static String cleanForKey(String key) {
 		key = StringUtils.goLowerCase(key).trim();
@@ -460,7 +466,7 @@ public class SkinParam implements ISkinParam {
 		return true;
 	}
 
-	public boolean useSwimlanes() {
+	public boolean useSwimlanes(UmlDiagramType type) {
 		if (type != UmlDiagramType.ACTIVITY) {
 			return false;
 		}
@@ -597,4 +603,23 @@ public class SkinParam implements ISkinParam {
 		return true;
 	}
 
+	public double getPadding() {
+		final String value = getValue("padding");
+		if (value != null && value.matches("\\d+(\\.\\d+)?")) {
+			return Double.parseDouble(value);
+		}
+		return 0;
+	}
+
+	public int groupInheritance() {
+		final String value = getValue("groupinheritance");
+		int result = Integer.MAX_VALUE;
+		if (value != null && value.matches("\\d+")) {
+			result = Integer.parseInt(value);
+		}
+		if (result <= 1) {
+			result = Integer.MAX_VALUE;
+		}
+		return result;
+	}
 }

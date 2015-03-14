@@ -127,8 +127,8 @@ public class SkinParamDelegator implements ISkinParam {
 		return skinParam.stereotypePositionTop();
 	}
 
-	public boolean useSwimlanes() {
-		return skinParam.useSwimlanes();
+	public boolean useSwimlanes(UmlDiagramType type) {
+		return skinParam.useSwimlanes(type);
 	}
 
 	public double getNodesep() {
@@ -189,6 +189,14 @@ public class SkinParamDelegator implements ISkinParam {
 
 	public HorizontalAlignment getDefaultTextAlignment() {
 		return skinParam.getDefaultTextAlignment();
+	}
+
+	public double getPadding() {
+		return skinParam.getPadding();
+	}
+
+	public int groupInheritance() {
+		return skinParam.groupInheritance();
 	}
 
 

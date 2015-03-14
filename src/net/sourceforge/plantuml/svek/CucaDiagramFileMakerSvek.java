@@ -39,7 +39,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import net.sourceforge.plantuml.EmptyImageBuilder;
 import net.sourceforge.plantuml.FileFormat;
@@ -48,7 +47,6 @@ import net.sourceforge.plantuml.FontParam;
 import net.sourceforge.plantuml.ISkinParam;
 import net.sourceforge.plantuml.Scale;
 import net.sourceforge.plantuml.UmlDiagramType;
-import net.sourceforge.plantuml.Url;
 import net.sourceforge.plantuml.activitydiagram3.ftile.EntityImageLegend;
 import net.sourceforge.plantuml.core.ImageData;
 import net.sourceforge.plantuml.cucadiagram.CucaDiagram;
@@ -58,25 +56,15 @@ import net.sourceforge.plantuml.cucadiagram.Stereotype;
 import net.sourceforge.plantuml.cucadiagram.dot.CucaDiagramSimplifierActivity;
 import net.sourceforge.plantuml.cucadiagram.dot.CucaDiagramSimplifierState;
 import net.sourceforge.plantuml.cucadiagram.dot.DotData;
-import net.sourceforge.plantuml.eps.EpsStrategy;
 import net.sourceforge.plantuml.graphic.FontConfiguration;
 import net.sourceforge.plantuml.graphic.HorizontalAlignment;
 import net.sourceforge.plantuml.graphic.HtmlColor;
-import net.sourceforge.plantuml.graphic.HtmlColorGradient;
-import net.sourceforge.plantuml.graphic.HtmlColorSimple;
 import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.graphic.StringBounderUtils;
 import net.sourceforge.plantuml.graphic.TextBlock;
 import net.sourceforge.plantuml.graphic.TextBlockUtils;
-import net.sourceforge.plantuml.png.PngIO;
 import net.sourceforge.plantuml.ugraphic.ImageBuilder;
 import net.sourceforge.plantuml.ugraphic.UFont;
-import net.sourceforge.plantuml.ugraphic.eps.UGraphicEps;
-import net.sourceforge.plantuml.ugraphic.g2d.UGraphicG2d;
-import net.sourceforge.plantuml.ugraphic.svg.UGraphicSvg;
-import net.sourceforge.plantuml.ugraphic.tikz.UGraphicTikz;
-import net.sourceforge.plantuml.ugraphic.visio.UGraphicVdx;
-import net.sourceforge.plantuml.StringUtils;
 
 public final class CucaDiagramFileMakerSvek implements CucaDiagramFileMaker {
 
@@ -244,67 +232,6 @@ public final class CucaDiagramFileMakerSvek implements CucaDiagramFileMaker {
 			scale = diagScale.getScale(dim.getWidth(), dim.getHeight());
 		}
 		return scale;
-	}
-
-	private double createPng(OutputStream os, FileFormatOption fileFormatOption, final TextBlockBackcolored result,
-			final Dimension2D dim, Set<Url> allUrlEncountered, boolean isWithMetadata) throws IOException {
-		final double scale = getScale(fileFormatOption, dim);
-		final UGraphicG2d ug = (UGraphicG2d) fileFormatOption.createUGraphic(diagram.getSkinParam().getColorMapper(),
-				scale, dim, result.getBackcolor(), diagram.isRotation());
-		result.drawU(ug);
-
-		PngIO.write(ug.getBufferedImage(), os, isWithMetadata ? diagram.getMetadata() : null,
-				diagram.getDpi(fileFormatOption));
-		allUrlEncountered.addAll(ug.getAllUrlsEncountered());
-		return scale;
-
-	}
-
-	private void createSvg(OutputStream os, FileFormatOption fileFormatOption, final TextBlockBackcolored result,
-			final Dimension2D dim) throws IOException {
-		final double scale = getScale(fileFormatOption, dim);
-
-		Color backColor = Color.WHITE;
-		if (result.getBackcolor() instanceof HtmlColorSimple) {
-			backColor = diagram.getSkinParam().getColorMapper().getMappedColor(result.getBackcolor());
-		}
-		final UGraphicSvg ug;
-		if (result.getBackcolor() instanceof HtmlColorGradient) {
-			ug = new UGraphicSvg(diagram.getSkinParam().getColorMapper(), (HtmlColorGradient) result.getBackcolor(),
-					false, scale);
-		} else if (backColor == null || backColor.equals(Color.WHITE)) {
-			ug = new UGraphicSvg(diagram.getSkinParam().getColorMapper(), false, scale);
-		} else {
-			ug = new UGraphicSvg(diagram.getSkinParam().getColorMapper(), StringUtils.getAsHtml(backColor), false,
-					scale);
-		}
-		result.drawU(ug);
-		ug.createXml(os);
-	}
-
-	private void createVdx(OutputStream os, FileFormatOption fileFormatOption, final TextBlockBackcolored result,
-			final Dimension2D dim) throws IOException {
-
-		final UGraphicVdx ug = new UGraphicVdx(diagram.getSkinParam().getColorMapper());
-		result.drawU(ug);
-		ug.createVsd(os);
-	}
-
-	private void createTikz(OutputStream os, FileFormatOption fileFormatOption, final TextBlockBackcolored result,
-			final Dimension2D dim) throws IOException {
-
-		final UGraphicTikz ug = new UGraphicTikz(diagram.getSkinParam().getColorMapper());
-		result.drawU(ug);
-		ug.createTikz(os);
-	}
-
-	private void createEps(OutputStream os, FileFormatOption fileFormatOption, final TextBlockBackcolored result,
-			final Dimension2D dim) throws IOException {
-
-		final UGraphicEps ug = new UGraphicEps(diagram.getSkinParam().getColorMapper(), EpsStrategy.getDefault2());
-
-		result.drawU(ug);
-		os.write(ug.getEPSCode().getBytes());
 	}
 
 }

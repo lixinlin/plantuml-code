@@ -54,7 +54,6 @@ import net.sourceforge.plantuml.SkinParamForecolored;
 import net.sourceforge.plantuml.SkinParamSameClassWidth;
 import net.sourceforge.plantuml.UmlDiagramType;
 import net.sourceforge.plantuml.core.UmlSource;
-import net.sourceforge.plantuml.cucadiagram.CucaDiagram;
 import net.sourceforge.plantuml.cucadiagram.Display;
 import net.sourceforge.plantuml.cucadiagram.EntityPortion;
 import net.sourceforge.plantuml.cucadiagram.EntityPosition;
@@ -71,6 +70,7 @@ import net.sourceforge.plantuml.cucadiagram.Stereotype;
 import net.sourceforge.plantuml.cucadiagram.UnparsableGraphvizException;
 import net.sourceforge.plantuml.cucadiagram.dot.DotData;
 import net.sourceforge.plantuml.cucadiagram.dot.GraphvizVersion;
+import net.sourceforge.plantuml.cucadiagram.dot.Neighborhood;
 import net.sourceforge.plantuml.cucadiagram.entity.EntityFactory;
 import net.sourceforge.plantuml.graphic.FontConfiguration;
 import net.sourceforge.plantuml.graphic.GraphicStrings;
@@ -146,10 +146,12 @@ public final class CucaDiagramFileMakerSvek2 {
 
 	public IEntityImage createFile(String... dotStrings) {
 
+		dotData.removeIrrelevantSametail();
 		dotStringFactory = new DotStringFactory(colorSequence, stringBounder, dotData);
 
 		printGroups(dotData.getRootGroup());
 		printEntities(getUnpackagedEntities());
+
 
 		for (Link link : dotData.getLinks()) {
 			if (link.isRemoved()) {
@@ -367,7 +369,13 @@ public final class CucaDiagramFileMakerSvek2 {
 			throw new IllegalStateException();
 		}
 		if (leaf.getEntityType().isLikeClass()) {
-			return new EntityImageClass(graphvizVersion, (ILeaf) leaf, skinParam, portionShower);
+			final EntityImageClass entityImageClass = new EntityImageClass(graphvizVersion, (ILeaf) leaf, skinParam,
+					portionShower);
+			final Neighborhood neighborhood = leaf.getNeighborhood();
+			if (neighborhood != null) {
+				return new EntityImageProtected(entityImageClass, 20, neighborhood, bibliotekon);
+			}
+			return entityImageClass;
 		}
 		if (leaf.getEntityType() == LeafType.NOTE) {
 			return new EntityImageNote(leaf, skinParam);

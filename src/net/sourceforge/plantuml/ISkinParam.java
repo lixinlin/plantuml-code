@@ -49,7 +49,7 @@ import net.sourceforge.plantuml.ugraphic.UStroke;
 public interface ISkinParam extends ISkinSimple {
 
 	public HtmlColor getHyperlinkColor();
-	
+
 	public boolean useUnderlineForHyperlink();
 
 	public HtmlColor getBackgroundColor();
@@ -63,7 +63,7 @@ public interface ISkinParam extends ISkinSimple {
 	public UFont getFont(FontParam fontParam, Stereotype stereotype, boolean inPackageTitle);
 
 	public HorizontalAlignment getHorizontalAlignment(AlignParam param);
-	
+
 	public HorizontalAlignment getDefaultTextAlignment();
 
 	public int getCircledCharacterRadius();
@@ -86,7 +86,7 @@ public interface ISkinParam extends ISkinSimple {
 
 	public boolean stereotypePositionTop();
 
-	public boolean useSwimlanes();
+	public boolean useSwimlanes(UmlDiagramType type);
 
 	public double getNodesep();
 
@@ -107,10 +107,11 @@ public interface ISkinParam extends ISkinSimple {
 	public boolean sameClassWidth();
 
 	public Rankdir getRankdir();
-	
+
 	public boolean useOctagonForActivity(Stereotype stereotype);
-	
+
 	public IHtmlColorSet getIHtmlColorSet();
 
+	public int groupInheritance();
 
 }

@@ -43,7 +43,6 @@ import net.sourceforge.plantuml.sequencediagram.LifeEvent;
 import net.sourceforge.plantuml.sequencediagram.Message;
 import net.sourceforge.plantuml.sequencediagram.Note;
 import net.sourceforge.plantuml.sequencediagram.Participant;
-import net.sourceforge.plantuml.sequencediagram.graphic.Stairs;
 
 public class EventsHistory {
 
@@ -110,6 +109,24 @@ public class EventsHistory {
 		// return level;
 	}
 
+	private boolean isNextEventADestroy(Event event) {
+		for (Iterator<Event> it = events.iterator(); it.hasNext();) {
+			final Event current = it.next();
+			if (event != current) {
+				continue;
+			}
+			if (current instanceof Message) {
+				final Event next = nextButSkippingNotes(it);
+				if (next instanceof LifeEvent) {
+					final LifeEvent le = (LifeEvent) next;
+					return le.isDestroy();
+				}
+			}
+			return false;
+		}
+		return false;
+	}
+
 	private Event nextButSkippingNotes(Iterator<Event> it) {
 		while (true) {
 			if (it.hasNext() == false) {
@@ -124,19 +141,21 @@ public class EventsHistory {
 		}
 	}
 
-	public Stairs getStairs(double totalHeight) {
-		// System.err.println("EventsHistory::getStairs " + p);
-		final Stairs result = new Stairs();
+	public Stairs2 getStairs(double totalHeight) {
+		System.err.println("EventsHistory::getStairs totalHeight=" + totalHeight);
+		final Stairs2 result = new Stairs2();
 		int value = 0;
 		for (Event event : events) {
-			final Double y = ys3.get(event);
-			if (y != null) {
-				assert y <= totalHeight;
+			final Double position = ys3.get(event);
+			System.err.println("EventsHistory::getStairs event=" + event + " position=" + position);
+			if (position != null) {
+				assert position <= totalHeight : "position=" + position + " totalHeight=" + totalHeight;
 				value = getLevelAt(event, EventsHistoryMode.CONSIDERE_FUTURE_DEACTIVATE);
-				result.addStep(y, value);
+				result.addStep(new StairsPosition(position, isNextEventADestroy(event)), value);
 			}
 		}
-		result.addStep(totalHeight, value);
+		System.err.println("EventsHistory::getStairs finishing totalHeight=" + totalHeight);
+		result.addStep(new StairsPosition(totalHeight, false), value);
 		// System.err.println("EventsHistory::getStairs " + p + " result=" + result);
 		return result;
 	}

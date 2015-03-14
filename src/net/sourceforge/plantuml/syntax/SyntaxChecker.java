@@ -37,6 +37,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import net.sourceforge.plantuml.BlockUml;
 import net.sourceforge.plantuml.ErrorUml;
 import net.sourceforge.plantuml.OptionFlags;
 import net.sourceforge.plantuml.PSystemError;
@@ -77,7 +78,15 @@ public class SyntaxChecker {
 		final SourceStringReader sourceStringReader = new SourceStringReader(new Defines(), source,
 				Collections.<String> emptyList());
 
-		final Diagram system = sourceStringReader.getBlocks().get(0).getDiagram();
+		final List<BlockUml> blocks = sourceStringReader.getBlocks();
+		if (blocks.size()==0) {
+			result.setError(true);
+			result.setErrorLinePosition(lastLineNumber(source));
+			result.addErrorText("No @enduml found");
+			result.setSuggest(Arrays.asList("Did you mean:", "@enduml"));
+			return result;
+		}
+		final Diagram system = blocks.get(0).getDiagram();
 		result.setCmapData(system.hasUrl());
 		if (system instanceof UmlDiagram) {
 			result.setUmlDiagramType(((UmlDiagram) system).getUmlDiagramType());

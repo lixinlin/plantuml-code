@@ -47,19 +47,9 @@ import net.sourceforge.plantuml.core.ImageData;
 
 public class NewpagedDiagram extends AbstractPSystem {
 
-	// public static NewpagedDiagram newpage(AbstractPSystem diagram, AbstractPSystem empty) {
-	// System.err.println("executing newpage A=" + diagram);
-	// if (diagram instanceof NewpagedDiagram) {
-	// final NewpagedDiagram other = (NewpagedDiagram) diagram;
-	// other.diagrams.add(empty);
-	// return other;
-	// }
-	// return new NewpagedDiagram(diagram, empty);
-	// }
-
 	private final List<Diagram> diagrams = new ArrayList<Diagram>();
 
-	public NewpagedDiagram(Diagram diag1, Diagram diag2) {
+	public NewpagedDiagram(AbstractPSystem diag1, AbstractPSystem diag2) {
 		if (diag1 instanceof NewpagedDiagram) {
 			throw new IllegalArgumentException();
 		}

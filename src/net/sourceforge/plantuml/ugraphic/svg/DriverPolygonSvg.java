@@ -58,7 +58,6 @@ public class DriverPolygonSvg implements UDriver<SvgGraphics> {
 
 		final double points[] = shape.getPointArray(x, y);
 		final UClip clip = clipContainer.getClip();
-
 		if (clip != null) {
 			for (int j = 0; j < points.length; j += 2) {
 				if (clip.isInside(points[j], points[j + 1]) == false) {

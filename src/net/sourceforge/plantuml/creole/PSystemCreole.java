@@ -74,7 +74,7 @@ public class PSystemCreole extends AbstractPSystem {
 				HtmlColorUtils.BLUE, true);
 		final Sheet sheet = new CreoleParser(fontConfiguration, HorizontalAlignment.LEFT, null, false)
 				.createSheet(display);
-		final SheetBlock1 sheetBlock = new SheetBlock1(sheet, 0);
+		final SheetBlock1 sheetBlock = new SheetBlock1(sheet, 0, 0);
 
 		final ImageBuilder builder = new ImageBuilder(new ColorMapperIdentity(), 1.0, null, null, null, 0, 0, null);
 		builder.addUDrawable(sheetBlock);

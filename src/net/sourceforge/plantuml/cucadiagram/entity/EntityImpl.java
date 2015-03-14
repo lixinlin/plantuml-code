@@ -60,8 +60,8 @@ import net.sourceforge.plantuml.cucadiagram.Link;
 import net.sourceforge.plantuml.cucadiagram.LongCode;
 import net.sourceforge.plantuml.cucadiagram.Member;
 import net.sourceforge.plantuml.cucadiagram.PortionShower;
-import net.sourceforge.plantuml.cucadiagram.Rankdir;
 import net.sourceforge.plantuml.cucadiagram.Stereotype;
+import net.sourceforge.plantuml.cucadiagram.dot.Neighborhood;
 import net.sourceforge.plantuml.graphic.HorizontalAlignment;
 import net.sourceforge.plantuml.graphic.HtmlColor;
 import net.sourceforge.plantuml.graphic.TextBlock;
@@ -636,6 +636,16 @@ final class EntityImpl implements ILeaf, IGroup {
 
 	public void setConcurrentSeparator(char separator) {
 		this.concurrentSeparator = separator;
+	}
+
+	private Neighborhood neighborhood;
+
+	public void setNeighborhood(Neighborhood neighborhood) {
+		this.neighborhood = neighborhood;
+	}
+
+	public Neighborhood getNeighborhood() {
+		return neighborhood;
 	}
 
 }
