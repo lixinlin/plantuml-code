@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 15222 $
+ * Revision $Revision: 15817 $
  *
  */
 package net.sourceforge.plantuml.graphic;
@@ -72,22 +72,23 @@ public class TextBlockUtils {
 		if (texts == null) {
 			return empty(0, 0);
 		}
-		return create(texts, fontConfiguration, horizontalAlignment, spriteContainer, 0, modeSimpleLine);
+		return create(texts, fontConfiguration, horizontalAlignment, spriteContainer, 0, modeSimpleLine, null, null);
 	}
 
 	public static TextBlock create(Display texts, FontConfiguration fontConfiguration,
 			HorizontalAlignment horizontalAlignment, ISkinSimple spriteContainer, double maxMessageSize,
-			boolean modeSimpleLine) {
+			boolean modeSimpleLine, UFont fontForStereotype, HtmlColor htmlColorForStereotype) {
 		if (texts.getNaturalHorizontalAlignment() != null) {
 			horizontalAlignment = texts.getNaturalHorizontalAlignment();
 		}
 		if (texts.size() > 0) {
 			if (texts.get(0) instanceof Stereotype) {
-				return createStereotype(texts, fontConfiguration, horizontalAlignment, spriteContainer, 0);
+				return createStereotype(texts, fontConfiguration, horizontalAlignment, spriteContainer, 0,
+						fontForStereotype, htmlColorForStereotype);
 			}
 			if (texts.get(texts.size() - 1) instanceof Stereotype) {
 				return createStereotype(texts, fontConfiguration, horizontalAlignment, spriteContainer,
-						texts.size() - 1);
+						texts.size() - 1, fontForStereotype, htmlColorForStereotype);
 			}
 			if (texts.get(0) instanceof MessageNumber) {
 				return createMessageNumber(texts, fontConfiguration, horizontalAlignment, spriteContainer,
@@ -120,20 +121,21 @@ public class TextBlockUtils {
 	}
 
 	private static TextBlock createStereotype(Display texts, FontConfiguration fontConfiguration,
-			HorizontalAlignment horizontalAlignment, SpriteContainer spriteContainer, int position) {
+			HorizontalAlignment horizontalAlignment, SpriteContainer spriteContainer, int position,
+			UFont fontForStereotype, HtmlColor htmlColorForStereotype) {
 		final Stereotype stereotype = (Stereotype) texts.get(position);
 		if (stereotype.isSpotted()) {
 			final CircledCharacter circledCharacter = new CircledCharacter(stereotype.getCharacter(),
 					stereotype.getRadius(), stereotype.getCircledFont(), stereotype.getHtmlColor(), null,
 					fontConfiguration.getColor());
-			if (stereotype.getLabel() == null) {
+			if (stereotype.getLabel(false) == null) {
 				return new TextBlockSpotted(circledCharacter, texts.subList(1, texts.size()), fontConfiguration,
 						horizontalAlignment, spriteContainer);
 			}
 			return new TextBlockSpotted(circledCharacter, texts, fontConfiguration, horizontalAlignment,
 					spriteContainer);
 		}
-		return new TextBlockSimple(texts, fontConfiguration, horizontalAlignment, spriteContainer, 0);
+		return new TextBlockSimple(texts, fontConfiguration, horizontalAlignment, spriteContainer, 0, fontForStereotype, htmlColorForStereotype);
 	}
 
 	public static TextBlock withMargin(TextBlock textBlock, double marginX, double marginY) {

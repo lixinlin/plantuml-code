@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 13938 $
+ * Revision $Revision: 15848 $
  *
  */
 package net.sourceforge.plantuml.eggs;
@@ -66,7 +66,7 @@ public class PSystemEgg extends AbstractPSystem {
 	public ImageData exportDiagram(OutputStream os, int num, FileFormatOption fileFormat) throws IOException {
 		final GraphicStrings result = getGraphicStrings();
 		final ImageBuilder imageBuilder = new ImageBuilder(new ColorMapperIdentity(), 1.0, result.getBackcolor(),
-				getMetadata(), null, 0, 0, null);
+				getMetadata(), null, 0, 0, null, false);
 		imageBuilder.addUDrawable(result);
 		return imageBuilder.writeImageTOBEMOVED(fileFormat.getFileFormat(), os);
 	}

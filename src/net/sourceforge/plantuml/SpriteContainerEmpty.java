@@ -49,4 +49,8 @@ public class SpriteContainerEmpty implements SpriteContainer, ISkinSimple {
 		return 0;
 	}
 
+	public boolean useGuillemet() {
+		return false;
+	}
+
 }

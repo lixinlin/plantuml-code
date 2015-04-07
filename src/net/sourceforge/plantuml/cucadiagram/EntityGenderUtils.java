@@ -57,7 +57,7 @@ public class EntityGenderUtils {
 				if (test.getStereotype() == null) {
 					return false;
 				}
-				return stereotype.equals(test.getStereotype().getLabel());
+				return stereotype.equals(test.getStereotype().getLabel(false));
 			}
 		};
 	}

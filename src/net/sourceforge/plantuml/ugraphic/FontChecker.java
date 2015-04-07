@@ -164,7 +164,7 @@ public class FontChecker {
 
 	public BufferedImage getBufferedImage(final char c) throws IOException {
 		assert c != '\t';
-		final ImageBuilder imageBuilder = new ImageBuilder(new ColorMapperIdentity(), 1, null, null, null, 0, 0, null);
+		final ImageBuilder imageBuilder = new ImageBuilder(new ColorMapperIdentity(), 1, null, null, null, 0, 0, null, false);
 		final double dim = 20;
 		imageBuilder.addUDrawable(new UDrawable() {
 			public void drawU(UGraphic ug) {

@@ -29,7 +29,7 @@
  * Original Author:  Arnaud Roques
  * Modified by: Nicolas Jouanin
  * 
- * Revision $Revision: 14672 $
+ * Revision $Revision: 15613 $
  *
  */
 package net.sourceforge.plantuml.preproc;
@@ -147,11 +147,13 @@ class PreprocessorInclude implements ReadLine {
 			fileName = fileName.substring(0, idx);
 		}
 		final File f = FileSystem.getInstance().getFile(withEnvironmentVariable(fileName));
-		if (f.exists()) {
+		if (f.exists() == false) {
+			return "Cannot include " + f.getAbsolutePath();
+		} else if (filesUsed.contains(f)) {
+			return "File already included " + f.getAbsolutePath();
+		} else {
 			filesUsed.add(f);
 			included = new PreprocessorInclude(getReaderInclude(f, suf), defines, charset, filesUsed, f.getParentFile());
-		} else {
-			return "Cannot include " + f.getAbsolutePath();
 		}
 		return this.readLine();
 	}
@@ -200,7 +202,7 @@ class PreprocessorInclude implements ReadLine {
 		Log.info("Using charset " + charset);
 		return new ReadLineReader(new InputStreamReader(new FileInputStream(f), charset));
 	}
-	
+
 	private ReadLine getReaderInclude(final URL url, String suf) throws IOException {
 		if (StartDiagramExtractReader.containsStartDiagram(url, charset)) {
 			int bloc = 0;
@@ -217,8 +219,6 @@ class PreprocessorInclude implements ReadLine {
 		Log.info("Using charset " + charset);
 		return new ReadLineReader(new InputStreamReader(is, charset));
 	}
-
-
 
 	public int getLineNumber() {
 		return numLine;

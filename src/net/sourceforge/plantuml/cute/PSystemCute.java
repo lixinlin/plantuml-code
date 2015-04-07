@@ -86,7 +86,7 @@ public class PSystemCute extends AbstractPSystem {
 	}
 
 	public ImageData exportDiagram(OutputStream os, int num, FileFormatOption fileFormat) throws IOException {
-		final ImageBuilder builder = new ImageBuilder(new ColorMapperIdentity(), 1.0, null, null, null, 10, 10, null);
+		final ImageBuilder builder = new ImageBuilder(new ColorMapperIdentity(), 1.0, null, null, null, 10, 10, null, false);
 		builder.addUDrawable(root);
 		return builder.writeImageTOBEMOVED(fileFormat.getFileFormat(), os);
 	}

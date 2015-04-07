@@ -70,4 +70,8 @@ public class Dictionary implements SpriteContainer, ISkinSimple {
 		return 0;
 	}
 
+	public boolean useGuillemet() {
+		return true;
+	}
+
 }

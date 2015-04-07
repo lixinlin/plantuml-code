@@ -76,7 +76,7 @@ public class PSystemCreole extends AbstractPSystem {
 				.createSheet(display);
 		final SheetBlock1 sheetBlock = new SheetBlock1(sheet, 0, 0);
 
-		final ImageBuilder builder = new ImageBuilder(new ColorMapperIdentity(), 1.0, null, null, null, 0, 0, null);
+		final ImageBuilder builder = new ImageBuilder(new ColorMapperIdentity(), 1.0, null, null, null, 0, 0, null, false);
 		builder.addUDrawable(sheetBlock);
 		return builder.writeImageTOBEMOVED(fileFormat.getFileFormat(), os);
 

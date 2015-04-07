@@ -144,7 +144,8 @@ public class QuoteUtils {
 					"Even the smallest person can change the course of the future.", //
 					"If you are a friend, you speak the password, and the doors will open.", //
 					"You Shall Not Pass", //
-					"73.6% Of All Statistics Are Made Up"
+					"73.6% Of All Statistics Are Made Up", //
+					"We can neither confirm nor deny that this is crashing"
 			);
 	private QuoteUtils() {
 	}

@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 15577 $
+ * Revision $Revision: 15848 $
  *
  */
 package net.sourceforge.plantuml;
@@ -259,7 +259,7 @@ public abstract class UmlDiagram extends AbstractPSystem implements Diagram {
 		}
 
 		final ImageBuilder imageBuilder = new ImageBuilder(new ColorMapperIdentity(), 1.0, HtmlColorUtils.WHITE,
-				getMetadata(), null, 0, 0, null);
+				getMetadata(), null, 0, 0, null, getSkinParam().handwritten());
 
 		final FlashCodeUtils utils = FlashCodeFactory.getFlashCodeUtils();
 		final BufferedImage im = utils.exportFlashcode(flash);

@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 14321 $
+ * Revision $Revision: 15849 $
  *
  */
 package net.sourceforge.plantuml.cucadiagram;
@@ -41,13 +41,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import net.sourceforge.plantuml.Hideable;
+import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.command.regex.MyPattern;
 import net.sourceforge.plantuml.graphic.HtmlColor;
 import net.sourceforge.plantuml.graphic.HtmlColorUtils;
 import net.sourceforge.plantuml.graphic.IHtmlColorSet;
 import net.sourceforge.plantuml.svek.PackageStyle;
 import net.sourceforge.plantuml.ugraphic.UFont;
-import net.sourceforge.plantuml.StringUtils;
 
 public class Stereotype implements CharSequence, Hideable {
 	private final static Pattern circleChar = MyPattern
@@ -67,7 +67,8 @@ public class Stereotype implements CharSequence, Hideable {
 		this(label, radius, circledFont, true, htmlColorSet);
 	}
 
-	public Stereotype(String label, double radius, UFont circledFont, boolean automaticPackageStyle, IHtmlColorSet htmlColorSet) {
+	public Stereotype(String label, double radius, UFont circledFont, boolean automaticPackageStyle,
+			IHtmlColorSet htmlColorSet) {
 		if (label == null) {
 			throw new IllegalArgumentException();
 		}
@@ -138,10 +139,13 @@ public class Stereotype implements CharSequence, Hideable {
 		return "<<O-O>>".equalsIgnoreCase(label);
 	}
 
-	public String getLabel() {
+	public String getLabel(boolean withGuillement) {
 		assert label == null || label.length() > 0;
 		if (isWithOOSymbol()) {
 			return null;
+		}
+		if (withGuillement) {
+			return manageGuillemet(label);
 		}
 		return label;
 	}
@@ -181,17 +185,35 @@ public class Stereotype implements CharSequence, Hideable {
 		return circledFont;
 	}
 
-	public List<String> getLabels() {
-		if (getLabel() == null) {
+	public List<String> getLabels(boolean useGuillemet) {
+		if (getLabel(false) == null) {
 			return null;
 		}
 		final List<String> result = new ArrayList<String>();
 		final Pattern p = MyPattern.cmpile("\\<\\<.*?\\>\\>");
-		final Matcher m = p.matcher(getLabel());
+		final Matcher m = p.matcher(getLabel(false));
 		while (m.find()) {
-			result.add(m.group());
+			if (useGuillemet) {
+				result.add(manageGuillemet(m.group()));
+			} else {
+				result.add(m.group());
+			}
 		}
 		return Collections.unmodifiableList(result);
+	}
+
+	private static String manageGuillemet(String st) {
+		if (st.startsWith("<< ")) {
+			st = "\u00AB" + st.substring(3);
+		} else if (st.startsWith("<<")) {
+			st = "\u00AB" + st.substring(2);
+		}
+		if (st.endsWith(" >>")) {
+			st = st.substring(0, st.length() - 3) + "\u00BB";
+		} else if (st.endsWith(">>")) {
+			st = st.substring(0, st.length() - 2) + "\u00BB";
+		}
+		return st;
 	}
 
 	public PackageStyle getPackageStyle() {

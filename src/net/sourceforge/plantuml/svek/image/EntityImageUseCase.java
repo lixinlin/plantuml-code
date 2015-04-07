@@ -78,11 +78,11 @@ public class EntityImageUseCase extends AbstractEntityImage {
 		final TextBlock tmp = new BodyEnhanced(entity.getDisplay(), FontParam.USECASE, skinParam,
 				HorizontalAlignment.CENTER, stereotype, true, false);
 
-		if (stereotype == null || stereotype.getLabel() == null) {
+		if (stereotype == null || stereotype.getLabel(false) == null) {
 			this.desc = tmp;
 		} else {
 			final TextBlock stereo = TextBlockUtils.create(
-					Display.getWithNewlines(stereotype.getLabel()),
+					Display.getWithNewlines(stereotype.getLabel(getSkinParam().useGuillemet())),
 					new FontConfiguration(SkinParamUtils.getFont(getSkinParam(),
 							FontParam.ACTOR_STEREOTYPE, stereotype), SkinParamUtils.getFontColor(getSkinParam(),
 					FontParam.ACTOR_STEREOTYPE, null), getSkinParam().getHyperlinkColor(), getSkinParam().useUnderlineForHyperlink()), HorizontalAlignment.CENTER, skinParam);

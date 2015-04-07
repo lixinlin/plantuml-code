@@ -71,6 +71,7 @@ import net.sourceforge.plantuml.graphic.UDrawable;
 import net.sourceforge.plantuml.mjpeg.MJPEGGenerator;
 import net.sourceforge.plantuml.ugraphic.eps.UGraphicEps;
 import net.sourceforge.plantuml.ugraphic.g2d.UGraphicG2d;
+import net.sourceforge.plantuml.ugraphic.hand.UGraphicHandwritten;
 import net.sourceforge.plantuml.ugraphic.html5.UGraphicHtml5;
 import net.sourceforge.plantuml.ugraphic.svg.UGraphicSvg;
 import net.sourceforge.plantuml.ugraphic.tikz.UGraphicTikz;
@@ -87,6 +88,7 @@ public class ImageBuilder {
 	private final double margin1;
 	private final double margin2;
 	private final Animation affineTransformations;
+	private final boolean useHandwritten;
 
 	// private final AffineTransform affineTransform;
 	// private final boolean withMetadata;
@@ -95,7 +97,8 @@ public class ImageBuilder {
 	private UDrawable udrawable;
 
 	public ImageBuilder(ColorMapper colorMapper, double dpiFactor, HtmlColor mybackcolor, String metadata,
-			String warningOrError, double margin1, double margin2, Animation affineTransformations) {
+			String warningOrError, double margin1, double margin2, Animation affineTransformations,
+			boolean useHandwritten) {
 		this.colorMapper = colorMapper;
 		this.dpiFactor = dpiFactor;
 		this.mybackcolor = mybackcolor;
@@ -104,6 +107,7 @@ public class ImageBuilder {
 		this.margin1 = margin1;
 		this.margin2 = margin2;
 		this.affineTransformations = affineTransformations;
+		this.useHandwritten = useHandwritten;
 	}
 
 	public void addUDrawable(UDrawable udrawable) {
@@ -136,7 +140,7 @@ public class ImageBuilder {
 		}
 
 		final UGraphic2 ug = createUGraphic(fileFormat, dim, affineTransforms, dx, dy);
-		udrawable.drawU(ug.apply(new UTranslate(margin1, margin1)));
+		udrawable.drawU(handwritten(ug.apply(new UTranslate(margin1, margin1))));
 		ug.writeImageTOBEMOVED(os, metadata, 96);
 		os.flush();
 
@@ -149,6 +153,13 @@ public class ImageBuilder {
 		}
 
 		return new ImageDataSimple(dim);
+	}
+
+	private UGraphic handwritten(UGraphic ug) {
+		if (useHandwritten) {
+			return new UGraphicHandwritten(ug);
+		}
+		return ug;
 	}
 
 	private ImageData writeImageMjpeg(OutputStream os) throws IOException {
@@ -220,8 +231,8 @@ public class ImageBuilder {
 		return im;
 	}
 
-	private UGraphic2 createUGraphic(FileFormat fileFormat, final Dimension2D dim,
-			Animation affineTransforms, double dx, double dy) {
+	private UGraphic2 createUGraphic(FileFormat fileFormat, final Dimension2D dim, Animation affineTransforms,
+			double dx, double dy) {
 		switch (fileFormat) {
 		case PNG:
 			return createUGraphicPNG(colorMapper, dpiFactor, dim, mybackcolor, affineTransforms, dx, dy);

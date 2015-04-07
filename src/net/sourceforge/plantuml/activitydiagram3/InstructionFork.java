@@ -47,9 +47,11 @@ public class InstructionFork implements Instruction {
 
 	private final List<InstructionList> forks = new ArrayList<InstructionList>();
 	private final Instruction parent;
+	private final LinkRendering inlinkRendering;
 
-	public InstructionFork(Instruction parent) {
+	public InstructionFork(Instruction parent, LinkRendering inlinkRendering) {
 		this.parent = parent;
+		this.inlinkRendering = inlinkRendering;
 		this.forks.add(new InstructionList());
 	}
 
@@ -83,7 +85,7 @@ public class InstructionFork implements Instruction {
 	}
 
 	public LinkRendering getInLinkRendering() {
-		return null;
+		return inlinkRendering;
 	}
 
 	public void addNote(Display note, NotePosition position) {

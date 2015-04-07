@@ -133,7 +133,7 @@ public final class CucaDiagramFileMakerSvek implements CucaDiagramFileMaker {
 
 		final ImageBuilder imageBuilder = new ImageBuilder(diagram.getSkinParam().getColorMapper(), scale,
 				result.getBackcolor(), fileFormatOption.isWithMetadata() ? diagram.getMetadata() : null,
-				warningOrError, 0, 10, diagram.getAnimation());
+				warningOrError, 0, 10, diagram.getAnimation(), diagram.getSkinParam().handwritten());
 		imageBuilder.addUDrawable(result);
 		return imageBuilder.writeImageTOBEMOVED(fileFormat, os);
 

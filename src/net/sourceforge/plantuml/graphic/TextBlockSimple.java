@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 12235 $
+ * Revision $Revision: 15846 $
  *
  */
 package net.sourceforge.plantuml.graphic;
@@ -45,6 +45,7 @@ import net.sourceforge.plantuml.SpriteContainer;
 import net.sourceforge.plantuml.command.regex.MyPattern;
 import net.sourceforge.plantuml.cucadiagram.Display;
 import net.sourceforge.plantuml.cucadiagram.Stereotype;
+import net.sourceforge.plantuml.ugraphic.UFont;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
 import net.sourceforge.plantuml.ugraphic.UTranslate;
 
@@ -54,17 +55,27 @@ class TextBlockSimple implements TextBlock {
 
 	private final Display texts;
 	private final FontConfiguration fontConfiguration;
+	private final UFont fontForStereotype;
 	private final HorizontalAlignment horizontalAlignment;
 	private final SpriteContainer spriteContainer;
 	private final double maxMessageSize;
+	private final HtmlColor htmlColorForStereotype;
 
 	protected TextBlockSimple(Display texts, FontConfiguration fontConfiguration,
 			HorizontalAlignment horizontalAlignment, SpriteContainer spriteContainer, double maxMessageSize) {
+		this(texts, fontConfiguration, horizontalAlignment, spriteContainer, maxMessageSize, null, null);
+	}
+
+	protected TextBlockSimple(Display texts, FontConfiguration fontConfiguration,
+			HorizontalAlignment horizontalAlignment, SpriteContainer spriteContainer, double maxMessageSize,
+			UFont fontForStereotype, HtmlColor htmlColorForStereotype) {
 		this.texts = texts;
 		this.fontConfiguration = fontConfiguration;
 		this.horizontalAlignment = horizontalAlignment;
 		this.spriteContainer = spriteContainer;
 		this.maxMessageSize = maxMessageSize;
+		this.fontForStereotype = fontForStereotype;
+		this.htmlColorForStereotype = htmlColorForStereotype;
 	}
 
 	private List<Line> getLines(StringBounder stringBounder) {
@@ -75,8 +86,9 @@ class TextBlockSimple implements TextBlock {
 			this.lines2 = new ArrayList<Line>();
 			for (CharSequence s : texts) {
 				if (s instanceof Stereotype) {
-					lines2.addAll(createLinesForStereotype(fontConfiguration, (Stereotype) s, horizontalAlignment,
-							spriteContainer));
+					lines2.addAll(createLinesForStereotype(
+							fontConfiguration.forceFont(fontForStereotype, htmlColorForStereotype), (Stereotype) s,
+							horizontalAlignment, spriteContainer));
 				} else if (s instanceof EmbededDiagram) {
 					lines2.add(new EmbededSystemLine((EmbededDiagram) s));
 				} else {
@@ -144,11 +156,11 @@ class TextBlockSimple implements TextBlock {
 
 	private List<SingleLine> createLinesForStereotype(FontConfiguration fontConfiguration, Stereotype s,
 			HorizontalAlignment horizontalAlignment, SpriteContainer spriteContainer) {
-		assert s.getLabel() != null;
+		assert s.getLabel(false) != null;
 		final List<SingleLine> result = new ArrayList<SingleLine>();
-		for (String st : s.getLabels()) {
-			result.add(new SingleLine(st, fontConfiguration.add(FontStyle.ITALIC), horizontalAlignment,
-					spriteContainer));
+		for (String st : s.getLabels(spriteContainer.useGuillemet())) {
+//			st = Stereotype.manageGuillemet(st);
+			result.add(new SingleLine(st, fontConfiguration, horizontalAlignment, spriteContainer));
 		}
 		return Collections.unmodifiableList(result);
 	}

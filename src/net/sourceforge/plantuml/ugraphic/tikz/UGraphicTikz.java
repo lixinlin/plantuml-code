@@ -53,6 +53,7 @@ import net.sourceforge.plantuml.ugraphic.ULine;
 import net.sourceforge.plantuml.ugraphic.UPath;
 import net.sourceforge.plantuml.ugraphic.UPolygon;
 import net.sourceforge.plantuml.ugraphic.URectangle;
+import net.sourceforge.plantuml.ugraphic.UText;
 
 public class UGraphicTikz extends AbstractUGraphic<TikzGraphics> implements ClipContainer, UGraphic2 {
 
@@ -83,7 +84,7 @@ public class UGraphicTikz extends AbstractUGraphic<TikzGraphics> implements Clip
 
 	private void register() {
 		registerDriver(URectangle.class, new DriverRectangleTikz());
-		// registerDriver(UText.class, new DriverNoneTikz());
+		registerDriver(UText.class, new DriverUTextTikz());
 		registerDriver(AtomText.class, new DriverAtomTextTikz());
 		registerDriver(ULine.class, new DriverLineTikz());
 		registerDriver(UPolygon.class, new DriverPolygonTikz());

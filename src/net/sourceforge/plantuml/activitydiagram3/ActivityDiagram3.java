@@ -184,7 +184,7 @@ public class ActivityDiagram3 extends UmlDiagram {
 
 		final ImageBuilder imageBuilder = new ImageBuilder(skinParam.getColorMapper(), dpiFactor, getSkinParam()
 				.getBackgroundColor(), fileFormatOption.isWithMetadata() ? getMetadata() : null, getWarningOrError(),
-				margin, margin, getAnimation());
+				margin, margin, getAnimation(), getSkinParam().handwritten());
 		imageBuilder.addUDrawable(result);
 
 		return imageBuilder.writeImageTOBEMOVED(fileFormatOption.getFileFormat(), os);
@@ -241,8 +241,9 @@ public class ActivityDiagram3 extends UmlDiagram {
 	}
 
 	public void fork() {
-		final InstructionFork instructionFork = new InstructionFork(current());
+		final InstructionFork instructionFork = new InstructionFork(current(), nextLinkRenderer());
 		current().add(instructionFork);
+		setNextLinkRendererInternal(null);
 		setCurrent(instructionFork);
 	}
 

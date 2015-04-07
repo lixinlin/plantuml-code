@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 15548 $
+ * Revision $Revision: 15599 $
  *
  */
 package net.sourceforge.plantuml.cucadiagram.dot;
@@ -122,7 +122,7 @@ abstract class AbstractGraphviz implements Graphviz {
 		return state;
 	}
 
-	private boolean illegalDotExe() {
+	public boolean illegalDotExe() {
 		return dotExe == null || dotExe.isFile() == false || dotExe.canRead() == false;
 	}
 
