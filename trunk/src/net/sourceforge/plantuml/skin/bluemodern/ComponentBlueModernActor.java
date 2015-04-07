@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 14712 $
+ * Revision $Revision: 15811 $
  *
  */
 package net.sourceforge.plantuml.skin.bluemodern;
@@ -52,9 +52,11 @@ public class ComponentBlueModernActor extends AbstractTextualComponent {
 	private final StickMan stickman;
 	private final boolean head;
 
-	public ComponentBlueModernActor(HtmlColor backgroundColor, HtmlColor foregroundColor, HtmlColor fontColor, HtmlColor hyperlinkColor,
-			boolean useUnderlineForHyperlink, UFont font, Display stringsToDisplay, boolean head, ISkinSimple spriteContainer) {
-		super(stringsToDisplay, fontColor, hyperlinkColor, useUnderlineForHyperlink, font, HorizontalAlignment.CENTER, 3, 3, 0, spriteContainer, 0, false);
+	public ComponentBlueModernActor(HtmlColor backgroundColor, HtmlColor foregroundColor, HtmlColor fontColor,
+			HtmlColor hyperlinkColor, boolean useUnderlineForHyperlink, UFont font, Display stringsToDisplay,
+			boolean head, ISkinSimple spriteContainer) {
+		super(stringsToDisplay, fontColor, hyperlinkColor, useUnderlineForHyperlink, font, HorizontalAlignment.CENTER,
+				3, 3, 0, spriteContainer, 0, false, null, null);
 		this.head = head;
 		stickman = new StickMan(backgroundColor, foregroundColor);
 	}
@@ -67,7 +69,8 @@ public class ComponentBlueModernActor extends AbstractTextualComponent {
 		final double delta = (getPreferredWidth(stringBounder) - stickman.getPreferredWidth()) / 2;
 
 		if (head) {
-			textBlock.drawU(ug.apply(new UTranslate(getTextMiddlePostion(stringBounder), stickman.getPreferredHeight())));
+			textBlock
+					.drawU(ug.apply(new UTranslate(getTextMiddlePostion(stringBounder), stickman.getPreferredHeight())));
 			ug = ug.apply(new UTranslate(delta, 0));
 		} else {
 			textBlock.drawU(ug.apply(new UTranslate(getTextMiddlePostion(stringBounder), 0)));

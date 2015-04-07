@@ -69,16 +69,19 @@ public class SourceStringReader {
 	}
 
 	public SourceStringReader(Defines defines, String source, String charset, List<String> config) {
-		try {
-			final BlockUmlBuilder builder = new BlockUmlBuilder(config, charset, defines, new StringReader(source),
-					null);
-			this.blocks = builder.getBlockUmls();
-		} catch (IOException e) {
-			Log.error("error " + e);
-			throw new IllegalStateException(e);
+		// WARNING GLOBAL LOCK HERE
+		synchronized (SourceStringReader.class) {
+			try {
+				final BlockUmlBuilder builder = new BlockUmlBuilder(config, charset, defines, new StringReader(source),
+						null);
+				this.blocks = builder.getBlockUmls();
+			} catch (IOException e) {
+				Log.error("error " + e);
+				throw new IllegalStateException(e);
+			}
 		}
 	}
-	
+
 	public String generateImage(OutputStream os) throws IOException {
 		return generateImage(os, 0);
 	}
@@ -107,7 +110,7 @@ public class SourceStringReader {
 			final Diagram system = b.getDiagram();
 			final int nbInSystem = system.getNbImages();
 			if (numImage < nbInSystem) {
-				//final CMapData cmap = new CMapData();
+				// final CMapData cmap = new CMapData();
 				final ImageData imageData = system.exportDiagram(os, numImage, fileFormatOption);
 				if (imageData.containsCMapData()) {
 					return system.getDescription().getDescription() + "\n" + imageData.getCMapData("plantuml");
@@ -122,13 +125,13 @@ public class SourceStringReader {
 	}
 
 	private void noStartumlFound(OutputStream os, FileFormatOption fileFormatOption) throws IOException {
-		final GraphicStrings error = GraphicStrings.createDefault(Arrays.asList("No @startuml found"), fileFormatOption.isUseRedForError());
-		final ImageBuilder imageBuilder = new ImageBuilder(new ColorMapperIdentity(), 1.0, error.getBackcolor(),
-				null, null, 0, 0, null);
+		final GraphicStrings error = GraphicStrings.createDefault(Arrays.asList("No @startuml found"),
+				fileFormatOption.isUseRedForError());
+		final ImageBuilder imageBuilder = new ImageBuilder(new ColorMapperIdentity(), 1.0, error.getBackcolor(), null,
+				null, 0, 0, null, false);
 		imageBuilder.addUDrawable(error);
 		imageBuilder.writeImageTOBEMOVED(fileFormatOption.getFileFormat(), os);
 	}
-
 
 	public DiagramDescription generateDiagramDescription(OutputStream os) throws IOException {
 		return generateDiagramDescription(os, 0);
@@ -141,7 +144,8 @@ public class SourceStringReader {
 		return result;
 	}
 
-	public DiagramDescription generateDiagramDescription(OutputStream os, FileFormatOption fileFormatOption) throws IOException {
+	public DiagramDescription generateDiagramDescription(OutputStream os, FileFormatOption fileFormatOption)
+			throws IOException {
 		return generateDiagramDescription(os, 0, fileFormatOption);
 	}
 
@@ -149,8 +153,8 @@ public class SourceStringReader {
 		return generateDiagramDescription(os, numImage, new FileFormatOption(FileFormat.PNG));
 	}
 
-	public DiagramDescription generateDiagramDescription(OutputStream os, int numImage, FileFormatOption fileFormatOption)
-			throws IOException {
+	public DiagramDescription generateDiagramDescription(OutputStream os, int numImage,
+			FileFormatOption fileFormatOption) throws IOException {
 		if (blocks.size() == 0) {
 			noStartumlFound(os, fileFormatOption);
 			return null;

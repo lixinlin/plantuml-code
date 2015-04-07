@@ -72,7 +72,8 @@ public class GraphvizVersionFinder {
 			}
 
 			public boolean useProtectionWhenThereALinkFromOrToGroup() {
-				return v < 238;
+				// return v < 238;
+				return true;
 			}
 
 		};

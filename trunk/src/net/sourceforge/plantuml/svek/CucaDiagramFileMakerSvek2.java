@@ -391,7 +391,7 @@ public final class CucaDiagramFileMakerSvek2 {
 			if (isHideEmptyDescriptionForState && leaf.getFieldsToDisplay().size() == 0) {
 				return new EntityImageStateEmptyDescription(leaf, skinParam);
 			}
-			if (leaf.getStereotype() != null && "<<sdlreceive>>".equals(leaf.getStereotype().getLabel())) {
+			if (leaf.getStereotype() != null && "<<sdlreceive>>".equals(leaf.getStereotype().getLabel(false))) {
 				return new EntityImageState2(leaf, skinParam);
 			}
 			return new EntityImageState(leaf, skinParam);
@@ -556,7 +556,7 @@ public final class CucaDiagramFileMakerSvek2 {
 		if (g.getStereotype() == null) {
 			return TextBlockUtils.empty(0, 0);
 		}
-		final List<String> stereos = g.getStereotype().getLabels();
+		final List<String> stereos = g.getStereotype().getLabels(dotData.getSkinParam().useGuillemet());
 		if (stereos == null) {
 			return TextBlockUtils.empty(0, 0);
 		}

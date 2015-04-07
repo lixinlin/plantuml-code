@@ -56,8 +56,10 @@ public class ComponentBlueModernEnglober extends AbstractTextualComponent {
 	private final HtmlColor backColor;
 
 	public ComponentBlueModernEnglober(HtmlColor borderColor, HtmlColor backColor, Display strings,
-			HtmlColor fontColor, HtmlColor hyperlinkColor, boolean useUnderlineForHyperlink, UFont font, ISkinSimple spriteContainer) {
-		super(strings, fontColor, hyperlinkColor, useUnderlineForHyperlink, font, HorizontalAlignment.CENTER, 4, 4, 1, spriteContainer, 0, false);
+			HtmlColor fontColor, HtmlColor hyperlinkColor, boolean useUnderlineForHyperlink, UFont font,
+			ISkinSimple spriteContainer) {
+		super(strings, fontColor, hyperlinkColor, useUnderlineForHyperlink, font, HorizontalAlignment.CENTER, 4, 4, 1,
+				spriteContainer, 0, false, null, null);
 		this.borderColor = borderColor;
 		this.backColor = backColor;
 	}
@@ -67,8 +69,7 @@ public class ComponentBlueModernEnglober extends AbstractTextualComponent {
 		final Dimension2D dimensionToUse = area.getDimensionToUse();
 		ug = ug.apply(new UChangeColor(borderColor));
 		ug = ug.apply(new UChangeBackColor(backColor));
-		ug.apply(new UStroke(2))
-				.draw(new URectangle(dimensionToUse.getWidth(), dimensionToUse.getHeight(), 9, 9));
+		ug.apply(new UStroke(2)).draw(new URectangle(dimensionToUse.getWidth(), dimensionToUse.getHeight(), 9, 9));
 		final double xpos = (dimensionToUse.getWidth() - getPureTextWidth(ug.getStringBounder())) / 2;
 
 		getTextBlock().drawU(ug.apply(new UTranslate(xpos, 0)));

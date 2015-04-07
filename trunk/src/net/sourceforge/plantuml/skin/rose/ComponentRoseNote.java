@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 14712 $
+ * Revision $Revision: 15811 $
  *
  */
 package net.sourceforge.plantuml.skin.rose;
@@ -61,10 +61,11 @@ final public class ComponentRoseNote extends AbstractTextualComponent implements
 	private final double deltaShadow;
 	private final UStroke stroke;
 
-	public ComponentRoseNote(HtmlColor back, HtmlColor foregroundColor, HtmlColor fontColor, HtmlColor hyperlinkColor, boolean useUnderlineForHyperlink, UFont font,
-			Display strings, double paddingX, double paddingY, ISkinSimple spriteContainer, double deltaShadow,
-			UStroke stroke) {
-		super(strings, fontColor, hyperlinkColor, useUnderlineForHyperlink, font, HorizontalAlignment.LEFT, 6, 15, 5, spriteContainer, 0, true);
+	public ComponentRoseNote(HtmlColor back, HtmlColor foregroundColor, HtmlColor fontColor, HtmlColor hyperlinkColor,
+			boolean useUnderlineForHyperlink, UFont font, Display strings, double paddingX, double paddingY,
+			ISkinSimple spriteContainer, double deltaShadow, UStroke stroke) {
+		super(strings, fontColor, hyperlinkColor, useUnderlineForHyperlink, font, HorizontalAlignment.LEFT, 6, 15, 5,
+				spriteContainer, 0, true, null, null);
 		this.back = back;
 		this.foregroundColor = foregroundColor;
 		this.paddingX = paddingX;
@@ -130,7 +131,7 @@ final public class ComponentRoseNote extends AbstractTextualComponent implements
 		getTextBlock().drawU(ug2);
 
 	}
-	
+
 	public double getStartingX(StringBounder stringBounder, double y) {
 		return 0;
 	}
@@ -138,6 +139,5 @@ final public class ComponentRoseNote extends AbstractTextualComponent implements
 	public double getEndingX(StringBounder stringBounder, double y) {
 		return getTextWidth(stringBounder);
 	}
-
 
 }

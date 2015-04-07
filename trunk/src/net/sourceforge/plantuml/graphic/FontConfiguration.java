@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 14708 $
+ * Revision $Revision: 15812 $
  *
  */
 package net.sourceforge.plantuml.graphic;
@@ -100,6 +100,18 @@ public class FontConfiguration {
 		this.hyperlink = hyperlink;
 		this.hyperlinkColor = hyperlinkColor;
 		this.useUnderlineForHyperlink = useUnderlineForHyperlink;
+	}
+
+	public FontConfiguration forceFont(UFont newFont, HtmlColor htmlColorForStereotype) {
+		if (newFont == null) {
+			return add(FontStyle.ITALIC);
+		}
+		FontConfiguration result = new FontConfiguration(styles, newFont, motherColor, newFont, currentColor,
+				extendedColor, fontPosition, svgAttributes, hyperlink, hyperlinkColor, useUnderlineForHyperlink);
+		if (htmlColorForStereotype != null) {
+			result = result.changeColor(htmlColorForStereotype);
+		}
+		return result;
 	}
 
 	public FontConfiguration changeAttributes(SvgAttributes toBeAdded) {

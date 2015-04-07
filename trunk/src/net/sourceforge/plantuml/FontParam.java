@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 14065 $
+ * Revision $Revision: 15799 $
  *
  */
 package net.sourceforge.plantuml;
@@ -100,7 +100,8 @@ public enum FontParam {
 	FOLDER_STEREOTYPE(14, Font.ITALIC), //
 	FRAME_STEREOTYPE(14, Font.ITALIC), //
 	DATABASE_STEREOTYPE(14, Font.ITALIC), //
-	ACTOR_STEREOTYPE(14, Font.ITALIC); //
+	ACTOR_STEREOTYPE(14, Font.ITALIC), //
+	SEQUENCE_STEREOTYPE(14, Font.ITALIC); //
 
 	private final int defaultSize;
 	private final int fontStyle;

@@ -91,11 +91,11 @@ public class EntityImageObject extends AbstractEntityImage implements Stencil {
 				new FontConfiguration(SkinParamUtils.getFont(getSkinParam(),
 						FontParam.OBJECT, stereotype), SkinParamUtils.getFontColor(getSkinParam(), FontParam.OBJECT,
 				stereotype), getSkinParam().getHyperlinkColor(), getSkinParam().useUnderlineForHyperlink()), HorizontalAlignment.CENTER, skinParam), 2, 2);
-		if (stereotype == null || stereotype.getLabel() == null) {
+		if (stereotype == null || stereotype.getLabel(false) == null) {
 			this.stereo = null;
 		} else {
 			this.stereo = TextBlockUtils.create(
-					Display.getWithNewlines(stereotype.getLabel()),
+					Display.getWithNewlines(stereotype.getLabel(getSkinParam().useGuillemet())),
 					new FontConfiguration(SkinParamUtils.getFont(getSkinParam(),
 							FontParam.OBJECT_STEREOTYPE, stereotype), SkinParamUtils.getFontColor(getSkinParam(),
 					FontParam.OBJECT_STEREOTYPE, stereotype), getSkinParam().getHyperlinkColor(), getSkinParam().useUnderlineForHyperlink()), HorizontalAlignment.CENTER, skinParam);

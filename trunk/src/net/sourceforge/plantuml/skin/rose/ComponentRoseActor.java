@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 14712 $
+ * Revision $Revision: 15811 $
  *
  */
 package net.sourceforge.plantuml.skin.rose;
@@ -54,10 +54,12 @@ public class ComponentRoseActor extends AbstractTextualComponent {
 	private final TextBlock stickman;
 	private final boolean head;
 
-	public ComponentRoseActor(HtmlColor yellow, HtmlColor red, HtmlColor fontColor, HtmlColor hyperlinkColor, boolean useUnderlineForHyperlink, UFont font,
-			Display stringsToDisplay, boolean head, ISkinSimple spriteContainer,
-			double deltaShadow, UStroke stroke) {
-		super(stringsToDisplay, fontColor, hyperlinkColor, useUnderlineForHyperlink, font, HorizontalAlignment.CENTER, 3, 3, 0, spriteContainer, 0, false);
+	public ComponentRoseActor(HtmlColor yellow, HtmlColor red, HtmlColor fontColor, HtmlColor hyperlinkColor,
+			boolean useUnderlineForHyperlink, UFont font, Display stringsToDisplay, boolean head,
+			ISkinSimple spriteContainer, double deltaShadow, UStroke stroke, UFont fontForStereotype,
+			HtmlColor htmlColorForStereotype) {
+		super(stringsToDisplay, fontColor, hyperlinkColor, useUnderlineForHyperlink, font, HorizontalAlignment.CENTER,
+				3, 3, 0, spriteContainer, 0, false, fontForStereotype, htmlColorForStereotype);
 		this.head = head;
 		this.stickman = new StickMan(yellow, red, deltaShadow, stroke.getThickness());
 	}

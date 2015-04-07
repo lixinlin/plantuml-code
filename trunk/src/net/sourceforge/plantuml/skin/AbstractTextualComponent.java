@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 14712 $
+ * Revision $Revision: 15812 $
  *
  */
 package net.sourceforge.plantuml.skin;
@@ -61,16 +61,19 @@ public abstract class AbstractTextualComponent extends AbstractComponent {
 	private final UFont font;
 	private final HtmlColor fontColor;
 
-	public AbstractTextualComponent(CharSequence label, HtmlColor fontColor, HtmlColor hyperlinkColor, boolean useUnderlineForHyperlink, UFont font,
-			HorizontalAlignment horizontalAlignment, int marginX1, int marginX2, int marginY,
-			ISkinSimple spriteContainer, double maxMessageSize) {
-		this(Display.getWithNewlines(label == null ? "" : label.toString()), fontColor, hyperlinkColor, useUnderlineForHyperlink, font, horizontalAlignment,
-				marginX1, marginX2, marginY, spriteContainer, maxMessageSize, false);
+	public AbstractTextualComponent(CharSequence label, HtmlColor fontColor, HtmlColor hyperlinkColor,
+			boolean useUnderlineForHyperlink, UFont font, HorizontalAlignment horizontalAlignment, int marginX1,
+			int marginX2, int marginY, ISkinSimple spriteContainer, double maxMessageSize, UFont fontForStereotype,
+			HtmlColor htmlColorForStereotype) {
+		this(Display.getWithNewlines(label == null ? "" : label.toString()), fontColor, hyperlinkColor,
+				useUnderlineForHyperlink, font, horizontalAlignment, marginX1, marginX2, marginY, spriteContainer,
+				maxMessageSize, false, fontForStereotype, htmlColorForStereotype);
 	}
 
-	public AbstractTextualComponent(Display strings, HtmlColor fontColor, HtmlColor hyperlinkColor, boolean useUnderlineForHyperlink, UFont font,
-			HorizontalAlignment horizontalAlignment, int marginX1, int marginX2, int marginY,
-			ISkinSimple spriteContainer, double maxMessageSize, boolean enhanced) {
+	public AbstractTextualComponent(Display strings, HtmlColor fontColor, HtmlColor hyperlinkColor,
+			boolean useUnderlineForHyperlink, UFont font, HorizontalAlignment horizontalAlignment, int marginX1,
+			int marginX2, int marginY, ISkinSimple spriteContainer, double maxMessageSize, boolean enhanced,
+			UFont fontForStereotype, HtmlColor htmlColorForStereotype) {
 		this.font = font;
 		this.fontColor = fontColor;
 		this.marginX1 = marginX1;
@@ -84,8 +87,9 @@ public abstract class AbstractTextualComponent extends AbstractComponent {
 			textBlock = new BodyEnhanced2(strings, FontParam.NOTE, spriteContainer, HorizontalAlignment.LEFT, font,
 					fontColor, hyperlinkColor, useUnderlineForHyperlink);
 		} else {
-			textBlock = TextBlockUtils.create(strings, new FontConfiguration(font, fontColor, hyperlinkColor, useUnderlineForHyperlink), horizontalAlignment,
-					spriteContainer, maxMessageSize, false);
+			textBlock = TextBlockUtils.create(strings, new FontConfiguration(font, fontColor, hyperlinkColor,
+					useUnderlineForHyperlink), horizontalAlignment, spriteContainer, maxMessageSize, false,
+					fontForStereotype, htmlColorForStereotype);
 		}
 	}
 

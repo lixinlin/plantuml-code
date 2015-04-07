@@ -627,6 +627,9 @@ public class Cluster implements Moveable {
 	}
 
 	private boolean protection1(UmlDiagramType type) {
+		if (group.getUSymbol() == USymbol.NODE) {
+			return true;
+		}
 		if (skinParam.useSwimlanes(type)) {
 			return false;
 		}

@@ -166,4 +166,8 @@ public class VCompactFactory implements FtileFactory {
 		return skinParam.getPadding();
 	}
 
+	public boolean useGuillemet() {
+		return skinParam.useGuillemet();
+	}
+
 }

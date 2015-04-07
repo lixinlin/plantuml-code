@@ -63,7 +63,7 @@ public class PSystemTree extends AbstractPSystem {
 
 	public ImageData exportDiagram(OutputStream os, int num, FileFormatOption fileFormat) throws IOException {
 		final ImageBuilder builder = new ImageBuilder(new ColorMapperIdentity(), 1.0, HtmlColorUtils.WHITE, null, null,
-				5, 5, null);
+				5, 5, null, false);
 		if (rendering == Rendering.NEEDLE) {
 			final UDrawable tmp = Needle.getNeedle(root, 200, 0, 60);
 			final LimitFinder limitFinder = new LimitFinder(TextBlockUtils.getDummyStringBounder(), true);

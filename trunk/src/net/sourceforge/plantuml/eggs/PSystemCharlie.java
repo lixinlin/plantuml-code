@@ -58,7 +58,7 @@ public class PSystemCharlie extends AbstractPSystem {
 
 	public ImageData exportDiagram(OutputStream os, int num, FileFormatOption fileFormat) throws IOException {
 		final ImageBuilder imageBuilder = new ImageBuilder(new ColorMapperIdentity(), 1.0, HtmlColorUtils.BLACK,
-				getMetadata(), null, 0, 0, null);
+				getMetadata(), null, 0, 0, null, false);
 		imageBuilder.addUDrawable(new UDrawable() {
 
 			public void drawU(UGraphic ug) {

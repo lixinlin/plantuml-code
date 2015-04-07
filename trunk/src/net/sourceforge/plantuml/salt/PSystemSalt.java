@@ -85,7 +85,7 @@ public class PSystemSalt extends AbstractPSystem {
 
 		final Dimension2D size = salt.getPreferredDimension(TextBlockUtils.getDummyStringBounder(), 0, 0);
 		final ImageBuilder builder = new ImageBuilder(new ColorMapperIdentity(), 1.0, HtmlColorUtils.WHITE, null,
-				null, 5, 5, null);
+				null, 5, 5, null, false);
 		builder.addUDrawable(new UDrawable() {
 
 			public void drawU(UGraphic ug) {

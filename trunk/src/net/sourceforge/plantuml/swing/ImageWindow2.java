@@ -210,7 +210,7 @@ class ImageWindow2 extends JFrame {
 			final String msg = "Error reading file: " + ex.toString();
 			final GraphicStrings error = GraphicStrings.createDefault(Arrays.asList(msg), false);
 			final ImageBuilder imageBuilder = new ImageBuilder(new ColorMapperIdentity(), 1.0, error.getBackcolor(),
-					null, null, 0, 0, null);
+					null, null, 0, 0, null, false);
 			imageBuilder.addUDrawable(error);
 			final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			try {

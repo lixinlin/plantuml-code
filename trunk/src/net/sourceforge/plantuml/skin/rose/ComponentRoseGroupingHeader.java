@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 14712 $
+ * Revision $Revision: 15811 $
  *
  */
 package net.sourceforge.plantuml.skin.rose;
@@ -67,10 +67,11 @@ public class ComponentRoseGroupingHeader extends AbstractTextualComponent {
 	private final double deltaShadow;
 	private final UStroke stroke;
 
-	public ComponentRoseGroupingHeader(HtmlColor fontColor, HtmlColor hyperlinkColor, boolean useUnderlineForHyperlink, HtmlColor background, HtmlColor groupBackground,
-			HtmlColor groupBorder, UFont bigFont, UFont smallFont, Display strings, ISkinSimple spriteContainer,
-			double deltaShadow, UStroke stroke) {
-		super(strings.get(0), fontColor, hyperlinkColor, useUnderlineForHyperlink, bigFont, HorizontalAlignment.LEFT, 15, 30, 1, spriteContainer, 0);
+	public ComponentRoseGroupingHeader(HtmlColor fontColor, HtmlColor hyperlinkColor, boolean useUnderlineForHyperlink,
+			HtmlColor background, HtmlColor groupBackground, HtmlColor groupBorder, UFont bigFont, UFont smallFont,
+			Display strings, ISkinSimple spriteContainer, double deltaShadow, UStroke stroke) {
+		super(strings.get(0), fontColor, hyperlinkColor, useUnderlineForHyperlink, bigFont, HorizontalAlignment.LEFT,
+				15, 30, 1, spriteContainer, 0, null, null);
 		this.groupBackground = groupBackground;
 		this.groupBorder = groupBorder;
 		this.background = background;
@@ -80,8 +81,8 @@ public class ComponentRoseGroupingHeader extends AbstractTextualComponent {
 			this.commentTextBlock = null;
 		} else {
 			final Display display = Display.getWithNewlines("[" + strings.get(1) + "]");
-			this.commentTextBlock = TextBlockUtils.create(display, new FontConfiguration(smallFont, fontColor, hyperlinkColor, useUnderlineForHyperlink),
-					HorizontalAlignment.LEFT, spriteContainer);
+			this.commentTextBlock = TextBlockUtils.create(display, new FontConfiguration(smallFont, fontColor,
+					hyperlinkColor, useUnderlineForHyperlink), HorizontalAlignment.LEFT, spriteContainer);
 		}
 		if (this.background == null) {
 			throw new IllegalArgumentException();

@@ -49,9 +49,10 @@ import net.sourceforge.plantuml.ugraphic.UTranslate;
 
 public class ComponentRoseDelayText extends AbstractTextualComponent {
 
-	public ComponentRoseDelayText(HtmlColor fontColor, HtmlColor hyperlinkColor, boolean useUnderlineForHyperlink, UFont font, Display stringsToDisplay,
-			ISkinSimple spriteContainer) {
-		super(stringsToDisplay, fontColor, hyperlinkColor, useUnderlineForHyperlink, font, HorizontalAlignment.CENTER, 0, 0, 4, spriteContainer, 0, false);
+	public ComponentRoseDelayText(HtmlColor fontColor, HtmlColor hyperlinkColor, boolean useUnderlineForHyperlink,
+			UFont font, Display stringsToDisplay, ISkinSimple spriteContainer) {
+		super(stringsToDisplay, fontColor, hyperlinkColor, useUnderlineForHyperlink, font, HorizontalAlignment.CENTER,
+				0, 0, 4, spriteContainer, 0, false, null, null);
 	}
 
 	@Override

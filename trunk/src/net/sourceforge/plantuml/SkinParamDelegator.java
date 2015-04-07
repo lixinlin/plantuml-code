@@ -199,5 +199,13 @@ public class SkinParamDelegator implements ISkinParam {
 		return skinParam.groupInheritance();
 	}
 
+	public boolean useGuillemet() {
+		return skinParam.useGuillemet();
+	}
+
+	public boolean handwritten() {
+		return skinParam.handwritten();
+	}
+
 
 }

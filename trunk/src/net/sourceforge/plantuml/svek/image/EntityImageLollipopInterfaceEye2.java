@@ -92,10 +92,10 @@ public class EntityImageLollipopInterfaceEye2 extends AbstractEntityImage {
 		this.ctx = new SymbolContext(backcolor, forecolor).withStroke(new UStroke(1.5)).withShadow(
 				getSkinParam().shadowing());
 
-		if (stereotype != null && stereotype.getLabel() != null
+		if (stereotype != null && stereotype.getLabel(false) != null
 				&& portionShower.showPortion(EntityPortion.STEREOTYPE, entity)) {
 			stereo = TextBlockUtils.create(
-					Display.getWithNewlines(stereotype.getLabel()),
+					Display.getWithNewlines(stereotype.getLabel(getSkinParam().useGuillemet())),
 					new FontConfiguration(SkinParamUtils.getFont(getSkinParam(),
 							symbol.getFontParamStereotype(), stereotype), SkinParamUtils.getFontColor(getSkinParam(),
 					symbol.getFontParamStereotype(), null), getSkinParam().getHyperlinkColor(), getSkinParam().useUnderlineForHyperlink()), HorizontalAlignment.CENTER, skinParam);

@@ -54,10 +54,12 @@ public class ComponentRoseBoundary extends AbstractTextualComponent {
 	private final TextBlock stickman;
 	private final boolean head;
 
-	public ComponentRoseBoundary(HtmlColor yellow, HtmlColor red, HtmlColor fontColor, HtmlColor hyperlinkColor, boolean useUnderlineForHyperlink, UFont font,
-			Display stringsToDisplay, boolean head, ISkinSimple spriteContainer,
-			double deltaShadow, UStroke stroke) {
-		super(stringsToDisplay, fontColor, hyperlinkColor, useUnderlineForHyperlink, font, HorizontalAlignment.CENTER, 3, 3, 0, spriteContainer, 0, false);
+	public ComponentRoseBoundary(HtmlColor yellow, HtmlColor red, HtmlColor fontColor, HtmlColor hyperlinkColor,
+			boolean useUnderlineForHyperlink, UFont font, Display stringsToDisplay, boolean head,
+			ISkinSimple spriteContainer, double deltaShadow, UStroke stroke, UFont fontForStereotype,
+			HtmlColor htmlColorForStereotype) {
+		super(stringsToDisplay, fontColor, hyperlinkColor, useUnderlineForHyperlink, font, HorizontalAlignment.CENTER,
+				3, 3, 0, spriteContainer, 0, false, fontForStereotype, htmlColorForStereotype);
 		this.head = head;
 		this.stickman = new Boundary(yellow, red, deltaShadow, stroke.getThickness());
 	}

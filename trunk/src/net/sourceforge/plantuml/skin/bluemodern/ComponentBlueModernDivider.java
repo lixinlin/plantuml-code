@@ -59,9 +59,11 @@ public class ComponentBlueModernDivider extends AbstractTextualComponent {
 	private final HtmlColor background2;
 	private final HtmlColor borderColor;
 
-	public ComponentBlueModernDivider(HtmlColor fontColor, HtmlColor hyperlinkColor, boolean useUnderlineForHyperlink, UFont font, HtmlColor background1, HtmlColor background2,
-			HtmlColor borderColor, Display stringsToDisplay, ISkinSimple spriteContainer) {
-		super(stringsToDisplay, fontColor, hyperlinkColor, useUnderlineForHyperlink, font, HorizontalAlignment.CENTER, 4, 4, 4, spriteContainer, 0, false);
+	public ComponentBlueModernDivider(HtmlColor fontColor, HtmlColor hyperlinkColor, boolean useUnderlineForHyperlink,
+			UFont font, HtmlColor background1, HtmlColor background2, HtmlColor borderColor, Display stringsToDisplay,
+			ISkinSimple spriteContainer) {
+		super(stringsToDisplay, fontColor, hyperlinkColor, useUnderlineForHyperlink, font, HorizontalAlignment.CENTER,
+				4, 4, 4, spriteContainer, 0, false, null, null);
 		this.background1 = background1;
 		this.background2 = background2;
 		this.borderColor = borderColor;

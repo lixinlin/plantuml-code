@@ -81,12 +81,12 @@ public class EntityImageClassHeader2 extends AbstractEntityImage {
 				fontConfigurationName, HorizontalAlignment.CENTER, skinParam), 3, 3, 0, 0);
 
 		final TextBlock stereo;
-		if (stereotype == null || stereotype.getLabel() == null
+		if (stereotype == null || stereotype.getLabel(false) == null
 				|| portionShower.showPortion(EntityPortion.STEREOTYPE, entity) == false) {
 			stereo = null;
 		} else {
 			stereo = TextBlockUtils.withMargin(TextBlockUtils.create(
-					Display.create(stereotype.getLabels()),
+					Display.create(stereotype.getLabels(skinParam.useGuillemet())),
 					new FontConfiguration(SkinParamUtils.getFont(getSkinParam(),
 							FontParam.CLASS_STEREOTYPE, stereotype), SkinParamUtils.getFontColor(getSkinParam(),
 					FontParam.CLASS_STEREOTYPE, stereotype), getSkinParam().getHyperlinkColor(), getSkinParam().useUnderlineForHyperlink()), HorizontalAlignment.CENTER, skinParam), 1, 0);

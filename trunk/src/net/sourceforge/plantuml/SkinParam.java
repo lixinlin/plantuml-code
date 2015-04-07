@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 15580 $
+ * Revision $Revision: 15850 $
  *
  */
 package net.sourceforge.plantuml;
@@ -75,9 +75,9 @@ public class SkinParam implements ISkinParam {
 	private static final String stereoPatternString = "\\<\\<(.*?)\\>\\>";
 	private static final Pattern stereoPattern = MyPattern.cmpile(stereoPatternString);
 
-//	public SkinParam() {
-//
-//	}
+	// public SkinParam() {
+	//
+	// }
 
 	public static SkinParam noShadowing() {
 		final SkinParam result = new SkinParam();
@@ -85,11 +85,11 @@ public class SkinParam implements ISkinParam {
 		return result;
 	}
 
-//	public SkinParam(String type) {
-//		if (type == null) {
-//			setParam("shadowing", "false");
-//		}
-//	}
+	// public SkinParam(String type) {
+	// if (type == null) {
+	// setParam("shadowing", "false");
+	// }
+	// }
 
 	static String cleanForKey(String key) {
 		key = StringUtils.goLowerCase(key).trim();
@@ -161,7 +161,7 @@ public class SkinParam implements ISkinParam {
 	public HtmlColor getHtmlColor(ColorParam param, Stereotype stereotype, boolean clickable) {
 		if (stereotype != null) {
 			checkStereotype(stereotype);
-			final String value2 = getValue(param.name() + "color" + stereotype.getLabel());
+			final String value2 = getValue(param.name() + "color" + stereotype.getLabel(false));
 			if (value2 != null && getIHtmlColorSet().getColorIfValid(value2) != null) {
 				return getIHtmlColorSet().getColorIfValid(value2);
 			}
@@ -193,7 +193,7 @@ public class SkinParam implements ISkinParam {
 	private int getFontSize(FontParam param, Stereotype stereotype) {
 		if (stereotype != null) {
 			checkStereotype(stereotype);
-			final String value2 = getValue(param.name() + "fontsize" + stereotype.getLabel());
+			final String value2 = getValue(param.name() + "fontsize" + stereotype.getLabel(false));
 			if (value2 != null && value2.matches("\\d+")) {
 				return Integer.parseInt(value2);
 			}
@@ -211,7 +211,7 @@ public class SkinParam implements ISkinParam {
 	private String getFontFamily(FontParam param, Stereotype stereotype) {
 		if (stereotype != null) {
 			checkStereotype(stereotype);
-			final String value2 = getValue(param.name() + "fontname" + stereotype.getLabel());
+			final String value2 = getValue(param.name() + "fontname" + stereotype.getLabel(false));
 			if (value2 != null) {
 				return StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(value2);
 			}
@@ -234,7 +234,7 @@ public class SkinParam implements ISkinParam {
 		String value = null;
 		if (stereotype != null) {
 			checkStereotype(stereotype);
-			value = getValue(param.name() + "fontcolor" + stereotype.getLabel());
+			value = getValue(param.name() + "fontcolor" + stereotype.getLabel(false));
 		}
 		if (value == null || getIHtmlColorSet().getColorIfValid(value) == null) {
 			value = getValue(param.name() + "fontcolor");
@@ -252,7 +252,7 @@ public class SkinParam implements ISkinParam {
 		String value = null;
 		if (stereotype != null) {
 			checkStereotype(stereotype);
-			value = getValue(param.name() + "fontstyle" + stereotype.getLabel());
+			value = getValue(param.name() + "fontstyle" + stereotype.getLabel(false));
 		}
 		if (value == null) {
 			value = getValue(param.name() + "fontstyle");
@@ -421,11 +421,14 @@ public class SkinParam implements ISkinParam {
 	}
 
 	public boolean shadowing() {
-		if (strictUmlStyle()) {
-			return false;
-		}
 		final String value = getValue("shadowing");
 		if ("false".equalsIgnoreCase(value)) {
+			return false;
+		}
+		if ("true".equalsIgnoreCase(value)) {
+			return true;
+		}
+		if (strictUmlStyle()) {
 			return false;
 		}
 		return true;
@@ -506,7 +509,7 @@ public class SkinParam implements ISkinParam {
 	public UStroke getThickness(LineParam param, Stereotype stereotype) {
 		if (stereotype != null) {
 			checkStereotype(stereotype);
-			final String value2 = getValue(param.name() + "thickness" + stereotype.getLabel());
+			final String value2 = getValue(param.name() + "thickness" + stereotype.getLabel(false));
 			if (value2 != null && value2.matches("[\\d.]+")) {
 				return new UStroke(Double.parseDouble(value2));
 			}
@@ -575,7 +578,7 @@ public class SkinParam implements ISkinParam {
 		String value = getValue("activityshape");
 		if (stereotype != null) {
 			checkStereotype(stereotype);
-			final String value2 = getValue("activityshape" + stereotype.getLabel());
+			final String value2 = getValue("activityshape" + stereotype.getLabel(false));
 			if (value2 != null) {
 				value = value2;
 			}
@@ -622,4 +625,21 @@ public class SkinParam implements ISkinParam {
 		}
 		return result;
 	}
+
+	public boolean useGuillemet() {
+		final String value = getValue("guillemet");
+		if ("false".equalsIgnoreCase(value)) {
+			return false;
+		}
+		return true;
+	}
+
+	public boolean handwritten() {
+		final String value = getValue("handwritten");
+		if ("true".equalsIgnoreCase(value)) {
+			return true;
+		}
+		return false;
+	}
+
 }

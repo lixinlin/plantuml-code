@@ -70,11 +70,11 @@ public class EntityImageArcCircle extends AbstractEntityImage {
 						FontParam.COMPONENT, stereotype), SkinParamUtils.getFontColor(getSkinParam(),
 				FontParam.COMPONENT, stereotype), getSkinParam().getHyperlinkColor(), getSkinParam().useUnderlineForHyperlink()), HorizontalAlignment.CENTER, skinParam);
 
-		if (stereotype == null || stereotype.getLabel() == null) {
+		if (stereotype == null || stereotype.getLabel(false) == null) {
 			this.stereo = null;
 		} else {
 			this.stereo = TextBlockUtils.create(
-					Display.getWithNewlines(stereotype.getLabel()),
+					Display.getWithNewlines(stereotype.getLabel(getSkinParam().useGuillemet())),
 					new FontConfiguration(SkinParamUtils.getFont(getSkinParam(),
 							FontParam.COMPONENT_STEREOTYPE, stereotype), SkinParamUtils.getFontColor(getSkinParam(),
 					FontParam.COMPONENT_STEREOTYPE, null), getSkinParam().getHyperlinkColor(), getSkinParam().useUnderlineForHyperlink()), HorizontalAlignment.CENTER, skinParam);

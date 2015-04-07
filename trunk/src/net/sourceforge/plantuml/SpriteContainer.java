@@ -39,4 +39,6 @@ public interface SpriteContainer {
 
 	public Sprite getSprite(String name);
 
+	public boolean useGuillemet();
+
 }

@@ -113,5 +113,9 @@ public interface ISkinParam extends ISkinSimple {
 	public IHtmlColorSet getIHtmlColorSet();
 
 	public int groupInheritance();
+	
+	public boolean useGuillemet();
+
+	public boolean handwritten();
 
 }

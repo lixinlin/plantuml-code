@@ -166,4 +166,8 @@ public class FtileFactoryDelegator implements FtileFactory {
 		return skinParam.getPadding();
 	}
 
+	public boolean useGuillemet() {
+		return skinParam.useGuillemet();
+	}
+
 }

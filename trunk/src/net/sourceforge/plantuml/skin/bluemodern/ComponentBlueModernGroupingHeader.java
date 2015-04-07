@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 14712 $
+ * Revision $Revision: 15811 $
  *
  */
 package net.sourceforge.plantuml.skin.bluemodern;
@@ -70,7 +70,7 @@ public class ComponentBlueModernGroupingHeader extends AbstractTextualComponent 
 			HtmlColor borderColor, HtmlColor fontColor1, HtmlColor fontColor2, HtmlColor hyperlinkColor, boolean useUnderlineForHyperlink, UFont bigFont,
 			UFont smallFont, Display strings, ISkinSimple spriteContainer) {
 		super(strings.get(0), fontColor1, hyperlinkColor, useUnderlineForHyperlink, bigFont, HorizontalAlignment.LEFT, 15, 30, 1,
-				spriteContainer, 0);
+				spriteContainer, 0, null, null);
 		this.headerBackgroundColor = headerBackgroundColor;
 		this.generalBackgroundColor = generalBackgroundColor;
 		this.borderColor = borderColor;
