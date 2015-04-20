@@ -26,32 +26,44 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Adrian Vogt
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 3837 $
  *
  */
-package net.sourceforge.plantuml.ugraphic.hand;
+package net.sourceforge.plantuml.ugraphic;
 
-import java.awt.geom.CubicCurve2D;
+import net.sourceforge.plantuml.graphic.HtmlColor;
 
-import net.sourceforge.plantuml.posimo.DotPath;
-import net.sourceforge.plantuml.ugraphic.UPath;
+public class UFont2 {
 
-public class UDotPathHand {
+	private final UFont font;
 
-	private final UPath path;
+	private final HtmlColor color;
+	private final HtmlColor hyperlinkColor;
+	private final boolean useUnderlineForHyperlink;
 
-	public UDotPathHand(DotPath source) {
-
-		final HandJiggle jiggle = new HandJiggle(source.getStartPoint(), 2.0);
-		for (CubicCurve2D curve : source.getBeziers()) {
-			jiggle.curveTo(curve);
-		}
-
-		this.path = jiggle.toUPath();
+	public UFont2(UFont font, HtmlColor color, boolean useUnderlineForHyperlink, HtmlColor hyperlinkColor) {
+		this.font = font;
+		this.color = color;
+		this.hyperlinkColor = hyperlinkColor;
+		this.useUnderlineForHyperlink = useUnderlineForHyperlink;
 	}
 
-	public UPath getHanddrawn() {
-		return this.path;
+	public final UFont getFont() {
+		return font;
+	}
+
+	public boolean useUnderlineForHyperlink() {
+		return useUnderlineForHyperlink;
+	}
+
+	public HtmlColor getHyperlinkColor() {
+		return hyperlinkColor;
+	}
+
+	public HtmlColor getColor() {
+		return color;
 	}
 
 }
