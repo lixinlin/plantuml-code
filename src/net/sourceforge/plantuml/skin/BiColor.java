@@ -26,25 +26,31 @@
  * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
  * in the United States and other countries.]
  *
- * Original Author:  Adrian Vogt
+ * Original Author:  Arnaud Roques
+ * 
+ * Revision $Revision: 8151 $
  *
  */
-package net.sourceforge.plantuml.ugraphic.hand;
+package net.sourceforge.plantuml.skin;
 
-import net.sourceforge.plantuml.ugraphic.UPath;
+import net.sourceforge.plantuml.graphic.HtmlColor;
 
-public class PathJiggle {
-	private final UPath path;
+public class BiColor {
 
-	private final double defaultVariation;
+	private final HtmlColor yellowBack;
+	private final HtmlColor redBorder;
 
-	public PathJiggle(UPath source, double defaultVariation) {
-		this.defaultVariation = defaultVariation;
-		this.path = null;
+	public BiColor(HtmlColor yellowBack, HtmlColor redBorder) {
+		this.yellowBack = yellowBack;
+		this.redBorder = redBorder;
 	}
 
-	public UPath toUPath() {
-		return path;
+	public HtmlColor getYellowBack() {
+		return yellowBack;
+	}
+
+	public HtmlColor getRedBorder() {
+		return redBorder;
 	}
 
 }

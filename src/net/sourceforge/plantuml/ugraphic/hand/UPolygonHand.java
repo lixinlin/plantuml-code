@@ -42,13 +42,16 @@ public class UPolygonHand {
 	private final UPolygon poly;
 
 	public UPolygonHand(UPolygon source) {
-
 		final List<Point2D.Double> pt = source.getPoints();
+		if (pt.size() == 0) {
+			poly = new UPolygon();
+			return;
+		}
 		final HandJiggle jiggle = new HandJiggle(pt.get(0), 1.5);
 		for (int i = 1; i < pt.size(); i++) {
-			jiggle.addPoints(pt.get(i));
+			jiggle.lineTo(pt.get(i));
 		}
-		jiggle.addPoints(pt.get(0));
+		jiggle.lineTo(pt.get(0));
 
 		this.poly = jiggle.toUPolygon();
 		this.poly.setDeltaShadow(source.getDeltaShadow());
