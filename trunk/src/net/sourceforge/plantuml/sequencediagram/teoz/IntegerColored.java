@@ -28,29 +28,34 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 8151 $
+ * Revision $Revision: 6054 $
  *
  */
-package net.sourceforge.plantuml.skin;
+package net.sourceforge.plantuml.sequencediagram.teoz;
 
 import net.sourceforge.plantuml.graphic.HtmlColor;
 
-public class BiColor {
+public class IntegerColored {
 
-	private final HtmlColor yellowBack;
-	private final HtmlColor redBorder;
+	private final int value;
+	private final HtmlColor color;
 
-	public BiColor(HtmlColor yellowBack, HtmlColor redBorder) {
-		this.yellowBack = yellowBack;
-		this.redBorder = redBorder;
+	public IntegerColored(int value, HtmlColor color) {
+		this.value = value;
+		this.color = color;
 	}
 
-	public HtmlColor getYellowBack() {
-		return yellowBack;
+	@Override
+	public String toString() {
+		return "" + value + " " + color;
 	}
 
-	public HtmlColor getRedBorder() {
-		return redBorder;
+	public int getValue() {
+		return value;
+	}
+
+	public HtmlColor getColor() {
+		return color;
 	}
 
 }
