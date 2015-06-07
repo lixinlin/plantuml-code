@@ -27,37 +27,45 @@
  * in the United States and other countries.]
  *
  * Original Author:  Arnaud Roques
- * 
- * Revision $Revision: 10266 $
+ *
+ * Revision $Revision: 9786 $
  *
  */
-package net.sourceforge.plantuml.activitydiagram3.ftile;
+package net.sourceforge.plantuml.activitydiagram3;
 
-import java.awt.geom.Dimension2D;
-import java.util.HashMap;
+import net.sourceforge.plantuml.activitydiagram3.ftile.Ftile;
+import net.sourceforge.plantuml.activitydiagram3.ftile.FtileFactory;
+import net.sourceforge.plantuml.activitydiagram3.ftile.Swimlane;
+import net.sourceforge.plantuml.cucadiagram.Display;
+import net.sourceforge.plantuml.sequencediagram.NotePosition;
 
-import net.sourceforge.plantuml.graphic.AbstractTextBlock;
-import net.sourceforge.plantuml.graphic.StringBounder;
-import net.sourceforge.plantuml.graphic.TextBlock;
-import net.sourceforge.plantuml.graphic.TextBlockUtils;
-import net.sourceforge.plantuml.ugraphic.UGraphic;
-import net.sourceforge.plantuml.ugraphic.UTranslate;
+public class InstructionEnd extends MonoSwimable implements Instruction {
 
-public class TextBlockInterceptorUDrawable extends AbstractTextBlock implements TextBlock {
+	private final LinkRendering inlinkRendering;
 
-	private final TextBlock textBlock;
-
-	public TextBlockInterceptorUDrawable(TextBlock textBlock) {
-		this.textBlock = textBlock;
+	public InstructionEnd(Swimlane swimlane, LinkRendering inlinkRendering) {
+		super(swimlane);
+		this.inlinkRendering = inlinkRendering;
 	}
 
-	public void drawU(UGraphic ug) {
-		textBlock.drawU(new UGraphicInterceptorUDrawable2(ug, new HashMap<String, UTranslate>()));
-		ug.flushUg();
+	public Ftile createFtile(FtileFactory factory) {
+		return factory.end(getSwimlaneIn());
 	}
 
-	public Dimension2D calculateDimension(StringBounder stringBounder) {
-		return TextBlockUtils.getMinMax(this, stringBounder).getDimension();
+	public void add(Instruction other) {
+		throw new UnsupportedOperationException();
+	}
+
+	final public boolean kill() {
+		return false;
+	}
+
+	public LinkRendering getInLinkRendering() {
+		return inlinkRendering;
+	}
+
+	public void addNote(Display note, NotePosition position) {
+		throw new UnsupportedOperationException();
 	}
 
 }
