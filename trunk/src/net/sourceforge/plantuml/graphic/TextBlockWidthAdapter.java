@@ -37,7 +37,7 @@ import java.awt.geom.Dimension2D;
 
 import net.sourceforge.plantuml.ugraphic.UGraphic;
 
-public class TextBlockWidthAdapter implements TextBlock {
+public class TextBlockWidthAdapter extends AbstractTextBlock implements TextBlock {
 
 	private final TextBlockWidth textBlockWidth;
 	private final double width;

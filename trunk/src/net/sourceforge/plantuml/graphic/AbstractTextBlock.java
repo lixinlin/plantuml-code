@@ -28,22 +28,17 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 4749 $
+ * Revision $Revision: 16264 $
  *
  */
-package net.sourceforge.plantuml.cucadiagram;
+package net.sourceforge.plantuml.graphic;
 
 import java.awt.geom.Rectangle2D;
 
-import net.sourceforge.plantuml.FontParam;
-import net.sourceforge.plantuml.ISkinParam;
-import net.sourceforge.plantuml.graphic.StringBounder;
-import net.sourceforge.plantuml.graphic.TextBlock;
+public abstract class AbstractTextBlock implements TextBlock {
 
-public interface BlockMember {
-
-	public TextBlock asTextBlock(FontParam fontParam, ISkinParam skinParam);
-	
-	public Rectangle2D getPosition(String member, StringBounder stringBounder, FontParam fontParam, ISkinParam skinParam);
+	public Rectangle2D getInnerPosition(String member, StringBounder stringBounder) {
+		throw new UnsupportedOperationException(getClass().toString());
+	}
 
 }
