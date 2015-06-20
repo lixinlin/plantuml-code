@@ -27,47 +27,57 @@
  * in the United States and other countries.]
  *
  * Original Author:  Arnaud Roques
- * 
- * Revision $Revision: 16353 $
+ *
+ * Revision $Revision: 3824 $
  *
  */
-package net.sourceforge.plantuml.preproc;
+package net.sourceforge.plantuml;
 
-import java.io.IOException;
-import java.util.regex.Matcher;
+public class LineLocationImpl implements LineLocation {
 
-import net.sourceforge.plantuml.CharSequence2;
-
-class IfManagerPositif extends IfManager {
-
-	public IfManagerPositif(ReadLine source, Defines defines) {
-		super(source, defines);
-	}
+	private final String desc;
+	private final int position;
+	private final LineLocation parent;
 
 	@Override
-	protected CharSequence2 readLineInternal() throws IOException {
-		CharSequence2 s = super.readLineInternal();
-		if (s == null) {
-			return null;
+	public String toString() {
+		if (desc == null) {
+			return "[?] : " + position;
 		}
-		Matcher m = endifPattern.matcher(s);
-		if (m.find()) {
-			return null;
+		return desc + " : " + position;
+	}
+
+	public LineLocationImpl(String desc, LineLocation parent) {
+		this(desc, parent, -1);
+	}
+
+	private LineLocationImpl(String desc, LineLocation parent, int position) {
+		this.parent = parent;
+		this.desc = desc;
+		this.position = position;
+	}
+
+	public LineLocationImpl oneLineRead() {
+		return new LineLocationImpl(desc, parent, position + 1);
+	}
+
+	public static LineLocation fromLine(CharSequence cs) {
+		if (cs instanceof CharSequence2) {
+			return ((CharSequence2) cs).getLocation();
 		}
-		m = elsePattern.matcher(s);
-		if (m.find()) {
-			do {
-				s = readLine();
-				if (s == null) {
-					return null;
-				}
-				m = endifPattern.matcher(s);
-				if (m.find()) {
-					return null;
-				}
-			} while (true);
-		}
-		return s;
+		return null;
+	}
+
+	public int getPosition() {
+		return position;
+	}
+
+	public String getDescription() {
+		return desc;
+	}
+
+	public LineLocation getParent() {
+		return parent;
 	}
 
 }

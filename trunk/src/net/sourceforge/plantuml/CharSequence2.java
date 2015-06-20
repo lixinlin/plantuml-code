@@ -27,31 +27,26 @@
  * in the United States and other countries.]
  *
  * Original Author:  Arnaud Roques
- * 
- * Revision $Revision: 9786 $
+ *
+ * Revision $Revision: 3824 $
  *
  */
-package net.sourceforge.plantuml.preproc;
+package net.sourceforge.plantuml;
 
-import java.util.Collection;
-import java.util.Iterator;
+public interface CharSequence2 extends CharSequence {
 
-public class StackReadLine implements ReadLine {
+	public int length();
 
-	final private Iterator<String> it;
+	public char charAt(int index);
 
-	public StackReadLine(Collection<String> all) {
-		this.it = all.iterator();
-	}
+	public CharSequence2 subSequence(int start, int end);
 
-	public void close() {
-	}
+	public String toString2();
+	
+	public LineLocation getLocation();
 
-	public String readLine() {
-		if (it.hasNext()) {
-			return it.next();
-		}
-		return null;
-	}
+	public CharSequence2 trin();
+
+	public boolean startsWith(String string);
 
 }

@@ -27,47 +27,35 @@
  * in the United States and other countries.]
  *
  * Original Author:  Arnaud Roques
- * 
- * Revision $Revision: 16353 $
+ *
+ * Revision $Revision: 3824 $
  *
  */
-package net.sourceforge.plantuml.preproc;
+package net.sourceforge.plantuml;
 
-import java.io.IOException;
-import java.util.regex.Matcher;
-
-import net.sourceforge.plantuml.CharSequence2;
-
-class IfManagerPositif extends IfManager {
-
-	public IfManagerPositif(ReadLine source, Defines defines) {
-		super(source, defines);
-	}
-
-	@Override
-	protected CharSequence2 readLineInternal() throws IOException {
-		CharSequence2 s = super.readLineInternal();
-		if (s == null) {
-			return null;
-		}
-		Matcher m = endifPattern.matcher(s);
-		if (m.find()) {
-			return null;
-		}
-		m = elsePattern.matcher(s);
-		if (m.find()) {
-			do {
-				s = readLine();
-				if (s == null) {
-					return null;
-				}
-				m = endifPattern.matcher(s);
-				if (m.find()) {
-					return null;
-				}
-			} while (true);
-		}
-		return s;
-	}
+/**
+ * Indicates the location of a line of code within a resource.
+ * The resource maybe a local file or a remote URL.
+ *
+ */
+public interface LineLocation {
+	
+	/**
+	 * Position of the line, starting at 0.
+	 */
+	public int getPosition();
+	
+	/**
+	 * A description of the ressource.
+	 * If the ressource is a file, this is the complete path of the file.
+	 */
+	public String getDescription();
+	
+	/**
+	 * Get the parent of this location.
+	 * If this resource has been included by a !include or !includeurl directive,
+	 * this return the location of the !include line.
+	 */
+	public LineLocation getParent();
 
 }
