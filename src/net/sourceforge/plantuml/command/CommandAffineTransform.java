@@ -46,7 +46,7 @@ public class CommandAffineTransform extends SingleLineCommand<UmlDiagram> {
 
 	@Override
 	protected CommandExecutionResult executeArg(UmlDiagram diagram, List<String> arg) {
-		final String value = arg.get(0);
+		final CharSequence value = arg.get(0);
 		diagram.setAnimation(Collections.singletonList(value));
 		return CommandExecutionResult.ok();
 	}

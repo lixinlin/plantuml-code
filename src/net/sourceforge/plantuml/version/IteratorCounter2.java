@@ -31,51 +31,18 @@
  */
 package net.sourceforge.plantuml.version;
 
-import java.util.List;
+import java.util.Iterator;
 
-public class IteratorCounterImpl implements IteratorCounter {
+import net.sourceforge.plantuml.CharSequence2;
 
-	private final List<String> data;
-	private int nb;
+public interface IteratorCounter2 extends Iterator<CharSequence2> {
 
-	public IteratorCounterImpl(List<String> data) {
-		this(data, 0);
-	}
+	public int currentNum();
 
-	private IteratorCounterImpl(List<String> data, int nb) {
-		this.data = data;
-		this.nb = nb;
-	}
+	public IteratorCounter2 cloneMe();
 
-	public int currentNum() {
-		return nb;
-	}
+	public CharSequence2 peek();
 
-	public boolean hasNext() {
-		return nb < data.size();
-	}
-
-	public String next() {
-		return data.get(nb++);
-	}
-
-	public String peek() {
-		return data.get(nb);
-	}
-
-	public String peekPrevious() {
-		if (nb == 0) {
-			return null;
-		}
-		return data.get(nb - 1);
-	}
-
-	public void remove() {
-		throw new UnsupportedOperationException();
-	}
-
-	public IteratorCounter cloneMe() {
-		return new IteratorCounterImpl(data, nb);
-	}
+	public CharSequence2 peekPrevious();
 
 }

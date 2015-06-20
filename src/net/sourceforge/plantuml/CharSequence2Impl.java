@@ -27,47 +27,64 @@
  * in the United States and other countries.]
  *
  * Original Author:  Arnaud Roques
- * 
- * Revision $Revision: 16353 $
+ *
+ * Revision $Revision: 3824 $
  *
  */
-package net.sourceforge.plantuml.preproc;
+package net.sourceforge.plantuml;
 
-import java.io.IOException;
-import java.util.regex.Matcher;
+public class CharSequence2Impl implements CharSequence2 {
 
-import net.sourceforge.plantuml.CharSequence2;
+	private final CharSequence s;
+	private final LineLocation location;
 
-class IfManagerPositif extends IfManager {
+	public CharSequence2Impl(CharSequence s, LineLocation location) {
+		if (s == null) {
+			throw new IllegalArgumentException();
+		}
+		this.s = s;
+		this.location = location;
+	}
 
-	public IfManagerPositif(ReadLine source, Defines defines) {
-		super(source, defines);
+	public static CharSequence2 errorPreprocessor(CharSequence s, LineLocation lineLocation) {
+		return new CharSequence2Impl(s, lineLocation);
+	}
+
+	public int length() {
+		return s.length();
+	}
+
+	public char charAt(int index) {
+		return s.charAt(index);
+	}
+
+	public CharSequence2 subSequence(int start, int end) {
+		return new CharSequence2Impl(s.subSequence(start, end), location);
+	}
+
+	public CharSequence toCharSequence() {
+		return s;
 	}
 
 	@Override
-	protected CharSequence2 readLineInternal() throws IOException {
-		CharSequence2 s = super.readLineInternal();
-		if (s == null) {
-			return null;
-		}
-		Matcher m = endifPattern.matcher(s);
-		if (m.find()) {
-			return null;
-		}
-		m = elsePattern.matcher(s);
-		if (m.find()) {
-			do {
-				s = readLine();
-				if (s == null) {
-					return null;
-				}
-				m = endifPattern.matcher(s);
-				if (m.find()) {
-					return null;
-				}
-			} while (true);
-		}
-		return s;
+	public String toString() {
+		return s.toString();
+	}
+
+	public String toString2() {
+		return s.toString();
+	}
+
+	public LineLocation getLocation() {
+		return location;
+	}
+
+	public CharSequence2 trin() {
+		return new CharSequence2Impl(StringUtils.trin(s.toString()), location);
+	}
+
+	public boolean startsWith(String start) {
+		return s.toString().startsWith(start);
 	}
 
 }
