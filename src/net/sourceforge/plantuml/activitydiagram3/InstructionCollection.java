@@ -33,57 +33,8 @@
  */
 package net.sourceforge.plantuml.activitydiagram3;
 
-import java.util.Set;
+public interface InstructionCollection extends Instruction {
 
-import net.sourceforge.plantuml.activitydiagram3.ftile.Ftile;
-import net.sourceforge.plantuml.activitydiagram3.ftile.FtileFactory;
-import net.sourceforge.plantuml.activitydiagram3.ftile.Swimlane;
-import net.sourceforge.plantuml.cucadiagram.Display;
-import net.sourceforge.plantuml.sequencediagram.NotePosition;
-
-public class InstructionPartition implements Instruction {
-
-	private final InstructionList list = new InstructionList();
-	private final Instruction parent;
-
-	public InstructionPartition(Instruction parent, String partitionTitle) {
-		this.parent = parent;
-	}
-	
-	public Instruction getParent() {
-		return parent;
-	}
-
-	public Set<Swimlane> getSwimlanes() {
-		return list.getSwimlanes();
-	}
-
-	public Swimlane getSwimlaneIn() {
-		return list.getSwimlaneIn();
-	}
-
-	public Swimlane getSwimlaneOut() {
-		return list.getSwimlaneOut();
-	}
-
-	public Ftile createFtile(FtileFactory factory) {
-		return list.createFtile(factory);
-	}
-
-	public void add(Instruction other) {
-		list.add(other);
-	}
-
-	public boolean kill() {
-		return list.kill();
-	}
-
-	public LinkRendering getInLinkRendering() {
-		return list.getInLinkRendering();
-	}
-
-	public boolean addNote(Display note, NotePosition position) {
-		throw new UnsupportedOperationException();
-	}
+	public Instruction getLast();
 
 }

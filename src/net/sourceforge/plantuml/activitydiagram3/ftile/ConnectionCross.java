@@ -51,10 +51,12 @@ public class ConnectionCross extends AbstractConnection {
 			final Swimlane swimlane1 = getFtile1().getSwimlaneOut();
 			final Swimlane swimlane2 = getFtile2().getSwimlaneIn();
 			if (swimlane1 == null) {
-				throw new IllegalStateException("" + getFtile1().getClass());
+				return;
+				// throw new IllegalStateException("" + getFtile1().getClass());
 			}
 			if (swimlane2 == null) {
-				throw new IllegalStateException("" + getFtile2().getClass());
+				return;
+				// throw new IllegalStateException("" + getFtile2().getClass());
 			}
 			conn.drawTranslate(ug, swimlane1.getTranslate(), swimlane2.getTranslate());
 		}
