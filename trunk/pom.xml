@@ -35,7 +35,7 @@
 
     <groupId>net.sourceforge.plantuml</groupId>
     <artifactId>plantuml</artifactId>
-    <version>8030</version>
+    <version>8031-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>PlantUML</name>
@@ -75,9 +75,9 @@
     </licenses>
 
     <scm>
-        <connection>scm:svn:svn://svn.code.sf.net/p/plantuml/code/tags/plantuml-8030</connection>
-        <developerConnection>scm:svn:https://svn.code.sf.net/p/plantuml/code/tags/plantuml-8030</developerConnection>
-        <url>svn://svn.code.sf.net/p/plantuml/code/tags/plantuml-8030</url>
+        <connection>scm:svn:svn://svn.code.sf.net/p/plantuml/code/trunk</connection>
+        <developerConnection>scm:svn:https://svn.code.sf.net/p/plantuml/code/trunk</developerConnection>
+        <url>svn://svn.code.sf.net/p/plantuml/code/trunk</url>
     </scm>
 
     <issueManagement>
