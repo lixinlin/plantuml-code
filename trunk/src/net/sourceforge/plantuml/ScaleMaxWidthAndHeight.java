@@ -28,29 +28,28 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 8475 $
+ * Revision $Revision: 5401 $
  *
  */
-package net.sourceforge.plantuml.activitydiagram3.ftile.vcompact.cond;
+package net.sourceforge.plantuml;
 
-import net.sourceforge.plantuml.activitydiagram3.ftile.AbstractFtile;
-import net.sourceforge.plantuml.activitydiagram3.ftile.FtileGeometry;
-import net.sourceforge.plantuml.graphic.StringBounder;
+public class ScaleMaxWidthAndHeight implements Scale {
 
-public abstract class FtileDimensionMemoize extends AbstractFtile {
+	private final double maxWidth;
+	private final double maxHeight;
 
-	public FtileDimensionMemoize(boolean shadowing) {
-		super(shadowing);
+	public ScaleMaxWidthAndHeight(double maxWidth, double maxHeight) {
+		this.maxWidth = maxWidth;
+		this.maxHeight = maxHeight;
 	}
 
-	private FtileGeometry calculateDimensionInternal;
-
-	protected final FtileGeometry calculateDimensionInternal(StringBounder stringBounder) {
-		if (calculateDimensionInternal == null) {
-			calculateDimensionInternal = calculateDimensionInternalSlow(stringBounder);
+	public double getScale(double width, double height) {
+		final double scale1 = maxWidth / width;
+		final double scale2 = maxHeight / height;
+		final double min = Math.min(scale1, scale2);
+		if (min > 1) {
+			return 1;
 		}
-		return calculateDimensionInternal;
+		return min;
 	}
-
-	abstract protected FtileGeometry calculateDimensionInternalSlow(StringBounder stringBounder);
 }

@@ -28,29 +28,32 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 8475 $
+ * Revision $Revision: 4246 $
  *
  */
-package net.sourceforge.plantuml.activitydiagram3.ftile.vcompact.cond;
+package net.sourceforge.plantuml;
 
-import net.sourceforge.plantuml.activitydiagram3.ftile.AbstractFtile;
-import net.sourceforge.plantuml.activitydiagram3.ftile.FtileGeometry;
-import net.sourceforge.plantuml.graphic.StringBounder;
+import net.sourceforge.plantuml.cucadiagram.Stereotype;
+import net.sourceforge.plantuml.graphic.HtmlColor;
 
-public abstract class FtileDimensionMemoize extends AbstractFtile {
+public class SkinParamForceColor extends SkinParamDelegator {
 
-	public FtileDimensionMemoize(boolean shadowing) {
-		super(shadowing);
+	final private ColorParam colorParam;;
+	final private HtmlColor color;
+
+	public SkinParamForceColor(ISkinParam skinParam, ColorParam colorParam, HtmlColor color) {
+		super(skinParam);
+		this.color = color;
+		this.colorParam = colorParam;
 	}
 
-	private FtileGeometry calculateDimensionInternal;
-
-	protected final FtileGeometry calculateDimensionInternal(StringBounder stringBounder) {
-		if (calculateDimensionInternal == null) {
-			calculateDimensionInternal = calculateDimensionInternalSlow(stringBounder);
+	public HtmlColor getHtmlColor(ColorParam param, Stereotype stereotype, boolean clickable) {
+		System.err.println("param=" + param);
+		if (colorParam == param) {
+			return color;
 		}
-		return calculateDimensionInternal;
+		// return color;
+		return super.getHtmlColor(param, stereotype, clickable);
 	}
 
-	abstract protected FtileGeometry calculateDimensionInternalSlow(StringBounder stringBounder);
 }
