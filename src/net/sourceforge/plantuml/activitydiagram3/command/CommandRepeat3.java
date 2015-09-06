@@ -40,7 +40,7 @@ import net.sourceforge.plantuml.command.regex.RegexConcat;
 import net.sourceforge.plantuml.command.regex.RegexLeaf;
 import net.sourceforge.plantuml.command.regex.RegexResult;
 import net.sourceforge.plantuml.graphic.HtmlColor;
-import net.sourceforge.plantuml.graphic.HtmlColorUtils;
+import net.sourceforge.plantuml.graphic.color.ColorParser;
 
 public class CommandRepeat3 extends SingleLineCommand2<ActivityDiagram3> {
 
@@ -50,7 +50,7 @@ public class CommandRepeat3 extends SingleLineCommand2<ActivityDiagram3> {
 
 	static RegexConcat getRegexConcat() {
 		return new RegexConcat(new RegexLeaf("^"), //
-				new RegexLeaf("COLOR", "(?:(" + HtmlColorUtils.COLOR_REGEXP + "):)?"), //
+				ColorParser.exp4(), //
 				new RegexLeaf("repeat"), //
 				new RegexLeaf(";?$"));
 	}

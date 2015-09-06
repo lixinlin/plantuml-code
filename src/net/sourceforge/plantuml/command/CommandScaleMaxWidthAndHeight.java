@@ -27,30 +27,29 @@
  * in the United States and other countries.]
  *
  * Original Author:  Arnaud Roques
- *
- * Revision $Revision: 8475 $
+ * 
+ * Revision $Revision: 4762 $
  *
  */
-package net.sourceforge.plantuml.activitydiagram3.ftile.vcompact.cond;
+package net.sourceforge.plantuml.command;
 
-import net.sourceforge.plantuml.activitydiagram3.ftile.AbstractFtile;
-import net.sourceforge.plantuml.activitydiagram3.ftile.FtileGeometry;
-import net.sourceforge.plantuml.graphic.StringBounder;
+import java.util.List;
 
-public abstract class FtileDimensionMemoize extends AbstractFtile {
+import net.sourceforge.plantuml.ScaleMaxWidthAndHeight;
+import net.sourceforge.plantuml.UmlDiagram;
 
-	public FtileDimensionMemoize(boolean shadowing) {
-		super(shadowing);
+public class CommandScaleMaxWidthAndHeight extends SingleLineCommand<UmlDiagram> {
+
+	public CommandScaleMaxWidthAndHeight() {
+		super("(?i)^scale[%s]+max[%s]+([0-9.]+)[%s]*[*x][%s]*([0-9.]+)$");
 	}
 
-	private FtileGeometry calculateDimensionInternal;
-
-	protected final FtileGeometry calculateDimensionInternal(StringBounder stringBounder) {
-		if (calculateDimensionInternal == null) {
-			calculateDimensionInternal = calculateDimensionInternalSlow(stringBounder);
-		}
-		return calculateDimensionInternal;
+	@Override
+	protected CommandExecutionResult executeArg(UmlDiagram diagram, List<String> arg) {
+		final double width = Double.parseDouble(arg.get(0));
+		final double height = Double.parseDouble(arg.get(1));
+		diagram.setScale(new ScaleMaxWidthAndHeight(width, height));
+		return CommandExecutionResult.ok();
 	}
 
-	abstract protected FtileGeometry calculateDimensionInternalSlow(StringBounder stringBounder);
 }
