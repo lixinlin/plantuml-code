@@ -37,8 +37,10 @@ import java.awt.geom.Dimension2D;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sourceforge.plantuml.ColorParam;
 import net.sourceforge.plantuml.FontParam;
 import net.sourceforge.plantuml.ISkinParam;
+import net.sourceforge.plantuml.LineParam;
 import net.sourceforge.plantuml.OptionFlags;
 import net.sourceforge.plantuml.activitydiagram3.Instruction;
 import net.sourceforge.plantuml.activitydiagram3.InstructionList;
@@ -65,6 +67,7 @@ import net.sourceforge.plantuml.graphic.TextBlock;
 import net.sourceforge.plantuml.graphic.TextBlockUtils;
 import net.sourceforge.plantuml.graphic.UGraphicDelegator;
 import net.sourceforge.plantuml.graphic.color.ColorType;
+import net.sourceforge.plantuml.skin.rose.Rose;
 import net.sourceforge.plantuml.svek.UGraphicForSnake;
 import net.sourceforge.plantuml.ugraphic.CompressionTransform;
 import net.sourceforge.plantuml.ugraphic.LimitFinder;
@@ -98,7 +101,7 @@ public class Swimlanes extends AbstractTextBlock implements TextBlock {
 	}
 
 	private FontConfiguration getFontConfiguration() {
-		return new FontConfiguration(skinParam, FontParam.TITLE, null);
+		return new FontConfiguration(skinParam, FontParam.SWIMLANE_TITLE, null);
 	}
 
 	private FtileFactory getFtileFactory() {
@@ -328,7 +331,9 @@ public class Swimlanes extends AbstractTextBlock implements TextBlock {
 	}
 
 	private void drawSeparation(UGraphic ug, double height) {
-		ug.apply(new UStroke(2)).apply(new UChangeColor(HtmlColorUtils.BLACK)).draw(new ULine(0, height));
+		final HtmlColor color = skinParam.getHtmlColor(ColorParam.swimlaneBorder, null, false);
+		final UStroke thickness = Rose.getStroke(skinParam, LineParam.swimlaneBorder, 2);
+		ug.apply(thickness).apply(new UChangeColor(color)).draw(new ULine(0, height));
 	}
 
 	public Dimension2D calculateDimension(StringBounder stringBounder) {

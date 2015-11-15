@@ -67,7 +67,7 @@ import net.sourceforge.plantuml.svek.ConditionStyle;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
 import net.sourceforge.plantuml.ugraphic.UTranslate;
 
-class FtileIfLong2 extends AbstractFtile {
+class FtileIfLongHorizontal extends AbstractFtile {
 
 	private final double xSeparation = 20;
 
@@ -78,7 +78,7 @@ class FtileIfLong2 extends AbstractFtile {
 
 	private final HtmlColor arrowColor;
 
-	private FtileIfLong2(List<Ftile> diamonds, List<Ftile> tiles, Ftile tile2, HtmlColor arrowColor) {
+	private FtileIfLongHorizontal(List<Ftile> diamonds, List<Ftile> tiles, Ftile tile2, HtmlColor arrowColor) {
 		super(tiles.get(0).shadowing() || tile2.shadowing());
 		if (diamonds.size() != tiles.size()) {
 			throw new IllegalArgumentException();
@@ -142,7 +142,6 @@ class FtileIfLong2 extends AbstractFtile {
 		final Ftile tile2 = new FtileMinWidth(branch2.getFtile(), 30);
 
 		List<Ftile> diamonds = new ArrayList<Ftile>();
-		final List<Connection> conns = new ArrayList<Connection>();
 		for (Branch branch : thens) {
 			final TextBlock tb1 = branch.getLabelPositive().create(fc, HorizontalAlignment.LEFT, ftileFactory);
 			final TextBlock tbTest = branch.getLabelTest().create(fc, HorizontalAlignment.LEFT, ftileFactory);
@@ -158,7 +157,8 @@ class FtileIfLong2 extends AbstractFtile {
 
 		diamonds = alignDiamonds(diamonds, ftileFactory.getStringBounder());
 
-		final FtileIfLong2 result = new FtileIfLong2(diamonds, tiles, tile2, arrowColor);
+		final FtileIfLongHorizontal result = new FtileIfLongHorizontal(diamonds, tiles, tile2, arrowColor);
+		final List<Connection> conns = new ArrayList<Connection>();
 
 		for (int i = 0; i < thens.size(); i++) {
 			final Ftile ftile = tiles.get(i);

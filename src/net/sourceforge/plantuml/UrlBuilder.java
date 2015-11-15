@@ -44,7 +44,21 @@ public class UrlBuilder {
 		STRICT, AT_START, ANYWHERE, AT_END
 	}
 
-	private static final String URL_PATTERN = "\\[\\[([%g][^%g]+[%g]|[^{}%s\\]\\[]*)(?:[%s]*\\{((?:[^{}]|\\{[^{}]*\\})+)\\})?(?:[%s]*([^\\]\\[]+))?\\]\\]";
+	private static String level0() {
+		return "(?:[^{}]|\\{[^{}]*\\})+";
+	}
+
+	private static String levelN(int n) {
+		if (n == 0) {
+			return level0();
+		}
+		return "(?:[^{}]|\\{" + levelN(n - 1) + "\\})+";
+	}
+
+	private static final String URL_PATTERN_OLD = "\\[\\[([%g][^%g]+[%g]|[^{}%s\\]\\[]*)(?:[%s]*\\{((?:[^{}]|\\{[^{}]*\\})+)\\})?(?:[%s]*([^\\]\\[]+))?\\]\\]";
+
+	private static final String URL_PATTERN = "\\[\\[([%g][^%g]+[%g]|[^{}%s\\]\\[]*)(?:[%s]*\\{" + "(" + levelN(3)
+			+ ")" + "\\})?(?:[%s]*([^\\]\\[]+))?\\]\\]";
 
 	private final String topurl;
 	private ModeUrl mode;

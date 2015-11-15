@@ -56,7 +56,7 @@ import net.sourceforge.plantuml.graphic.color.Colors;
 public final class FactoryNoteOnLinkCommand implements SingleMultiFactoryCommand<CucaDiagram> {
 
 	private RegexConcat getRegexConcatSingleLine() {
-		return new RegexConcat(new RegexLeaf("^note[%s]+"), //
+		return new RegexConcat(new RegexLeaf("^[%s]*note[%s]+"), //
 				new RegexLeaf("POSITION", "(right|left|top|bottom)?[%s]*on[%s]+link"), //
 				new RegexLeaf("[%s]*"), //
 				color().getRegex(), //
@@ -66,7 +66,7 @@ public final class FactoryNoteOnLinkCommand implements SingleMultiFactoryCommand
 	}
 
 	private RegexConcat getRegexConcatMultiLine() {
-		return new RegexConcat(new RegexLeaf("^note[%s]+"), //
+		return new RegexConcat(new RegexLeaf("^[%s]*note[%s]+"), //
 				new RegexLeaf("POSITION", "(right|left|top|bottom)?[%s]*on[%s]+link"), //
 				new RegexLeaf("[%s]*"), //
 				color().getRegex(), //
@@ -82,7 +82,7 @@ public final class FactoryNoteOnLinkCommand implements SingleMultiFactoryCommand
 
 			@Override
 			public String getPatternEnd() {
-				return "(?i)^end[%s]?note$";
+				return "(?i)^[%s]*end[%s]?note$";
 			}
 
 			public CommandExecutionResult executeNow(final CucaDiagram system, BlocLines lines) {

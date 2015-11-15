@@ -279,6 +279,9 @@ public class EntityImageNote extends AbstractEntityImage implements Stencil {
 	private Shape other;
 
 	public void setOpaleLine(Line line, Shape shape, Shape other) {
+		if (other == null) {
+			throw new IllegalArgumentException();
+		}
 		this.opaleLine = line;
 		this.shape = shape;
 		this.other = other;

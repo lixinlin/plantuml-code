@@ -188,14 +188,18 @@ public final class CucaDiagramFileMakerSvek2 {
 						&& onlyOneLink(link.getEntity1())) {
 					final Shape shape = getBibliotekon().getShape(link.getEntity1());
 					final Shape other = getBibliotekon().getShape(link.getEntity2());
-					((EntityImageNote) shape.getImage()).setOpaleLine(line, shape, other);
-					line.setOpale(true);
+					if (other != null) {
+						((EntityImageNote) shape.getImage()).setOpaleLine(line, shape, other);
+						line.setOpale(true);
+					}
 				} else if (link.getEntity2().isGroup() == false && link.getEntity2().getEntityType() == LeafType.NOTE
 						&& onlyOneLink(link.getEntity2())) {
 					final Shape shape = getBibliotekon().getShape(link.getEntity2());
 					final Shape other = getBibliotekon().getShape(link.getEntity1());
-					((EntityImageNote) shape.getImage()).setOpaleLine(line, shape, other);
-					line.setOpale(true);
+					if (other != null) {
+						((EntityImageNote) shape.getImage()).setOpaleLine(line, shape, other);
+						line.setOpale(true);
+					}
 				}
 			} catch (IllegalStateException e) {
 				e.printStackTrace();

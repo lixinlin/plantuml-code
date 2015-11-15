@@ -69,20 +69,25 @@ public class FtileFactoryDelegatorIf extends FtileFactoryDelegator {
 		final HtmlColor arrowColor = getRose().getHtmlColor(getSkinParam(), ColorParam.activityArrow);
 
 		final FontConfiguration fcArrow = new FontConfiguration(getSkinParam(), FontParam.ACTIVITY_ARROW, null);
+		// .changeColor(fontColor(FontParam.ACTIVITY_DIAMOND));
 		if (thens.size() > 1) {
-			return FtileIfLong2.create(swimlane, borderColor, backColor, arrowColor, getFactory(), conditionStyle,
-					thens, elseBranch, fcArrow, topInlinkRendering, afterEndwhile);
+			if (OptionFlags.USE_IF_VERTICAL)
+				return FtileIfLongVertical.create(swimlane, borderColor, backColor, arrowColor, getFactory(),
+						conditionStyle, thens, elseBranch, fcArrow, topInlinkRendering, afterEndwhile);
+			return FtileIfLongHorizontal.create(swimlane, borderColor, backColor, arrowColor, getFactory(),
+					conditionStyle, thens, elseBranch, fcArrow, topInlinkRendering, afterEndwhile);
 		}
 		final FontParam testParam = conditionStyle == ConditionStyle.INSIDE ? FontParam.ACTIVITY_DIAMOND
 				: FontParam.ACTIVITY_ARROW;
-		final FontConfiguration fcTest = new FontConfiguration(getSkinParam(), testParam, null);
-		if (OptionFlags.USE_NEW_IF) {
-			return ConditionalBuilder.create(swimlane, borderColor, backColor, arrowColor, getFactory(),
-					conditionStyle, thens.get(0), elseBranch, getSkinParam(), getStringBounder(), fcArrow, fcTest);
-		} else {
-			return FtileIfOrigin.create(swimlane, borderColor, backColor, arrowColor, getFactory(), conditionStyle,
-					thens.get(0), elseBranch, getSkinParam(), getStringBounder(), fcArrow, fcTest);
-		}
+		final FontConfiguration fcTest = new FontConfiguration(getSkinParam(), testParam, null)
+				.changeColor(fontColor(FontParam.ACTIVITY_DIAMOND));
+
+		return ConditionalBuilder.create(swimlane, borderColor, backColor, arrowColor, getFactory(), conditionStyle,
+				thens.get(0), elseBranch, getSkinParam(), getStringBounder(), fcArrow, fcTest);
+	}
+
+	private HtmlColor fontColor(FontParam param) {
+		return getSkinParam().getFontHtmlColor(param, null);
 	}
 
 }

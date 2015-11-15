@@ -74,7 +74,7 @@ public final class FactoryNoteOnEntityCommand implements SingleMultiFactoryComma
 	}
 
 	private RegexConcat getRegexConcatSingleLine(IRegex partialPattern) {
-		return new RegexConcat(new RegexLeaf("^note[%s]+"), //
+		return new RegexConcat(new RegexLeaf("^[%s]*note[%s]+"), //
 				new RegexLeaf("POSITION", "(right|left|top|bottom)"), //
 				new RegexOr(//
 						new RegexConcat(new RegexLeaf("[%s]+of[%s]+"), partialPattern), //
@@ -92,7 +92,7 @@ public final class FactoryNoteOnEntityCommand implements SingleMultiFactoryComma
 	}
 
 	private RegexConcat getRegexConcatMultiLine(IRegex partialPattern, final boolean withBracket) {
-		return new RegexConcat(new RegexLeaf("^note[%s]+"), //
+		return new RegexConcat(new RegexLeaf("^[%s]*note[%s]+"), //
 				new RegexLeaf("POSITION", "(right|left|top|bottom)"), //
 				new RegexOr(//
 						new RegexConcat(new RegexLeaf("[%s]+of[%s]+"), partialPattern), //
@@ -124,7 +124,7 @@ public final class FactoryNoteOnEntityCommand implements SingleMultiFactoryComma
 				if (withBracket) {
 					return "(?i)^(\\})$";
 				}
-				return "(?i)^(end[%s]?note)$";
+				return "(?i)^[%s]*(end[%s]?note)$";
 			}
 
 			public CommandExecutionResult executeNow(final AbstractEntityDiagram system, BlocLines lines) {
