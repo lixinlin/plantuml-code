@@ -28,7 +28,7 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 17433 $
+ * Revision $Revision: 17570 $
  * 
  */
 package net.sourceforge.plantuml;
@@ -48,6 +48,7 @@ public enum ColorParam {
 	activityEnd(HtmlColorUtils.BLACK),
 	activityBar(HtmlColorUtils.BLACK),
 	activityArrow(HtmlColorUtils.MY_RED, ColorType.ARROW),
+	swimlaneBorder(HtmlColorUtils.BLACK),
 	
 	usecaseBorder(HtmlColorUtils.MY_RED, ColorType.LINE),
 	usecaseBackground(HtmlColorUtils.MY_YELLOW, ColorType.BACK),

@@ -28,23 +28,15 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 7715 $
- * 
+ * Revision $Revision: 8475 $
+ *
  */
-package net.sourceforge.plantuml;
+package net.sourceforge.plantuml.activitydiagram3.ftile;
 
+import net.sourceforge.plantuml.graphic.StringBounder;
 
-public enum LineParam {
-//	sequenceBoundaryBorder,
-	sequenceActorBorder,
-	sequenceDividerBorder,
-//	sequenceGroupBorder(0.1),
-//	sequenceReferenceBorder(0.1),
-	sequenceLifeLineBorder,
-	sequenceParticipantBorder, noteBorder, sequenceGroupBorder, sequenceReferenceBorder,
-	classBorder, objectBorder,
-	packageBorder,
-	swimlaneBorder;
-//	sequenceBoxBorder(0.1);
-	
+public interface FtileOverpassing extends Ftile {
+
+	public FtileGeometry getOverpassDimension(StringBounder stringBounder);
+
 }

@@ -164,6 +164,7 @@ public class QuoteUtils {
 					"To sculpt an elephant from a big block of marble, just knock away all the bits that don't look like an elephant.", //
 					"Who said you could talk to me? Have I got something on my face ?"
 			);
+	// We've been through worst
 	private QuoteUtils() {
 	}
 

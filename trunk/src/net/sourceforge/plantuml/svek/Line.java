@@ -497,6 +497,7 @@ public class Line implements Moveable, Hideable {
 			if (pos != null) {
 				corner1.manage(pos);
 				this.endHeadLabelXY = TextBlockUtils.asPositionable(endHeadText, stringBounder, pos);
+				corner1.manage(pos.getX() - 15, pos.getY());
 			}
 		}
 
