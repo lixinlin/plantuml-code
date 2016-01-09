@@ -41,6 +41,11 @@
 				<include name="*.png" />
 			</fileset>
 		</copy>
+		<copy todir="build/sprites/archimate">
+			<fileset dir="src/sprites/archimate">
+				<include name="*.png" />
+			</fileset>
+		</copy>
 	</target>
 
 	<target name="dist" depends="compile">

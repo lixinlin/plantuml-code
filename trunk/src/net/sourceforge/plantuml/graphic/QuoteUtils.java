@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009-2014, Arnaud Roques
+ * (C) Copyright 2009-2017, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -165,6 +165,10 @@ public class QuoteUtils {
 					"Who said you could talk to me? Have I got something on my face ?"
 			);
 	// We've been through worst
+	// United we stand
+	// We shall never surrender
+	// Absolute honesty isn't always the most diplomatic nor the safest form of communication with emotional beings.
+	// Humor: seventy-five percent. [Confirmed] Self destruct sequence in T minus 10, 9... 
 	private QuoteUtils() {
 	}
 

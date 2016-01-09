@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009-2014, Arnaud Roques
+ * (C) Copyright 2009-2017, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -42,6 +42,7 @@ import net.sourceforge.plantuml.FontParam;
 import net.sourceforge.plantuml.ISkinParam;
 import net.sourceforge.plantuml.LineParam;
 import net.sourceforge.plantuml.OptionFlags;
+import net.sourceforge.plantuml.Pragma;
 import net.sourceforge.plantuml.activitydiagram3.Instruction;
 import net.sourceforge.plantuml.activitydiagram3.InstructionList;
 import net.sourceforge.plantuml.activitydiagram3.LinkRendering;
@@ -87,6 +88,7 @@ import net.sourceforge.plantuml.ugraphic.UTranslate;
 public class Swimlanes extends AbstractTextBlock implements TextBlock {
 
 	private final ISkinParam skinParam;;
+	private final Pragma pragma;
 
 	private final List<Swimlane> swimlanes = new ArrayList<Swimlane>();
 	private Swimlane currentSwimlane = null;
@@ -96,8 +98,9 @@ public class Swimlanes extends AbstractTextBlock implements TextBlock {
 
 	private LinkRendering nextLinkRenderer;
 
-	public Swimlanes(ISkinParam skinParam) {
+	public Swimlanes(ISkinParam skinParam, Pragma pragma) {
 		this.skinParam = skinParam;
+		this.pragma = pragma;
 	}
 
 	private FontConfiguration getFontConfiguration() {
@@ -108,7 +111,7 @@ public class Swimlanes extends AbstractTextBlock implements TextBlock {
 		FtileFactory factory = new VCompactFactory(skinParam, TextBlockUtils.getDummyStringBounder());
 		factory = new FtileFactoryDelegatorAddUrl(factory, skinParam);
 		factory = new FtileFactoryDelegatorAssembly(factory, skinParam);
-		factory = new FtileFactoryDelegatorIf(factory, skinParam);
+		factory = new FtileFactoryDelegatorIf(factory, skinParam, pragma);
 		factory = new FtileFactoryDelegatorWhile(factory, skinParam);
 		factory = new FtileFactoryDelegatorRepeat(factory, skinParam);
 		factory = new FtileFactoryDelegatorCreateFork(factory, skinParam);
