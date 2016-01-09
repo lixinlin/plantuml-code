@@ -2,7 +2,7 @@
  * PlantUML : a free UML diagram generator
  * ========================================================================
  *
- * (C) Copyright 2009-2014, Arnaud Roques
+ * (C) Copyright 2009-2017, Arnaud Roques
  *
  * Project Info:  http://plantuml.sourceforge.net
  * 
@@ -160,6 +160,8 @@ public final class FactoryNoteOnEntityCommand implements SingleMultiFactoryComma
 			if (cl1 == null) {
 				return CommandExecutionResult.error("Nothing to note to");
 			}
+		} else if (diagram.isGroup(code)) {
+			cl1 = diagram.getGroup(code);
 		} else {
 			cl1 = diagram.getOrCreateLeaf(code, null, null);
 		}
