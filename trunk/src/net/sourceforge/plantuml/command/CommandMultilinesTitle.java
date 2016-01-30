@@ -28,13 +28,16 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 18280 $
+ * Revision $Revision: 18788 $
  *
  */
 package net.sourceforge.plantuml.command;
 
 import net.sourceforge.plantuml.UmlDiagram;
 import net.sourceforge.plantuml.cucadiagram.Display;
+import net.sourceforge.plantuml.cucadiagram.DisplayPositionned;
+import net.sourceforge.plantuml.graphic.HorizontalAlignment;
+import net.sourceforge.plantuml.graphic.VerticalAlignment;
 
 public class CommandMultilinesTitle extends CommandMultilines<UmlDiagram> {
 
@@ -52,7 +55,7 @@ public class CommandMultilinesTitle extends CommandMultilines<UmlDiagram> {
 		lines = lines.removeEmptyColumns();
 		final Display strings = lines.toDisplay();
 		if (strings.size() > 0) {
-			diagram.setTitle(strings);
+			diagram.setTitle(new DisplayPositionned(strings, HorizontalAlignment.CENTER, VerticalAlignment.TOP));
 			return CommandExecutionResult.ok();
 		}
 		return CommandExecutionResult.error("No title defined");

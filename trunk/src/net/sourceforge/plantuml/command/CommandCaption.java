@@ -28,16 +28,30 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 3837 $
+ * Revision $Revision: 18788 $
  *
  */
-package net.sourceforge.plantuml.ugraphic;
+package net.sourceforge.plantuml.command;
 
-import net.sourceforge.plantuml.graphic.HtmlColor;
-import net.sourceforge.plantuml.graphic.TextBlock;
+import java.util.List;
 
-public interface Sprite {
-	
-	public TextBlock asTextBlock(final HtmlColor color);
+import net.sourceforge.plantuml.UmlDiagram;
+import net.sourceforge.plantuml.cucadiagram.Display;
+import net.sourceforge.plantuml.cucadiagram.DisplayPositionned;
+import net.sourceforge.plantuml.graphic.HorizontalAlignment;
+import net.sourceforge.plantuml.graphic.VerticalAlignment;
+
+public class CommandCaption extends SingleLineCommand<UmlDiagram> {
+
+	public CommandCaption() {
+		super("(?i)^caption(?:[%s]*:[%s]*|[%s]+)(.*[\\p{L}0-9_.].*)$");
+	}
+
+	@Override
+	protected CommandExecutionResult executeArg(UmlDiagram diagram, List<String> arg) {
+		diagram.setCaption(new DisplayPositionned(Display.getWithNewlines(arg.get(0)), HorizontalAlignment.CENTER,
+				VerticalAlignment.BOTTOM));
+		return CommandExecutionResult.ok();
+	}
 
 }

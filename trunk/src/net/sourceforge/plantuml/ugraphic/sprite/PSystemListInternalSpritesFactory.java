@@ -28,38 +28,24 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 11025 $
+ * Revision $Revision: 3830 $
  *
  */
-package net.sourceforge.plantuml.creole;
+package net.sourceforge.plantuml.ugraphic.sprite;
 
-import java.awt.geom.Dimension2D;
+import net.sourceforge.plantuml.AbstractPSystem;
+import net.sourceforge.plantuml.StringUtils;
+import net.sourceforge.plantuml.command.PSystemSingleLineFactory;
 
-import net.sourceforge.plantuml.graphic.FontConfiguration;
-import net.sourceforge.plantuml.graphic.StringBounder;
-import net.sourceforge.plantuml.graphic.TextBlock;
-import net.sourceforge.plantuml.ugraphic.UGraphic;
+public class PSystemListInternalSpritesFactory extends PSystemSingleLineFactory {
 
-public class AtomSprite implements Atom {
-
-	private final TextBlock sprite;
-	private final FontConfiguration fontConfiguration;
-
-	public AtomSprite(TextBlock sprite, FontConfiguration fontConfiguration) {
-		this.sprite = sprite;
-		this.fontConfiguration = fontConfiguration;
+	@Override
+	protected AbstractPSystem executeLine(String line) {
+		final String lineLower = StringUtils.goLowerCase(line);
+		if (lineLower.startsWith("listsprite")) {
+			return new PSystemListInternalSprites();
+		}
+		return null;
 	}
 
-	public Dimension2D calculateDimension(StringBounder stringBounder) {
-		return sprite.calculateDimension(stringBounder);
-	}
-
-	public double getStartingAltitude(StringBounder stringBounder) {
-		return -3;
-	}
-
-	public void drawU(UGraphic ug) {
-		sprite.drawU(ug);
-	}
-	
 }
