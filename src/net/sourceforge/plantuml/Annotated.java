@@ -27,39 +27,24 @@
  * in the United States and other countries.]
  *
  * Original Author:  Arnaud Roques
- * 
- * Revision $Revision: 11025 $
+ *
+ * Revision $Revision: 18790 $
  *
  */
-package net.sourceforge.plantuml.creole;
+package net.sourceforge.plantuml;
 
-import java.awt.geom.Dimension2D;
+import net.sourceforge.plantuml.cucadiagram.DisplayPositionned;
 
-import net.sourceforge.plantuml.graphic.FontConfiguration;
-import net.sourceforge.plantuml.graphic.StringBounder;
-import net.sourceforge.plantuml.graphic.TextBlock;
-import net.sourceforge.plantuml.ugraphic.UGraphic;
+public interface Annotated {
 
-public class AtomSprite implements Atom {
+	public DisplayPositionned getTitle();
 
-	private final TextBlock sprite;
-	private final FontConfiguration fontConfiguration;
+	public DisplayPositionned getCaption();
 
-	public AtomSprite(TextBlock sprite, FontConfiguration fontConfiguration) {
-		this.sprite = sprite;
-		this.fontConfiguration = fontConfiguration;
-	}
+	public DisplayPositionned getLegend();
 
-	public Dimension2D calculateDimension(StringBounder stringBounder) {
-		return sprite.calculateDimension(stringBounder);
-	}
+	public DisplayPositionned getHeader();
 
-	public double getStartingAltitude(StringBounder stringBounder) {
-		return -3;
-	}
+	public DisplayPositionned getFooter();
 
-	public void drawU(UGraphic ug) {
-		sprite.drawU(ug);
-	}
-	
 }

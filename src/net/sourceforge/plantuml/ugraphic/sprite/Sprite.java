@@ -28,38 +28,16 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 11025 $
+ * Revision $Revision: 3837 $
  *
  */
-package net.sourceforge.plantuml.creole;
+package net.sourceforge.plantuml.ugraphic.sprite;
 
-import java.awt.geom.Dimension2D;
-
-import net.sourceforge.plantuml.graphic.FontConfiguration;
-import net.sourceforge.plantuml.graphic.StringBounder;
+import net.sourceforge.plantuml.graphic.HtmlColor;
 import net.sourceforge.plantuml.graphic.TextBlock;
-import net.sourceforge.plantuml.ugraphic.UGraphic;
 
-public class AtomSprite implements Atom {
-
-	private final TextBlock sprite;
-	private final FontConfiguration fontConfiguration;
-
-	public AtomSprite(TextBlock sprite, FontConfiguration fontConfiguration) {
-		this.sprite = sprite;
-		this.fontConfiguration = fontConfiguration;
-	}
-
-	public Dimension2D calculateDimension(StringBounder stringBounder) {
-		return sprite.calculateDimension(stringBounder);
-	}
-
-	public double getStartingAltitude(StringBounder stringBounder) {
-		return -3;
-	}
-
-	public void drawU(UGraphic ug) {
-		sprite.drawU(ug);
-	}
+public interface Sprite {
 	
+	public TextBlock asTextBlock(final HtmlColor color);
+
 }

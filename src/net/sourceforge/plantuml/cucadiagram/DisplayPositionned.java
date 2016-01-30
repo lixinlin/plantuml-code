@@ -28,38 +28,49 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 11025 $
+ * Revision $Revision: 8218 $
  *
  */
-package net.sourceforge.plantuml.creole;
+package net.sourceforge.plantuml.cucadiagram;
 
-import java.awt.geom.Dimension2D;
+import net.sourceforge.plantuml.graphic.HorizontalAlignment;
+import net.sourceforge.plantuml.graphic.VerticalAlignment;
 
-import net.sourceforge.plantuml.graphic.FontConfiguration;
-import net.sourceforge.plantuml.graphic.StringBounder;
-import net.sourceforge.plantuml.graphic.TextBlock;
-import net.sourceforge.plantuml.ugraphic.UGraphic;
+public class DisplayPositionned {
 
-public class AtomSprite implements Atom {
+	private final Display display;
+	private final HorizontalAlignment horizontalAlignment;
+	private final VerticalAlignment verticalAlignment;
 
-	private final TextBlock sprite;
-	private final FontConfiguration fontConfiguration;
-
-	public AtomSprite(TextBlock sprite, FontConfiguration fontConfiguration) {
-		this.sprite = sprite;
-		this.fontConfiguration = fontConfiguration;
+	public DisplayPositionned(Display display, HorizontalAlignment horizontalAlignment,
+			VerticalAlignment verticalAlignment) {
+		this.display = display;
+		this.horizontalAlignment = horizontalAlignment;
+		this.verticalAlignment = verticalAlignment;
 	}
 
-	public Dimension2D calculateDimension(StringBounder stringBounder) {
-		return sprite.calculateDimension(stringBounder);
+	public static DisplayPositionned none(HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment) {
+		return new DisplayPositionned(Display.NULL, horizontalAlignment, verticalAlignment);
 	}
 
-	public double getStartingAltitude(StringBounder stringBounder) {
-		return -3;
+	public final Display getDisplay() {
+		return display;
 	}
 
-	public void drawU(UGraphic ug) {
-		sprite.drawU(ug);
+	public final HorizontalAlignment getHorizontalAlignment() {
+		return horizontalAlignment;
 	}
-	
+
+	public final VerticalAlignment getVerticalAlignment() {
+		return verticalAlignment;
+	}
+
+	public static boolean isNull(DisplayPositionned data) {
+		return data == null || Display.isNull(data.display);
+	}
+
+	public boolean hasUrl() {
+		return display.hasUrl();
+	}
+
 }

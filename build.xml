@@ -54,6 +54,8 @@
 		<jar jarfile="plantuml.jar" basedir="build">
 			<manifest>
 				<attribute name="Main-Class" value="net.sourceforge.plantuml.Run" />
+				<attribute name="SplashScreen-Image" value="net/sourceforge/plantuml/version/logo.png" />
+				<attribute name="Class-Path" value="batik-all-1.7.jar fop.jar" />
 			</manifest>
 		</jar>
 		<delete dir="build" />

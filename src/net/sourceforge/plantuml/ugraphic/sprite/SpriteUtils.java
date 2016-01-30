@@ -31,12 +31,14 @@
  * Revision $Revision: 3837 $
  *
  */
-package net.sourceforge.plantuml.ugraphic;
+package net.sourceforge.plantuml.ugraphic.sprite;
 
 import java.awt.image.BufferedImage;
 import java.util.List;
 
 public class SpriteUtils {
+
+	public static final String SPRITE_NAME = "[-\\p{L}0-9_/]+";
 
 	private SpriteUtils() {
 	}
