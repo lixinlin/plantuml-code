@@ -28,50 +28,44 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 11025 $
+ * Revision $Revision: 4041 $
  *
  */
-package net.sourceforge.plantuml.creole;
+package net.sourceforge.plantuml.cute;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.List;
 
-import net.sourceforge.plantuml.StringUtils;
-import net.sourceforge.plantuml.command.regex.MyPattern;
-import net.sourceforge.plantuml.graphic.Splitter;
+import net.sourceforge.plantuml.geom.LineSegmentDouble;
+import net.sourceforge.plantuml.ugraphic.UTranslate;
 
-public class CommandCreoleImg implements Command {
+public class CrossingSegment {
 
-	private final Pattern pattern;
+	private final Balloon balloon;
+	private final LineSegmentDouble segment;
 
-	private CommandCreoleImg(String p) {
-		this.pattern = MyPattern.cmpile(p);
+	public CrossingSegment(Balloon balloon, LineSegmentDouble segment) {
+		this.balloon = balloon;
+		this.segment = segment;
 	}
 
-	public static Command create() {
-		return new CommandCreoleImg("^(?i)(" + Splitter.imgPatternNoSrcColon + ")");
-	}
+	public List<Point2D> intersection() {
+		final List<Point2D> result = new ArrayList<Point2D>();
 
-	public int matchingSize(String line) {
-		final Matcher m = pattern.matcher(line);
-		if (m.find() == false) {
-			return 0;
-		}
-		return m.group(1).length();
-	}
+		final UTranslate tr = new UTranslate(balloon.getCenter());
+		final UTranslate trInverse = tr.reverse();
 
-	public String executeAndGetRemaining(String line, StripeSimple stripe) {
-		final Matcher m = pattern.matcher(line);
-		if (m.find() == false) {
-			throw new IllegalStateException();
+		final CrossingSimple simple = new CrossingSimple(balloon.getRadius(),
+				new InfiniteLine(segment).translate(trInverse));
+		for (Point2D pt : simple.intersection()) {
+			pt = tr.getTranslated(pt);
+			if (segment.isPointOnSegment(pt)) {
+				result.add(pt);
+			}
 		}
-		String src = m.group(2);
-		if (src.toLowerCase().startsWith("src=")) {
-			src = src.substring(4);
-		}
-		src = StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(src, "\"");
-		stripe.addImage(src);
-		return line.substring(m.group(1).length());
+
+		return result;
 	}
 
 }

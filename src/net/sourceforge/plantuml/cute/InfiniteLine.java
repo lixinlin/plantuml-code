@@ -35,6 +35,7 @@ package net.sourceforge.plantuml.cute;
 
 import java.awt.geom.Point2D;
 
+import net.sourceforge.plantuml.geom.AbstractLineSegment;
 import net.sourceforge.plantuml.ugraphic.UTranslate;
 
 public class InfiniteLine {
@@ -45,6 +46,10 @@ public class InfiniteLine {
 	public InfiniteLine(Point2D a, Point2D b) {
 		this.a = a;
 		this.b = b;
+	}
+
+	public InfiniteLine(AbstractLineSegment segment) {
+		this(segment.getP1(), segment.getP2());
 	}
 
 	@Override
