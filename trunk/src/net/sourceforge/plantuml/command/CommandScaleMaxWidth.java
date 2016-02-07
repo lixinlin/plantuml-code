@@ -28,50 +28,27 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 11025 $
+ * Revision $Revision: 4762 $
  *
  */
-package net.sourceforge.plantuml.creole;
+package net.sourceforge.plantuml.command;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.List;
 
-import net.sourceforge.plantuml.StringUtils;
-import net.sourceforge.plantuml.command.regex.MyPattern;
-import net.sourceforge.plantuml.graphic.Splitter;
+import net.sourceforge.plantuml.ScaleMaxWidth;
+import net.sourceforge.plantuml.UmlDiagram;
 
-public class CommandCreoleImg implements Command {
+public class CommandScaleMaxWidth extends SingleLineCommand<UmlDiagram> {
 
-	private final Pattern pattern;
-
-	private CommandCreoleImg(String p) {
-		this.pattern = MyPattern.cmpile(p);
+	public CommandScaleMaxWidth() {
+		super("(?i)^scale[%s]+max[%s]+([0-9.]+)[%s]+width$");
 	}
 
-	public static Command create() {
-		return new CommandCreoleImg("^(?i)(" + Splitter.imgPatternNoSrcColon + ")");
-	}
-
-	public int matchingSize(String line) {
-		final Matcher m = pattern.matcher(line);
-		if (m.find() == false) {
-			return 0;
-		}
-		return m.group(1).length();
-	}
-
-	public String executeAndGetRemaining(String line, StripeSimple stripe) {
-		final Matcher m = pattern.matcher(line);
-		if (m.find() == false) {
-			throw new IllegalStateException();
-		}
-		String src = m.group(2);
-		if (src.toLowerCase().startsWith("src=")) {
-			src = src.substring(4);
-		}
-		src = StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(src, "\"");
-		stripe.addImage(src);
-		return line.substring(m.group(1).length());
+	@Override
+	protected CommandExecutionResult executeArg(UmlDiagram diagram, List<String> arg) {
+		final double width = Double.parseDouble(arg.get(0));
+		diagram.setScale(new ScaleMaxWidth(width));
+		return CommandExecutionResult.ok();
 	}
 
 }

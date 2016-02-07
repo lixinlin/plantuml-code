@@ -27,51 +27,25 @@
  * in the United States and other countries.]
  *
  * Original Author:  Arnaud Roques
- * 
- * Revision $Revision: 11025 $
+ *
+ * Revision $Revision: 5401 $
  *
  */
-package net.sourceforge.plantuml.creole;
+package net.sourceforge.plantuml;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+public class ScaleMaxWidth implements Scale {
 
-import net.sourceforge.plantuml.StringUtils;
-import net.sourceforge.plantuml.command.regex.MyPattern;
-import net.sourceforge.plantuml.graphic.Splitter;
+	private final double maxWidth;
 
-public class CommandCreoleImg implements Command {
-
-	private final Pattern pattern;
-
-	private CommandCreoleImg(String p) {
-		this.pattern = MyPattern.cmpile(p);
+	public ScaleMaxWidth(double maxWidth) {
+		this.maxWidth = maxWidth;
 	}
 
-	public static Command create() {
-		return new CommandCreoleImg("^(?i)(" + Splitter.imgPatternNoSrcColon + ")");
-	}
-
-	public int matchingSize(String line) {
-		final Matcher m = pattern.matcher(line);
-		if (m.find() == false) {
-			return 0;
+	public double getScale(double width, double height) {
+		final double result = maxWidth / width;
+		if (result > 1) {
+			return 1;
 		}
-		return m.group(1).length();
+		return result;
 	}
-
-	public String executeAndGetRemaining(String line, StripeSimple stripe) {
-		final Matcher m = pattern.matcher(line);
-		if (m.find() == false) {
-			throw new IllegalStateException();
-		}
-		String src = m.group(2);
-		if (src.toLowerCase().startsWith("src=")) {
-			src = src.substring(4);
-		}
-		src = StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(src, "\"");
-		stripe.addImage(src);
-		return line.substring(m.group(1).length());
-	}
-
 }
