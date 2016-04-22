@@ -28,52 +28,42 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 19570 $
+ * Revision $Revision: 5079 $
  *
  */
-package net.sourceforge.plantuml.ugraphic;
+package net.sourceforge.plantuml.xmlsc;
 
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
-import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.OutputStream;
 
-public class UImage implements UShape {
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 
-	private final BufferedImage image;
+import net.sourceforge.plantuml.Log;
+import net.sourceforge.plantuml.statediagram.StateDiagram;
 
-	public UImage(BufferedImage image) {
-		this.image = image;
+public final class StateDiagramScxmlMaker {
+
+	private final StateDiagram diagram;
+
+	public StateDiagramScxmlMaker(StateDiagram diagram) throws IOException {
+		this.diagram = diagram;
 	}
 
-	public UImage(BufferedImage before, double scale) {
-		if (scale == 1) {
-			this.image = before;
-			return;
+	public void createFiles(OutputStream fos) throws IOException {
+		try {
+			final ScxmlStateDiagramStandard xmi;
+			xmi = new ScxmlStateDiagramStandard(diagram);
+			xmi.transformerXml(fos);
+		} catch (ParserConfigurationException e) {
+			Log.error(e.toString());
+			e.printStackTrace();
+			throw new IOException(e.toString());
+		} catch (TransformerException e) {
+			Log.error(e.toString());
+			e.printStackTrace();
+			throw new IOException(e.toString());
 		}
-
-		final int w = (int) Math.round(before.getWidth() * scale);
-		final int h = (int) Math.round(before.getHeight() * scale);
-		final BufferedImage after = new BufferedImage(w, h, before.getType());
-		final AffineTransform at = new AffineTransform();
-		at.scale(scale, scale);
-		final AffineTransformOp scaleOp = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
-		this.image = scaleOp.filter(before, after);
-	}
-
-	public UImage scale(double scale) {
-		return new UImage(image, scale);
-	}
-
-	public final BufferedImage getImage() {
-		return image;
-	}
-
-	public double getWidth() {
-		return image.getWidth()-1;
-	}
-
-	public double getHeight() {
-		return image.getHeight()-1;
 	}
 
 }

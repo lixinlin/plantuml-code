@@ -28,52 +28,39 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 19570 $
+ * Revision $Revision: 8066 $
  *
  */
-package net.sourceforge.plantuml.ugraphic;
+package net.sourceforge.plantuml.graphic;
 
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
-import java.awt.image.BufferedImage;
+import java.awt.geom.Dimension2D;
 
-public class UImage implements UShape {
+import net.sourceforge.plantuml.Dimension2DDouble;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
 
-	private final BufferedImage image;
+class USymbolTogether extends USymbol {
 
-	public UImage(BufferedImage image) {
-		this.image = image;
+	@Override
+	public SkinParameter getSkinParameter() {
+		return SkinParameter.STORAGE;
 	}
 
-	public UImage(BufferedImage before, double scale) {
-		if (scale == 1) {
-			this.image = before;
-			return;
-		}
-
-		final int w = (int) Math.round(before.getWidth() * scale);
-		final int h = (int) Math.round(before.getHeight() * scale);
-		final BufferedImage after = new BufferedImage(w, h, before.getType());
-		final AffineTransform at = new AffineTransform();
-		at.scale(scale, scale);
-		final AffineTransformOp scaleOp = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
-		this.image = scaleOp.filter(before, after);
+	public TextBlock asSmall(TextBlock name, final TextBlock label, final TextBlock stereotype,
+			final SymbolContext symbolContext) {
+		throw new UnsupportedOperationException();
 	}
 
-	public UImage scale(double scale) {
-		return new UImage(image, scale);
-	}
+	public TextBlock asBig(final TextBlock title, final TextBlock stereotype, final double width, final double height,
+			final SymbolContext symbolContext) {
+		return new AbstractTextBlock() {
 
-	public final BufferedImage getImage() {
-		return image;
-	}
+			public void drawU(UGraphic ug) {
+			}
 
-	public double getWidth() {
-		return image.getWidth()-1;
-	}
-
-	public double getHeight() {
-		return image.getHeight()-1;
+			public Dimension2D calculateDimension(StringBounder stringBounder) {
+				return new Dimension2DDouble(width, height);
+			}
+		};
 	}
 
 }

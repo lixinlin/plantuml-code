@@ -28,52 +28,23 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 19570 $
+ * Revision $Revision: 3837 $
  *
  */
-package net.sourceforge.plantuml.ugraphic;
+package net.sourceforge.plantuml.dedication;
 
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
-import java.awt.image.BufferedImage;
+import net.sourceforge.plantuml.AbstractPSystem;
+import net.sourceforge.plantuml.command.PSystemSingleLineFactory;
 
-public class UImage implements UShape {
+public class PSystemDedicationFactory extends PSystemSingleLineFactory {
 
-	private final BufferedImage image;
-
-	public UImage(BufferedImage image) {
-		this.image = image;
-	}
-
-	public UImage(BufferedImage before, double scale) {
-		if (scale == 1) {
-			this.image = before;
-			return;
+	@Override
+	protected AbstractPSystem executeLine(String line) {
+		final Dedication dedication = Dedications.get(line);
+		if (dedication != null) {
+			return new PSystemDedication(dedication, Dedications.keepLetter(line));
 		}
-
-		final int w = (int) Math.round(before.getWidth() * scale);
-		final int h = (int) Math.round(before.getHeight() * scale);
-		final BufferedImage after = new BufferedImage(w, h, before.getType());
-		final AffineTransform at = new AffineTransform();
-		at.scale(scale, scale);
-		final AffineTransformOp scaleOp = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
-		this.image = scaleOp.filter(before, after);
-	}
-
-	public UImage scale(double scale) {
-		return new UImage(image, scale);
-	}
-
-	public final BufferedImage getImage() {
-		return image;
-	}
-
-	public double getWidth() {
-		return image.getWidth()-1;
-	}
-
-	public double getHeight() {
-		return image.getHeight()-1;
+		return null;
 	}
 
 }

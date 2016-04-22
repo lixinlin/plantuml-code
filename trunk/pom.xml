@@ -30,7 +30,8 @@
 	Script Author: Julien Eluard
 	
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.sourceforge.plantuml</groupId>
@@ -111,10 +112,12 @@
             <resource>
                 <directory>${project.basedir}/src</directory>
                 <includes>
-                    <include>net/sourceforge/plantuml/version/logo.png</include>
-                    <include>net/sourceforge/plantuml/version/favicon.png</include>
+                    <include>net/sourceforge/plantuml/version/*.png</include>
+                    <include>net/sourceforge/plantuml/openiconic/data/*.txt</include>
                     <include>net/sourceforge/plantuml/openiconic/data/*.svg</include>
                     <include>net/sourceforge/plantuml/fun/*.png</include>
+                    <include>sprite/archimate/*.png</include>
+                    <include>net/sourceforge/plantuml/dedication/*.png</include>
                 </includes>
             </resource>
         </resources>        
