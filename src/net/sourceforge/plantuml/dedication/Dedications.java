@@ -28,52 +28,51 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 19570 $
+ * Revision $Revision: 4041 $
  *
  */
-package net.sourceforge.plantuml.ugraphic;
+package net.sourceforge.plantuml.dedication;
 
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
-import java.awt.image.BufferedImage;
+import java.util.HashMap;
+import java.util.Map;
 
-public class UImage implements UShape {
+import net.sourceforge.plantuml.SignatureUtils;
 
-	private final BufferedImage image;
+public class Dedications {
 
-	public UImage(BufferedImage image) {
-		this.image = image;
+	private static final Map<String, Dedication> all = new HashMap<String, Dedication>();
+
+	static {
+		addNormal("Write your own dedication!");
+		addCrypted("RyHcSMMTGTW-ZlDelq18AwlwfbZZdfo-Yo0ketavjyFxRAFoKx1mAI032reWO3p4Mog-AV6jFqjXfi8G6pKo7G00");
 	}
 
-	public UImage(BufferedImage before, double scale) {
-		if (scale == 1) {
-			this.image = before;
-			return;
+	private static void addNormal(String sentence) {
+		final String signature = SignatureUtils.getSignatureSha512(keepLetter(sentence));
+		addCrypted(signature);
+	}
+
+	private static void addCrypted(String signature) {
+		all.put(signature, new Dedication(signature));
+	}
+
+	private Dedications() {
+	}
+
+	public static Dedication get(String line) {
+		final String signature = SignatureUtils.getSignatureSha512(keepLetter(line));
+		return all.get(signature);
+	}
+
+	public static String keepLetter(String s) {
+		final StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < s.length(); i++) {
+			final char c = s.charAt(i);
+			if (Character.isLetter(c)) {
+				sb.append(c);
+			}
 		}
-
-		final int w = (int) Math.round(before.getWidth() * scale);
-		final int h = (int) Math.round(before.getHeight() * scale);
-		final BufferedImage after = new BufferedImage(w, h, before.getType());
-		final AffineTransform at = new AffineTransform();
-		at.scale(scale, scale);
-		final AffineTransformOp scaleOp = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
-		this.image = scaleOp.filter(before, after);
-	}
-
-	public UImage scale(double scale) {
-		return new UImage(image, scale);
-	}
-
-	public final BufferedImage getImage() {
-		return image;
-	}
-
-	public double getWidth() {
-		return image.getWidth()-1;
-	}
-
-	public double getHeight() {
-		return image.getHeight()-1;
+		return sb.toString().toUpperCase();
 	}
 
 }

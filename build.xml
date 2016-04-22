@@ -46,6 +46,11 @@
 				<include name="*.png" />
 			</fileset>
 		</copy>
+		<copy todir="build/net/sourceforge/plantuml/dedication">
+			<fileset dir="src/net/sourceforge/plantuml/dedication">
+				<include name="*.png" />
+			</fileset>
+		</copy>
 	</target>
 
 	<target name="dist" depends="compile">
