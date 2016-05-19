@@ -27,35 +27,22 @@
  * in the United States and other countries.]
  *
  * Original Author:  Arnaud Roques
- *
- * Revision $Revision: 8475 $
+ * 
+ * Revision $Revision: 19109 $
  *
  */
-package net.sourceforge.plantuml.activitydiagram3.ftile.vcompact;
+package net.sourceforge.plantuml.sequencediagram;
 
-import net.sourceforge.plantuml.ISkinParam;
-import net.sourceforge.plantuml.activitydiagram3.ftile.Ftile;
-import net.sourceforge.plantuml.activitydiagram3.ftile.FtileFactory;
-import net.sourceforge.plantuml.activitydiagram3.ftile.FtileFactoryDelegator;
-import net.sourceforge.plantuml.activitydiagram3.ftile.Swimlane;
-import net.sourceforge.plantuml.cucadiagram.Display;
-import net.sourceforge.plantuml.sequencediagram.NotePosition;
-import net.sourceforge.plantuml.sequencediagram.NoteType;
+import net.sourceforge.plantuml.StringUtils;
 
-public class FtileFactoryDelegatorAddNote extends FtileFactoryDelegator {
+public enum NoteType {
+	NOTE, FLOATING_NOTE;
 
-	public FtileFactoryDelegatorAddNote(FtileFactory factory, ISkinParam skinParam) {
-		super(factory, skinParam);
+	public static NoteType defaultType(String s) {
+		if (s == null) {
+			return NoteType.NOTE;
+		}
+		return NoteType.valueOf(StringUtils.goUpperCase(s).replace(' ', '_'));
 	}
 
-	@Override
-	public Ftile addNote(Ftile ftile, Display note, NotePosition notePosition, NoteType type, Swimlane swimlane) {
-		if (note == null) {
-			throw new IllegalArgumentException();
-		}
-		if (ftile == null) {
-			return new FtileNoteAlone(getSkinParam().shadowing(), note, getSkinParam(), type == NoteType.NOTE, swimlane);
-		}
-		return new FtileWithNoteOpale(ftile, note, notePosition, type, getSkinParam(), true);
-	}
 }

@@ -28,34 +28,36 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 8475 $
+ * Revision $Revision: 9786 $
  *
  */
-package net.sourceforge.plantuml.activitydiagram3.ftile.vcompact;
+package net.sourceforge.plantuml.activitydiagram3;
 
-import net.sourceforge.plantuml.ISkinParam;
 import net.sourceforge.plantuml.activitydiagram3.ftile.Ftile;
 import net.sourceforge.plantuml.activitydiagram3.ftile.FtileFactory;
-import net.sourceforge.plantuml.activitydiagram3.ftile.FtileFactoryDelegator;
 import net.sourceforge.plantuml.activitydiagram3.ftile.Swimlane;
 import net.sourceforge.plantuml.cucadiagram.Display;
 import net.sourceforge.plantuml.sequencediagram.NotePosition;
 import net.sourceforge.plantuml.sequencediagram.NoteType;
 
-public class FtileFactoryDelegatorAddNote extends FtileFactoryDelegator {
+public class WithNote {
 
-	public FtileFactoryDelegatorAddNote(FtileFactory factory, ISkinParam skinParam) {
-		super(factory, skinParam);
+	private Display note;
+	private NotePosition notePosition;
+	private NoteType type;
+
+	public boolean addNote(Display note, NotePosition position, NoteType type) {
+		this.note = note;
+		this.notePosition = position;
+		this.type = type;
+		return true;
 	}
 
-	@Override
-	public Ftile addNote(Ftile ftile, Display note, NotePosition notePosition, NoteType type, Swimlane swimlane) {
-		if (note == null) {
-			throw new IllegalArgumentException();
+	final protected Ftile eventuallyAddNote(FtileFactory factory, Ftile ftile, Swimlane swimlane) {
+		if (note != null) {
+			return factory.addNote(ftile, note, notePosition, type, swimlane);
 		}
-		if (ftile == null) {
-			return new FtileNoteAlone(getSkinParam().shadowing(), note, getSkinParam(), type == NoteType.NOTE, swimlane);
-		}
-		return new FtileWithNoteOpale(ftile, note, notePosition, type, getSkinParam(), true);
+		return ftile;
 	}
+
 }

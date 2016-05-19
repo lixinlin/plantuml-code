@@ -36,14 +36,10 @@ package net.sourceforge.plantuml.activitydiagram3;
 import net.sourceforge.plantuml.activitydiagram3.ftile.Ftile;
 import net.sourceforge.plantuml.activitydiagram3.ftile.FtileFactory;
 import net.sourceforge.plantuml.activitydiagram3.ftile.Swimlane;
-import net.sourceforge.plantuml.cucadiagram.Display;
-import net.sourceforge.plantuml.sequencediagram.NotePosition;
 
 public class InstructionStop extends MonoSwimable implements Instruction {
 
 	private final LinkRendering inlinkRendering;
-	private Display note;
-	private NotePosition notePosition;
 
 	public InstructionStop(Swimlane swimlane, LinkRendering inlinkRendering) {
 		super(swimlane);
@@ -55,9 +51,7 @@ public class InstructionStop extends MonoSwimable implements Instruction {
 
 	public Ftile createFtile(FtileFactory factory) {
 		Ftile result = factory.stop(getSwimlaneIn());
-		if (note != null) {
-			result = factory.addNote(result, note, notePosition);
-		}
+		result = eventuallyAddNote(factory, result, result.getSwimlaneIn());
 		return result;
 	}
 
@@ -71,12 +65,6 @@ public class InstructionStop extends MonoSwimable implements Instruction {
 
 	public LinkRendering getInLinkRendering() {
 		return inlinkRendering;
-	}
-
-	public boolean addNote(Display note, NotePosition position) {
-		this.note = note;
-		this.notePosition = position;
-		return true;
 	}
 
 }
