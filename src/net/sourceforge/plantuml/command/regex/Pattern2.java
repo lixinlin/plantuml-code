@@ -28,35 +28,27 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 3834 $
+ * Revision $Revision: 4762 $
  *
  */
-package net.sourceforge.plantuml.graphic;
+package net.sourceforge.plantuml.command.regex;
 
-import net.sourceforge.plantuml.command.regex.Matcher2;
-import net.sourceforge.plantuml.command.regex.MyPattern;
-import net.sourceforge.plantuml.command.regex.Pattern2;
+import java.util.regex.Pattern;
 
-class ColorChange implements FontChange {
+public class Pattern2 {
 
-	static private final Pattern2 colorPattern = MyPattern.cmpile("(?i)" + Splitter.fontColorPattern2);
+	private final Pattern pattern;
 
-	private final HtmlColor color;
-
-	ColorChange(String s) {
-		final Matcher2 matcherColor = colorPattern.matcher(s);
-		if (matcherColor.find() == false) {
-			throw new IllegalArgumentException();
-		}
-		this.color = HtmlColorSet.getInstance().getColorIfValid(matcherColor.group(1));
+	public Pattern2(Pattern pattern) {
+		this.pattern = pattern;
 	}
 
-	HtmlColor getColor() {
-		return color;
+	public Matcher2 matcher(CharSequence input) {
+		return Matcher2.build(pattern, input);
 	}
 
-	public FontConfiguration apply(FontConfiguration initial) {
-		return initial.changeColor(color);
+	public String pattern() {
+		return pattern.pattern();
 	}
 
 }
