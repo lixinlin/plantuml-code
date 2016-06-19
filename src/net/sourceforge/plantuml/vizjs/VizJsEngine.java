@@ -28,45 +28,40 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 19946 $
+ * Revision $Revision: 19398 $
  *
  */
-package net.sourceforge.plantuml.skin.rose;
+package net.sourceforge.plantuml.vizjs;
 
-import java.awt.geom.Dimension2D;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
-import net.sourceforge.plantuml.graphic.HtmlColor;
-import net.sourceforge.plantuml.graphic.StringBounder;
-import net.sourceforge.plantuml.skin.AbstractComponent;
-import net.sourceforge.plantuml.skin.Area;
-import net.sourceforge.plantuml.skin.ArrowConfiguration;
-import net.sourceforge.plantuml.ugraphic.UChangeColor;
-import net.sourceforge.plantuml.ugraphic.UGraphic;
-import net.sourceforge.plantuml.ugraphic.ULine;
+public class VizJsEngine {
 
-public class ComponentRoseNewpage extends AbstractComponent {
-
-	private final HtmlColor foregroundColor;
-
-	public ComponentRoseNewpage(HtmlColor foregroundColor) {
-		this.foregroundColor = foregroundColor;
+	public static boolean isOk() {
+		try {
+			final Class classVizJS = Class.forName("ch.braincell.viz.VizJS");
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 
-	@Override
-	protected void drawInternalU(UGraphic ug, Area area) {
-		final Dimension2D dimensionToUse = area.getDimensionToUse();
-		ug = ArrowConfiguration.stroke(ug, 2, 2, 1).apply(new UChangeColor(foregroundColor));
-		ug.draw(new ULine(dimensionToUse.getWidth(), 0));
+	private final Object viz;
+	private final Method mExecute;
+
+	public VizJsEngine() throws ClassNotFoundException, NoSuchMethodException, SecurityException,
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		final Class classVizJS = Class.forName("ch.braincell.viz.VizJS");
+		final Method mCreate = classVizJS.getMethod("create");
+		mExecute = classVizJS.getMethod("execute", String.class);
+		this.viz = mCreate.invoke(null);
+		System.err.println("Creating one engine");
 	}
 
-	@Override
-	public double getPreferredHeight(StringBounder stringBounder) {
-		return 1;
-	}
-
-	@Override
-	public double getPreferredWidth(StringBounder stringBounder) {
-		return 0;
+	public String execute(String dot) throws IllegalAccessException, IllegalArgumentException,
+			InvocationTargetException {
+		return (String) mExecute.invoke(viz, dot);
 	}
 
 }
