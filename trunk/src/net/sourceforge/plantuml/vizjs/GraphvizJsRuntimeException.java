@@ -28,45 +28,15 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 19946 $
+ * Revision $Revision: 19398 $
  *
  */
-package net.sourceforge.plantuml.skin.rose;
+package net.sourceforge.plantuml.vizjs;
 
-import java.awt.geom.Dimension2D;
+public class GraphvizJsRuntimeException extends RuntimeException {
 
-import net.sourceforge.plantuml.graphic.HtmlColor;
-import net.sourceforge.plantuml.graphic.StringBounder;
-import net.sourceforge.plantuml.skin.AbstractComponent;
-import net.sourceforge.plantuml.skin.Area;
-import net.sourceforge.plantuml.skin.ArrowConfiguration;
-import net.sourceforge.plantuml.ugraphic.UChangeColor;
-import net.sourceforge.plantuml.ugraphic.UGraphic;
-import net.sourceforge.plantuml.ugraphic.ULine;
-
-public class ComponentRoseNewpage extends AbstractComponent {
-
-	private final HtmlColor foregroundColor;
-
-	public ComponentRoseNewpage(HtmlColor foregroundColor) {
-		this.foregroundColor = foregroundColor;
-	}
-
-	@Override
-	protected void drawInternalU(UGraphic ug, Area area) {
-		final Dimension2D dimensionToUse = area.getDimensionToUse();
-		ug = ArrowConfiguration.stroke(ug, 2, 2, 1).apply(new UChangeColor(foregroundColor));
-		ug.draw(new ULine(dimensionToUse.getWidth(), 0));
-	}
-
-	@Override
-	public double getPreferredHeight(StringBounder stringBounder) {
-		return 1;
-	}
-
-	@Override
-	public double getPreferredWidth(StringBounder stringBounder) {
-		return 0;
+	public GraphvizJsRuntimeException(Exception e) {
+		// TODO Auto-generated constructor stub
 	}
 
 }

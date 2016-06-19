@@ -38,6 +38,10 @@ public interface GraphvizVersion {
 
 	public boolean useProtectionWhenThereALinkFromOrToGroup();
 
+	public boolean modeSafe();
+
+	public boolean isVizjs();
+
 	// COMMON, V2_34_0
 
 }
