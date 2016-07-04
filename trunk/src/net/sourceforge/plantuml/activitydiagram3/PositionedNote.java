@@ -28,13 +28,48 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 4236 $
- * 
+ * Revision $Revision: 9786 $
+ *
  */
-package net.sourceforge.plantuml.svek;
+package net.sourceforge.plantuml.activitydiagram3;
 
-public enum ShapeType {
+import net.sourceforge.plantuml.cucadiagram.Display;
+import net.sourceforge.plantuml.graphic.color.Colors;
+import net.sourceforge.plantuml.sequencediagram.NotePosition;
+import net.sourceforge.plantuml.sequencediagram.NoteType;
 
-	RECTANGLE, RECTANGLE_HTML_FOR_PORTS, ROUND_RECTANGLE, CIRCLE, CIRCLE_IN_RECT, OVAL, DIAMOND, OCTAGON, FOLDER
+public class PositionedNote {
+
+	private final Display display;
+	private final NotePosition notePosition;
+	private final NoteType type;
+	private final Colors colors;
+
+	public PositionedNote(Display display, NotePosition position, NoteType type, Colors colors) {
+		this.display = display;
+		this.notePosition = position;
+		this.type = type;
+		this.colors = colors;
+	}
+
+	public PositionedNote(Display note, NotePosition position, NoteType type) {
+		this(note, position, type, null);
+	}
+
+	public Display getDisplay() {
+		return display;
+	}
+
+	public NotePosition getNotePosition() {
+		return notePosition;
+	}
+
+	public NoteType getType() {
+		return type;
+	}
+
+	public Colors getColors() {
+		return colors;
+	}
 
 }

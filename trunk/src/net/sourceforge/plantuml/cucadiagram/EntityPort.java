@@ -27,14 +27,50 @@
  * in the United States and other countries.]
  *
  * Original Author:  Arnaud Roques
- *
- * Revision $Revision: 4236 $
  * 
+ * Revision $Revision: 19635 $
+ *
  */
-package net.sourceforge.plantuml.svek;
+package net.sourceforge.plantuml.cucadiagram;
 
-public enum ShapeType {
+public class EntityPort {
 
-	RECTANGLE, RECTANGLE_HTML_FOR_PORTS, ROUND_RECTANGLE, CIRCLE, CIRCLE_IN_RECT, OVAL, DIAMOND, OCTAGON, FOLDER
+	private final String uid;
+	private final String portName;
+
+	public EntityPort(String uid, String portName) {
+		this.uid = uid;
+		this.portName = portName;
+	}
+
+	public String getFullString() {
+		if (portName != null) {
+			return uid + ":" + portName;
+		}
+		return uid;
+	}
+
+	private boolean isShielded() {
+		return uid.endsWith(":h");
+	}
+
+	public String getPrefix() {
+		if (isShielded()) {
+			return uid.substring(0, uid.length() - 2);
+		}
+		return uid;
+	}
+
+	public boolean startsWith(String centerId) {
+		return uid.startsWith(centerId);
+	}
+
+	public boolean equalsId(EntityPort other) {
+		return this.uid.equals(other.uid);
+	}
+
+	public String getPortName() {
+		return portName;
+	}
 
 }
