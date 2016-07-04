@@ -33,8 +33,35 @@
  */
 package net.sourceforge.plantuml.svek;
 
-public enum ShapeType {
+public class PortGeometry {
 
-	RECTANGLE, RECTANGLE_HTML_FOR_PORTS, ROUND_RECTANGLE, CIRCLE, CIRCLE_IN_RECT, OVAL, DIAMOND, OCTAGON, FOLDER
+	private final double position;
+	private final double height;
+
+	public PortGeometry(double position, double height) {
+		this.position = position;
+		this.height = height;
+	}
+
+	public PortGeometry translateY(double deltaY) {
+		return new PortGeometry(position + deltaY, height);
+	}
+
+	@Override
+	public String toString() {
+		return "pos=" + position + " height=" + height;
+	}
+
+	public double getHeight() {
+		return height;
+	}
+
+	public double getPosition() {
+		return position;
+	}
+
+	public double getLastY() {
+		return position + height;
+	}
 
 }

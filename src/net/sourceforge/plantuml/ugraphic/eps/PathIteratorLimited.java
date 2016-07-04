@@ -28,13 +28,58 @@
  *
  * Original Author:  Arnaud Roques
  *
- * Revision $Revision: 4236 $
- * 
  */
-package net.sourceforge.plantuml.svek;
+package net.sourceforge.plantuml.ugraphic.eps;
 
-public enum ShapeType {
+import java.awt.Shape;
+import java.awt.geom.PathIterator;
 
-	RECTANGLE, RECTANGLE_HTML_FOR_PORTS, ROUND_RECTANGLE, CIRCLE, CIRCLE_IN_RECT, OVAL, DIAMOND, OCTAGON, FOLDER
+public class PathIteratorLimited implements PathIterator {
+
+	private final PathIterator path;
+	private final int limit;
+	private int current = 0;
+
+	public static int count(Shape source) {
+		int result = 0;
+		final PathIterator path = source.getPathIterator(null);
+		while (path.isDone() == false) {
+			result++;
+			path.next();
+		}
+		return result;
+	}
+
+	public PathIteratorLimited(Shape source, int start, int limit) {
+		this.path = source.getPathIterator(null);
+		this.limit = limit;
+		for (int i = 0; i < start; i++) {
+			this.next();
+		}
+	}
+
+	public int currentSegment(float[] arg0) {
+		return path.currentSegment(arg0);
+	}
+
+	public int currentSegment(double[] arg0) {
+		return path.currentSegment(arg0);
+	}
+
+	public int getWindingRule() {
+		return path.getWindingRule();
+	}
+
+	public boolean isDone() {
+		if (current >= limit) {
+			return true;
+		}
+		return path.isDone();
+	}
+
+	public void next() {
+		path.next();
+		current++;
+	}
 
 }

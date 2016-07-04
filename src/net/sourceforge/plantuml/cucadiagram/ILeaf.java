@@ -65,10 +65,12 @@ public interface ILeaf extends IEntity {
 
 	public void setSvekImage(IEntityImage svekImage);
 
-	public void setRemoved(boolean removed);
-
 	public void setNeighborhood(Neighborhood neighborhood);
 
 	public Neighborhood getNeighborhood();
+
+	public boolean hasPort();
+
+	public void setHasPort(boolean hasPort);
 
 }

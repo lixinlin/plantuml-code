@@ -33,8 +33,10 @@
  */
 package net.sourceforge.plantuml.svek;
 
-public enum ShapeType {
+import net.sourceforge.plantuml.graphic.StringBounder;
 
-	RECTANGLE, RECTANGLE_HTML_FOR_PORTS, ROUND_RECTANGLE, CIRCLE, CIRCLE_IN_RECT, OVAL, DIAMOND, OCTAGON, FOLDER
+public interface WithPorts {
+
+	Ports getPorts(StringBounder stringBounder);
 
 }

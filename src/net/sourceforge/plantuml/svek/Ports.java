@@ -33,8 +33,31 @@
  */
 package net.sourceforge.plantuml.svek;
 
-public enum ShapeType {
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-	RECTANGLE, RECTANGLE_HTML_FOR_PORTS, ROUND_RECTANGLE, CIRCLE, CIRCLE_IN_RECT, OVAL, DIAMOND, OCTAGON, FOLDER
+public class Ports {
+
+	private final Map<String, PortGeometry> all = new LinkedHashMap<String, PortGeometry>();
+
+	public void addThis(Ports other) {
+		all.putAll(other.all);
+	}
+
+	public Ports translateY(double deltaY) {
+		final Ports result = new Ports();
+		for (Map.Entry<String, PortGeometry> ent : all.entrySet()) {
+			result.all.put(ent.getKey(), ent.getValue().translateY(deltaY));
+		}
+		return result;
+	}
+
+	public void add(String portName, double position, double height) {
+		all.put(portName, new PortGeometry(position, height));
+	}
+
+	public Map<String, PortGeometry> getAll() {
+		return all;
+	}
 
 }
