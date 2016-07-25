@@ -41,7 +41,7 @@ import net.sourceforge.plantuml.cucadiagram.IEntity;
 import net.sourceforge.plantuml.cucadiagram.ILeaf;
 import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.hector2.layering.Layer;
-import net.sourceforge.plantuml.svek.CucaDiagramFileMakerSvek2;
+import net.sourceforge.plantuml.svek.DotDataImageBuilder;
 import net.sourceforge.plantuml.svek.IEntityImage;
 
 public class Foo1 {
@@ -57,7 +57,7 @@ public class Foo1 {
 	}
 
 	private static IEntityImage computeImage(final ILeaf leaf, CucaDiagram diagram) {
-		final IEntityImage image = CucaDiagramFileMakerSvek2.createEntityImageBlock(leaf, diagram.getSkinParam(),
+		final IEntityImage image = DotDataImageBuilder.createEntityImageBlock(leaf, diagram.getSkinParam(),
 				false, diagram, null, null, null);
 		return image;
 	}
