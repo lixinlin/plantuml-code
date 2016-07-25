@@ -28,54 +28,20 @@
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 4749 $
+ * Revision $Revision: 19109 $
  *
  */
-package net.sourceforge.plantuml.cucadiagram;
+package net.sourceforge.plantuml.ugraphic;
 
-import net.sourceforge.plantuml.cucadiagram.dot.Neighborhood;
-import net.sourceforge.plantuml.graphic.USymbol;
-import net.sourceforge.plantuml.skin.VisibilityModifier;
-import net.sourceforge.plantuml.svek.IEntityImage;
+public class UComment implements UShape {
 
-public interface ILeaf extends IEntity {
+	private final String comment;
 
-	public EntityPosition getEntityPosition();
+	public UComment(String comment) {
+		this.comment = comment;
+	}
 
-	public void setContainer(IGroup container);
-
-	public boolean isTop();
-
-	public void setTop(boolean top);
-
-	public boolean hasNearDecoration();
-
-	public void setNearDecoration(boolean nearDecoration);
-
-	public int getXposition();
-
-	public void setXposition(int pos);
-
-	public IEntityImage getSvekImage();
-
-	public String getGeneric();
-
-	public void muteToType(LeafType newType, USymbol newSymbol);
-
-	public void setGeneric(String generic);
-
-	public void setSvekImage(IEntityImage svekImage);
-
-	public void setNeighborhood(Neighborhood neighborhood);
-
-	public Neighborhood getNeighborhood();
-
-	public boolean hasPort();
-
-	public void setHasPort(boolean hasPort);
-
-	public void setVisibilityModifier(VisibilityModifier visibility);
-
-	public VisibilityModifier getVisibilityModifier();
-
+	public String getComment() {
+		return comment;
+	}
 }

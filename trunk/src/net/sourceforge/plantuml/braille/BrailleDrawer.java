@@ -27,23 +27,45 @@
  * in the United States and other countries.]
  *
  * Original Author:  Arnaud Roques
- * 
- * Revision $Revision: 20172 $
+ *
+ * Revision $Revision: 6170 $
  *
  */
-package net.sourceforge.plantuml.cucadiagram.dot;
+package net.sourceforge.plantuml.braille;
 
-import java.io.File;
-import java.io.OutputStream;
+import net.sourceforge.plantuml.graphic.HtmlColorUtils;
+import net.sourceforge.plantuml.graphic.UDrawable;
+import net.sourceforge.plantuml.ugraphic.UChangeBackColor;
+import net.sourceforge.plantuml.ugraphic.UChangeColor;
+import net.sourceforge.plantuml.ugraphic.UEllipse;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
+import net.sourceforge.plantuml.ugraphic.UTranslate;
 
-public interface Graphviz {
+public class BrailleDrawer implements UDrawable {
 
-	ProcessState createFile3(OutputStream os);
+	private final BrailleGrid grid;
+	private final double step = 9;
+	private final double spotSize = 5;
 
-	File getDotExe();
+	public BrailleDrawer(BrailleGrid grid) {
+		this.grid = grid;
+	}
 
-	String dotVersion();
+	public void drawU(UGraphic ug) {
+		ug = ug.apply(new UChangeColor(HtmlColorUtils.BLACK)).apply(new UChangeBackColor(HtmlColorUtils.BLACK));
+		for (int x = grid.getMinX(); x <= grid.getMaxX(); x++) {
+			for (int y = grid.getMinY(); y <= grid.getMaxY(); y++) {
+				if (grid.getState(x, y)) {
+					drawCircle(ug, x, y);
+				}
+			}
+		}
+	}
 
-	ExeState getExeState();
+	private void drawCircle(UGraphic ug, int x, int y) {
+		final double cx = x * step;
+		final double cy = y * step;
+		ug.apply(new UTranslate(cx, cy)).draw(new UEllipse(spotSize, spotSize));
+	}
 
 }

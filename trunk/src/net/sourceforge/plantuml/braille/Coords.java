@@ -27,55 +27,44 @@
  * in the United States and other countries.]
  *
  * Original Author:  Arnaud Roques
- * 
- * Revision $Revision: 4749 $
+ *
+ * Revision $Revision: 6170 $
  *
  */
-package net.sourceforge.plantuml.cucadiagram;
+package net.sourceforge.plantuml.braille;
 
-import net.sourceforge.plantuml.cucadiagram.dot.Neighborhood;
-import net.sourceforge.plantuml.graphic.USymbol;
-import net.sourceforge.plantuml.skin.VisibilityModifier;
-import net.sourceforge.plantuml.svek.IEntityImage;
+public class Coords {
 
-public interface ILeaf extends IEntity {
+	private final int x;
+	private final int y;
 
-	public EntityPosition getEntityPosition();
+	public Coords(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
 
-	public void setContainer(IGroup container);
+	@Override
+	public boolean equals(Object obj) {
+		final Coords other = (Coords) obj;
+		return this.x == other.x && this.y == other.y;
+	}
 
-	public boolean isTop();
+	@Override
+	public int hashCode() {
+		return x + y * 8192;
+	}
 
-	public void setTop(boolean top);
+	@Override
+	public String toString() {
+		return "( " + x + " ; " + y + " )";
+	}
 
-	public boolean hasNearDecoration();
+	public int getX() {
+		return x;
+	}
 
-	public void setNearDecoration(boolean nearDecoration);
-
-	public int getXposition();
-
-	public void setXposition(int pos);
-
-	public IEntityImage getSvekImage();
-
-	public String getGeneric();
-
-	public void muteToType(LeafType newType, USymbol newSymbol);
-
-	public void setGeneric(String generic);
-
-	public void setSvekImage(IEntityImage svekImage);
-
-	public void setNeighborhood(Neighborhood neighborhood);
-
-	public Neighborhood getNeighborhood();
-
-	public boolean hasPort();
-
-	public void setHasPort(boolean hasPort);
-
-	public void setVisibilityModifier(VisibilityModifier visibility);
-
-	public VisibilityModifier getVisibilityModifier();
+	public int getY() {
+		return y;
+	}
 
 }
