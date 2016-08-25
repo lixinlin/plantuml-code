@@ -23,38 +23,37 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
  * USA.
  *
- * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
- * in the United States and other countries.]
  *
  * Original Author:  Arnaud Roques
  * 
- * Revision $Revision: 19265 $
  *
  */
-package net.sourceforge.plantuml.graphic;
+package net.sourceforge.plantuml.creole;
 
-import java.awt.FontMetrics;
-import java.awt.Graphics2D;
 import java.awt.geom.Dimension2D;
-import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
 
-import net.sourceforge.plantuml.Dimension2DDouble;
-import net.sourceforge.plantuml.ugraphic.UFont;
+import net.sourceforge.plantuml.graphic.StringBounder;
+import net.sourceforge.plantuml.graphic.TileImageSvg;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
 
-public class StringBounderUtils {
+public class AtomImgSvg implements Atom {
 
-	final static BufferedImage imDummy = new BufferedImage(10, 10, BufferedImage.TYPE_INT_RGB);
-	final static Graphics2D gg = imDummy.createGraphics();
-	
-	public static StringBounder asStringBounder() {
+	private final TileImageSvg tileImageSvg;
 
-		return new StringBounder() {
-			public Dimension2D calculateDimension(UFont font, String text) {
-				final FontMetrics fm = gg.getFontMetrics(font.getFont());
-				final Rectangle2D rect = fm.getStringBounds(text, gg);
-				return new Dimension2DDouble(rect.getWidth(), rect.getHeight());
-			}
-		};
+	public AtomImgSvg(TileImageSvg tileImageSvg) {
+		this.tileImageSvg = tileImageSvg;
 	}
+
+	public Dimension2D calculateDimension(StringBounder stringBounder) {
+		return tileImageSvg.calculateDimension(stringBounder);
+	}
+
+	public double getStartingAltitude(StringBounder stringBounder) {
+		return 0;
+	}
+
+	public void drawU(UGraphic ug) {
+		tileImageSvg.drawU(ug);
+	}
+
 }
