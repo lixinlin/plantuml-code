@@ -47,7 +47,9 @@ public class InstructionEnd extends MonoSwimable implements Instruction {
 	}
 
 	public Ftile createFtile(FtileFactory factory) {
-		return factory.end(getSwimlaneIn());
+		Ftile result = factory.end(getSwimlaneIn());
+		result = eventuallyAddNote(factory, result, result.getSwimlaneIn());
+		return result;
 	}
 
 	public void add(Instruction other) {

@@ -28,36 +28,50 @@
  * 
  *
  */
-package net.sourceforge.plantuml.graphic;
+package net.sourceforge.plantuml.preproc;
 
-import java.awt.geom.Dimension2D;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.StringTokenizer;
 
-import net.sourceforge.plantuml.Dimension2DDouble;
-import net.sourceforge.plantuml.ugraphic.UGraphic;
+public class DefineSignature {
 
-class USymbolTogether extends USymbol {
+	private final String key;
+	private final String fctName;
+	private final Variables vars = new Variables();
 
-	@Override
-	public SkinParameter getSkinParameter() {
-		return SkinParameter.STORAGE;
+	public DefineSignature(String key) {
+		this.key = key;
+
+		final StringTokenizer st = new StringTokenizer(key, "(),");
+		this.fctName = st.nextToken().trim();
+
+		while (st.hasMoreTokens()) {
+			final String var1 = st.nextToken().trim();
+			this.vars.add(new DefineVariable(var1));
+		}
 	}
 
-	public TextBlock asSmall(TextBlock name, final TextBlock label, final TextBlock stereotype,
-			final SymbolContext symbolContext) {
-		return TextBlockUtils.empty(10, 10);
+	public boolean isMethod() {
+		return key.contains("(");
 	}
 
-	public TextBlock asBig(final TextBlock title, final TextBlock stereotype, final double width, final double height,
-			final SymbolContext symbolContext) {
-		return new AbstractTextBlock() {
+	public String getKey() {
+		return key;
+	}
 
-			public void drawU(UGraphic ug) {
-			}
+	public List<Variables> getVariationVariables() {
+		final List<Variables> result = new ArrayList<Variables>();
+		final int count = vars.countDefaultValue();
+		for (int i = 0; i <= count; i++) {
+			result.add(vars.removeSomeDefaultValues(i));
+		}
+		return Collections.unmodifiableList(result);
+	}
 
-			public Dimension2D calculateDimension(StringBounder stringBounder) {
-				return new Dimension2DDouble(width, height);
-			}
-		};
+	public String getFonctionName() {
+		return fctName;
 	}
 
 }
