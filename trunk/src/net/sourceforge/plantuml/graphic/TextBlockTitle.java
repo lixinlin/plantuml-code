@@ -34,49 +34,39 @@ import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
 
 import net.sourceforge.plantuml.Dimension2DDouble;
-import net.sourceforge.plantuml.svek.Ports;
-import net.sourceforge.plantuml.svek.WithPorts;
+import net.sourceforge.plantuml.ISkinSimple;
+import net.sourceforge.plantuml.creole.CreoleMode;
+import net.sourceforge.plantuml.cucadiagram.Display;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
 import net.sourceforge.plantuml.ugraphic.UTranslate;
 
-class TextBlockMarged extends AbstractTextBlock implements TextBlock, WithPorts {
+public class TextBlockTitle implements TextBlock {
+
+	private final double outMargin = 2;
 
 	private final TextBlock textBlock;
-	private final double x1;
-	private final double x2;
-	private final double y1;
-	private final double y2;
 
-	TextBlockMarged(TextBlock textBlock, double x1, double x2, double y1, double y2) {
-		this.textBlock = textBlock;
-		this.x1 = x1;
-		this.x2 = x2;
-		this.y1 = y1;
-		this.y2 = y2;
+	TextBlockTitle(FontConfiguration font, Display stringsToDisplay, ISkinSimple spriteContainer) {
+		if (stringsToDisplay.size() == 1 && stringsToDisplay.get(0).length() == 0) {
+			throw new IllegalArgumentException();
+		}
+		textBlock = stringsToDisplay.create(font, HorizontalAlignment.CENTER, spriteContainer, 0, CreoleMode.FULL,
+				null, null);
+	}
+
+	public final void drawU(UGraphic ug) {
+		textBlock.drawU(ug.apply(new UTranslate(outMargin, 0)));
 	}
 
 	public Dimension2D calculateDimension(StringBounder stringBounder) {
-		final Dimension2D dim = textBlock.calculateDimension(stringBounder);
-		return Dimension2DDouble.delta(dim, x1 + x2, y1 + y2);
+		final Dimension2D textDim = textBlock.calculateDimension(stringBounder);
+		final double width = textDim.getWidth() + outMargin * 2;
+		final double height = textDim.getHeight();
+		return new Dimension2DDouble(width, height);
 	}
 
-	public void drawU(UGraphic ug) {
-		final UTranslate translate = new UTranslate(x1, y1);
-		textBlock.drawU(ug.apply(translate));
-	}
-
-	@Override
 	public Rectangle2D getInnerPosition(String member, StringBounder stringBounder) {
-		final Rectangle2D parent = textBlock.getInnerPosition(member, stringBounder);
-		if (parent == null) {
-			return null;
-		}
-		final UTranslate translate = new UTranslate(x1, y1);
-		return translate.apply(parent);
-	}
-
-	public Ports getPorts(StringBounder stringBounder) {
-		return ((WithPorts) textBlock).getPorts(stringBounder).translateY(y1);
+		return null;
 	}
 
 }

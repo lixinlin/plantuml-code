@@ -31,52 +31,31 @@
 package net.sourceforge.plantuml.graphic;
 
 import java.awt.geom.Dimension2D;
-import java.awt.geom.Rectangle2D;
 
 import net.sourceforge.plantuml.Dimension2DDouble;
-import net.sourceforge.plantuml.svek.Ports;
-import net.sourceforge.plantuml.svek.WithPorts;
+import net.sourceforge.plantuml.ugraphic.UChangeColor;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
+import net.sourceforge.plantuml.ugraphic.URectangle;
 import net.sourceforge.plantuml.ugraphic.UTranslate;
 
-class TextBlockMarged extends AbstractTextBlock implements TextBlock, WithPorts {
+class SimpleTextBlockBordered extends AbstractTextBlock implements TextBlock {
 
 	private final TextBlock textBlock;
-	private final double x1;
-	private final double x2;
-	private final double y1;
-	private final double y2;
+	private final HtmlColor color;
 
-	TextBlockMarged(TextBlock textBlock, double x1, double x2, double y1, double y2) {
+	public SimpleTextBlockBordered(TextBlock textBlock, HtmlColor color) {
 		this.textBlock = textBlock;
-		this.x1 = x1;
-		this.x2 = x2;
-		this.y1 = y1;
-		this.y2 = y2;
+		this.color = color;
 	}
 
 	public Dimension2D calculateDimension(StringBounder stringBounder) {
 		final Dimension2D dim = textBlock.calculateDimension(stringBounder);
-		return Dimension2DDouble.delta(dim, x1 + x2, y1 + y2);
+		return Dimension2DDouble.delta(dim, 1, 1);
 	}
 
 	public void drawU(UGraphic ug) {
-		final UTranslate translate = new UTranslate(x1, y1);
-		textBlock.drawU(ug.apply(translate));
+		final Dimension2D dim = textBlock.calculateDimension(ug.getStringBounder());
+		textBlock.drawU(ug.apply(new UTranslate(1, 1)));
+		ug.apply(new UChangeColor(color)).draw(new URectangle(dim.getWidth(), dim.getHeight()));
 	}
-
-	@Override
-	public Rectangle2D getInnerPosition(String member, StringBounder stringBounder) {
-		final Rectangle2D parent = textBlock.getInnerPosition(member, stringBounder);
-		if (parent == null) {
-			return null;
-		}
-		final UTranslate translate = new UTranslate(x1, y1);
-		return translate.apply(parent);
-	}
-
-	public Ports getPorts(StringBounder stringBounder) {
-		return ((WithPorts) textBlock).getPorts(stringBounder).translateY(y1);
-	}
-
 }

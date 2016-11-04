@@ -31,12 +31,11 @@
 package net.sourceforge.plantuml.graphic;
 
 import java.awt.geom.Dimension2D;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 
 import net.sourceforge.plantuml.Dimension2DDouble;
+import net.sourceforge.plantuml.FileUtils;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
 import net.sourceforge.plantuml.ugraphic.UImageSvg;
 
@@ -49,14 +48,7 @@ public class TileImageSvg extends AbstractTextBlock implements TextBlock {
 	}
 
 	private UImageSvg createSvg(File svgFile) throws IOException {
-		final BufferedReader br = new BufferedReader(new FileReader(svgFile));
-		final StringBuilder sb = new StringBuilder();
-		String s;
-		while ((s = br.readLine()) != null) {
-			sb.append(s);
-		}
-		br.close();
-		return new UImageSvg(sb.toString());
+		return new UImageSvg(FileUtils.readSvg(svgFile));
 	}
 
 	public Dimension2D calculateDimension(StringBounder stringBounder) {

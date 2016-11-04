@@ -28,36 +28,39 @@
  * 
  *
  */
-package net.sourceforge.plantuml.graphic;
+package net.sourceforge.plantuml.preproc;
 
-import java.awt.geom.Dimension2D;
+public class DefineVariable {
 
-import net.sourceforge.plantuml.Dimension2DDouble;
-import net.sourceforge.plantuml.ugraphic.UGraphic;
+	private final String name;
+	private final String defaultValue;
 
-class USymbolTogether extends USymbol {
-
-	@Override
-	public SkinParameter getSkinParameter() {
-		return SkinParameter.STORAGE;
+	public DefineVariable(String name) {
+		name = name.trim();
+		final int idx = name.indexOf('=');
+		if (idx == -1) {
+			this.name = name;
+			this.defaultValue = null;
+		} else {
+			this.name = name.substring(0, idx).trim();
+			final String right = name.substring(idx + 1).trim();
+			this.defaultValue = right.substring(1, right.length() - 1);
+		}
 	}
 
-	public TextBlock asSmall(TextBlock name, final TextBlock label, final TextBlock stereotype,
-			final SymbolContext symbolContext) {
-		return TextBlockUtils.empty(10, 10);
+	public String getName() {
+		return name;
 	}
 
-	public TextBlock asBig(final TextBlock title, final TextBlock stereotype, final double width, final double height,
-			final SymbolContext symbolContext) {
-		return new AbstractTextBlock() {
+	public String getDefaultValue() {
+		return defaultValue;
+	}
 
-			public void drawU(UGraphic ug) {
-			}
-
-			public Dimension2D calculateDimension(StringBounder stringBounder) {
-				return new Dimension2DDouble(width, height);
-			}
-		};
+	public DefineVariable removeDefault() {
+		if (defaultValue == null) {
+			throw new IllegalStateException();
+		}
+		return new DefineVariable(name);
 	}
 
 }
