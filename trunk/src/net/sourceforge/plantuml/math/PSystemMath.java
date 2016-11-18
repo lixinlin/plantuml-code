@@ -28,22 +28,35 @@
  * 
  *
  */
-package net.sourceforge.plantuml.eggs;
+package net.sourceforge.plantuml.math;
+
+import java.io.IOException;
+import java.io.OutputStream;
 
 import net.sourceforge.plantuml.AbstractPSystem;
-import net.sourceforge.plantuml.command.PSystemSingleLineFactory;
-import net.sourceforge.plantuml.webp.Portrait;
-import net.sourceforge.plantuml.webp.Portraits;
+import net.sourceforge.plantuml.FileFormatOption;
+import net.sourceforge.plantuml.core.DiagramDescription;
+import net.sourceforge.plantuml.core.DiagramDescriptionImpl;
+import net.sourceforge.plantuml.core.ImageData;
 
-public class PSystemMemorialFactory extends PSystemSingleLineFactory {
+public class PSystemMath extends AbstractPSystem {
 
-	@Override
-	protected AbstractPSystem executeLine(String line) {
-		final Portrait portrait = Portraits.getOne(line);
-		if (portrait != null) {
-			return new PSystemMemorial(portrait);
-		}
-		return null;
+	private String math = "";
+
+	public PSystemMath() {
+	}
+
+	public DiagramDescription getDescription() {
+		return new DiagramDescriptionImpl("(Math)", getClass());
+	}
+
+	public ImageData exportDiagram(OutputStream os, int num, FileFormatOption fileFormat) throws IOException {
+		AsciiMathSafe asciiMath = new AsciiMathSafe(math);
+		return asciiMath.export(os, fileFormat);
+	}
+
+	public void doCommandLine(String line) {
+		this.math = line;
 	}
 
 }

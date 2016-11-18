@@ -37,7 +37,6 @@ import net.sourceforge.plantuml.EnsureVisible;
 import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.Url;
 import net.sourceforge.plantuml.graphic.StringBounder;
-import net.sourceforge.plantuml.graphic.TextBlockUtils;
 
 public class UGraphicNull extends AbstractUGraphic<String> implements EnsureVisible, UGraphic2 {
 
