@@ -36,29 +36,32 @@ import net.sourceforge.plantuml.command.regex.RegexConcat;
 import net.sourceforge.plantuml.command.regex.RegexLeaf;
 import net.sourceforge.plantuml.command.regex.RegexResult;
 
-public class CommandChangeState extends SingleLineCommand2<TimingDiagram> {
+public class CommandChangeState2 extends SingleLineCommand2<TimingDiagram> {
 
-	public CommandChangeState() {
+	public CommandChangeState2() {
 		super(getRegexConcat());
 	}
 
 	private static RegexConcat getRegexConcat() {
 		return new RegexConcat(new RegexLeaf("^"), //
-				new RegexLeaf("CODE", "([\\p{L}0-9_.@]+)"), //
+				new RegexLeaf("[%s]*"), //
+				TimeTickBuilder.expressionAtWithoutArobase("TIME"), //
 				new RegexLeaf("[%s]*is[%s]*"), //
-				new RegexLeaf("STATE", "(.*?)"), //
+				new RegexLeaf("STATE", "([^:]*?)"), //
+				new RegexLeaf("COMMENT", "(?:[%s]*:[%s]*(.*?))?"), //
 				new RegexLeaf("[%s]*$"));
 	}
 
 	@Override
 	final protected CommandExecutionResult executeArg(TimingDiagram diagram, RegexResult arg) {
-		final String code = arg.get("CODE", 0);
-		final Player player = diagram.getPlayer(code);
+		final Player player = diagram.getLastPlayer();
 		if (player == null) {
-			return CommandExecutionResult.error("Unkown \"" + code + "\"");
+			return CommandExecutionResult.error("Missing @ line before this");
 		}
-		final TimeTick now = diagram.getNow();
-		player.setState(now, arg.get("STATE", 0));
+		final TimeTick tick = TimeTickBuilder.parseTimeTick("TIME", arg, diagram);
+		final String comment = arg.get("COMMENT", 0);
+		player.setState(tick, arg.get("STATE", 0), comment);
+		diagram.addTime(tick);
 		return CommandExecutionResult.ok();
 	}
 

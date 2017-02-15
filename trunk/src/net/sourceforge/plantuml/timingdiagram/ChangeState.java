@@ -34,10 +34,12 @@ public class ChangeState implements Comparable<ChangeState> {
 
 	private final TimeTick when;
 	private final String state;
+	private final String comment;
 
-	public ChangeState(TimeTick when, String state) {
+	public ChangeState(TimeTick when, String state, String comment) {
 		this.when = when;
 		this.state = state;
+		this.comment = comment;
 	}
 
 	public int compareTo(ChangeState other) {
@@ -50,6 +52,10 @@ public class ChangeState implements Comparable<ChangeState> {
 
 	public final String getState() {
 		return state;
+	}
+
+	public String getComment() {
+		return comment;
 	}
 
 }
