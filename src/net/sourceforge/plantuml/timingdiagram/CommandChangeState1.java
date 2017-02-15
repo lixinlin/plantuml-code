@@ -25,41 +25,43 @@
  *
  *
  * Original Author:  Arnaud Roques
+ * 
  *
  */
 package net.sourceforge.plantuml.timingdiagram;
 
+import net.sourceforge.plantuml.command.CommandExecutionResult;
+import net.sourceforge.plantuml.command.SingleLineCommand2;
+import net.sourceforge.plantuml.command.regex.RegexConcat;
 import net.sourceforge.plantuml.command.regex.RegexLeaf;
 import net.sourceforge.plantuml.command.regex.RegexResult;
 
-public class TimeTickBuilder {
+public class CommandChangeState1 extends SingleLineCommand2<TimingDiagram> {
 
-	private static final String WITHOUT_AROBASE = "(\\+?)(\\d+)";
-	private static final String WITH_AROBASE = "@" + WITHOUT_AROBASE;
-
-	public static RegexLeaf expressionAtWithoutArobase(String name) {
-		return new RegexLeaf(name, WITHOUT_AROBASE);
+	public CommandChangeState1() {
+		super(getRegexConcat());
 	}
 
-	public static RegexLeaf expressionAtWithArobase(String name) {
-		return new RegexLeaf(name, WITH_AROBASE);
+	private static RegexConcat getRegexConcat() {
+		return new RegexConcat(new RegexLeaf("^"), //
+				new RegexLeaf("CODE", CommandTimeMessage.PLAYER_CODE), //
+				new RegexLeaf("[%s]*is[%s]*"), //
+				new RegexLeaf("STATE", "([^:]*?)"), //
+				new RegexLeaf("COMMENT", "(?:[%s]*:[%s]*(.*?))?"), //
+				new RegexLeaf("[%s]*$"));
 	}
 
-	public static RegexLeaf optionalExpressionAtWithArobase(String name) {
-		return new RegexLeaf(name, "(?:" + WITH_AROBASE + ")?");
-	}
-
-	public static TimeTick parseTimeTick(String name, RegexResult arg, Clock clock) {
-		final String number = arg.get(name, 1);
-		if (number == null) {
-			return clock.getNow();
+	@Override
+	final protected CommandExecutionResult executeArg(TimingDiagram diagram, RegexResult arg) {
+		final String code = arg.get("CODE", 0);
+		final Player player = diagram.getPlayer(code);
+		if (player == null) {
+			return CommandExecutionResult.error("Unkown \"" + code + "\"");
 		}
-		final boolean isRelative = "+".equals(arg.get(name, 0));
-		int value = Integer.parseInt(number);
-		if (isRelative) {
-			value += clock.getNow().getTime();
-		}
-		return new TimeTick(value);
+		final String comment = arg.get("COMMENT", 0);
+		final TimeTick now = diagram.getNow();
+		player.setState(now, arg.get("STATE", 0), comment);
+		return CommandExecutionResult.ok();
 	}
 
 }
