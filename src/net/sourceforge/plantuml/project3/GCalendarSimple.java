@@ -30,30 +30,18 @@
  */
 package net.sourceforge.plantuml.project3;
 
-import java.util.Arrays;
-import java.util.Collection;
+public class GCalendarSimple implements GCalendar {
 
-import net.sourceforge.plantuml.command.regex.IRegex;
-import net.sourceforge.plantuml.command.regex.RegexLeaf;
-import net.sourceforge.plantuml.command.regex.RegexResult;
+	private final DayAsDate start;
 
-public class SubjectTask implements SubjectPattern {
-
-	public Collection<VerbPattern> getVerbs() {
-		return Arrays.<VerbPattern> asList(new VerbLasts(), new VerbStarts(), new VerbHappens(), new VerbEnds(),
-				new VerbIsColored());
+	public GCalendarSimple(DayAsDate start) {
+		this.start = start;
 	}
 
-	public IRegex toRegex() {
-		return new RegexLeaf("SUBJECT", "\\[([^\\[\\]]+?)\\](?:[%s]+as[%s]+\\[([^\\[\\]]+?)\\])?");
-	}
-
-	public Subject getSubject(GanttDiagram project, RegexResult arg) {
-		final String s = arg.get("SUBJECT", 0);
-		final String shortName = arg.get("SUBJECT", 1);
-		final Task result = project.getOrCreateTask(s, shortName);
-		if (result == null) {
-			throw new IllegalStateException();
+	public DayAsDate toDayAsDate(InstantDay day) {
+		DayAsDate result = start;
+		for (int i = 0; i < day.getNumDay(); i++) {
+			result = result.next();
 		}
 		return result;
 	}

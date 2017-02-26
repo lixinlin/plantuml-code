@@ -30,32 +30,21 @@
  */
 package net.sourceforge.plantuml.project3;
 
-import java.util.Arrays;
-import java.util.Collection;
+import net.sourceforge.plantuml.StringUtils;
 
-import net.sourceforge.plantuml.command.regex.IRegex;
-import net.sourceforge.plantuml.command.regex.RegexLeaf;
-import net.sourceforge.plantuml.command.regex.RegexResult;
+public enum DayOfWeek {
 
-public class SubjectTask implements SubjectPattern {
+	MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY;
 
-	public Collection<VerbPattern> getVerbs() {
-		return Arrays.<VerbPattern> asList(new VerbLasts(), new VerbStarts(), new VerbHappens(), new VerbEnds(),
-				new VerbIsColored());
+	public DayOfWeek next() {
+		return DayOfWeek.values()[(ordinal() + 1) % 7];
 	}
 
-	public IRegex toRegex() {
-		return new RegexLeaf("SUBJECT", "\\[([^\\[\\]]+?)\\](?:[%s]+as[%s]+\\[([^\\[\\]]+?)\\])?");
+	public static DayOfWeek fromH(int h) {
+		return DayOfWeek.values()[(h + 5) % 7];
 	}
 
-	public Subject getSubject(GanttDiagram project, RegexResult arg) {
-		final String s = arg.get("SUBJECT", 0);
-		final String shortName = arg.get("SUBJECT", 1);
-		final Task result = project.getOrCreateTask(s, shortName);
-		if (result == null) {
-			throw new IllegalStateException();
-		}
-		return result;
+	public String shortName() {
+		return StringUtils.capitalize(name().substring(0, 2));
 	}
-
 }

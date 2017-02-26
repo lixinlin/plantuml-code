@@ -44,7 +44,10 @@ public class ComplementBeforeOrAfterOrAtTaskStartOrEnd implements ComplementPatt
 	public Complement getComplement(GanttDiagram system, RegexResult arg, String suffix) {
 		final String code = arg.get("COMPLEMENT" + suffix, 2);
 		final String position = arg.get("COMPLEMENT" + suffix, 3);
-		final Task task = system.getTask(new TaskCode(code));
+		final Task task = system.getExistingTask(code);
+		if (task == null) {
+			throw new IllegalStateException();
+		}
 		final String days = arg.get("COMPLEMENT" + suffix, 0);
 		TaskInstant result = new TaskInstant(task, TaskAttribute.fromString(position));
 		if (days != null) {

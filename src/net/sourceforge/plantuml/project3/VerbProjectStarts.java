@@ -33,29 +33,30 @@ package net.sourceforge.plantuml.project3;
 import java.util.Arrays;
 import java.util.Collection;
 
+import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.command.regex.IRegex;
 import net.sourceforge.plantuml.command.regex.RegexLeaf;
 import net.sourceforge.plantuml.command.regex.RegexResult;
 
-public class SubjectTask implements SubjectPattern {
+public class VerbProjectStarts implements VerbPattern {
 
-	public Collection<VerbPattern> getVerbs() {
-		return Arrays.<VerbPattern> asList(new VerbLasts(), new VerbStarts(), new VerbHappens(), new VerbEnds(),
-				new VerbIsColored());
+	public Collection<ComplementPattern> getComplements() {
+		return Arrays.<ComplementPattern> asList(new ComplementDate());
 	}
 
 	public IRegex toRegex() {
-		return new RegexLeaf("SUBJECT", "\\[([^\\[\\]]+?)\\](?:[%s]+as[%s]+\\[([^\\[\\]]+?)\\])?");
+		return new RegexLeaf("starts[%s]*(the[%s]*|on[%s]*)*");
 	}
 
-	public Subject getSubject(GanttDiagram project, RegexResult arg) {
-		final String s = arg.get("SUBJECT", 0);
-		final String shortName = arg.get("SUBJECT", 1);
-		final Task result = project.getOrCreateTask(s, shortName);
-		if (result == null) {
-			throw new IllegalStateException();
-		}
-		return result;
-	}
+	public Verb getVerb(final GanttDiagram project, RegexResult arg) {
+		return new Verb() {
+			public CommandExecutionResult execute(Subject subject, Complement complement) {
+				final DayAsDate start = (DayAsDate) complement;
+				assert project == subject;
+				project.setStartingDate(start);
+				return CommandExecutionResult.ok();
+			}
 
+		};
+	}
 }
