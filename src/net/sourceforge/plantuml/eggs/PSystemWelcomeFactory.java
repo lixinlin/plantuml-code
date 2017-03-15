@@ -6,6 +6,11 @@
  *
  * Project Info:  http://plantuml.com
  * 
+ * If you like this project or if you find it useful, you can support us at:
+ * 
+ * http://plantuml.com/patreon (only 1$ per month!)
+ * http://plantuml.com/paypal
+ * 
  * This file is part of PlantUML.
  *
  * PlantUML is free software; you can redistribute it and/or modify it
@@ -25,12 +30,28 @@
  *
  *
  * Original Author:  Arnaud Roques
- *
+ * 
  *
  */
-package net.sourceforge.plantuml.core;
+package net.sourceforge.plantuml.eggs;
 
-public class DiagramDescriptionImpl {
+import net.sourceforge.plantuml.api.PSystemFactory;
+import net.sourceforge.plantuml.core.Diagram;
+import net.sourceforge.plantuml.core.DiagramType;
+import net.sourceforge.plantuml.core.UmlSource;
+import net.sourceforge.plantuml.graphic.GraphicPosition;
 
+public class PSystemWelcomeFactory implements PSystemFactory {
+
+	public Diagram createSystem(UmlSource source) {
+		if (source.getTotalLineCount() == 2) {
+			return new PSystemWelcome(GraphicPosition.BACKGROUND_CORNER_BOTTOM_RIGHT);
+		}
+		return null;
+	}
+
+	public DiagramType getDiagramType() {
+		return DiagramType.UML;
+	}
 
 }
