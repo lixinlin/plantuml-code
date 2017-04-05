@@ -31,28 +31,12 @@
  *
  * Original Author:  Arnaud Roques
  *
+ *
  */
-package net.sourceforge.plantuml.applet;
+package net.sourceforge.plantuml.bpm;
 
-import java.applet.Applet;
-import java.awt.Graphics;
+public interface GridCleaner {
 
-import net.sourceforge.plantuml.version.Version;
+	public boolean clean(Grid grid);
 
-public class VersionApplet extends Applet {
-
-	@Override
-	public void init() {
-		super.init();
-	}
-
-	@Override
-	public void start() {
-		super.start();
-	}
-
-	@Override
-	public void paint(Graphics g) {
-		g.drawString(Version.versionString(), 0, 10);
-	}
 }

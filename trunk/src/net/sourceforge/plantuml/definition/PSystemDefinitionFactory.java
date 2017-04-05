@@ -30,34 +30,31 @@
  *
  *
  * Original Author:  Arnaud Roques
+ * 
  *
  */
-package net.sourceforge.plantuml.bpm;
+package net.sourceforge.plantuml.definition;
 
-public class BpmEdge {
+import net.sourceforge.plantuml.command.PSystemBasicFactory;
+import net.sourceforge.plantuml.core.DiagramType;
 
-	private final BpmElement from;
-	private final BpmElement to;
+public class PSystemDefinitionFactory extends PSystemBasicFactory<PSystemDefinition> {
 
-	public BpmEdge(BpmElement from, BpmElement to) {
-		if (from == null || to == null) {
-			throw new IllegalArgumentException();
+	public PSystemDefinitionFactory() {
+		super(DiagramType.DEFINITION);
+	}
+
+	public PSystemDefinition init(String startLine) {
+		if (getDiagramType() == DiagramType.DEFINITION) {
+			return new PSystemDefinition(startLine);
 		}
-		this.from = from;
-		this.to = to;
-	}
-
-	public final BpmElement getFrom() {
-		return from;
-	}
-
-	public final BpmElement getTo() {
-		return to;
+		return null;
 	}
 
 	@Override
-	public String toString() {
-		return from.toString() + "-->" + to.toString();
+	public PSystemDefinition executeLine(PSystemDefinition system, String line) {
+		system.doCommandLine(line);
+		return system;
 	}
 
 }

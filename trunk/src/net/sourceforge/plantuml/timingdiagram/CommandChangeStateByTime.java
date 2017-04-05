@@ -44,9 +44,9 @@ import net.sourceforge.plantuml.graphic.color.ColorParser;
 import net.sourceforge.plantuml.graphic.color.ColorType;
 import net.sourceforge.plantuml.graphic.color.Colors;
 
-public class CommandChangeState2 extends SingleLineCommand2<TimingDiagram> {
+public class CommandChangeStateByTime extends SingleLineCommand2<TimingDiagram> {
 
-	public CommandChangeState2() {
+	public CommandChangeStateByTime() {
 		super(getRegexConcat());
 	}
 
@@ -55,7 +55,7 @@ public class CommandChangeState2 extends SingleLineCommand2<TimingDiagram> {
 				new RegexLeaf("[%s]*"), //
 				TimeTickBuilder.expressionAtWithoutArobase("TIME"), //
 				new RegexLeaf("[%s]*is[%s]*"), //
-				CommandChangeState1.getStateOrHidden(), //
+				CommandChangeStateByPlayerCode.getStateOrHidden(), //
 				new RegexLeaf("[%s]*"), //
 				color().getRegex(), //
 				new RegexLeaf("[%s]*"), //
@@ -76,7 +76,7 @@ public class CommandChangeState2 extends SingleLineCommand2<TimingDiagram> {
 		final TimeTick tick = TimeTickBuilder.parseTimeTick("TIME", arg, diagram);
 		final String comment = arg.get("COMMENT", 0);
 		final Colors colors = color().getColor(arg, diagram.getSkinParam().getIHtmlColorSet());
-		player.setState(tick, arg.get("STATE", 0), comment, colors);
+		player.setState(tick, arg.getLazzy("STATE", 0), comment, colors);
 		diagram.addTime(tick);
 		return CommandExecutionResult.ok();
 	}

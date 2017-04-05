@@ -46,11 +46,11 @@ import net.sourceforge.plantuml.graphic.color.ColorParser;
 import net.sourceforge.plantuml.graphic.color.ColorType;
 import net.sourceforge.plantuml.graphic.color.Colors;
 
-public class CommandChangeState1 extends SingleLineCommand2<TimingDiagram> {
+public class CommandChangeStateByPlayerCode extends SingleLineCommand2<TimingDiagram> {
 
 	private static final String STATE_CODE = "([\\p{L}0-9_][\\p{L}0-9_.]*)";
 
-	public CommandChangeState1() {
+	public CommandChangeStateByPlayerCode() {
 		super(getRegexConcat());
 	}
 
@@ -68,9 +68,10 @@ public class CommandChangeState1 extends SingleLineCommand2<TimingDiagram> {
 
 	static IRegex getStateOrHidden() {
 		return new RegexOr(//
-				new RegexLeaf("STATE", STATE_CODE), //
-				new RegexLeaf("\\{[^\\}]*?\\}"), //
-				new RegexLeaf("[^:\\w]*?") //
+				new RegexLeaf("STATE1", "[%g]([^%g]+)[%g]"), //
+				new RegexLeaf("STATE2", STATE_CODE), //
+				new RegexLeaf("STATE3", "(\\{hidden\\})"), //
+				new RegexLeaf("STATE4", "(\\{\\.\\.\\.\\})") //
 		);
 	}
 
@@ -88,7 +89,7 @@ public class CommandChangeState1 extends SingleLineCommand2<TimingDiagram> {
 		final String comment = arg.get("COMMENT", 0);
 		final TimeTick now = diagram.getNow();
 		final Colors colors = color().getColor(arg, diagram.getSkinParam().getIHtmlColorSet());
-		player.setState(now, arg.get("STATE", 0), comment, colors);
+		player.setState(now, arg.getLazzy("STATE", 0), comment, colors);
 		return CommandExecutionResult.ok();
 	}
 
