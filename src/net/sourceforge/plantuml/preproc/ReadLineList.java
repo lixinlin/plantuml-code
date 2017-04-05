@@ -30,11 +30,36 @@
  *
  *
  * Original Author:  Arnaud Roques
- *
+ * 
  *
  */
-package net.sourceforge.plantuml.bpm;
+package net.sourceforge.plantuml.preproc;
 
-public class Row {
+import java.util.Iterator;
+import java.util.List;
+
+import net.sourceforge.plantuml.CharSequence2;
+import net.sourceforge.plantuml.CharSequence2Impl;
+import net.sourceforge.plantuml.LineLocation;
+
+public class ReadLineList implements ReadLine {
+
+	private final Iterator<? extends CharSequence> iterator;
+	private final LineLocation location;
+
+	public ReadLineList(List<? extends CharSequence> definition, LineLocation location) {
+		this.iterator = definition.iterator();
+		this.location = location;
+	}
+
+	public void close() {
+	}
+
+	public CharSequence2 readLine() {
+		if (iterator.hasNext() == false) {
+			return null;
+		}
+		return new CharSequence2Impl(iterator.next(), location);
+	}
 
 }
