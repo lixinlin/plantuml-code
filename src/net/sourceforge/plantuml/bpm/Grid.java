@@ -281,10 +281,10 @@ public class Grid {
 				final Coord dest = getCoord(dests.get(i));
 				final boolean startHorizontal = i == 0;
 				if (startHorizontal) {
-					System.err.println("DrawingHorizontal " + ent.getValue() + " --> " + dests.get(i) + " " + i);
+					// System.err.println("DrawingHorizontal " + ent.getValue() + " --> " + dests.get(i) + " " + i);
 					drawHorizontal(src, dest);
 				} else {
-					// drawVertical(src, dest);
+					drawVertical(src, dest);
 				}
 			}
 		}
@@ -295,15 +295,25 @@ public class Grid {
 				.getLine();) {
 			final Line cur = itLine.next();
 			if (cur != dest.getLine()) {
-				Cell tmp = getCell(cur, src.getCol());
-				addPuzzle(tmp, "NS");
+				addPuzzle(cur, src.getCol(), "NS");
 			}
 		}
 		for (Navigator<Col> itCol = Navigators.iterate(cols, src.getCol(), dest.getCol()); itCol.get() != dest.getCol();) {
 			final Col cur = itCol.next();
 			if (cur != dest.getCol()) {
-				Cell tmp = getCell(dest.getLine(), cur);
-				addPuzzle(tmp, "EW");
+				addPuzzle(dest.getLine(), cur, "EW");
+			}
+		}
+		if (src.getLine() != dest.getLine() && src.getCol() != dest.getCol()) {
+			if (lines.compare(dest.getLine(), src.getLine()) > 0) {
+				addPuzzle(dest.getLine(), src.getCol(), "N");
+			} else {
+				addPuzzle(dest.getLine(), src.getCol(), "S");
+			}
+			if (cols.compare(dest.getCol(), src.getCol()) > 0) {
+				addPuzzle(dest.getLine(), src.getCol(), "E");
+			} else {
+				addPuzzle(dest.getLine(), src.getCol(), "W");
 			}
 		}
 
@@ -313,29 +323,38 @@ public class Grid {
 		for (Navigator<Col> itCol = Navigators.iterate(cols, src.getCol(), dest.getCol()); itCol.get() != dest.getCol();) {
 			final Col cur = itCol.next();
 			if (cur != dest.getCol()) {
-				Cell tmp = getCell(src.getLine(), cur);
-				addPuzzle(tmp, "EW");
+				addPuzzle(src.getLine(), cur, "EW");
 			}
 		}
-		System.err.println("src=" + src + " " + getCell(src));
-		System.err.println("dest=" + dest + " " + getCell(dest));
 		for (Navigator<Line> itLine = Navigators.iterate(lines, src.getLine(), dest.getLine()); itLine.get() != dest
 				.getLine();) {
 			final Line cur = itLine.next();
 			if (cur != dest.getLine()) {
-				Cell tmp = getCell(cur, src.getCol());
-				addPuzzle(tmp, "NS");
+				addPuzzle(cur, dest.getCol(), "NS");
+			}
+		}
+		if (src.getLine() != dest.getLine() && src.getCol() != dest.getCol()) {
+			if (cols.compare(dest.getCol(), src.getCol()) > 0) {
+				addPuzzle(src.getLine(), dest.getCol(), "W");
+			} else {
+				addPuzzle(src.getLine(), dest.getCol(), "E");
+			}
+			if (lines.compare(dest.getLine(), src.getLine()) > 0) {
+				addPuzzle(src.getLine(), dest.getCol(), "S");
+			} else {
+				addPuzzle(src.getLine(), dest.getCol(), "N");
 			}
 		}
 	}
 
-	private void addPuzzle(Cell tmp, String direction) {
+	private void addPuzzle(Line line, Col col, String direction) {
+		final Cell cell = getCell(line, col);
 		ConnectorPuzzle after = ConnectorPuzzle.get(direction);
-		final ConnectorPuzzle before = (ConnectorPuzzle) tmp.getData();
+		final ConnectorPuzzle before = (ConnectorPuzzle) cell.getData();
 		if (before != null) {
 			after = after.append(before);
 		}
-		tmp.setData(after);
+		cell.setData(after);
 	}
 
 }

@@ -376,8 +376,9 @@ public abstract class UmlDiagram extends AbstractPSystem implements Diagram, Ann
 	protected abstract ImageData exportDiagramInternal(OutputStream os, int index, FileFormatOption fileFormatOption)
 			throws IOException;
 
-	final protected void exportCmap(File suggestedFile, final ImageData cmapdata) throws FileNotFoundException {
-		final String name = changeName(suggestedFile.getAbsolutePath());
+	final protected void exportCmap(SuggestedFile suggestedFile, int index, final ImageData cmapdata)
+			throws FileNotFoundException {
+		final String name = changeName(suggestedFile.getFile(index).getAbsolutePath());
 		final File cmapFile = new File(name);
 		PrintWriter pw = null;
 		try {
