@@ -239,11 +239,4 @@ public class PSystemUtils {
 		return maker.create();
 	}
 
-	@Deprecated
-	public static List<FileImageData> exportDiagrams(Diagram system, File f, FileFormatOption fileFormatOption)
-			throws IOException {
-		return exportDiagrams(system, SuggestedFile.fromOutputFile(f, fileFormatOption.getFileFormat()),
-				fileFormatOption);
-	}
-
 }
