@@ -30,41 +30,37 @@
  *
  *
  * Original Author:  Arnaud Roques
- * 
+ *
  *
  */
-package net.sourceforge.plantuml.timingdiagram;
+package net.sourceforge.plantuml.asciiart;
 
-import java.util.ArrayList;
-import java.util.List;
+import net.sourceforge.plantuml.graphic.StringBounder;
+import net.sourceforge.plantuml.skin.Area;
+import net.sourceforge.plantuml.skin.Context2D;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
+import net.sourceforge.plantuml.ugraphic.txt.UGraphicTxt;
 
-import net.sourceforge.plantuml.command.Command;
-import net.sourceforge.plantuml.command.UmlDiagramFactory;
+public class ComponentTextDestroy extends AbstractComponentText {
 
-public class TimingDiagramFactory extends UmlDiagramFactory {
-
-	@Override
-	public TimingDiagram createEmptyDiagram() {
-		return new TimingDiagram();
+	public ComponentTextDestroy() {
 	}
 
-	@Override
-	protected List<Command> createCommands() {
+	public void drawU(UGraphic ug, Area area, Context2D context) {
+		final UmlCharArea charArea = ((UGraphicTxt) ug).getCharArea();
+		charArea.drawStringLR("/", 2, 0);
+		charArea.drawStringLR("\\", 0, 0);
+		charArea.drawStringLR("X", 1, 1);
+		charArea.drawStringLR("\\", 2, 2);
+		charArea.drawStringLR("/", 0, 2);
+	}
 
-		final List<Command> cmds = new ArrayList<Command>();
+	public double getPreferredHeight(StringBounder stringBounder) {
+		return 5;
+	}
 
-		addCommonCommands(cmds);
-
-		cmds.add(new CommandLifeLine());
-		cmds.add(new CommandChangeStateByPlayerCode());
-		cmds.add(new CommandChangeStateByTime());
-		cmds.add(new CommandAtTime());
-		cmds.add(new CommandAtPlayer());
-		cmds.add(new CommandTimeMessage());
-		cmds.add(new CommandConstraint());
-		cmds.add(new CommandScalePixel());
-
-		return cmds;
+	public double getPreferredWidth(StringBounder stringBounder) {
+		return 3;
 	}
 
 }

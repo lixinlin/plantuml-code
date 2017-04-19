@@ -170,10 +170,10 @@ public class SourceFileReader implements ISourceFileReader {
 		final List<GeneratedImage> result = new ArrayList<GeneratedImage>();
 
 		for (BlockUml blockUml : builder.getBlockUmls()) {
-			final String newName = blockUml.getFileOrDirname(fileFormatOption.getFileFormat());
-			Log.info("name from block=" + newName);
+			final String newName = blockUml.getFileOrDirname();
 			SuggestedFile suggested = null;
 			if (newName != null) {
+				Log.info("name from block=" + newName);
 				final File dir = getDirIfDirectory(newName);
 				if (dir == null) {
 					Log.info(newName + " is not taken as a directory");
@@ -203,7 +203,7 @@ public class SourceFileReader implements ISourceFileReader {
 				OutputStream os = null;
 				try {
 					os = new BufferedOutputStream(new FileOutputStream(suggested.getFile(0)));
-					UmlDiagram.exportDiagramError(os, t, fileFormatOption, null, blockUml.getFlashData(),
+					UmlDiagram.exportDiagramError(os, t, fileFormatOption, 42, null, blockUml.getFlashData(),
 							UmlDiagram.getFailureText2(t));
 				} finally {
 					if (os != null) {

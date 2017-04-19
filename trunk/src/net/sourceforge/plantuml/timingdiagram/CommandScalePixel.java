@@ -30,43 +30,40 @@
  *
  *
  * Original Author:  Arnaud Roques
+ * 
  *
  */
 package net.sourceforge.plantuml.timingdiagram;
 
-import java.math.BigDecimal;
-
+import net.sourceforge.plantuml.command.CommandExecutionResult;
+import net.sourceforge.plantuml.command.SingleLineCommand2;
+import net.sourceforge.plantuml.command.regex.RegexConcat;
 import net.sourceforge.plantuml.command.regex.RegexLeaf;
 import net.sourceforge.plantuml.command.regex.RegexResult;
 
-public class TimeTickBuilder {
+public class CommandScalePixel extends SingleLineCommand2<TimingDiagram> {
 
-	private static final String WITHOUT_AROBASE = "(\\+?)(\\d+\\.?\\d*)";
-	private static final String WITH_AROBASE = "@" + WITHOUT_AROBASE;
-
-	public static RegexLeaf expressionAtWithoutArobase(String name) {
-		return new RegexLeaf(name, WITHOUT_AROBASE);
+	public CommandScalePixel() {
+		super(getRegexConcat());
 	}
 
-	public static RegexLeaf expressionAtWithArobase(String name) {
-		return new RegexLeaf(name, WITH_AROBASE);
+	private static RegexConcat getRegexConcat() {
+		return new RegexConcat(new RegexLeaf("^"), //
+				new RegexLeaf("scale"), //
+				new RegexLeaf("[%s]+"), //
+				new RegexLeaf("TICK", "(\\d+)"), //
+				new RegexLeaf("[%s]+as[%s]+"), //
+				new RegexLeaf("PIXEL", "(\\d+)"), //
+				new RegexLeaf("[%s]+pixels?"), //
+				new RegexLeaf("[%s]*$"));
 	}
 
-	public static RegexLeaf optionalExpressionAtWithArobase(String name) {
-		return new RegexLeaf(name, "(?:" + WITH_AROBASE + ")?");
-	}
-
-	public static TimeTick parseTimeTick(String name, RegexResult arg, Clock clock) {
-		final String number = arg.get(name, 1);
-		if (number == null) {
-			return clock.getNow();
-		}
-		final boolean isRelative = "+".equals(arg.get(name, 0));
-		BigDecimal value = new BigDecimal(number);
-		if (isRelative) {
-			value = clock.getNow().getTime().add(value);
-		}
-		return new TimeTick(value);
+	@Override
+	final protected CommandExecutionResult executeArg(TimingDiagram diagram, RegexResult arg) {
+		final long tick = Long.parseLong(arg.get("TICK", 0));
+		final long pixel = Long.parseLong(arg.get("PIXEL", 0));
+		diagram.scaleInPixels(tick, pixel);
+		return CommandExecutionResult.ok();
 	}
 
 }
