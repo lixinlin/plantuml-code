@@ -30,51 +30,16 @@
  *
  *
  * Original Author:  Arnaud Roques
- * 
+ *
  *
  */
-package net.sourceforge.plantuml.preproc;
+package net.sourceforge.plantuml.bpm;
 
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-import net.sourceforge.plantuml.CharSequence2;
-import net.sourceforge.plantuml.CharSequence2Impl;
-import net.sourceforge.plantuml.LineLocation;
+public class FootPrint {
 
-class ReadLineInsertable implements ReadLine {
-
-	private final ReadLine source;
-	private final List<CharSequence2> inserted = new LinkedList<CharSequence2>();
-
-	public ReadLineInsertable(ReadLine source) {
-		this.source = source;
-	}
-
-	public void close() throws IOException {
-		source.close();
-	}
-
-	public CharSequence2 readLine() throws IOException {
-		if (inserted.size() > 0) {
-			final Iterator<CharSequence2> it = inserted.iterator();
-			final CharSequence2 result = it.next();
-			it.remove();
-			return result;
-		}
-		return source.readLine();
-	}
-
-	public void insert(List<? extends CharSequence> data, LineLocation location) {
-		for (CharSequence s : data) {
-			insert(s, location);
-		}
-	}
-
-	public void insert(CharSequence s, LineLocation location) {
-		inserted.add(new CharSequence2Impl(s, location));
-	}
+	private final Set<Coord> cells = new HashSet<Coord>();
 
 }
