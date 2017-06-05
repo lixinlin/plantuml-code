@@ -30,30 +30,39 @@
  *
  *
  * Original Author:  Arnaud Roques
- *
  * 
+ *
  */
-package net.sourceforge.plantuml;
+package net.sourceforge.plantuml.preproc;
 
+class NumericCompare {
 
-public enum LineParam {
-//	sequenceBoundaryBorder,
-	sequenceActorBorder,
-	sequenceDividerBorder,
-//	sequenceGroupBorder(0.1),
-//	sequenceReferenceBorder(0.1),
-	sequenceLifeLineBorder,
-	sequenceParticipantBorder, noteBorder, sequenceGroupBorder, sequenceReferenceBorder,
-	legendBorder,
-	sequenceArrow,
-	classBorder, objectBorder, usecaseBorder,
-	partitionBorder,
-	packageBorder,
-	swimlaneBorder,
-	activityBorder,
-	titleBorder,
-	diagramBorder,
-	rectangleBorder;
-//	sequenceBoxBorder(0.1);
-	
+	private final String operator;
+
+	public NumericCompare(String operator) {
+		this.operator = operator;
+	}
+
+	public boolean isCompareOk(int value1, int value2) {
+		if (operator.equals("<")) {
+			return value1 < value2;
+		}
+		if (operator.equals("<=")) {
+			return value1 <= value2;
+		}
+		if (operator.equals(">")) {
+			return value1 > value2;
+		}
+		if (operator.equals(">=")) {
+			return value1 >= value2;
+		}
+		if (operator.equals("=") || operator.equals("==")) {
+			return value1 == value2;
+		}
+		if (operator.equals("!=") || operator.equals("<>")) {
+			return value1 != value2;
+		}
+		throw new IllegalStateException();
+	}
+
 }

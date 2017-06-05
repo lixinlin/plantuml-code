@@ -30,32 +30,48 @@
  *
  *
  * Original Author:  Arnaud Roques
- *
  * 
+ *
  */
-package net.sourceforge.plantuml.svek.extremity;
+package net.sourceforge.plantuml.creole;
 
-import java.awt.geom.Point2D;
+import java.awt.geom.Dimension2D;
+import java.util.List;
 
-import net.sourceforge.plantuml.OptionFlags;
-import net.sourceforge.plantuml.graphic.UDrawable;
-import net.sourceforge.plantuml.svek.AbstractExtremityFactory;
-import net.sourceforge.plantuml.svek.Side;
+import net.sourceforge.plantuml.Dimension2DDouble;
+import net.sourceforge.plantuml.graphic.StringBounder;
+import net.sourceforge.plantuml.ugraphic.UGraphic;
+import net.sourceforge.plantuml.ugraphic.UTranslate;
 
-public class ExtremityFactoryParenthesis extends AbstractExtremityFactory implements ExtremityFactory {
+public class AtomTexts implements Atom {
+	private final List<AtomText> all;
 
-	@Override
-	public UDrawable createUDrawable(Point2D p0, double angle, Side side) {
-		return new ExtremityParenthesis(p0, angle - Math.PI / 2);
+	public AtomTexts(List<AtomText> texts) {
+		this.all = texts;
 	}
 
-	public UDrawable createUDrawable(Point2D p0, Point2D p1, Point2D p2, Side side) {
-		final double ortho = atan2(p0, p2);
-		if (OptionFlags.USE_INTERFACE_EYE2) {
-			final Point2D center = new Point2D.Double((p0.getX() + p2.getX()) / 2, (p0.getY() + p2.getY()) / 2);
-			return new ExtremityParenthesis2(center, ortho, p1);
+	public Dimension2D calculateDimension(StringBounder stringBounder) {
+		double width = 0;
+		double height = 0;
+		for (AtomText text : all) {
+			final Dimension2D dim = text.calculateDimension(stringBounder);
+			width = Math.max(width, dim.getWidth());
+			height += dim.getHeight();
 		}
-		return new ExtremityParenthesis(p1, ortho);
+		return new Dimension2DDouble(width, height);
+	}
+
+	public double getStartingAltitude(StringBounder stringBounder) {
+		return all.get(0).getStartingAltitude(stringBounder);
+	}
+
+	public void drawU(UGraphic ug) {
+		double y = 0;
+		for (AtomText text : all) {
+			final Dimension2D dim = text.calculateDimension(ug.getStringBounder());
+			text.drawU(ug.apply(new UTranslate(0, y)));
+			y += dim.getHeight();
+		}
 	}
 
 }

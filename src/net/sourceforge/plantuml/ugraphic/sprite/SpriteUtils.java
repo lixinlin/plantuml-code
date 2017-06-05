@@ -38,6 +38,8 @@ package net.sourceforge.plantuml.ugraphic.sprite;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
+import net.sourceforge.plantuml.BackSlash;
+
 public class SpriteUtils {
 
 	public static final String SPRITE_NAME = "[-\\p{L}0-9_/]+";
@@ -52,7 +54,7 @@ public class SpriteUtils {
 		final List<String> result = level.encode(img);
 		for (String s : result) {
 			sb.append(s);
-			sb.append("\n");
+			sb.append(BackSlash.NEWLINE);
 		}
 		sb.append("}\n");
 		return sb.toString();
@@ -64,12 +66,12 @@ public class SpriteUtils {
 		final List<String> list = level.encodeZ(img);
 		if (list.size() == 1) {
 			sb.append(list.get(0));
-			sb.append("\n");
+			sb.append(BackSlash.NEWLINE);
 		} else {
 			sb.append("{\n");
 			for (String s : list) {
 				sb.append(s);
-				sb.append("\n");
+				sb.append(BackSlash.NEWLINE);
 			}
 			sb.append("}\n");
 		}
