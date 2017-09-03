@@ -235,10 +235,10 @@ public class QuoteUtils {
 					"V unir cneg bs n cyna.", "V'z cerggl fher gur nafjre vf: V nz Tebbg.",
 					"Nalguvat gung pna cbffvoyl tb jebat, qbrf", "Cyhf pn engr, cyhf ba n qr punapr dhr pn znepur",
 					"Fb V thrff gur sbeghar gryyre'f evtug...", "Jura rirelguvat'f tbar jebat fbzrubj...",
-					"V qba’g jnag gb yvir ba guvf cynarg nalzber",
+					"V qba'g jnag gb yvir ba guvf cynarg nalzber",
 					"Oba, p'rfg y'urher bh yrf fbhiravef fr enzrarag...",
 					"Fhpprff pbafvfgf bs tbvat sebz snvyher gb snvyher jvgubhg ybff bs raguhfvnfz",
-					"Vs lbh’er tbvat guebhtu uryy, xrrc tbvat",
+					"Vs lbh'er tbvat guebhtu uryy, xrrc tbvat",
 					"Jre xnzcsg, xnaa ireyvrera. Jre avpug xnzcsg, ung fpuba ireybera.",
 					"P'rfg nh cvrq qh zhe dhr y'ba ibvg yr zvrhk yr zhe."
 
