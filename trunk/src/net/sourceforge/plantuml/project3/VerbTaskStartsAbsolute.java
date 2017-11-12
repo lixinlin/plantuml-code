@@ -43,23 +43,22 @@ import net.sourceforge.plantuml.command.regex.IRegex;
 import net.sourceforge.plantuml.command.regex.RegexLeaf;
 import net.sourceforge.plantuml.command.regex.RegexResult;
 
-public class VerbStarts implements VerbPattern {
+public class VerbTaskStartsAbsolute implements VerbPattern {
 
 	public Collection<ComplementPattern> getComplements() {
-		return Arrays.<ComplementPattern> asList(new ComplementBeforeOrAfterOrAtTaskStartOrEnd());
+		return Arrays.<ComplementPattern> asList(new ComplementDate());
 	}
 
 	public IRegex toRegex() {
-		return new RegexLeaf("starts");
+		return new RegexLeaf("starts[%s]*(the[%s]*|on[%s]*)*");
 	}
 
 	public Verb getVerb(final GanttDiagram project, RegexResult arg) {
 		return new Verb() {
 			public CommandExecutionResult execute(Subject subject, Complement complement) {
 				final Task task = (Task) subject;
-				final TaskInstant when = (TaskInstant) complement;
-				task.setStart(when.getInstantPrecise());
-				project.addContraint(new GanttConstraint(when, new TaskInstant(task, TaskAttribute.START)));
+				final DayAsDate start = (DayAsDate) complement;
+				task.setStart(start.asInstantDay(project.getStartingDate()));
 				return CommandExecutionResult.ok();
 			}
 
