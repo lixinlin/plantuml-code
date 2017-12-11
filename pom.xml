@@ -124,7 +124,7 @@
             <resource>
                 <directory>${project.basedir}</directory>
                 <includes>
-                    <include>stdlib/**/*.puml</include>
+                    <include>stdlib/**/*.repx</include>
                 </includes>
             </resource>
         </resources>        
