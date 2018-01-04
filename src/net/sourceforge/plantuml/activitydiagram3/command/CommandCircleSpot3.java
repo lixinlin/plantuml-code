@@ -30,42 +30,35 @@
  *
  *
  * Original Author:  Arnaud Roques
- * 
+ *
  *
  */
-package net.sourceforge.plantuml.salt;
+package net.sourceforge.plantuml.activitydiagram3.command;
 
-import net.sourceforge.plantuml.StringUtils;
-import net.sourceforge.plantuml.command.PSystemBasicFactory;
-import net.sourceforge.plantuml.core.DiagramType;
+import net.sourceforge.plantuml.activitydiagram3.ActivityDiagram3;
+import net.sourceforge.plantuml.command.CommandExecutionResult;
+import net.sourceforge.plantuml.command.SingleLineCommand2;
+import net.sourceforge.plantuml.command.regex.RegexConcat;
+import net.sourceforge.plantuml.command.regex.RegexLeaf;
+import net.sourceforge.plantuml.command.regex.RegexResult;
 
-public class PSystemSaltFactory extends PSystemBasicFactory<PSystemSalt> {
+public class CommandCircleSpot3 extends SingleLineCommand2<ActivityDiagram3> {
 
-	public PSystemSaltFactory(DiagramType diagramType) {
-		super(diagramType);
+	public CommandCircleSpot3() {
+		super(getRegexConcat());
 	}
 
-	public PSystemSalt init(String startLine) {
-		if (getDiagramType() == DiagramType.UML) {
-			return null;
-		} else if (getDiagramType() == DiagramType.SALT) {
-			return new PSystemSalt();
-		} else {
-			throw new IllegalStateException(getDiagramType().name());
-		}
-
+	static RegexConcat getRegexConcat() {
+		return new RegexConcat(//
+				new RegexLeaf("^"), //
+				new RegexLeaf("SPOT", "\\((\\S)\\)"), //
+				new RegexLeaf(";?$"));
 	}
 
 	@Override
-	public PSystemSalt executeLine(PSystemSalt system, String line) {
-		if (system == null && line.replace('\t', ' ').trim().equals("salt")) {
-			return new PSystemSalt();
-		}
-		if (system == null) {
-			return null;
-		}
-		system.add(StringUtils.trin(line));
-		return system;
+	protected CommandExecutionResult executeArg(ActivityDiagram3 diagram, RegexResult arg) {
+		diagram.addSpot(arg.get("SPOT", 0));
+		return CommandExecutionResult.ok();
 	}
 
 }
