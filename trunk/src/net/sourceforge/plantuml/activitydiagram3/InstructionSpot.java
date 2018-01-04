@@ -30,42 +30,51 @@
  *
  *
  * Original Author:  Arnaud Roques
- * 
+ *
  *
  */
-package net.sourceforge.plantuml.salt;
+package net.sourceforge.plantuml.activitydiagram3;
 
-import net.sourceforge.plantuml.StringUtils;
-import net.sourceforge.plantuml.command.PSystemBasicFactory;
-import net.sourceforge.plantuml.core.DiagramType;
+import net.sourceforge.plantuml.activitydiagram3.ftile.Ftile;
+import net.sourceforge.plantuml.activitydiagram3.ftile.FtileFactory;
+import net.sourceforge.plantuml.activitydiagram3.ftile.FtileKilled;
+import net.sourceforge.plantuml.activitydiagram3.ftile.Swimlane;
 
-public class PSystemSaltFactory extends PSystemBasicFactory<PSystemSalt> {
+public class InstructionSpot extends MonoSwimable implements Instruction {
 
-	public PSystemSaltFactory(DiagramType diagramType) {
-		super(diagramType);
+	private boolean killed = false;
+	private final LinkRendering inlinkRendering;
+	private final String spot;
+
+	public InstructionSpot(String spot, LinkRendering inlinkRendering, Swimlane swimlane) {
+		super(swimlane);
+		this.spot = spot;
+		this.inlinkRendering = inlinkRendering;
+		if (inlinkRendering == null) {
+			throw new IllegalArgumentException();
+		}
 	}
 
-	public PSystemSalt init(String startLine) {
-		if (getDiagramType() == DiagramType.UML) {
-			return null;
-		} else if (getDiagramType() == DiagramType.SALT) {
-			return new PSystemSalt();
-		} else {
-			throw new IllegalStateException(getDiagramType().name());
+	public Ftile createFtile(FtileFactory factory) {
+		Ftile result = factory.spot(getSwimlaneIn(), spot);
+		result = eventuallyAddNote(factory, result, result.getSwimlaneIn());
+		if (killed) {
+			return new FtileKilled(result);
 		}
-
+		return result;
 	}
 
-	@Override
-	public PSystemSalt executeLine(PSystemSalt system, String line) {
-		if (system == null && line.replace('\t', ' ').trim().equals("salt")) {
-			return new PSystemSalt();
-		}
-		if (system == null) {
-			return null;
-		}
-		system.add(StringUtils.trin(line));
-		return system;
+	public void add(Instruction other) {
+		throw new UnsupportedOperationException();
+	}
+
+	final public boolean kill() {
+		this.killed = true;
+		return true;
+	}
+
+	public LinkRendering getInLinkRendering() {
+		return inlinkRendering;
 	}
 
 }
