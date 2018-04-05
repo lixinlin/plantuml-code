@@ -35,21 +35,8 @@
  */
 package net.sourceforge.plantuml.project3;
 
-public class DurationDay implements Duration {
+public interface Load extends Value, Complement, LoadPlanable {
 
-	private final int days;
-
-	public DurationDay(int days) {
-		this.days = days;
-	}
-
-	public int getDays() {
-		return days;
-	}
-
-	@Override
-	public String toString() {
-		return "{" + days + " days}";
-	}
+	int getFullLoad();
 
 }
