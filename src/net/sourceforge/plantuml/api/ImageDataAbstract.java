@@ -30,27 +30,44 @@
  *
  *
  * Original Author:  Arnaud Roques
- * 
+ *
  *
  */
-package net.sourceforge.plantuml.project3;
+package net.sourceforge.plantuml.api;
 
-public class Solver2 {
+import java.awt.geom.Dimension2D;
 
-	public Instant solveEnd(Instant start, int fullLoad, LoadPlanable plan) {
-		while (fullLoad > 0) {
-			fullLoad -= plan.getLoadAt(start);
-			start = start.increment();
-		}
-		return start;
+import net.sourceforge.plantuml.core.ImageData;
+
+public abstract class ImageDataAbstract implements ImageData {
+
+	private final int width;
+	private final int height;
+	private int status;
+
+	public ImageDataAbstract(int width, int height) {
+		this.width = width;
+		this.height = height;
 	}
 
-	public Instant solveStart(Instant end, int fullLoad, LoadPlanable plan) {
-		while (fullLoad > 0) {
-			fullLoad -= plan.getLoadAt(end);
-			end = end.decrement();
-		}
-		return end;
+	public ImageDataAbstract(Dimension2D dim) {
+		this((int) dim.getWidth(), (int) dim.getHeight());
+	}
+
+	public final int getWidth() {
+		return width;
+	}
+
+	public final int getHeight() {
+		return height;
+	}
+
+	public final int getStatus() {
+		return status;
+	}
+
+	public final void setStatus(int status) {
+		this.status = status;
 	}
 
 }
