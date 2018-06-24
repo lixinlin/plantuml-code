@@ -35,39 +35,18 @@
  */
 package net.sourceforge.plantuml.project3;
 
-import net.sourceforge.plantuml.graphic.HtmlColor;
-import net.sourceforge.plantuml.ugraphic.UChangeBackColor;
-import net.sourceforge.plantuml.ugraphic.UChangeColor;
-import net.sourceforge.plantuml.ugraphic.UGraphic;
+import net.sourceforge.plantuml.command.regex.IRegex;
+import net.sourceforge.plantuml.command.regex.RegexLeaf;
+import net.sourceforge.plantuml.command.regex.RegexResult;
 
-public class ComplementColors implements Complement {
+public class ComplementNamed implements ComplementPattern {
 
-	private final HtmlColor center;
-	private final HtmlColor border;
-
-	public ComplementColors(HtmlColor center, HtmlColor border) {
-		this.center = center;
-		this.border = border;
+	public IRegex toRegex(String suffix) {
+		return new RegexLeaf("COMPLEMENT" + suffix, "\\[([^\\[\\]]+)\\]");
 	}
 
-	public UGraphic apply(UGraphic ug) {
-		if (isOk() == false) {
-			throw new IllegalStateException();
-		}
-		ug = ug.apply(new UChangeBackColor(center));
-		if (border == null) {
-			ug = ug.apply(new UChangeColor(center));
-		} else {
-			ug = ug.apply(new UChangeColor(border));
-		}
-		return ug;
-	}
-
-	public boolean isOk() {
-		return center != null;
-	}
-
-	public HtmlColor getCenter() {
-		return center;
+	public Failable<Complement> getComplement(GanttDiagram system, RegexResult arg, String suffix) {
+		final String name = arg.get("COMPLEMENT" + suffix, 0);
+		return Failable.<Complement> ok(new ComplementName(name));
 	}
 }

@@ -30,53 +30,41 @@
  *
  *
  * Original Author:  Arnaud Roques
+ * 
  *
  */
-package net.sourceforge.plantuml.timingdiagram;
+package net.sourceforge.plantuml.project3;
 
-import net.sourceforge.plantuml.cucadiagram.Display;
-import net.sourceforge.plantuml.cucadiagram.LinkDecor;
-import net.sourceforge.plantuml.cucadiagram.LinkType;
-import net.sourceforge.plantuml.cucadiagram.WithLinkType;
-import net.sourceforge.plantuml.graphic.HtmlColorUtils;
+import java.util.Arrays;
+import java.util.Collection;
 
-public class TimeMessage extends WithLinkType {
+import net.sourceforge.plantuml.command.CommandExecutionResult;
+import net.sourceforge.plantuml.command.regex.IRegex;
+import net.sourceforge.plantuml.command.regex.RegexLeaf;
+import net.sourceforge.plantuml.command.regex.RegexResult;
 
-	private final TickInPlayer tickInPlayer1;
-	private final TickInPlayer tickInPlayer2;
-	private final Display label;
+public class VerbIsOrAreNamed implements VerbPattern {
 
-	public TimeMessage(TickInPlayer tickInPlayer1, TickInPlayer tickInPlayer2, String label) {
-		this.tickInPlayer1 = tickInPlayer1;
-		this.tickInPlayer2 = tickInPlayer2;
-		this.label = Display.getWithNewlines(label);
-		this.setSpecificColor(HtmlColorUtils.BLUE);
-		this.type = new LinkType(LinkDecor.NONE, LinkDecor.NONE);
+	public Collection<ComplementPattern> getComplements() {
+		return Arrays.<ComplementPattern> asList(new ComplementNamed());
 	}
 
-	public final Player getPlayer1() {
-		return tickInPlayer1.getPlayer();
+	public IRegex toRegex() {
+		return new RegexLeaf("(is|are)[%s]+named");
 	}
 
-	public final Player getPlayer2() {
-		return tickInPlayer2.getPlayer();
-	}
-
-	public final TimeTick getTick1() {
-		return tickInPlayer1.getTick();
-	}
-
-	public final TimeTick getTick2() {
-		return tickInPlayer2.getTick();
-	}
-
-	public final Display getLabel() {
-		return label;
-	}
-
-	@Override
-	public void goNorank() {
-		// Nothing to do
+	public Verb getVerb(final GanttDiagram project, final RegexResult arg) {
+		return new Verb() {
+			public CommandExecutionResult execute(Subject subject, Complement complement) {
+				final ComplementName named = (ComplementName) complement;
+				final String name = named.getName();
+				final DaysAsDates days = (DaysAsDates) subject;
+				for (DayAsDate d : days) {
+					project.nameDay(d, name);
+				}
+				return CommandExecutionResult.ok();
+			}
+		};
 	}
 
 }

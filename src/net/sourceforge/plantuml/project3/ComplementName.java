@@ -35,39 +35,16 @@
  */
 package net.sourceforge.plantuml.project3;
 
-import java.util.Arrays;
-import java.util.Collection;
+public class ComplementName implements Complement {
 
-import net.sourceforge.plantuml.command.CommandExecutionResult;
-import net.sourceforge.plantuml.command.regex.IRegex;
-import net.sourceforge.plantuml.command.regex.RegexLeaf;
-import net.sourceforge.plantuml.command.regex.RegexResult;
+	private final String name;
 
-public class VerbIs implements VerbPattern {
-
-	public Collection<ComplementPattern> getComplements() {
-		return Arrays.<ComplementPattern> asList(new ComplementClose());
+	public ComplementName(String name) {
+		this.name = name;
 	}
 
-	public IRegex toRegex() {
-		return new RegexLeaf("is");
+	public final String getName() {
+		return name;
 	}
 
-	public Verb getVerb(final GanttDiagram project, RegexResult arg) {
-		return new Verb() {
-			public CommandExecutionResult execute(Subject subject, Complement complement) {
-				if (subject instanceof DayAsDate) {
-					final DayAsDate day = (DayAsDate) subject;
-					project.closeDayAsDate(day);
-				}
-				if (subject instanceof DaysAsDates) {
-					final DaysAsDates days = (DaysAsDates) subject;
-					for (DayAsDate d : days) {
-						project.closeDayAsDate(d);
-					}
-				}
-				return CommandExecutionResult.ok();
-			}
-		};
-	}
 }
