@@ -42,30 +42,55 @@ import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.command.regex.IRegex;
 import net.sourceforge.plantuml.command.regex.RegexLeaf;
 import net.sourceforge.plantuml.command.regex.RegexResult;
+import net.sourceforge.plantuml.graphic.HtmlColor;
 
-public class VerbTaskStartsAbsolute implements VerbPattern {
+public class VerbIsOrAre implements VerbPattern {
 
 	public Collection<ComplementPattern> getComplements() {
-		return Arrays.<ComplementPattern> asList(new ComplementDate());
+		return Arrays.<ComplementPattern> asList(new ComplementClose(), new ComplementInColors2());
 	}
 
 	public IRegex toRegex() {
-		return new RegexLeaf("starts[%s]*(the[%s]*|on[%s]*|at[%s]*)*");
+		return new RegexLeaf("(is|are)");
 	}
 
-	public Verb getVerb(final GanttDiagram project, RegexResult arg) {
+	public Verb getVerb(final GanttDiagram project, final RegexResult arg) {
 		return new Verb() {
 			public CommandExecutionResult execute(Subject subject, Complement complement) {
-				final Task task = (Task) subject;
-				final DayAsDate start = (DayAsDate) complement;
-				final DayAsDate startingDate = project.getStartingDate();
-				if (startingDate == null) {
-					return CommandExecutionResult.error("No starting date for the project");
+				if (complement instanceof ComplementColors) {
+					final HtmlColor color = ((ComplementColors) complement).getCenter();
+					return manageColor(project, subject, color);
 				}
-				task.setStart(start.asInstantDay(startingDate));
-				return CommandExecutionResult.ok();
+				return manageClose(project, subject);
 			}
-
 		};
+	}
+
+	private CommandExecutionResult manageColor(final GanttDiagram project, Subject subject, HtmlColor color) {
+		if (subject instanceof DayAsDate) {
+			final DayAsDate day = (DayAsDate) subject;
+			project.colorDay(day, color);
+		}
+		if (subject instanceof DaysAsDates) {
+			final DaysAsDates days = (DaysAsDates) subject;
+			for (DayAsDate d : days) {
+				project.colorDay(d, color);
+			}
+		}
+		return CommandExecutionResult.ok();
+	}
+
+	private CommandExecutionResult manageClose(final GanttDiagram project, Subject subject) {
+		if (subject instanceof DayAsDate) {
+			final DayAsDate day = (DayAsDate) subject;
+			project.closeDayAsDate(day);
+		}
+		if (subject instanceof DaysAsDates) {
+			final DaysAsDates days = (DaysAsDates) subject;
+			for (DayAsDate d : days) {
+				project.closeDayAsDate(d);
+			}
+		}
+		return CommandExecutionResult.ok();
 	}
 }
