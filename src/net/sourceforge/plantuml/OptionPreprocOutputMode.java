@@ -31,28 +31,11 @@
  *
  * Original Author:  Arnaud Roques
  *
- * 
+ *
  */
 package net.sourceforge.plantuml;
 
-import net.sourceforge.plantuml.graphic.HorizontalAlignment;
+public enum OptionPreprocOutputMode {
+	NORMAL, CYPHER
 
-
-public enum AlignParam {
-	
-	ARROW_MESSAGE_ALIGN(HorizontalAlignment.LEFT),
-	SEQUENCE_MESSAGE_ALIGN(HorizontalAlignment.LEFT),
-	SEQUENCE_MESSAGETEXT_ALIGN(HorizontalAlignment.LEFT),
-	SEQUENCE_REFERENCE_ALIGN(HorizontalAlignment.CENTER),
-	PACKAGE_TITLE_ALIGNMENT(HorizontalAlignment.CENTER);
-	
-	private final HorizontalAlignment defaultValue;
-	
-	private AlignParam(HorizontalAlignment defaultValue) {
-		this.defaultValue = defaultValue;
-	}
-
-	public final HorizontalAlignment getDefaultValue() {
-		return defaultValue;
-	}
 }

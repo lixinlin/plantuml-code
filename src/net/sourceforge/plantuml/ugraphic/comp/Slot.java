@@ -33,7 +33,7 @@
  * 
  *
  */
-package net.sourceforge.plantuml.ugraphic;
+package net.sourceforge.plantuml.ugraphic.comp;
 
 public class Slot implements Comparable<Slot> {
 

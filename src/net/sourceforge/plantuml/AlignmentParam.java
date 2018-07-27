@@ -30,34 +30,30 @@
  *
  *
  * Original Author:  Arnaud Roques
- * 
  *
+ * 
  */
-package net.sourceforge.plantuml.graphic;
+package net.sourceforge.plantuml;
 
-import java.awt.geom.Dimension2D;
+import net.sourceforge.plantuml.graphic.HorizontalAlignment;
 
-import net.sourceforge.plantuml.Dimension2DDouble;
-import net.sourceforge.plantuml.ugraphic.CompressionTransform;
-import net.sourceforge.plantuml.ugraphic.UGraphic;
-import net.sourceforge.plantuml.ugraphic.UGraphicCompress2;
 
-public class TextBlockCompressed2 extends AbstractTextBlock implements TextBlock {
-
-	private final TextBlock textBlock;
-	private final CompressionTransform compressionTransform;
-
-	public TextBlockCompressed2(TextBlock textBlock, CompressionTransform compressionTransform) {
-		this.textBlock = textBlock;
-		this.compressionTransform = compressionTransform;
+public enum AlignmentParam {
+	
+	arrowMessageAlignment(HorizontalAlignment.LEFT),
+	sequenceMessageAlignment(HorizontalAlignment.LEFT),
+	sequenceMessageTextAlignment(HorizontalAlignment.LEFT),
+	sequenceReferenceAlignment(HorizontalAlignment.CENTER),
+	packageTitleAlignment(HorizontalAlignment.CENTER),
+	noteTextAlignment(HorizontalAlignment.LEFT);
+	
+	private final HorizontalAlignment defaultValue;
+	
+	private AlignmentParam(HorizontalAlignment defaultValue) {
+		this.defaultValue = defaultValue;
 	}
 
-	public void drawU(final UGraphic ug) {
-		textBlock.drawU(new UGraphicCompress2(ug, compressionTransform));
-	}
-
-	public Dimension2D calculateDimension(StringBounder stringBounder) {
-		final Dimension2D dim = textBlock.calculateDimension(stringBounder);
-		return new Dimension2DDouble(compressionTransform.transform(dim.getWidth()), dim.getHeight());
+	public final HorizontalAlignment getDefaultValue() {
+		return defaultValue;
 	}
 }
