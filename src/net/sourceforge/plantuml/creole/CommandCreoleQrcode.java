@@ -33,61 +33,42 @@
  * 
  *
  */
-package net.sourceforge.plantuml.sequencediagram.teoz;
+package net.sourceforge.plantuml.creole;
 
-import net.sourceforge.plantuml.Url;
-import net.sourceforge.plantuml.graphic.StringBounder;
-import net.sourceforge.plantuml.real.Real;
-import net.sourceforge.plantuml.sequencediagram.Event;
-import net.sourceforge.plantuml.sequencediagram.Participant;
-import net.sourceforge.plantuml.ugraphic.UGraphic;
+import net.sourceforge.plantuml.command.regex.Matcher2;
+import net.sourceforge.plantuml.command.regex.MyPattern;
+import net.sourceforge.plantuml.command.regex.Pattern2;
+import net.sourceforge.plantuml.graphic.Splitter;
 
-public class EmptyTile implements Tile {
+public class CommandCreoleQrcode implements Command {
 
-	private final double height;
-	private final Tile position;
+	private final Pattern2 pattern;
 
-	public EmptyTile(double height, Tile position) {
-		this.height = height;
-		this.position = position;
+	private CommandCreoleQrcode(String p) {
+		this.pattern = MyPattern.cmpile(p);
 	}
 
-	public void drawU(UGraphic ug) {
+	public static Command create() {
+		return new CommandCreoleQrcode("^(?i)(" + Splitter.qrcodePattern + ")");
 	}
 
-	public double getPreferredHeight(StringBounder stringBounder) {
-		return height;
+	public int matchingSize(String line) {
+		final Matcher2 m = pattern.matcher(line);
+		if (m.find() == false) {
+			return 0;
+		}
+		return m.group(1).length();
 	}
 
-	public void addConstraints(StringBounder stringBounder) {
-	}
-
-	public Real getMinX(StringBounder stringBounder) {
-		return position.getMinX(stringBounder);
-	}
-
-	public Real getMaxX(StringBounder stringBounder) {
-		return position.getMaxX(stringBounder);
-	}
-
-	public Event getEvent() {
-		return new Event() {
-			public boolean dealWith(Participant someone) {
-				return false;
-			}
-
-			public Url getUrl() {
-				return null;
-			}
-
-			public boolean hasUrl() {
-				return false;
-			}
-
-			public boolean isParallel() {
-				return false;
-			}
-		};
+	public String executeAndGetRemaining(String line, StripeSimple stripe) {
+		final Matcher2 m = pattern.matcher(line);
+		if (m.find() == false) {
+			throw new IllegalStateException();
+		}
+		final String src = m.group(2);
+		final double scale = CommandCreoleImg.getScale(m.group(3), 3);
+		stripe.addQrcode(src, scale);
+		return line.substring(m.group(1).length());
 	}
 
 }
