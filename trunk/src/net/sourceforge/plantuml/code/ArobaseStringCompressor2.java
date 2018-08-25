@@ -50,9 +50,9 @@ public class ArobaseStringCompressor2 implements StringCompressor {
 	}
 
 	private String clean2(String s) {
-		s = s.replace("\0", "");
+		// s = s.replace("\0", "");
 		s = StringUtils.trin(s);
-		s = s.replace("\r", "").replaceAll("\n+$", "");
+		// s = s.replace("\r", "").replaceAll("\n+$", "");
 		if (s.startsWith("@start")) {
 			return s;
 		}
