@@ -35,56 +35,12 @@
  */
 package net.sourceforge.plantuml;
 
-public class QString {
+import java.io.PrintStream;
 
-	private final String data;
-	private final long mask;
+import net.sourceforge.plantuml.core.Diagram;
 
-	public QString(String data) {
-		this.data = data;
-		this.mask = getMask(data);
-	}
-	
-	@Override
-	public String toString() {
-		return data;
-	}
+public interface Stdrpt {
 
-	public boolean containsQ(QString other) {
-		if ((this.mask & other.mask) != other.mask) {
-			return false;
-		}
-		return this.data.contains(other.data);
-	}
-
-	static long getMask(String s) {
-		long result = 0;
-		for (int i = 0; i < s.length(); i++) {
-			result |= getMask(s.charAt(i));
-		}
-		return result;
-	}
-
-	static long getMask(char c) {
-		if (c >= '0' && c <= '9') {
-			final int n = c - '0';
-			return 1L << n;
-		}
-		if (c >= 'a' && c <= 'z') {
-			final int n = c - 'a' + 10;
-			return 1L << n;
-		}
-		if (c >= 'A' && c <= 'Z') {
-			final int n = c - 'A' + 10 + 26;
-			return 1L << n;
-		}
-		if (c == '_') {
-			return 1L << (10 + 26 + 26);
-		}
-		if (c == '(') {
-			return 1L << 63;
-		}
-		return 0;
-	}
+	public void printInfo(PrintStream output, Diagram sys);
 
 }
