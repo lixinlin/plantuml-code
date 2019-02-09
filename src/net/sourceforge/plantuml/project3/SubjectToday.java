@@ -33,21 +33,29 @@
  * 
  *
  */
-package net.sourceforge.plantuml.project;
+package net.sourceforge.plantuml.project3;
 
-class DayCloseWeekDay implements DayClose {
+import java.util.Arrays;
+import java.util.Collection;
 
-	private final WeekDay weekDay;
+import net.sourceforge.plantuml.command.regex.IRegex;
+import net.sourceforge.plantuml.command.regex.RegexConcat;
+import net.sourceforge.plantuml.command.regex.RegexLeaf;
+import net.sourceforge.plantuml.command.regex.RegexResult;
 
-	public DayCloseWeekDay(WeekDay weekDay) {
-		this.weekDay = weekDay;
+public class SubjectToday implements SubjectPattern {
+
+	public Collection<VerbPattern> getVerbs() {
+		return Arrays.<VerbPattern> asList(new VerbIsColoredForToday(), new VerbIsForToday());
 	}
 
-	public boolean isClose(Day day) {
-		if (day.getWeekDay() == weekDay) {
-			return true;
-		}
-		return false;
+	public IRegex toRegex() {
+		return new RegexConcat( //
+				new RegexLeaf("today") //
+		);
 	}
 
+	public Subject getSubject(GanttDiagram project, RegexResult arg) {
+		return new Today();
+	}
 }

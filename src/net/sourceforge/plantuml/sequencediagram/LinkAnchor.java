@@ -33,26 +33,35 @@
  * 
  *
  */
-package net.sourceforge.plantuml.project;
+package net.sourceforge.plantuml.sequencediagram;
 
-import java.util.ArrayList;
-import java.util.List;
+public class LinkAnchor {
 
-class DayCloseOr implements DayClose {
+	private final String anchor1;
+	private final String anchor2;
+	private final String message;
 
-	private final List<DayClose> all = new ArrayList<DayClose>();
-
-	public boolean isClose(Day day) {
-		for (DayClose dc : all) {
-			if (dc.isClose(day)) {
-				return true;
-			}
-		}
-		return false;
+	public LinkAnchor(String anchor1, String anchor2, String message) {
+		this.anchor1 = anchor1;
+		this.anchor2 = anchor2;
+		this.message = message;
 	}
 
-	public void add(DayClose dayClose) {
-		all.add(dayClose);
+	@Override
+	public String toString() {
+		return anchor1 + "<->" + anchor2 + " " + message;
+	}
+
+	public final String getAnchor1() {
+		return anchor1;
+	}
+
+	public final String getAnchor2() {
+		return anchor2;
+	}
+
+	public final String getMessage() {
+		return message;
 	}
 
 }

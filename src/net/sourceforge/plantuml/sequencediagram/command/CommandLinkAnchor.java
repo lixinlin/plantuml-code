@@ -33,41 +33,38 @@
  * 
  *
  */
-package net.sourceforge.plantuml.sequencediagram.teoz;
+package net.sourceforge.plantuml.sequencediagram.command;
 
-import net.sourceforge.plantuml.graphic.UDrawable;
-import net.sourceforge.plantuml.sequencediagram.AbstractMessage;
-import net.sourceforge.plantuml.sequencediagram.Event;
-import net.sourceforge.plantuml.ugraphic.UGraphic;
-import net.sourceforge.plantuml.ugraphic.UTranslate;
+import net.sourceforge.plantuml.command.CommandExecutionResult;
+import net.sourceforge.plantuml.command.SingleLineCommand2;
+import net.sourceforge.plantuml.command.regex.RegexConcat;
+import net.sourceforge.plantuml.command.regex.RegexLeaf;
+import net.sourceforge.plantuml.command.regex.RegexResult;
+import net.sourceforge.plantuml.sequencediagram.SequenceDiagram;
 
-public class YPositionedTile implements UDrawable {
+public class CommandLinkAnchor extends SingleLineCommand2<SequenceDiagram> {
 
-	private final Tile tile;
-	private final double y;
-
-	public YPositionedTile(Tile tile, double y) {
-		this.tile = tile;
-		this.y = y;
-		if (tile instanceof TileWithCallbackY) {
-			((TileWithCallbackY) tile).callbackY(y);
-		}
+	public CommandLinkAnchor() {
+		super(getRegexConcat());
 	}
 
-	public void drawU(UGraphic ug) {
-		// System.err.println("YPositionedTile::drawU y=" + y + " " + tile);
-		ug.apply(new UTranslate(0, y)).draw(tile);
+	static RegexConcat getRegexConcat() {
+		return new RegexConcat(new RegexLeaf("^"), //
+				new RegexLeaf("ANCHOR1", "\\{([\\p{L}0-9_]+)\\}"), //
+				new RegexLeaf("[%s]*"), //
+				new RegexLeaf("LINK", "\\<-\\>"), //
+				new RegexLeaf("[%s]*"), //
+				new RegexLeaf("ANCHOR2", "\\{([\\p{L}0-9_]+)\\}"), //
+				new RegexLeaf("[%s]*"), //
+				new RegexLeaf("MESSAGE", "(?::[%s]*(.*))?$"));
 	}
 
-	public boolean matchAnchor(String anchor) {
-		final Event event = tile.getEvent();
-		if (event instanceof AbstractMessage) {
-			final AbstractMessage msg = (AbstractMessage) event;
-			if (anchor.equals(msg.getAnchor())) {
-				return true;
-			}
-		}
-		return false;
+	@Override
+	protected CommandExecutionResult executeArg(SequenceDiagram diagram, RegexResult arg) {
+		final String anchor1 = arg.get("ANCHOR1", 0);
+		final String anchor2 = arg.get("ANCHOR2", 0);
+		final String message = arg.get("MESSAGE", 0);
+		return diagram.linkAnchor(anchor1, anchor2, message);
 	}
 
 }
