@@ -33,10 +33,35 @@
  * 
  *
  */
-package net.sourceforge.plantuml.project;
+package net.sourceforge.plantuml.project3;
 
-interface DayClose {
+import java.util.Arrays;
+import java.util.Collection;
 
-	boolean isClose(Day day);
+import net.sourceforge.plantuml.command.CommandExecutionResult;
+import net.sourceforge.plantuml.command.regex.IRegex;
+import net.sourceforge.plantuml.command.regex.RegexLeaf;
+import net.sourceforge.plantuml.command.regex.RegexResult;
 
+public class VerbIsColoredForToday implements VerbPattern {
+
+	public Collection<ComplementPattern> getComplements() {
+		return Arrays.<ComplementPattern> asList(new ComplementInColors());
+	}
+
+	public IRegex toRegex() {
+		return new RegexLeaf("is[%s]+colou?red");
+	}
+
+	public Verb getVerb(final GanttDiagram project, RegexResult arg) {
+		return new Verb() {
+			public CommandExecutionResult execute(Subject subject, Complement complement) {
+				final Today task = (Today) subject;
+				final ComplementColors colors = (ComplementColors) complement;
+				project.setTodayColors(colors);
+				return CommandExecutionResult.ok();
+			}
+
+		};
+	}
 }

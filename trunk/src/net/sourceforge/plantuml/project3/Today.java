@@ -33,8 +33,8 @@
  * 
  *
  */
-package net.sourceforge.plantuml.project;
+package net.sourceforge.plantuml.project3;
 
-interface Formal extends Expression {
+public class Today implements Subject {
 
 }
