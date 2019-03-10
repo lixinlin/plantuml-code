@@ -35,7 +35,6 @@
  */
 package net.sourceforge.plantuml.mindmap;
 
-import net.sourceforge.plantuml.Direction;
 import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.command.SingleLineCommand2;
 import net.sourceforge.plantuml.command.regex.RegexConcat;
@@ -61,7 +60,7 @@ public class CommandMindMapOrgmode extends SingleLineCommand2<MindMapDiagram> {
 	protected CommandExecutionResult executeArg(MindMapDiagram diagram, RegexResult arg) {
 		final String type = arg.get("TYPE", 0);
 		final String label = arg.get("LABEL", 0);
-		return diagram.addIdea(type.length() - 1, label, IdeaShape.fromDesc(arg.get("SHAPE", 0)), Direction.RIGHT);
+		return diagram.addIdea(type.length() - 1, label, IdeaShape.fromDesc(arg.get("SHAPE", 0)));
 	}
 
 }

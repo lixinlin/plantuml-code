@@ -650,4 +650,9 @@ public class GanttDiagram extends AbstractPSystem implements Subject {
 		return CommandExecutionResult.ok();
 	}
 
+	public CommandExecutionResult deleteTask(Task task) {
+		task.setColors(new ComplementColors(HtmlColorUtils.WHITE, HtmlColorUtils.BLACK));
+		return CommandExecutionResult.ok();
+	}
+
 }

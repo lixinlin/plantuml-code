@@ -67,6 +67,7 @@ public final class FactorySequenceNoteCommand implements SingleMultiFactoryComma
 	private RegexConcat getRegexConcatMultiLine() {
 		return new RegexConcat(//
 				new RegexLeaf("^"), //
+				new RegexLeaf("PARALLEL", "(&[%s]*)?"), //
 				new RegexLeaf("VMERGE", "(/)?[%s]*"), //
 				new RegexLeaf("STYLE", "(note|hnote|rnote)"), //
 				new RegexLeaf("[%s]*"), //
@@ -82,6 +83,7 @@ public final class FactorySequenceNoteCommand implements SingleMultiFactoryComma
 	private RegexConcat getRegexConcatSingleLine() {
 		return new RegexConcat(//
 				new RegexLeaf("^"), //
+				new RegexLeaf("PARALLEL", "(&[%s]*)?"), //
 				new RegexLeaf("VMERGE", "(/)?[%s]*"), //
 				new RegexLeaf("STYLE", "(note|hnote|rnote)"), //
 				new RegexLeaf("[%s]*"), //
@@ -137,6 +139,7 @@ public final class FactorySequenceNoteCommand implements SingleMultiFactoryComma
 
 		if (strings.size() > 0) {
 			final boolean tryMerge = arg.get("VMERGE", 0) != null;
+			final boolean parallel = arg.get("PARALLEL", 0) != null;
 			final Display display = diagram.manageVariable(strings.toDisplay());
 			final Note note = new Note(p, position, display);
 			Colors colors = color().getColor(arg, diagram.getSkinParam().getIHtmlColorSet());
@@ -152,6 +155,9 @@ public final class FactorySequenceNoteCommand implements SingleMultiFactoryComma
 				final UrlBuilder urlBuilder = new UrlBuilder(diagram.getSkinParam().getValue("topurl"), ModeUrl.STRICT);
 				final Url urlLink = urlBuilder.getUrl(arg.get("URL", 0));
 				note.setUrl(urlLink);
+			}
+			if (parallel) {
+				note.goParallel();
 			}
 			diagram.addNote(note, tryMerge);
 		}

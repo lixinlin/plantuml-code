@@ -43,8 +43,14 @@ import net.sourceforge.plantuml.ugraphic.UGraphicStencil;
 import net.sourceforge.plantuml.ugraphic.UPath;
 import net.sourceforge.plantuml.ugraphic.UStroke;
 import net.sourceforge.plantuml.ugraphic.UTranslate;
+// https://stackoverflow.com/questions/39552127/algorithm-for-drawing-random-comic-style-clouds
+// http://martin-oehm.de/data/cloud.html
+// https://stackoverflow.com/questions/34623855/what-is-the-algorithm-behind-the-pdf-cloud-annotation
+// https://stackoverflow.com/questions/3177121/how-do-i-paint-clouds
 
 class USymbolCloud extends USymbol {
+
+	private final static boolean NEW = false;
 
 	@Override
 	public SkinParameter getSkinParameter() {
@@ -54,12 +60,45 @@ class USymbolCloud extends USymbol {
 	private void drawCloud(UGraphic ug, double width, double height, boolean shadowing) {
 		final UPath shape = getSpecificFrontierForCloud(width, height);
 		if (shadowing) {
-			shape.setDeltaShadow(3.0);
+			// shape.setDeltaShadow(3.0);
 		}
 		ug.apply(new UTranslate(3, -3)).draw(shape);
 	}
 
+	private UPath getSpecificFrontierForCloudNew(double width, double height) {
+		final UPath path = new UPath();
+		lineTo(path, 10, 10, width / 2, 0, width - 10, 10);
+
+		lineTo(path, width - 10, 10, width, height / 2, width - 10, height - 10);
+
+		lineTo(path, width - 10, height - 10, width / 2, height, 10, height - 10);
+
+		lineTo(path, 10, height - 10, 0, height / 2, 10, 10);
+
+		return path;
+
+	}
+
+	private void lineTo(UPath path, double x1, double y1, double x2, double y2) {
+		path.moveTo(x1, y1);
+		path.lineTo(x2, y2);
+	}
+
+	private void lineTo(UPath path, double x1, double y1, double x2, double y2, double x3, double y3) {
+		path.moveTo(x1, y1);
+		// path.lineTo(x2, y2);
+		// path.lineTo(x3, y3);
+
+		CoordinateChange change = new CoordinateChange(x1, y1, x3, y3);
+
+		path.lineTo(change.getTrueCoordinate(change.getLength() / 2, -10));
+		path.lineTo(change.getTrueCoordinate(change.getLength(), 0));
+	}
+
 	private UPath getSpecificFrontierForCloud(double width, double height) {
+		if (NEW) {
+			return getSpecificFrontierForCloudNew(width, height);
+		}
 		final UPath path = new UPath();
 		path.moveTo(0, 10);
 		double x = 0;
@@ -86,6 +125,8 @@ class USymbolCloud extends USymbol {
 	}
 
 	private Margin getMargin() {
+		if (NEW)
+			return new Margin(15, 15, 15, 15);
 		return new Margin(10, 10, 10, 10);
 	}
 

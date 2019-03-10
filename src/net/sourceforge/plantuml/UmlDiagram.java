@@ -207,16 +207,16 @@ public abstract class UmlDiagram extends AbstractPSystem implements Diagram, Ann
 		return animation;
 	}
 
-	public final double getDpiFactor(FileFormatOption fileFormatOption) {
+	public final double getScaleCoef(FileFormatOption fileFormatOption) {
 		if (getSkinParam().getDpi() == 96) {
-			return 1.0;
+			return fileFormatOption.getScaleCoef();
 		}
-		return getSkinParam().getDpi() / 96.0;
+		return getSkinParam().getDpi() * fileFormatOption.getScaleCoef() / 96.0;
 	}
 
-	public final int getDpi(FileFormatOption fileFormatOption) {
-		return getSkinParam().getDpi();
-	}
+	// public final int getDpi(FileFormatOption fileFormatOption) {
+	// return getSkinParam().getDpi();
+	// }
 
 	public final boolean isHideUnlinkedData() {
 		return hideUnlinkedData;
