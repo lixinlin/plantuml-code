@@ -75,7 +75,7 @@ public class CommandArrow extends SingleLineCommand2<SequenceDiagram> {
 	static RegexConcat getRegexConcat() {
 		return new RegexConcat(
 				new RegexLeaf("^"), //
-				new RegexLeaf("PARALLEL", "(&%s*)?"), //
+				new RegexLeaf("PARALLEL", "(&[%s]*)?"), //
 				new RegexLeaf("ANCHOR", "(\\{([\\p{L}0-9_]+)\\}[%s]+)?"), //
 				new RegexOr("PART1", //
 						new RegexLeaf("PART1CODE", "([\\p{L}0-9_.@]+)"), //

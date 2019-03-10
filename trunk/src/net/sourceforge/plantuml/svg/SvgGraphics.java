@@ -62,8 +62,8 @@ import net.sourceforge.plantuml.OptionFlags;
 import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.SvgString;
 import net.sourceforge.plantuml.code.Base64Coder;
-import net.sourceforge.plantuml.eps.EpsGraphics;
 import net.sourceforge.plantuml.graphic.HtmlColorGradient;
+import net.sourceforge.plantuml.tikz.TikzGraphics;
 import net.sourceforge.plantuml.ugraphic.ColorMapper;
 import net.sourceforge.plantuml.ugraphic.UPath;
 import net.sourceforge.plantuml.ugraphic.USegment;
@@ -634,7 +634,7 @@ public class SvgGraphics {
 			} else if (type == USegmentType.SEG_CLOSE) {
 				// Nothing
 			} else {
-				Log.println("unknown " + seg);
+				Log.println("unknown3 " + seg);
 			}
 
 		}
@@ -696,7 +696,7 @@ public class SvgGraphics {
 	}
 
 	private String format(double x) {
-		return EpsGraphics.format(x * scale);
+		return TikzGraphics.format(x * scale);
 	}
 
 	private String formatBoolean(double x) {

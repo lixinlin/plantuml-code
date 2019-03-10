@@ -49,7 +49,6 @@ import net.sourceforge.plantuml.skin.Area;
 import net.sourceforge.plantuml.skin.ArrowComponent;
 import net.sourceforge.plantuml.skin.ArrowConfiguration;
 import net.sourceforge.plantuml.skin.Component;
-import net.sourceforge.plantuml.skin.ComponentType;
 import net.sourceforge.plantuml.skin.Context2D;
 import net.sourceforge.plantuml.skin.rose.Rose;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
@@ -65,6 +64,11 @@ public class CommunicationTileSelf extends AbstractTile implements TileWithUpdat
 
 	public Event getEvent() {
 		return message;
+	}
+
+	@Override
+	public double getYPoint(StringBounder stringBounder) {
+		return getComponent(stringBounder).getYPoint(stringBounder);
 	}
 
 	public CommunicationTileSelf(LivingSpace livingSpace1, Message message, Rose skin, ISkinParam skinParam,
@@ -86,11 +90,11 @@ public class CommunicationTileSelf extends AbstractTile implements TileWithUpdat
 	//
 	// }
 
-	private Component getComponent(StringBounder stringBounder) {
+	private ArrowComponent getComponent(StringBounder stringBounder) {
 		ArrowConfiguration arrowConfiguration = message.getArrowConfiguration();
 		arrowConfiguration = arrowConfiguration.self();
-		final Component comp = skin.createComponent(ComponentType.ARROW, arrowConfiguration, skinParam,
-				message.getLabelNumbered());
+		final ArrowComponent comp = skin
+				.createComponentArrow(arrowConfiguration, skinParam, message.getLabelNumbered());
 		return comp;
 	}
 

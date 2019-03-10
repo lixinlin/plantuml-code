@@ -97,6 +97,40 @@ public class UImage implements UShape {
 		if (newColor == null) {
 			return this;
 		}
+		int darkerRgb = getDarkerRgb();
+		final BufferedImage copy = deepCopy(image);
+		for (int i = 0; i < image.getWidth(); i++) {
+			for (int j = 0; j < image.getHeight(); j++) {
+				final int color = copy.getRGB(i, j);
+				final int rgb = getRgb(color);
+				final int a = getA(color);
+				if (a != 0 && rgb == darkerRgb) {
+					copy.setRGB(i, j, newColor.getRGB() + a);
+				}
+			}
+		}
+		return new UImage(copy, formula);
+	}
+
+	public UImage muteTransparentColor(Color newColor) {
+		if (newColor == null) {
+			return this;
+		}
+		final BufferedImage copy = deepCopy(image);
+		for (int i = 0; i < image.getWidth(); i++) {
+			for (int j = 0; j < image.getHeight(); j++) {
+				final int color = copy.getRGB(i, j);
+				// final int rgb = getRgb(color);
+				final int a = getA(color);
+				if (a == 0) {
+					copy.setRGB(i, j, newColor.getRGB());
+				}
+			}
+		}
+		return new UImage(copy, formula);
+	}
+
+	private int getDarkerRgb() {
 		int darkerRgb = -1;
 		for (int i = 0; i < image.getWidth(); i++) {
 			for (int j = 0; j < image.getHeight(); j++) {
@@ -116,18 +150,7 @@ public class UImage implements UShape {
 				}
 			}
 		}
-		final BufferedImage copy = deepCopy(image);
-		for (int i = 0; i < image.getWidth(); i++) {
-			for (int j = 0; j < image.getHeight(); j++) {
-				final int color = copy.getRGB(i, j);
-				final int rgb = getRgb(color);
-				final int a = getA(color);
-				if (a!=0 && rgb == darkerRgb) {
-					copy.setRGB(i, j, newColor.getRGB() + a);
-				}
-			}
-		}
-		return new UImage(copy, formula);
+		return darkerRgb;
 	}
 
 	private static final int mask_a__ = 0xFF000000;
