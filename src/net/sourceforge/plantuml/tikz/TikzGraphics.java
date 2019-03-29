@@ -47,7 +47,6 @@ import java.util.List;
 import java.util.Map;
 
 import net.sourceforge.plantuml.Log;
-import net.sourceforge.plantuml.SignatureUtils;
 import net.sourceforge.plantuml.Url;
 import net.sourceforge.plantuml.eps.EpsGraphics;
 import net.sourceforge.plantuml.ugraphic.UPath;

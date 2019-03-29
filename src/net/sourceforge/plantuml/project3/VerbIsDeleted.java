@@ -37,7 +37,6 @@ package net.sourceforge.plantuml.project3;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 
 import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.command.regex.IRegex;

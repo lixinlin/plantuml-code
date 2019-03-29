@@ -36,6 +36,7 @@
 package net.sourceforge.plantuml.wbs;
 
 import net.sourceforge.plantuml.Direction;
+import net.sourceforge.plantuml.LineLocation;
 import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.command.SingleLineCommand2;
 import net.sourceforge.plantuml.command.regex.RegexConcat;
@@ -59,7 +60,7 @@ public class CommandWBSOrgmode extends SingleLineCommand2<WBSDiagram> {
 	}
 
 	@Override
-	protected CommandExecutionResult executeArg(WBSDiagram diagram, RegexResult arg) {
+	protected CommandExecutionResult executeArg(WBSDiagram diagram, LineLocation location, RegexResult arg) {
 		final String type = arg.get("TYPE", 0);
 		final String label = arg.get("LABEL", 0);
 		final String direction = arg.get("DIRECTION", 0);

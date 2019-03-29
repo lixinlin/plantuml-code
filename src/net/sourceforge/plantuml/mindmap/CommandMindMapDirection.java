@@ -36,6 +36,7 @@
 package net.sourceforge.plantuml.mindmap;
 
 import net.sourceforge.plantuml.Direction;
+import net.sourceforge.plantuml.LineLocation;
 import net.sourceforge.plantuml.command.CommandExecutionResult;
 import net.sourceforge.plantuml.command.SingleLineCommand2;
 import net.sourceforge.plantuml.command.regex.RegexConcat;
@@ -57,7 +58,7 @@ public class CommandMindMapDirection extends SingleLineCommand2<MindMapDiagram> 
 	}
 
 	@Override
-	protected CommandExecutionResult executeArg(MindMapDiagram diagram, RegexResult arg) {
+	protected CommandExecutionResult executeArg(MindMapDiagram diagram, LineLocation location, RegexResult arg) {
 		final String direction = arg.get("DIRECTION", 0);
 		diagram.setDefaultDirection(Direction.valueOf(direction.toUpperCase()));
 		return CommandExecutionResult.ok();

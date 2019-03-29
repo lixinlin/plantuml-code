@@ -171,7 +171,11 @@ public class ActivityDiagram3 extends UmlDiagram {
 		if (last instanceof InstructionWhile == false) {
 			return false;
 		}
-		((InstructionWhile) last).setSpecial(special);
+		final InstructionWhile instructionWhile = (InstructionWhile) last;
+		if (instructionWhile.containsBreak()) {
+			return false;
+		}
+		instructionWhile.setSpecial(special);
 		return true;
 	}
 

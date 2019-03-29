@@ -121,7 +121,7 @@ public class WBSDiagram extends UmlDiagram {
 	}
 
 	private TextBlock getDrawingElement() {
-		return new Fork(getSkinParam(), root);
+		return new Fork2(getSkinParam(), root);
 	}
 
 	public CommandExecutionResult addIdea(int level, String label, Direction direction, IdeaShape shape) {

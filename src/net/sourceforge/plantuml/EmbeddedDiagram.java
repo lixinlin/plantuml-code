@@ -160,7 +160,7 @@ public class EmbeddedDiagram implements CharSequence {
 		}
 
 		private Diagram getSystem() throws IOException, InterruptedException {
-			final BlockUml blockUml = new BlockUml(system.as2(), Defines.createEmpty(), skinParam);
+			final BlockUml blockUml = new BlockUml(system.as2(), Defines.createEmpty(), skinParam, null);
 			return blockUml.getDiagram();
 
 		}

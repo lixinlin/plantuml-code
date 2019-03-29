@@ -377,11 +377,10 @@ public class GanttDiagram extends AbstractPSystem implements Subject {
 	}
 
 	private void initMinMax() {
-		// min = tasks.values().iterator().next().getStart();
 		if (tasks.size() == 0) {
 			max = min.increment();
 		} else {
-			max = tasks.values().iterator().next().getEnd();
+			max = null;
 			for (Task task : tasks.values()) {
 				if (task instanceof TaskSeparator) {
 					continue;
@@ -391,7 +390,7 @@ public class GanttDiagram extends AbstractPSystem implements Subject {
 				// if (min.compareTo(start) > 0) {
 				// min = start;
 				// }
-				if (max.compareTo(end) < 0) {
+				if (max == null || max.compareTo(end) < 0) {
 					max = end;
 				}
 			}

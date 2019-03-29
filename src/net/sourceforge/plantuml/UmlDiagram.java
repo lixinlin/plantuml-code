@@ -473,7 +473,7 @@ public abstract class UmlDiagram extends AbstractPSystem implements Diagram, Ann
 		if (f.exists() == false || f.canRead() == false) {
 			return CommandExecutionResult.error("Cannot load skin from " + filename);
 		}
-		final BlocLines lines = BlocLines.load(f);
+		final BlocLines lines = BlocLines.load(f, new LineLocationImpl(f.getName(), null));
 		final CommandSkinParam cmd1 = new CommandSkinParam();
 		final CommandSkinParamMultilines cmd2 = new CommandSkinParamMultilines();
 		for (int i = 0; i < lines.size(); i++) {
