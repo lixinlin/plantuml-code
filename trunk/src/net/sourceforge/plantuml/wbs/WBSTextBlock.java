@@ -36,10 +36,8 @@
 package net.sourceforge.plantuml.wbs;
 
 import java.awt.geom.Point2D;
-import java.util.Collection;
 
 import net.sourceforge.plantuml.ColorParam;
-import net.sourceforge.plantuml.Direction;
 import net.sourceforge.plantuml.FontParam;
 import net.sourceforge.plantuml.ISkinParam;
 import net.sourceforge.plantuml.activitydiagram3.ftile.BoxStyle;
@@ -49,7 +47,6 @@ import net.sourceforge.plantuml.graphic.AbstractTextBlock;
 import net.sourceforge.plantuml.graphic.FontConfiguration;
 import net.sourceforge.plantuml.graphic.HorizontalAlignment;
 import net.sourceforge.plantuml.graphic.HtmlColor;
-import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.graphic.TextBlock;
 import net.sourceforge.plantuml.graphic.TextBlockUtils;
 import net.sourceforge.plantuml.graphic.color.Colors;
@@ -68,54 +65,35 @@ public abstract class WBSTextBlock extends AbstractTextBlock {
 		this.skinParam = skinParam;
 	}
 
-	private HtmlColor getLinkColor() {
+	final protected HtmlColor getLinkColor() {
 		return ColorParam.activityBorder.getDefaultValue();
 	}
 
-	protected void drawLine(UGraphic ug, Point2D p1, Point2D p2) {
+	final protected void drawLine(UGraphic ug, Point2D p1, Point2D p2) {
 		final ULine line = new ULine(p1, p2);
 		ug.apply(new UTranslate(p1)).apply(new UChangeColor(getLinkColor())).draw(line);
 	}
 
-	protected void drawLine(UGraphic ug, double x1, double y1, double x2, double y2) {
+	final protected void drawLine(UGraphic ug, double x1, double y1, double x2, double y2) {
 		drawLine(ug, new Point2D.Double(x1, y1), new Point2D.Double(x2, y2));
-
 	}
 
-	protected TextBlock buildBox(WElement idea) {
-		return buildBox(idea.getLabel(), idea.getShape());
-	}
-
-	private TextBlock buildBox(Display label, IdeaShape shape) {
+	final protected TextBlock buildMain(WElement idea) {
+		Display label = idea.getLabel();
 		final UFont font = skinParam.getFont(null, false, FontParam.ACTIVITY);
-
-		if (shape == IdeaShape.BOX) {
+		
+		if (idea.getShape() == IdeaShape.BOX) {
 			final FtileBox box = new FtileBox(Colors.empty().mute(skinParam), label, font, null, BoxStyle.SDL_TASK);
 			return box;
 		}
-
+		
 		final TextBlock text = label.create(FontConfiguration.blackBlueTrue(font), HorizontalAlignment.LEFT, skinParam);
 		// if (direction == Direction.RIGHT) {
 		// return TextBlockUtils.withMargin(text, 3, 0, 1, 1);
 		// }
 		return TextBlockUtils.withMargin(text, 0, 3, 1, 1);
-
 	}
 
-	final protected double getCollWidth(StringBounder stringBounder, Collection<? extends TextBlock> all) {
-		double result = 0;
-		for (TextBlock child : all) {
-			result = Math.max(result, child.calculateDimension(stringBounder).getWidth());
-		}
-		return result;
-	}
 
-	final protected double getCollHeight(StringBounder stringBounder, Collection<? extends TextBlock> all, double deltay) {
-		double result = 0;
-		for (TextBlock child : all) {
-			result += deltay + child.calculateDimension(stringBounder).getHeight();
-		}
-		return result;
-	}
 
 }

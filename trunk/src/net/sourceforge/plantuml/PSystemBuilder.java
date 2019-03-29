@@ -67,7 +67,6 @@ import net.sourceforge.plantuml.flowdiagram.FlowDiagramFactory;
 import net.sourceforge.plantuml.font.PSystemListFontsFactory;
 import net.sourceforge.plantuml.help.HelpFactory;
 import net.sourceforge.plantuml.jcckit.PSystemJcckitFactory;
-import net.sourceforge.plantuml.logo.PSystemLogoFactory;
 import net.sourceforge.plantuml.math.PSystemLatexFactory;
 import net.sourceforge.plantuml.math.PSystemMathFactory;
 import net.sourceforge.plantuml.mindmap.MindMapDiagramFactory;
@@ -92,17 +91,17 @@ public class PSystemBuilder {
 
 	public static final long startTime = System.currentTimeMillis();
 
-	final public Diagram createPSystem(ISkinSimple skinParam, final List<CharSequence2> strings2) {
+	final public Diagram createPSystem(ISkinSimple skinParam, final List<StringLocated> strings2) {
 
 		final long now = System.currentTimeMillis();
 
 		Diagram result = null;
 		try {
-			final DiagramType type = DiagramType.getTypeFromArobaseStart(strings2.get(0).toString2());
+			final DiagramType type = DiagramType.getTypeFromArobaseStart(strings2.get(0).getString());
 			final UmlSource umlSource = new UmlSource(strings2, type == DiagramType.UML);
 
 			// int cpt = 0;
-			for (CharSequence2 s : strings2) {
+			for (StringLocated s : strings2) {
 				if (s.getPreprocessorError() != null) {
 					Log.error("Preprocessor Error: " + s.getPreprocessorError());
 					final ErrorUml err = new ErrorUml(ErrorUmlType.SYNTAX_ERROR, s.getPreprocessorError(), /* cpt */
@@ -166,12 +165,12 @@ public class PSystemBuilder {
 		factories.add(new NwDiagramFactory());
 		factories.add(new MindMapDiagramFactory());
 		factories.add(new WBSDiagramFactory());
+		factories.add(new PSystemDitaaFactory(DiagramType.DITAA));
+		factories.add(new PSystemDitaaFactory(DiagramType.UML));
 		if (License.getCurrent() == License.GPL || License.getCurrent() == License.GPLV2) {
-			factories.add(new PSystemDitaaFactory(DiagramType.DITAA));
-			factories.add(new PSystemDitaaFactory(DiagramType.UML));
 			factories.add(new PSystemJcckitFactory(DiagramType.JCCKIT));
 			factories.add(new PSystemJcckitFactory(DiagramType.UML));
-			factories.add(new PSystemLogoFactory());
+			// factories.add(new PSystemLogoFactory());
 			factories.add(new PSystemSudokuFactory());
 		}
 		factories.add(new PSystemDefinitionFactory());

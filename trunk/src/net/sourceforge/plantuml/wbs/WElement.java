@@ -64,6 +64,10 @@ class WElement {
 		this.shape = shape;
 	}
 
+	public boolean isLeaf() {
+		return childrenLeft.size() == 0 && childrenRight.size() == 0;
+	}
+
 	public WElement createElement(int newLevel, Display newLabel, Direction direction, IdeaShape shape) {
 		final WElement result = new WElement(newLabel, newLevel, this, shape);
 		if (direction == Direction.LEFT) {

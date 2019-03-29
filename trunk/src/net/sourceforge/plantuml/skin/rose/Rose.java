@@ -50,7 +50,6 @@ import net.sourceforge.plantuml.graphic.HorizontalAlignment;
 import net.sourceforge.plantuml.graphic.HtmlColor;
 import net.sourceforge.plantuml.graphic.SkinParameter;
 import net.sourceforge.plantuml.graphic.SymbolContext;
-import net.sourceforge.plantuml.skin.ArrowComponent;
 import net.sourceforge.plantuml.skin.ArrowConfiguration;
 import net.sourceforge.plantuml.skin.ArrowDirection;
 import net.sourceforge.plantuml.skin.Component;
@@ -271,7 +270,7 @@ public class Rose {
 		return null;
 	}
 
-	public ArrowComponent createComponentArrow(ArrowConfiguration config, ISkinParam param, Display stringsToDisplay) {
+	public AbstractComponentRoseArrow createComponentArrow(ArrowConfiguration config, ISkinParam param, Display stringsToDisplay) {
 		final HtmlColor sequenceArrow = config.getColor() == null ? getHtmlColor(param, ColorParam.arrow) : config
 				.getColor();
 		if (config.getArrowDirection() == ArrowDirection.SELF) {

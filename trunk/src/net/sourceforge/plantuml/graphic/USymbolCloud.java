@@ -36,6 +36,10 @@
 package net.sourceforge.plantuml.graphic;
 
 import java.awt.geom.Dimension2D;
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 import net.sourceforge.plantuml.Dimension2DDouble;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
@@ -50,7 +54,8 @@ import net.sourceforge.plantuml.ugraphic.UTranslate;
 
 class USymbolCloud extends USymbol {
 
-	private final static boolean NEW = false;
+	private final static boolean NEW = true;
+	private final static boolean DEBUG = false;
 
 	@Override
 	public SkinParameter getSkinParameter() {
@@ -62,37 +67,116 @@ class USymbolCloud extends USymbol {
 		if (shadowing) {
 			// shape.setDeltaShadow(3.0);
 		}
-		ug.apply(new UTranslate(3, -3)).draw(shape);
+		ug.apply(new UTranslate(0, 0)).draw(shape);
 	}
 
 	private UPath getSpecificFrontierForCloudNew(double width, double height) {
-		final UPath path = new UPath();
-		lineTo(path, 10, 10, width / 2, 0, width - 10, 10);
+		final Random rnd = new Random((long) width + 7919L * (long) height);
+		final List<Point2D> points = new ArrayList<Point2D>();
 
-		lineTo(path, width - 10, 10, width, height / 2, width - 10, height - 10);
+		double bubbleSize = 11;
+		if (Math.max(width, height) / bubbleSize > 16) {
+			bubbleSize = Math.max(width, height) / 16;
+		}
 
-		lineTo(path, width - 10, height - 10, width / 2, height, 10, height - 10);
+		final double margin1 = 8;
 
-		lineTo(path, 10, height - 10, 0, height / 2, 10, 10);
+		final Point2D.Double pointA = new Point2D.Double(margin1, margin1);
+		final Point2D.Double pointB = new Point2D.Double(width - margin1, margin1);
+		final Point2D.Double pointC = new Point2D.Double(width - margin1, height - margin1);
+		final Point2D.Double pointD = new Point2D.Double(margin1, height - margin1);
 
-		return path;
+		if (width > 100 && height > 100) {
+			complex(rnd, points, bubbleSize, pointA, pointB, pointC, pointD);
+		} else {
+			simple(rnd, points, bubbleSize, pointA, pointB, pointC, pointD);
+		}
+
+		points.add(points.get(0));
+
+		final UPath result = new UPath();
+		result.moveTo(points.get(0));
+		for (int i = 0; i < points.size() - 1; i++) {
+			if (DEBUG) {
+				result.lineTo(points.get(i + 1));
+			} else {
+				addCurve(rnd, result, points.get(i), points.get(i + 1));
+			}
+		}
+		return result;
 
 	}
 
-	private void lineTo(UPath path, double x1, double y1, double x2, double y2) {
-		path.moveTo(x1, y1);
-		path.lineTo(x2, y2);
+	private void complex(final Random rnd, final List<Point2D> points, double bubbleSize, final Point2D.Double pointA,
+			final Point2D.Double pointB, final Point2D.Double pointC, final Point2D.Double pointD) {
+		final double margin2 = 7;
+		specialLine(bubbleSize, rnd, points, mvX(pointA, margin2), mvX(pointB, -margin2));
+		points.add(mvY(pointB, margin2));
+		specialLine(bubbleSize, rnd, points, mvY(pointB, margin2), mvY(pointC, -margin2));
+		points.add(mvX(pointC, -margin2));
+		specialLine(bubbleSize, rnd, points, mvX(pointC, -margin2), mvX(pointD, margin2));
+		points.add(mvY(pointD, -margin2));
+		specialLine(bubbleSize, rnd, points, mvY(pointD, -margin2), mvY(pointA, margin2));
+		points.add(mvX(pointA, margin2));
 	}
 
-	private void lineTo(UPath path, double x1, double y1, double x2, double y2, double x3, double y3) {
-		path.moveTo(x1, y1);
-		// path.lineTo(x2, y2);
-		// path.lineTo(x3, y3);
+	private void simple(final Random rnd, final List<Point2D> points, double bubbleSize, final Point2D.Double pointA,
+			final Point2D.Double pointB, final Point2D.Double pointC, final Point2D.Double pointD) {
+		specialLine(bubbleSize, rnd, points, pointA, pointB);
+		specialLine(bubbleSize, rnd, points, pointB, pointC);
+		specialLine(bubbleSize, rnd, points, pointC, pointD);
+		specialLine(bubbleSize, rnd, points, pointD, pointA);
+	}
 
-		CoordinateChange change = new CoordinateChange(x1, y1, x3, y3);
+	private static Point2D mvX(Point2D pt, double dx) {
+		return new Point2D.Double(pt.getX() + dx, pt.getY());
+	}
 
-		path.lineTo(change.getTrueCoordinate(change.getLength() / 2, -10));
-		path.lineTo(change.getTrueCoordinate(change.getLength(), 0));
+	private static Point2D mvY(Point2D pt, double dy) {
+		return new Point2D.Double(pt.getX(), pt.getY() + dy);
+	}
+
+	private void specialLine(double bubbleSize, Random rnd, List<Point2D> points, Point2D p1, Point2D p2) {
+		final CoordinateChange change = new CoordinateChange(p1, p2);
+		final double length = change.getLength();
+		final Point2D middle = change.getTrueCoordinate(length / 2, -rnd(rnd, 1, 1 + Math.min(12, bubbleSize * 0.8)));
+		// final Point2D middle = change.getTrueCoordinate(length / 2, -13);
+		if (DEBUG) {
+			points.add(middle);
+			points.add(p2);
+		} else {
+			bubbleLine(rnd, points, p1, middle, bubbleSize);
+			bubbleLine(rnd, points, middle, p2, bubbleSize);
+		}
+	}
+
+	private void bubbleLine(Random rnd, List<Point2D> points, Point2D p1, Point2D p2, double bubbleSize) {
+		final CoordinateChange change = new CoordinateChange(p1, p2);
+		final double length = change.getLength();
+		final int nb = (int) (length / bubbleSize);
+		for (int i = 0; i < nb; i++) {
+			points.add(rnd(rnd, change.getTrueCoordinate(i * length / nb, 0), bubbleSize * .2));
+		}
+	}
+
+	private void addCurve(Random rnd, UPath path, Point2D p1, Point2D p2) {
+		final CoordinateChange change = new CoordinateChange(p1, p2);
+		final double length = change.getLength();
+		final double coef = rnd(rnd, .25, .35);
+		final Point2D middle = change.getTrueCoordinate(length * coef, -length * rnd(rnd, .4, .55));
+		final Point2D middle2 = change.getTrueCoordinate(length * (1 - coef), -length * rnd(rnd, .4, .55));
+		path.cubicTo(middle, middle2, p2);
+
+	}
+
+	static private double rnd(Random rnd, double a, double b) {
+		return rnd.nextDouble() * (b - a) + a;
+	}
+
+	static private Point2D rnd(Random rnd, Point2D pt, double v) {
+		final double x = pt.getX() + v * rnd.nextDouble();
+		final double y = pt.getY() + v * rnd.nextDouble();
+		return new Point2D.Double(x, y);
 	}
 
 	private UPath getSpecificFrontierForCloud(double width, double height) {

@@ -38,7 +38,6 @@ package net.sourceforge.plantuml.project3;
 import net.sourceforge.plantuml.command.regex.IRegex;
 import net.sourceforge.plantuml.command.regex.RegexLeaf;
 import net.sourceforge.plantuml.command.regex.RegexResult;
-import net.sourceforge.plantuml.graphic.HtmlColor;
 
 public class ComplementEmpty implements ComplementPattern {
 

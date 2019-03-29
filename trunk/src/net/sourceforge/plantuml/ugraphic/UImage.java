@@ -98,10 +98,10 @@ public class UImage implements UShape {
 			return this;
 		}
 		int darkerRgb = getDarkerRgb();
-		final BufferedImage copy = deepCopy(image);
+		final BufferedImage copy = deepCopy2();
 		for (int i = 0; i < image.getWidth(); i++) {
 			for (int j = 0; j < image.getHeight(); j++) {
-				final int color = copy.getRGB(i, j);
+				final int color = image.getRGB(i, j);
 				final int rgb = getRgb(color);
 				final int a = getA(color);
 				if (a != 0 && rgb == darkerRgb) {
@@ -114,12 +114,12 @@ public class UImage implements UShape {
 
 	public UImage muteTransparentColor(Color newColor) {
 		if (newColor == null) {
-			return this;
+			newColor = Color.WHITE;
 		}
-		final BufferedImage copy = deepCopy(image);
+		final BufferedImage copy = deepCopy2();
 		for (int i = 0; i < image.getWidth(); i++) {
 			for (int j = 0; j < image.getHeight(); j++) {
-				final int color = copy.getRGB(i, j);
+				final int color = image.getRGB(i, j);
 				// final int rgb = getRgb(color);
 				final int a = getA(color);
 				if (a == 0) {
@@ -172,10 +172,21 @@ public class UImage implements UShape {
 	// }
 
 	// From https://stackoverflow.com/questions/3514158/how-do-you-clone-a-bufferedimage
-	private static BufferedImage deepCopy(BufferedImage bi) {
+	private static BufferedImage deepCopyOld(BufferedImage bi) {
 		final ColorModel cm = bi.getColorModel();
 		final boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
 		final WritableRaster raster = bi.copyData(bi.getRaster().createCompatibleWritableRaster());
 		return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
 	}
+
+	private BufferedImage deepCopy2() {
+		final BufferedImage result = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		for (int i = 0; i < this.image.getWidth(); i++) {
+			for (int j = 0; j < this.image.getHeight(); j++) {
+				result.setRGB(i, j, image.getRGB(i, j));
+			}
+		}
+		return result;
+	}
+
 }
