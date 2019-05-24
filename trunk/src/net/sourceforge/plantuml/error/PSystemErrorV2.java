@@ -31,46 +31,22 @@
  *
  * Original Author:  Arnaud Roques
  *
- *
  */
-package net.sourceforge.plantuml.suggest;
+package net.sourceforge.plantuml.error;
 
-public class VariatorSwapLetter extends VariatorIteratorAdaptor {
+import java.util.List;
 
-	private final String data;
-	private int i;
+import net.sourceforge.plantuml.ErrorUml;
+import net.sourceforge.plantuml.StringLocated;
+import net.sourceforge.plantuml.core.UmlSource;
 
-	public VariatorSwapLetter(String data) {
-		this.data = data;
-		ensureTwoLetters();
-	}
+public class PSystemErrorV2 extends PSystemError {
 
-	private void ensureTwoLetters() {
-		while (i < data.length() - 1 && areTwoLetters() == false) {
-			i++;
-		}
+	public PSystemErrorV2(UmlSource source, List<StringLocated> trace, ErrorUml singleError) {
+		this.setSource(source);
+		this.trace = trace;
+		this.singleError = singleError;
 
 	}
 
-	private boolean areTwoLetters() {
-		return Character.isLetter(data.charAt(i)) && Character.isLetter(data.charAt(i + 1));
-
-	}
-
-	@Override
-	Variator getVariator() {
-		return new Variator() {
-			public String getData() {
-				if (i >= data.length() - 1) {
-					return null;
-				}
-				return data.substring(0, i) + data.charAt(i + 1) + data.charAt(i) + data.substring(i + 2);
-			}
-
-			public void nextStep() {
-				i++;
-				ensureTwoLetters();
-			}
-		};
-	}
 }

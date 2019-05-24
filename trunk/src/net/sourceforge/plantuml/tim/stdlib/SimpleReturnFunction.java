@@ -5,12 +5,12 @@
  * (C) Copyright 2009-2020, Arnaud Roques
  *
  * Project Info:  http://plantuml.com
- * 
+ *
  * If you like this project or if you find it useful, you can support us at:
- * 
+ *
  * http://plantuml.com/patreon (only 1$ per month!)
  * http://plantuml.com/paypal
- * 
+ *
  * This file is part of PlantUML.
  *
  * PlantUML is free software; you can redistribute it and/or modify it
@@ -31,48 +31,36 @@
  *
  * Original Author:  Arnaud Roques
  *
- *
  */
-package net.sourceforge.plantuml.suggest;
+package net.sourceforge.plantuml.tim.stdlib;
 
-public class VariatorAddOneCharBetweenWords extends VariatorIteratorAdaptor {
+import java.util.List;
 
-	private final String data;
-	private final char toAdd;
-	private int i;
+import net.sourceforge.plantuml.tim.EaterException;
+import net.sourceforge.plantuml.tim.TContext;
+import net.sourceforge.plantuml.tim.TFunction;
+import net.sourceforge.plantuml.tim.TFunctionType;
+import net.sourceforge.plantuml.tim.TMemory;
+import net.sourceforge.plantuml.tim.expression.TValue;
 
-	public VariatorAddOneCharBetweenWords(String data, char toAdd) {
-		this.data = data;
-		this.toAdd = toAdd;
-		i++;
-		ensureBetweenWords();
+public abstract class SimpleReturnFunction implements TFunction {
+
+	final public TFunctionType getFunctionType() {
+		return TFunctionType.RETURN;
 	}
 
-	private void ensureBetweenWords() {
-		while (i < data.length() && inWord()) {
-			i++;
-		}
-
+	final public void executeVoid(TContext context, TMemory memory, String s) throws EaterException {
+		throw new UnsupportedOperationException();
 	}
 
-	private boolean inWord() {
-		return Character.isLetterOrDigit(data.charAt(i - 1)) && Character.isLetterOrDigit(data.charAt(i));
+	final public void executeVoidInternal(TContext context, TMemory memory, List<TValue> args) throws EaterException {
+		throw new UnsupportedOperationException();
+	}
+	
+	final public boolean isUnquoted() {
+		return false;
 	}
 
-	@Override
-	Variator getVariator() {
-		return new Variator() {
-			public String getData() {
-				if (i > data.length() - 1) {
-					return null;
-				}
-				return data.substring(0, i) + toAdd + data.substring(i);
-			}
 
-			public void nextStep() {
-				i++;
-				ensureBetweenWords();
-			}
-		};
-	}
+
 }
