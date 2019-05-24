@@ -5,12 +5,12 @@
  * (C) Copyright 2009-2020, Arnaud Roques
  *
  * Project Info:  http://plantuml.com
- * 
+ *
  * If you like this project or if you find it useful, you can support us at:
- * 
+ *
  * http://plantuml.com/patreon (only 1$ per month!)
  * http://plantuml.com/paypal
- * 
+ *
  * This file is part of PlantUML.
  *
  * PlantUML is free software; you can redistribute it and/or modify it
@@ -31,13 +31,28 @@
  *
  * Original Author:  Arnaud Roques
  *
- *
  */
-package net.sourceforge.plantuml.suggest;
+package net.sourceforge.plantuml.tim.stdlib;
 
-public interface Variator {
+import java.util.List;
 
-	String getData();
-	void nextStep();
+import net.sourceforge.plantuml.tim.EaterException;
+import net.sourceforge.plantuml.tim.TContext;
+import net.sourceforge.plantuml.tim.TFunctionSignature;
+import net.sourceforge.plantuml.tim.TMemory;
+import net.sourceforge.plantuml.tim.expression.TValue;
 
+public class AlwaysFalse extends SimpleReturnFunction {
+
+	public TFunctionSignature getSignature() {
+		return new TFunctionSignature("%false", 0);
+	}
+
+	public boolean canCover(int nbArg) {
+		return nbArg == 0;
+	}
+
+	public TValue executeReturn(TContext context, TMemory memory, List<TValue> args) throws EaterException {
+		return TValue.fromBoolean(false);
+	}
 }

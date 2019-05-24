@@ -5,12 +5,12 @@
  * (C) Copyright 2009-2020, Arnaud Roques
  *
  * Project Info:  http://plantuml.com
- * 
+ *
  * If you like this project or if you find it useful, you can support us at:
- * 
+ *
  * http://plantuml.com/patreon (only 1$ per month!)
  * http://plantuml.com/paypal
- * 
+ *
  * This file is part of PlantUML.
  *
  * PlantUML is free software; you can redistribute it and/or modify it
@@ -31,39 +31,24 @@
  *
  * Original Author:  Arnaud Roques
  *
- *
  */
-package net.sourceforge.plantuml.suggest;
+package net.sourceforge.plantuml.tim;
 
-public class VariatorAddTwoChar extends VariatorIteratorAdaptor {
+import net.sourceforge.plantuml.Log;
 
-	private final String data;
-	private final char toAdd;
-	private int i;
-	private int j = 1;
+public class EaterLog extends Eater {
 
-	public VariatorAddTwoChar(String data, char toAdd) {
-		this.data = data;
-		this.toAdd = toAdd;
+	public EaterLog(String s) {
+		super(s);
 	}
 
 	@Override
-	Variator getVariator() {
-		return new Variator() {
-			public String getData() {
-				if (i >= data.length()) {
-					return null;
-				}
-				return data.substring(0, i) + toAdd + data.substring(i, j) + toAdd + data.substring(j);
-			}
-
-			public void nextStep() {
-				j++;
-				if (j > data.length()) {
-					i++;
-					j = i + 1;
-				}
-			}
-		};
+	public void execute(TContext context, TMemory memory) throws EaterException {
+		skipSpaces();
+		checkAndEatChar("!log");
+		skipSpaces();
+		final String logData = context.applyFunctionsAndVariables(memory, this.eatAllToEnd());
+		Log.error("[Log] " + logData);
 	}
+
 }
