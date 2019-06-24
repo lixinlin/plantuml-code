@@ -28,33 +28,25 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
  * USA.
  *
+ * Contributed by Jonathan Buhacoff
+ * Based on ConditionStyle by Arnaud Roques and Arno Peterson
  *
- * Original Author:  Arnaud Roques
- *
- *
+ * 
  */
-package net.sourceforge.plantuml.descdiagram.command;
+package net.sourceforge.plantuml.svek;
 
-import java.util.List;
+import java.util.EnumSet;
 
-import net.sourceforge.plantuml.command.CommandExecutionResult;
-import net.sourceforge.plantuml.command.SingleLineCommand;
-import net.sourceforge.plantuml.descdiagram.DescriptionDiagram;
+public enum ConditionEndStyle {
 
-public class CommandNamespaceSeparator extends SingleLineCommand<DescriptionDiagram> {
+	DIAMOND, HLINE;
 
-	public CommandNamespaceSeparator() {
-		super("(?i)^set[%s]namespaceseparator[%s](\\S+)$");
-	}
-
-	@Override
-	protected CommandExecutionResult executeArg(DescriptionDiagram diagram, List<String> arg) {
-		final String s = arg.get(0);
-		if ("none".equalsIgnoreCase(s)) {
-			diagram.setNamespaceSeparator(null);
-		} else {
-			diagram.setNamespaceSeparator(s);
+	public static ConditionEndStyle fromString(String value) {
+		for (ConditionEndStyle p : EnumSet.allOf(ConditionEndStyle.class)) {
+			if (p.toString().equalsIgnoreCase(value)) {
+				return p;
+			}
 		}
-		return CommandExecutionResult.ok();
+		return null;
 	}
 }
