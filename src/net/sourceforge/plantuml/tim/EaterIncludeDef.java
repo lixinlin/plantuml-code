@@ -5,12 +5,12 @@
  * (C) Copyright 2009-2020, Arnaud Roques
  *
  * Project Info:  http://plantuml.com
- * 
+ *
  * If you like this project or if you find it useful, you can support us at:
- * 
+ *
  * http://plantuml.com/patreon (only 1$ per month!)
  * http://plantuml.com/paypal
- * 
+ *
  * This file is part of PlantUML.
  *
  * PlantUML is free software; you can redistribute it and/or modify it
@@ -30,25 +30,30 @@
  *
  *
  * Original Author:  Arnaud Roques
- * 
  *
  */
-package net.sourceforge.plantuml.command;
-
-import java.util.List;
-
-import net.sourceforge.plantuml.core.Diagram;
-
-public class CommandComment extends SingleLineCommand<Diagram> {
+package net.sourceforge.plantuml.tim;
 
 
-	private CommandComment() {
-		super(CommandMultilinesComment.COMMENT_SINGLE_LINE);
+public class EaterIncludeDef extends Eater {
+
+	private String location;
+
+	public EaterIncludeDef(String s) {
+		super(s);
 	}
 
 	@Override
-	protected CommandExecutionResult executeArg(Diagram diagram, List<String> arg) {
-		return CommandExecutionResult.ok();
+	public void execute(TContext context, TMemory memory) throws EaterException {
+		skipSpaces();
+		checkAndEatChar("!includedef");
+		skipSpaces();
+		this.location = context.applyFunctionsAndVariables(memory, this.eatAllToEnd());
+
+	}
+
+	public final String getLocation() {
+		return location;
 	}
 
 }
