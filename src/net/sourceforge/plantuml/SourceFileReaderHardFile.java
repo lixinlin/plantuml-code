@@ -30,53 +30,39 @@
  *
  *
  * Original Author:  Arnaud Roques
- * 
+ *
  *
  */
-package net.sourceforge.plantuml.ugraphic.sprite;
+package net.sourceforge.plantuml;
 
-import java.awt.geom.Dimension2D;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.List;
 
-import net.sourceforge.plantuml.Dimension2DDouble;
-import net.sourceforge.plantuml.FileUtils;
-import net.sourceforge.plantuml.SvgString;
-import net.sourceforge.plantuml.graphic.AbstractTextBlock;
-import net.sourceforge.plantuml.graphic.HtmlColor;
-import net.sourceforge.plantuml.graphic.StringBounder;
-import net.sourceforge.plantuml.graphic.TextBlock;
-import net.sourceforge.plantuml.ugraphic.UGraphic;
-import net.sourceforge.plantuml.ugraphic.UImageSvg;
+import net.sourceforge.plantuml.preproc.Defines;
+import net.sourceforge.plantuml.preproc.FileWithSuffix;
 
-public class SpriteSvg implements Sprite {
+public class SourceFileReaderHardFile extends SourceFileReaderAbstract implements ISourceFileReader {
 
-	private final UImageSvg img;
+	public SourceFileReaderHardFile(Defines defines, final File file, File outputFile, List<String> config, String charset,
+			FileFormatOption fileFormatOption) throws IOException {
+		this.file = file;
+		this.fileFormatOption = fileFormatOption;
+		this.outputFile = outputFile;
+		if (file.exists() == false) {
+			throw new IllegalArgumentException();
+		}
+		FileSystem.getInstance().setCurrentDir(file.getAbsoluteFile().getParentFile());
 
-	public SpriteSvg(String svg) {
-		this.img = new UImageSvg(new SvgString(svg, 1));
+		final File parentFile = file.getAbsoluteFile().getParentFile();
+		builder = new BlockUmlBuilder(config, charset, defines, getReader(charset), parentFile,
+				FileWithSuffix.getFileName(file));
 	}
 
-	public SpriteSvg(File svgFile) throws IOException {
-		this(FileUtils.readSvg(svgFile));
-	}
-
-	public SpriteSvg(InputStream is) throws IOException {
-		this(FileUtils.readSvg(is));
-	}
-
-	public TextBlock asTextBlock(final HtmlColor color, final double scale) {
-		return new AbstractTextBlock() {
-
-			public void drawU(UGraphic ug) {
-				ug.draw(img);
-			}
-
-			public Dimension2D calculateDimension(StringBounder stringBounder) {
-				return new Dimension2DDouble(img.getWidth() * scale, img.getHeight() * scale);
-			}
-		};
+	@Override
+	protected SuggestedFile getSuggestedFile(BlockUml blockUml) {
+		final SuggestedFile suggested = SuggestedFile.fromOutputFile(outputFile, fileFormatOption.getFileFormat());
+		return suggested;
 	}
 
 }

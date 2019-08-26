@@ -33,70 +33,50 @@
  * 
  *
  */
-package net.sourceforge.plantuml.ugraphic.sprite;
+package net.sourceforge.plantuml.sprite;
 
 import java.awt.geom.Dimension2D;
-import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-import javax.imageio.ImageIO;
-
 import net.sourceforge.plantuml.Dimension2DDouble;
+import net.sourceforge.plantuml.FileUtils;
+import net.sourceforge.plantuml.SvgString;
 import net.sourceforge.plantuml.graphic.AbstractTextBlock;
 import net.sourceforge.plantuml.graphic.HtmlColor;
-import net.sourceforge.plantuml.graphic.HtmlColorSimple;
 import net.sourceforge.plantuml.graphic.StringBounder;
 import net.sourceforge.plantuml.graphic.TextBlock;
 import net.sourceforge.plantuml.ugraphic.UGraphic;
-import net.sourceforge.plantuml.ugraphic.UImage;
+import net.sourceforge.plantuml.ugraphic.UImageSvg;
 
-public class SpriteImage implements Sprite {
+public class SpriteSvg implements Sprite {
 
-	private final UImage img;
+	private final UImageSvg img;
 
-	public SpriteImage(BufferedImage img) {
-		this.img = new UImage(img);
+	public SpriteSvg(String svg) {
+		this.img = new UImageSvg(new SvgString(svg, 1));
+	}
+
+	public SpriteSvg(File svgFile) throws IOException {
+		this(FileUtils.readSvg(svgFile));
+	}
+
+	public SpriteSvg(InputStream is) throws IOException {
+		this(FileUtils.readSvg(is));
 	}
 
 	public TextBlock asTextBlock(final HtmlColor color, final double scale) {
 		return new AbstractTextBlock() {
 
 			public void drawU(UGraphic ug) {
-				if (color == null) {
-					ug.draw(img.scale(scale));
-				} else {
-					ug.draw(img.muteColor(((HtmlColorSimple) color).getColor999()).scale(scale));
-				}
+				ug.draw(img);
 			}
 
 			public Dimension2D calculateDimension(StringBounder stringBounder) {
 				return new Dimension2DDouble(img.getWidth() * scale, img.getHeight() * scale);
 			}
 		};
-	}
-
-	public static Sprite fromInternal(String name) {
-		if (name.endsWith(".png")) {
-			throw new IllegalArgumentException();
-		}
-		final InputStream is = getInternalSprite(name + ".png");
-		if (is == null) {
-			return null;
-		}
-		try {
-			return new SpriteImage(ImageIO.read(is));
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
-
-	}
-
-	public static InputStream getInternalSprite(final String inner) {
-		final String path = "/sprites/" + inner;
-		final InputStream is = SpriteImage.class.getResourceAsStream(path);
-		return is;
 	}
 
 }

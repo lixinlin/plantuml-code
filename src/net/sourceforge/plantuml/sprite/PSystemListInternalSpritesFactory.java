@@ -33,13 +33,21 @@
  * 
  *
  */
-package net.sourceforge.plantuml.ugraphic.sprite;
+package net.sourceforge.plantuml.sprite;
 
-import net.sourceforge.plantuml.graphic.HtmlColor;
-import net.sourceforge.plantuml.graphic.TextBlock;
+import net.sourceforge.plantuml.AbstractPSystem;
+import net.sourceforge.plantuml.StringUtils;
+import net.sourceforge.plantuml.command.PSystemSingleLineFactory;
 
-public interface Sprite {
-	
-	public TextBlock asTextBlock(final HtmlColor color, double scale);
+public class PSystemListInternalSpritesFactory extends PSystemSingleLineFactory {
+
+	@Override
+	protected AbstractPSystem executeLine(String line) {
+		final String lineLower = StringUtils.goLowerCase(line);
+		if (lineLower.startsWith("listsprite")) {
+			return new PSystemListInternalSprites();
+		}
+		return null;
+	}
 
 }
