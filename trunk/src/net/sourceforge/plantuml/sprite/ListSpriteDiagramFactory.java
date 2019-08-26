@@ -30,24 +30,38 @@
  *
  *
  * Original Author:  Arnaud Roques
- * 
+ *
  *
  */
-package net.sourceforge.plantuml.ugraphic.sprite;
+package net.sourceforge.plantuml.sprite;
 
-import net.sourceforge.plantuml.AbstractPSystem;
-import net.sourceforge.plantuml.StringUtils;
-import net.sourceforge.plantuml.command.PSystemSingleLineFactory;
+import java.util.ArrayList;
+import java.util.List;
 
-public class PSystemListInternalSpritesFactory extends PSystemSingleLineFactory {
+import net.sourceforge.plantuml.ISkinSimple;
+import net.sourceforge.plantuml.command.Command;
+import net.sourceforge.plantuml.command.UmlDiagramFactory;
+
+public class ListSpriteDiagramFactory extends UmlDiagramFactory {
+
+	private final ISkinSimple skinParam;
+
+	public ListSpriteDiagramFactory(ISkinSimple skinParam) {
+		this.skinParam = skinParam;
+	}
 
 	@Override
-	protected AbstractPSystem executeLine(String line) {
-		final String lineLower = StringUtils.goLowerCase(line);
-		if (lineLower.startsWith("listsprite")) {
-			return new PSystemListInternalSprites();
-		}
-		return null;
+	protected List<Command> createCommands() {
+
+		final List<Command> cmds = new ArrayList<Command>();
+		addCommonCommands1(cmds);
+		addCommonCommands2(cmds);
+		return cmds;
+	}
+
+	@Override
+	public ListSpriteDiagram createEmptyDiagram() {
+		return new ListSpriteDiagram(skinParam);
 	}
 
 }

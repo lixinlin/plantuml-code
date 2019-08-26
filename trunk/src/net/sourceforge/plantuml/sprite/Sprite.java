@@ -33,15 +33,13 @@
  * 
  *
  */
-package net.sourceforge.plantuml.skin.bluemodern;
+package net.sourceforge.plantuml.sprite;
 
-import net.sourceforge.plantuml.graphic.HtmlColorUtils;
+import net.sourceforge.plantuml.graphic.HtmlColor;
+import net.sourceforge.plantuml.graphic.TextBlock;
 
-public class ShadowShape extends FillRoundShape {
-
-	public ShadowShape(double width, double height, double corner) {
-		super(width, height, HtmlColorUtils.LIGHT_GRAY, HtmlColorUtils.GRAY, corner);
-
-	}
+public interface Sprite {
+	
+	public TextBlock asTextBlock(final HtmlColor color, double scale);
 
 }
