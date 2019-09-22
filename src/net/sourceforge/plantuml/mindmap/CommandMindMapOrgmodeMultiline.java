@@ -33,53 +33,54 @@
  * 
  *
  */
-package net.sourceforge.plantuml.command;
+package net.sourceforge.plantuml.mindmap;
 
-import net.sourceforge.plantuml.FontParam;
-import net.sourceforge.plantuml.LineLocation;
-import net.sourceforge.plantuml.SkinParam;
-import net.sourceforge.plantuml.TitledDiagram;
-import net.sourceforge.plantuml.UmlDiagram;
+import net.sourceforge.plantuml.command.BlocLines;
+import net.sourceforge.plantuml.command.CommandExecutionResult;
+import net.sourceforge.plantuml.command.CommandMultilines2;
+import net.sourceforge.plantuml.command.MultilinesStrategy;
 import net.sourceforge.plantuml.command.regex.IRegex;
 import net.sourceforge.plantuml.command.regex.RegexConcat;
 import net.sourceforge.plantuml.command.regex.RegexLeaf;
 import net.sourceforge.plantuml.command.regex.RegexOptional;
-import net.sourceforge.plantuml.command.regex.RegexOr;
 import net.sourceforge.plantuml.command.regex.RegexResult;
 import net.sourceforge.plantuml.cucadiagram.Display;
-import net.sourceforge.plantuml.graphic.HorizontalAlignment;
-import net.sourceforge.plantuml.style.PName;
+import net.sourceforge.plantuml.graphic.HtmlColor;
 
-public class CommandFooter extends SingleLineCommand2<TitledDiagram> {
+public class CommandMindMapOrgmodeMultiline extends CommandMultilines2<MindMapDiagram> {
 
-	public CommandFooter() {
-		super(getRegexConcat());
+	public CommandMindMapOrgmodeMultiline() {
+		super(getRegexConcat(), MultilinesStrategy.REMOVE_STARTING_QUOTE);
 	}
 
 	static IRegex getRegexConcat() {
-		return RegexConcat.build(CommandFooter.class.getName(), //
-				RegexLeaf.start(), //
-				new RegexOptional(new RegexLeaf("POSITION", "(left|right|center)")), //
-				RegexLeaf.spaceZeroOrMore(), //
-				new RegexLeaf("footer"), //
-				new RegexOr( //
-						new RegexConcat(RegexLeaf.spaceZeroOrMore(), new RegexLeaf(":"), RegexLeaf.spaceZeroOrMore()), //
-						RegexLeaf.spaceOneOrMore()), //
-				new RegexLeaf("LABEL", "(.*[\\p{L}0-9_.].*)"), RegexLeaf.end()); //
+		return RegexConcat.build(CommandMindMapOrgmodeMultiline.class.getName(), RegexLeaf.start(), //
+				new RegexLeaf("TYPE", "([*]+)"), //
+				new RegexOptional(new RegexLeaf("BACKCOLOR", "\\[(#\\w+)\\]")), //
+				new RegexLeaf("SHAPE", "(_)?"), //
+				new RegexLeaf(":"), //
+				new RegexLeaf("DATA", "(.*)"), //
+				RegexLeaf.end());
 	}
 
 	@Override
-	protected CommandExecutionResult executeArg(TitledDiagram diagram, LineLocation location, RegexResult arg) {
-		final String align = arg.get("POSITION", 0);
-		HorizontalAlignment ha = HorizontalAlignment.fromString(align, HorizontalAlignment.CENTER);
-		if (SkinParam.USE_STYLES() && align == null) {
-			ha = FontParam.FOOTER.getStyleDefinition()
-					.getMergedStyle(((UmlDiagram) diagram).getSkinParam().getCurrentStyleBuilder())
-					.getHorizontalAlignment();
-		}
-		diagram.getFooter().putDisplay(Display.getWithNewlines(arg.get("LABEL", 0)), ha);
-
-		
-		return CommandExecutionResult.ok();
+	public String getPatternEnd() {
+		return "^(.*);$";
 	}
+
+	@Override
+	protected CommandExecutionResult executeNow(MindMapDiagram diagram, BlocLines lines) {
+		final RegexResult line0 = getStartingPattern().matcher(lines.getFirst499().getTrimmed().getString());
+		final String type = line0.get("TYPE", 0);
+		final String stringColor = line0.get("BACKCOLOR", 0);
+		HtmlColor backColor = null;
+		if (stringColor != null) {
+			backColor = diagram.getSkinParam().getIHtmlColorSet().getColorIfValid(stringColor);
+		}
+		lines = lines.removeStartingAndEnding2(line0.get("DATA", 0));
+
+		return diagram.addIdea(backColor, type.length() - 1, lines.toDisplay(),
+				IdeaShape.fromDesc(line0.get("SHAPE", 0)));
+	}
+
 }
